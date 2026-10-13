@@ -31,7 +31,7 @@ def promote(raw: dict) -> dict:
             question["blocking"] = False
     run = {
         "id": "dev-seed",
-        "suite": {"id": doc.get("template", {}).get("id", "dev"), "version": "0.0-dev"},
+        "suite": {"id": doc.get("template", {}).get("id", "dev"), "version": "0.0"},
         "profile_revision": doc["revision"],
         "profile_sha256": profile_sha256(doc),
         "started_at": "2026-10-13T00:00:00Z",
