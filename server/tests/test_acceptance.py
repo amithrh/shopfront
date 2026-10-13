@@ -60,7 +60,7 @@ async def test_declined_confirmation_commits_nothing(client: Any, deps: Any, eli
 async def test_big_cake_becomes_owner_task_and_completes_on_approval(
     client: Any, deps: Any, elicitation: ElicitationScript
 ) -> None:
-    from shopfront_server.domain.services.owner import OwnerDecisionInput
+    from askonce_server.domain.services.owner import OwnerDecisionInput
 
     async def owner_approves() -> None:
         for _ in range(200):

@@ -15,11 +15,11 @@ from typing import Any
 import pytest
 from support import add_dispute
 
-from shopfront_server.clock import FixedClock
-from shopfront_server.domain.availability import MAX_SEARCH_DAYS, AvailabilityEngine
-from shopfront_server.domain.planning import PlanProblem
-from shopfront_server.errors import DisputedFact
-from shopfront_server.profile.model import Profile
+from askonce_server.clock import FixedClock
+from askonce_server.domain.availability import MAX_SEARCH_DAYS, AvailabilityEngine
+from askonce_server.domain.planning import PlanProblem
+from askonce_server.errors import DisputedFact
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 

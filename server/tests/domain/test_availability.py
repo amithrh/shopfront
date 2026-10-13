@@ -12,8 +12,8 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from shopfront_server.clock import FixedClock
-from shopfront_server.domain.availability import (
+from askonce_server.clock import FixedClock
+from askonce_server.domain.availability import (
     AvailabilityEngine,
     cell_key,
     day_key,
@@ -21,10 +21,10 @@ from shopfront_server.domain.availability import (
     session_key,
     wall_time,
 )
-from shopfront_server.domain.planning import PlanProblem
-from shopfront_server.domain.services.booking import parse_start
-from shopfront_server.profile.factref import resolve
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.planning import PlanProblem
+from askonce_server.domain.services.booking import parse_start
+from askonce_server.profile.factref import resolve
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 

@@ -6,8 +6,8 @@ from typing import Any
 
 import pytest
 
-from shopfront_server import errors
-from shopfront_server.profile.factref import (
+from askonce_server import errors
+from askonce_server.profile.factref import (
     Evidence,
     FactRef,
     FactRefError,
@@ -16,7 +16,7 @@ from shopfront_server.profile.factref import (
     explain_unresolvable,
     resolve,
 )
-from shopfront_server.profile.model import Profile
+from askonce_server.profile.model import Profile
 
 DOCSTRING_EXAMPLES = [
     "business#name",
@@ -146,7 +146,7 @@ def test_resolve_location_hours_uses_their_own_provenance(example: Profile) -> N
     fact = resolve(example, "locations/main#hours")
     assert fact.present and fact.value["weekly"][0]["close"] == "18:00"
     assert fact.owner_confirmed is True  # hours.provenance, not the location's (unconfirmed) one
-    assert "urn:shopfront:owner-answer:q-hours" in {e.url for e in fact.evidence}
+    assert "urn:askonce:owner-answer:q-hours" in {e.url for e in fact.evidence}
     weekly = resolve(example, "locations/main#hours.weekly")
     assert weekly.provenance == fact.provenance
 
@@ -182,7 +182,7 @@ def test_resolve_choice_allergens_are_owner_confirmed(example: Profile) -> None:
 def test_resolve_knowledge_and_module_facts(example: Profile) -> None:
     deposit = resolve(example, "info/deposit#facts.deposit_percent")
     assert deposit.value == 50 and deposit.owner_confirmed
-    assert deposit.evidence_url == "urn:shopfront:owner-answer:q-deposit"  # only owner evidence
+    assert deposit.evidence_url == "urn:askonce:owner-answer:q-deposit"  # only owner evidence
     capacity = resolve(example, "custom-cakes#availability.capacity_per_day")
     assert capacity.value == 2 and capacity.owner_confirmed
     approver = resolve(example, "rosa#expected_response_minutes")
@@ -248,9 +248,9 @@ def test_malformed_text_raises(example: Profile) -> None:
 
 def test_evidence_url_preference() -> None:
     ref = FactRef.parse("business#name")
-    web, owner = Evidence("https://a.example/", "x"), Evidence("urn:shopfront:owner-answer:q1", "y")
+    web, owner = Evidence("https://a.example/", "x"), Evidence("urn:askonce:owner-answer:q1", "y")
     assert ResolvedFact(ref, True, evidence=(owner, web)).evidence_url == "https://a.example/"
-    assert ResolvedFact(ref, True, evidence=(owner,)).evidence_url == "urn:shopfront:owner-answer:q1"
+    assert ResolvedFact(ref, True, evidence=(owner,)).evidence_url == "urn:askonce:owner-answer:q1"
     assert ResolvedFact(ref, True).evidence_url is None
     assert owner.is_owner and not web.is_owner
 

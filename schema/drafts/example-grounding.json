@@ -39,7 +39,7 @@
       "trust": "untrusted_web",
       "captured_at": "2026-10-12T15:02:11Z",
       "content_sha256": "a9e4f1afaf177a3c578e6c0834c709aefb782303466bc4af859e62790857dc4b",
-      "snapshot_uri": "s3://shopfront-snapshots/thimbleberry-bakehouse/2026-10-12/home.html",
+      "snapshot_uri": "s3://askonce-snapshots/thimbleberry-bakehouse/2026-10-12/home.html",
       "http_status": 200
     },
     "src_menu": {
@@ -49,7 +49,7 @@
       "trust": "untrusted_web",
       "captured_at": "2026-10-12T15:02:11Z",
       "content_sha256": "17aa6e38a9d88f302f520763e721fa329e0ae8c6ba323066472a43637fe3a556",
-      "snapshot_uri": "s3://shopfront-snapshots/thimbleberry-bakehouse/2026-10-12/menu.html",
+      "snapshot_uri": "s3://askonce-snapshots/thimbleberry-bakehouse/2026-10-12/menu.html",
       "http_status": 200
     },
     "src_about": {
@@ -59,7 +59,7 @@
       "trust": "untrusted_web",
       "captured_at": "2026-10-12T15:02:11Z",
       "content_sha256": "efe05ac301757edf20ecc8704a9c0c17c43126995e0d36bd250d63e187886b53",
-      "snapshot_uri": "s3://shopfront-snapshots/thimbleberry-bakehouse/2026-10-12/about.html",
+      "snapshot_uri": "s3://askonce-snapshots/thimbleberry-bakehouse/2026-10-12/about.html",
       "http_status": 200,
       "quarantined_spans": [
         {
@@ -77,12 +77,12 @@
       "trust": "untrusted_web",
       "captured_at": "2026-10-12T15:02:11Z",
       "content_sha256": "8ea49061e7e262474a985138b8ff1ff3590b8519264de0520986fa00d77a0c46",
-      "snapshot_uri": "s3://shopfront-snapshots/thimbleberry-bakehouse/2026-10-12/contact.html",
+      "snapshot_uri": "s3://askonce-snapshots/thimbleberry-bakehouse/2026-10-12/contact.html",
       "http_status": 200
     },
     "src_owner_hours_sat": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q_hours_sat",
+      "url": "urn:askonce:owner-answer:q_hours_sat",
       "title": "Owner answer",
       "trust": "owner_attested",
       "captured_at": "2026-10-12T15:07:12Z",
@@ -91,7 +91,7 @@
     },
     "src_owner_capacity": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q_capacity",
+      "url": "urn:askonce:owner-answer:q_capacity",
       "title": "Owner answer",
       "trust": "owner_attested",
       "captured_at": "2026-10-12T15:08:20Z",
@@ -100,7 +100,7 @@
     },
     "src_owner_gf_allergens": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q_gf_allergens",
+      "url": "urn:askonce:owner-answer:q_gf_allergens",
       "title": "Owner answer",
       "trust": "owner_attested",
       "captured_at": "2026-10-12T15:10:30Z",
@@ -312,7 +312,7 @@
           },
           {
             "source_id": "src_owner_hours_sat",
-            "url": "urn:shopfront:owner-answer:q_hours_sat",
+            "url": "urn:askonce:owner-answer:q_hours_sat",
             "quote": "6pm. The contact page is out of date.",
             "content_sha256": "b85f71d1e848405585cd6d39f1af687e7d617758e9ca8223a92f14eb8c80bff2",
             "extracted_at": "2026-10-12T15:07:12Z",
@@ -591,7 +591,7 @@
           },
           {
             "source_id": "src_owner_gf_allergens",
-            "url": "urn:shopfront:owner-answer:q_gf_allergens",
+            "url": "urn:askonce:owner-answer:q_gf_allergens",
             "quote": "It contains eggs, milk and almonds. We bake gluten-free cakes on Mondays when no wheat flour is used in the kitchen.",
             "content_sha256": "e088a4c4060f22c198bc01bf5ed3616c3fd2b4af58c496358c272ac3b968f4c6",
             "extracted_at": "2026-10-12T15:10:30Z",
@@ -692,7 +692,7 @@
         "evidence": [
           {
             "source_id": "src_owner_capacity",
-            "url": "urn:shopfront:owner-answer:q_capacity",
+            "url": "urn:askonce:owner-answer:q_capacity",
             "quote": "Two custom cakes a day, max.",
             "content_sha256": "80857d17958e25aac2ef25a93778e6afae1af84ece5ee147f7500ddecb818a29",
             "extracted_at": "2026-10-12T15:08:20Z",
@@ -1115,7 +1115,7 @@
         "question_id": "q_hours_sat",
         "evidence": {
           "source_id": "src_owner_hours_sat",
-          "url": "urn:shopfront:owner-answer:q_hours_sat",
+          "url": "urn:askonce:owner-answer:q_hours_sat",
           "quote": "6pm. The contact page is out of date.",
           "content_sha256": "b85f71d1e848405585cd6d39f1af687e7d617758e9ca8223a92f14eb8c80bff2",
           "extracted_at": "2026-10-12T15:07:12Z",

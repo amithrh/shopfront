@@ -13,11 +13,11 @@ from typing import Any
 import pytest
 from botocore.stub import ANY, Stubber
 
-from shopfront_server.clock import FixedClock
-from shopfront_server.domain.models import CapacityHold, Commitment
-from shopfront_server.domain.ports import CapacityExhausted, Committed, Duplicate
-from shopfront_server.domain.idempotency import new_record
-from shopfront_server.domain.stores.dynamodb import (
+from askonce_server.clock import FixedClock
+from askonce_server.domain.models import CapacityHold, Commitment
+from askonce_server.domain.ports import CapacityExhausted, Committed, Duplicate
+from askonce_server.domain.idempotency import new_record
+from askonce_server.domain.stores.dynamodb import (
     DynamoCapacityStore,
     DynamoCommitmentStore,
     DynamoIdempotencyStore,
@@ -26,11 +26,11 @@ from shopfront_server.domain.stores.dynamodb import (
     parse_commitment,
     sortable_utc,
 )
-from shopfront_server.errors import ConcurrencyConflict, InvalidState, NotFound
+from askonce_server.errors import ConcurrencyConflict, InvalidState, NotFound
 
 pytestmark = pytest.mark.anyio
 
-TABLE = "shopfront"
+TABLE = "askonce"
 NOW = datetime(2026, 10, 14, 16, 0, tzinfo=UTC)
 DAY = CapacityHold(key="CAP#thimbleberry-bakehouse#custom-cakes#DAY#2026-10-18", units=1, limit=2)
 CELL = CapacityHold(key="CAP#quillfern-salon#appointments#CELL#2026-10-15T15:00:00Z#wren", units=1, limit=1)
@@ -487,10 +487,10 @@ def owner_over(store: DynamoCommitmentStore, clock: FixedClock) -> Any:
     from support import TEST_KEY
 
     from mcp_tasks import InMemoryTaskStore, TaskManager
-    from shopfront_server.domain.availability import AvailabilityEngine
-    from shopfront_server.domain.services import DomainContext, OwnerService
-    from shopfront_server.domain.stores.memory import InMemoryCapacityStore, InMemoryIdempotencyStore, MemoryState
-    from shopfront_server.ids import IdFactory
+    from askonce_server.domain.availability import AvailabilityEngine
+    from askonce_server.domain.services import DomainContext, OwnerService
+    from askonce_server.domain.stores.memory import InMemoryCapacityStore, InMemoryIdempotencyStore, MemoryState
+    from askonce_server.ids import IdFactory
 
     state = MemoryState()
     ctx = DomainContext(

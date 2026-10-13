@@ -63,7 +63,7 @@ async def test_legacy_client_uses_a_session_and_synchronous_elicitation(served: 
     async with Client(f"{served}/mcp", mode="legacy", elicitation_callback=answers) as client:
         assert client.protocol_version == "2025-11-25"
         names = [tool.name for tool in (await client.list_tools()).tools]
-        assert len(names) == 15  # 14 Shopfront tools + the probe
+        assert len(names) == 17  # 16 AskOnce tools + the probe
         result = await client.call_tool("probe_commit", {"item": "bread"})
     assert result.content[0].text == "committed bread"  # type: ignore[union-attr]
     assert answers.messages == ["Shall I probe bread?"]

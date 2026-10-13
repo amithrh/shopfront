@@ -14,20 +14,20 @@ from tools_support import BAKERY, BIG_CAKE, SMALL_CAKE, Stack, build_stack, load
 
 from mcp import Client
 from mcp.server.mcpserver.exceptions import ToolError
-from shopfront_server import observability
-from shopfront_server.domain.services.owner import OwnerDecisionInput
-from shopfront_server.errors import UnknownBusiness
-from shopfront_server.tools import context
-from shopfront_server.tools.guard import OutputGuardMiddleware
-from shopfront_server.tools.schemas import PolicyResult
-from shopfront_server.tools.server import INSTRUCTIONS, build_mcp_server
+from askonce_server import observability
+from askonce_server.domain.services.owner import OwnerDecisionInput
+from askonce_server.errors import UnknownBusiness
+from askonce_server.tools import context
+from askonce_server.tools.guard import OutputGuardMiddleware
+from askonce_server.tools.schemas import PolicyResult
+from askonce_server.tools.server import INSTRUCTIONS, build_mcp_server
 
 pytestmark = pytest.mark.anyio
 
 
 def test_server_installs_the_output_guard(stack: Stack) -> None:
     assert any(isinstance(m, OutputGuardMiddleware) for m in stack.server.middleware)
-    assert stack.server.name == "shopfront"
+    assert stack.server.name == "askonce"
     assert "find_business" in INSTRUCTIONS and "get_task" in INSTRUCTIONS
 
 
@@ -129,8 +129,8 @@ def test_round2_tasks_list_tool_span_records_only_digests_of_capability_ids(monk
     assert attrs[observability.ATTR_TASK] == observability.id_digest("t_secret")
     assert attrs[observability.ATTR_COMMITMENT] == observability.id_digest("c_secret")
     assert attrs[observability.ATTR_MODULE] == "rosa"
-    assert "shopfront.absent" not in attrs
-    assert not [k for k, v in attrs.items() if "_secret" in str(v) or not k.startswith("shopfront.")]
+    assert "askonce.absent" not in attrs
+    assert not [k for k, v in attrs.items() if "_secret" in str(v) or not k.startswith("askonce.")]
 
 
 async def test_round2_tasks_list_no_span_carries_a_raw_task_id_or_reference(
@@ -149,9 +149,9 @@ async def test_round2_tasks_list_no_span_carries_a_raw_task_id_or_reference(
         replied = structured(await client.call_tool("reply_to_owner", {"task_id": task_id, "answer": "Blue"}))
     assert task_id and reference and replied["task_status"] == "working"
     spans = {span.name: dict(span.attributes or {}) for span in exporter.get_finished_spans()}
-    for name in ("shopfront.tool.place_custom_order", "shopfront.tool.get_task", "shopfront.tool.reply_to_owner"):
+    for name in ("askonce.tool.place_custom_order", "askonce.tool.get_task", "askonce.tool.reply_to_owner"):
         assert spans[name][observability.ATTR_TASK] == observability.id_digest(task_id), name
-    assert spans["shopfront.tool.place_custom_order"][observability.ATTR_COMMITMENT] == observability.id_digest(reference)
+    assert spans["askonce.tool.place_custom_order"][observability.ATTR_COMMITMENT] == observability.id_digest(reference)
     leaked = [
         (name, key)
         for name, attrs in spans.items()

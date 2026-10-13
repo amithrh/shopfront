@@ -16,8 +16,8 @@ from typing import Any, TypeVar
 import mcp_types as types
 import pytest
 
-from shopfront_server.canonical import profile_sha256
-from shopfront_server.config import REPO_ROOT
+from askonce_server.canonical import profile_sha256
+from askonce_server.config import REPO_ROOT
 
 T = TypeVar("T")
 

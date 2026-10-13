@@ -1,4 +1,4 @@
-"""Play a full customer + owner conversation against a running local Shopfront server.
+"""Play a full customer + owner conversation against a running local AskOnce server.
 
 Prints what a voice assistant would say at each step (each tool result's `speak`), the confirmation
 questions the server asks (MRTR elicitation), and the owner's side (inbox + approve) through the

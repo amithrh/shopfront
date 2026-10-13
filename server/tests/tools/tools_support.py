@@ -22,17 +22,17 @@ from typing import Any
 from support import FIXED_NOW, SCHEMA_PATH, TEST_KEY, ElicitationScript, apps_advertisement
 
 from mcp import Client
-from shopfront_server.app.wiring import build_deps
-from shopfront_server.clock import FixedClock
-from shopfront_server.config import Settings
-from shopfront_server.deps import ShopfrontDeps
-from shopfront_server.profile.factref import FactRef
-from shopfront_server.profile.loader import load_profile
-from shopfront_server.profile.model import Profile
-from shopfront_server.tools import grounding
-from shopfront_server.tools.render import COMMITMENT_URN, OWNER_ANSWER_URN
-from shopfront_server.tools.schemas import check_spoken
-from shopfront_server.tools.server import build_mcp_server
+from askonce_server.app.wiring import build_deps
+from askonce_server.clock import FixedClock
+from askonce_server.config import Settings
+from askonce_server.deps import AskOnceDeps
+from askonce_server.profile.factref import FactRef
+from askonce_server.profile.loader import load_profile
+from askonce_server.profile.model import Profile
+from askonce_server.tools import grounding
+from askonce_server.tools.render import COMMITMENT_URN, OWNER_ANSWER_URN
+from askonce_server.tools.schemas import check_spoken
+from askonce_server.tools.server import build_mcp_server
 
 BAKERY = "thimbleberry-bakehouse"
 SALON = "quillfern-salon"
@@ -106,7 +106,7 @@ class RoundCounter:
 class Stack:
     """A wired server over a given set of profiles, plus helpers to open clients on it."""
 
-    deps: ShopfrontDeps
+    deps: AskOnceDeps
     server: Any
     counter: RoundCounter
 
@@ -173,7 +173,7 @@ def strings_of(value: Any) -> list[str]:
     return []
 
 
-async def assert_grounded(deps: ShopfrontDeps, data: dict[str, Any]) -> None:
+async def assert_grounded(deps: AskOnceDeps, data: dict[str, Any]) -> None:
     """`speak` is spoken-safe; every fact parses; every profile fact is statable where it came from."""
     check_spoken(data["speak"])
     business_ids = [data["business_id"]] if data.get("business_id") else []

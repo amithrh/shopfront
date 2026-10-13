@@ -16,9 +16,9 @@ from mcp.server.transport_security import TransportSecurityMiddleware, Transport
 from pydantic import SecretStr
 from support import TEST_KEY
 
-from shopfront_server import __version__
-from shopfront_server.app.main import create_app
-from shopfront_server.config import Settings
+from askonce_server import __version__
+from askonce_server.app.main import create_app
+from askonce_server.config import Settings
 
 MODERN = "2026-07-28"
 MODERN_META = {
@@ -101,7 +101,7 @@ def test_post_mcp_is_served_without_redirect(client: TestClient) -> None:
     assert response.status_code == 200, response.text
     assert response.headers.get("mcp-session-id")
     message = jsonrpc_message(response)
-    assert message["result"]["serverInfo"]["name"] == "shopfront"
+    assert message["result"]["serverInfo"]["name"] == "askonce"
     assert message["result"]["protocolVersion"] == "2025-11-25"
 
 
@@ -110,7 +110,7 @@ def test_modern_tools_list_is_sessionless(client: TestClient) -> None:
     assert response.status_code == 200, response.text
     assert "mcp-session-id" not in response.headers
     names = [tool["name"] for tool in jsonrpc_message(response)["result"]["tools"]]
-    assert names[0] == "find_business" and "get_task" in names and len(names) == 14
+    assert names[0] == "find_business" and "get_task" in names and len(names) == 16
 
 
 def test_unknown_host_gets_421(client: TestClient) -> None:
@@ -177,7 +177,7 @@ def test_cors_origin_missing_from_transport_allow_list_is_logged(
     world_factory: Callable[[Settings], Any], settings: Settings, caplog: pytest.LogCaptureFixture
 ) -> None:
     misconfigured = settings.model_copy(update={"cors_origins": ["https://owner.example"]})
-    with caplog.at_level(logging.WARNING, logger="shopfront.app"):
+    with caplog.at_level(logging.WARNING, logger="askonce.app"):
         world = world_factory(misconfigured)
         create_app(misconfigured, deps=world.deps)
     assert "https://owner.example" in caplog.text

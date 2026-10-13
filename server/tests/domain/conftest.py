@@ -23,25 +23,25 @@ import pytest
 from support import TEST_KEY
 
 from mcp_tasks import InMemoryTaskStore, TaskManager
-from shopfront_server.clock import FixedClock
-from shopfront_server.domain.availability import AvailabilityEngine
-from shopfront_server.domain.models import Commitment
-from shopfront_server.domain.services import (
+from askonce_server.clock import FixedClock
+from askonce_server.domain.availability import AvailabilityEngine
+from askonce_server.domain.models import Commitment
+from askonce_server.domain.services import (
     BookingService,
     CustomOrderService,
     DomainContext,
     OwnerService,
     QuoteService,
 )
-from shopfront_server.domain.stores.memory import (
+from askonce_server.domain.stores.memory import (
     InMemoryCapacityStore,
     InMemoryCommitmentStore,
     InMemoryIdempotencyStore,
     MemoryState,
 )
-from shopfront_server.errors import UnknownBusiness
-from shopfront_server.ids import IdFactory
-from shopfront_server.profile.model import Profile
+from askonce_server.errors import UnknownBusiness
+from askonce_server.ids import IdFactory
+from askonce_server.profile.model import Profile
 
 BAKERY = "thimbleberry-bakehouse"
 SALON = "quillfern-salon"

@@ -1,0 +1,42 @@
+"""askonce-bedrock: a small Bedrock model router (token buckets, throttling failover, metrics)."""
+
+from askonce_bedrock.router import (
+    ALL_MODELS,
+    DEFAULT_CLAUDE_RPM,
+    DEFAULT_NOVA_RPM,
+    DEFAULT_REGION,
+    DEFAULT_ROLES,
+    Attempt,
+    BedrockRouter,
+    Metrics,
+    ModelStats,
+    RouterConfig,
+    RouterError,
+    RouterExhausted,
+    RouterResult,
+    TokenBucket,
+    classify,
+    default_rpm,
+)
+
+__version__ = "0.1.0"
+
+__all__ = [
+    "ALL_MODELS",
+    "DEFAULT_CLAUDE_RPM",
+    "DEFAULT_NOVA_RPM",
+    "DEFAULT_REGION",
+    "DEFAULT_ROLES",
+    "Attempt",
+    "BedrockRouter",
+    "Metrics",
+    "ModelStats",
+    "RouterConfig",
+    "RouterError",
+    "RouterExhausted",
+    "RouterResult",
+    "TokenBucket",
+    "__version__",
+    "classify",
+    "default_rpm",
+]

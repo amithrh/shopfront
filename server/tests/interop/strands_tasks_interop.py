@@ -1,11 +1,11 @@
-"""Interop: Strands' independent SEP-2663 client against a running Shopfront server.
+"""Interop: Strands' independent SEP-2663 client against a running AskOnce server.
 
 Runs under the ONBOARDING venv (strands-agents 1.57.1 on mcp 2.1.1), not the server venv:
 
     onboarding/.venv/bin/python server/tests/interop/strands_tasks_interop.py http://127.0.0.1:<port> <admin-token>
 
 The customer is a Strands `MCPClient` with `TasksConfig` (it advertises io.modelcontextprotocol/tasks on
-2026-07-28) and an elicitation callback that accepts Shopfront's MRTR confirmation. The owner is plain HTTP:
+2026-07-28) and an elicitation callback that accepts AskOnce's MRTR confirmation. The owner is plain HTTP:
 the admin route mints an inbox link, the owner reads the inbox and approves through the signed REST API.
 
 Two paths are exercised:

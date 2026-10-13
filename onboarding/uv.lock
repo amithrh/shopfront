@@ -29,6 +29,56 @@ wheels = [
 ]
 
 [[package]]
+name = "askonce-bedrock"
+version = "0.1.0"
+source = { editable = "../packages/askonce-bedrock" }
+dependencies = [
+    { name = "boto3" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "boto3", specifier = ">=1.40" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "boto3", specifier = "==1.43.111" },
+    { name = "pytest", specifier = "==9.1.1" },
+]
+
+[[package]]
+name = "askonce-onboarding"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "askonce-bedrock" },
+    { name = "bedrock-agentcore" },
+    { name = "httpx" },
+    { name = "jsonschema" },
+    { name = "strands-agents" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "askonce-bedrock", editable = "../packages/askonce-bedrock" },
+    { name = "bedrock-agentcore", specifier = "==1.24.0" },
+    { name = "httpx", specifier = "==0.28.1" },
+    { name = "jsonschema", specifier = ">=4.26.0" },
+    { name = "strands-agents", specifier = "==1.57.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = "==9.1.1" },
+    { name = "pytest-asyncio", specifier = "==1.4.0" },
+]
+
+[[package]]
 name = "attrs"
 version = "26.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -922,37 +972,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/76/43/35e4d8aa320bffe8287fe8f65f578fa2d2db0a64212f0e710dce58267854/s3transfer-0.19.2.tar.gz", hash = "sha256:ba0309fd86be3c27dbf78cdd813c13c5e1df16e5874b99d2535ebbdfb9892993", size = 165592, upload-time = "2026-07-22T19:30:44.432Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl", hash = "sha256:d8168eccca828cbb2cd573675333f3bddd254313a9c42494b84c76b539e8ba25", size = 90216, upload-time = "2026-07-22T19:30:43.251Z" },
-]
-
-[[package]]
-name = "shopfront-onboarding"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "bedrock-agentcore" },
-    { name = "httpx" },
-    { name = "jsonschema" },
-    { name = "strands-agents" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "bedrock-agentcore", specifier = "==1.24.0" },
-    { name = "httpx", specifier = "==0.28.1" },
-    { name = "jsonschema", specifier = ">=4.26.0" },
-    { name = "strands-agents", specifier = "==1.57.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "pytest", specifier = "==9.1.1" },
-    { name = "pytest-asyncio", specifier = "==1.4.0" },
 ]
 
 [[package]]

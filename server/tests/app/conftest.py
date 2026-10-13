@@ -1,7 +1,7 @@
 """Fixtures for the app work package's tests (HTTP app, owner API, links, wiring, sweeper).
 
 The app layer is tested against small fakes of the other work packages' collaborators (profile store,
-commitment store, owner service) wired into a real `ShopfrontDeps` with a real `TaskManager`, so these
+commitment store, owner service) wired into a real `AskOnceDeps` with a real `TaskManager`, so these
 tests run before the profile/domain/tools packages land. Tests that need the real collaborators use the
 root conftest's fixtures (`deps`, `http_app`, ...), which skip until those packages are ready.
 
@@ -23,12 +23,12 @@ from pydantic import BaseModel, Field
 
 from mcp.server.mcpserver import AcceptedElicitation, Elicit, ElicitationResult, MCPServer, Resolve
 from mcp_tasks import InMemoryTaskStore, TaskManager, TasksExtension
-from shopfront_server.app.links import OwnerLinkSigner
-from shopfront_server.app.main import create_app
-from shopfront_server.clock import Clock, FixedClock
-from shopfront_server.config import Settings
-from shopfront_server.deps import ShopfrontDeps
-from shopfront_server.domain.models import (
+from askonce_server.app.links import OwnerLinkSigner
+from askonce_server.app.main import create_app
+from askonce_server.clock import Clock, FixedClock
+from askonce_server.config import Settings
+from askonce_server.deps import AskOnceDeps
+from askonce_server.domain.models import (
     DECISION_TO_STATUS,
     OPEN_STATUSES,
     Commitment,
@@ -36,10 +36,10 @@ from shopfront_server.domain.models import (
     CommitmentStatus,
     OwnerDecision,
 )
-from shopfront_server.domain.services.owner import ANSWER_FIELD, InboxItem, OwnerDecisionInput
-from shopfront_server.errors import InvalidDecision, InvalidState, NotFound, UnknownBusiness, UnknownModule
-from shopfront_server.ids import IdFactory
-from shopfront_server.tools.server import build_mcp_server
+from askonce_server.domain.services.owner import ANSWER_FIELD, InboxItem, OwnerDecisionInput
+from askonce_server.errors import InvalidDecision, InvalidState, NotFound, UnknownBusiness, UnknownModule
+from askonce_server.ids import IdFactory
+from askonce_server.tools.server import build_mcp_server
 from support import serve
 
 BAKERY = "thimbleberry-bakehouse"
@@ -214,7 +214,7 @@ class Seeded:
 
 
 class OwnerWorld:
-    """Fakes for the other work packages, wired into a real ShopfrontDeps with a real TaskManager."""
+    """Fakes for the other work packages, wired into a real AskOnceDeps with a real TaskManager."""
 
     def __init__(self, settings: Settings, clock: FixedClock) -> None:
         self.settings = settings
@@ -236,7 +236,7 @@ class OwnerWorld:
         self.task_manager = TaskManager(InMemoryTaskStore(), default_poll_interval_ms=20)
         self.owner = FakeOwnerService(self.commitments, self.task_manager, clock, self.profiles)
         unused = cast(Any, None)
-        self.deps = ShopfrontDeps(
+        self.deps = AskOnceDeps(
             settings=settings,
             clock=clock,
             ids=IdFactory(settings.id_key_bytes()),
@@ -329,7 +329,7 @@ async def seeded(world: OwnerWorld) -> Seeded:
 @pytest.fixture
 def app_signer(world: OwnerWorld) -> OwnerLinkSigner:
     """A signer equivalent to the app's (same keys, same clock)."""
-    from shopfront_server.app.links import signer_from_settings
+    from askonce_server.app.links import signer_from_settings
 
     return signer_from_settings(world.settings, clock=world.clock)
 
@@ -366,8 +366,8 @@ async def probe_commit(item: str, answer: Annotated[ElicitationResult[ProbeConfi
     return f"not committed {item} ({answer.action})"
 
 
-def server_with_probe(deps: ShopfrontDeps) -> MCPServer:
-    """The real Shopfront MCPServer (name, request-state keys, extensions) plus the probe tool."""
+def server_with_probe(deps: AskOnceDeps) -> MCPServer:
+    """The real AskOnce MCPServer (name, request-state keys, extensions) plus the probe tool."""
     server = build_mcp_server(deps)
     server.add_tool(probe_commit)
     return server
@@ -377,7 +377,7 @@ def server_with_probe(deps: ShopfrontDeps) -> MCPServer:
 
 
 @pytest.fixture
-def probe_factory() -> Callable[[ShopfrontDeps], MCPServer]:
+def probe_factory() -> Callable[[AskOnceDeps], MCPServer]:
     return server_with_probe
 
 
@@ -388,7 +388,7 @@ def serve_app() -> Callable[[FastAPI], contextlib.AbstractContextManager[str]]:
 
 @pytest.fixture
 def served(world: OwnerWorld) -> Iterator[str]:
-    """Base URL of the app (real Shopfront MCP server + probe tool) served over real HTTP."""
+    """Base URL of the app (real AskOnce MCP server + probe tool) served over real HTTP."""
     with serve(create_app(world.settings, deps=world.deps, mcp_server_factory=server_with_probe)) as url:
         yield url
 

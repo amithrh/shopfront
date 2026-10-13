@@ -1730,7 +1730,7 @@
             "owner_confirmed": true,
             "evidence": [
               {
-                "url": "urn:shopfront:owner-answer:q-walk-ins",
+                "url": "urn:askonce:owner-answer:q-walk-ins",
                 "quote": "No walk-ins, sorry. We're appointment only, so people need to call or email to book."
               }
             ]
@@ -1883,7 +1883,7 @@
                 "quote": "Less than 24 hours before We charge 50% of the booked service price. A color deposit is kept and counts toward that charge."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-cancellation-notice",
+                "url": "urn:askonce:owner-answer:q-cancellation-notice",
                 "quote": "It's 24 hours. The 48-hour footnote on the services page is old, I'll take it down."
               }
             ]
@@ -1930,7 +1930,7 @@
                 "quote": "No-show We charge 100% of the booked service price."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-cancellation-notice",
+                "url": "urn:askonce:owner-answer:q-cancellation-notice",
                 "quote": "It's 24 hours. The 48-hour footnote on the services page is old, I'll take it down."
               }
             ]
@@ -2157,7 +2157,7 @@
                 "quote": "We carry a PPD-free color line for all-over color and root touch-ups."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-sensitivities",
+                "url": "urn:askonce:owner-answer:q-sensitivities",
                 "quote": "Yes, that's all correct."
               }
             ]
@@ -2189,7 +2189,7 @@
                 "quote": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-sensitivities",
+                "url": "urn:askonce:owner-answer:q-sensitivities",
                 "quote": "Yes, that's all correct."
               }
             ]
@@ -2221,7 +2221,7 @@
                 "quote": "Formaldehyde-free. Lasts about 12 weeks."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-sensitivities",
+                "url": "urn:askonce:owner-answer:q-sensitivities",
                 "quote": "Yes, that's all correct."
               }
             ]
@@ -2248,7 +2248,7 @@
                 "quote": "Our finishing oil contains argan oil. If you have a nut allergy, tell us and we'll leave it out."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-sensitivities",
+                "url": "urn:askonce:owner-answer:q-sensitivities",
                 "quote": "Yes, that's all correct."
               }
             ]
@@ -2273,7 +2273,7 @@
                 "quote": "We use nitrile (latex-free) gloves for every service."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-sensitivities",
+                "url": "urn:askonce:owner-answer:q-sensitivities",
                 "quote": "Yes, that's all correct."
               }
             ]
@@ -2298,7 +2298,7 @@
                 "quote": "Fragrance-free shampoo and conditioner are available on request."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-sensitivities",
+                "url": "urn:askonce:owner-answer:q-sensitivities",
                 "quote": "Yes, that's all correct."
               }
             ]
@@ -2976,7 +2976,7 @@
         "owner_confirmed": true,
         "evidence": [
           {
-            "url": "urn:shopfront:owner-edit:onboarding-settings",
+            "url": "urn:askonce:owner-edit:onboarding-settings",
             "quote": "I check requests between clients and usually answer within two hours. If I haven't answered in a day, let the customer know."
           }
         ]
@@ -3051,28 +3051,28 @@
     },
     "owner-q-cancellation-notice": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-cancellation-notice",
+      "url": "urn:askonce:owner-answer:q-cancellation-notice",
       "title": "Answer from Inés, Oct 12",
       "question_id": "q-cancellation-notice",
       "retrieved_at": "2026-10-12T16:38:10Z"
     },
     "owner-q-walk-ins": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-walk-ins",
+      "url": "urn:askonce:owner-answer:q-walk-ins",
       "title": "Answer from Inés, Oct 12",
       "question_id": "q-walk-ins",
       "retrieved_at": "2026-10-12T16:39:02Z"
     },
     "owner-q-sensitivities": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-sensitivities",
+      "url": "urn:askonce:owner-answer:q-sensitivities",
       "title": "Answer from Inés, Oct 12",
       "question_id": "q-sensitivities",
       "retrieved_at": "2026-10-12T16:39:40Z"
     },
     "owner-settings": {
       "kind": "owner_edit",
-      "url": "urn:shopfront:owner-edit:onboarding-settings",
+      "url": "urn:askonce:owner-edit:onboarding-settings",
       "title": "Inés's settings",
       "retrieved_at": "2026-10-12T16:40:15Z"
     }

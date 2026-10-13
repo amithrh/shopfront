@@ -1,0 +1,10 @@
+{
+  "app": ".venv/bin/python app.py",
+  "watch": {
+    "include": ["app.py", "askonce_infra/**"]
+  },
+  "context": {
+    "@aws-cdk/aws-iam:minimizePolicies": true,
+    "@aws-cdk/core:target-partitions": ["aws"]
+  }
+}

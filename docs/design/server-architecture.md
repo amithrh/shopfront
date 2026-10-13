@@ -1,11 +1,11 @@
-# Shopfront MCP server: architecture (v1)
+# AskOnce MCP server: architecture (v1)
 
 The MCP server is the product: one multi-tenant endpoint at `/mcp`. Through it, any MCP host can find a
 certified small business and then use it: browse, ask, book, order or request a quote. Answers are
 grounded in the business's profile, and the owner stays in control of anything that needs approval.
 
 This document is the contract for the five implementation work packages (section 19). The skeleton in
-`server/src/shopfront_server/` and `packages/mcp-tasks/` matches it signature for signature.
+`server/src/askonce_server/` and `packages/mcp-tasks/` matches it signature for signature.
 `uv run pytest -q` passes on the skeleton: 11 architecture tests pass, and the acceptance tests skip
 until their work packages land.
 
@@ -38,7 +38,7 @@ behaviour relied on below was verified there or in an architect probe (marked *p
 ## 1. Package layout
 
 ```
-packages/mcp-tasks/                      reusable, Apache-2.0, no Shopfront code      [tasks]
+packages/mcp-tasks/                      reusable, Apache-2.0, no AskOnce code      [tasks]
   src/mcp_tasks/models.py                TaskRecord, statuses, wire()
   src/mcp_tasks/store.py                 TaskStore protocol, InMemoryTaskStore, DuplicateTask
   src/mcp_tasks/manager.py               TaskManager state machine (CAS transitions)
@@ -47,7 +47,11 @@ packages/mcp-tasks/                      reusable, Apache-2.0, no Shopfront code
   src/mcp_tasks/dynamodb.py              DynamoTaskStore
   tests/
 
-server/src/shopfront_server/
+packages/askonce-bedrock/                Bedrock model router for the NON-server components
+  src/askonce_bedrock/router.py          roles -> ordered model ids, token buckets, failover, metrics
+  smoke.py  tests/
+
+server/src/askonce_server/
   __init__.py  __main__.py  config.py  deps.py  observability.py               [app]
   clock.py  errors.py  ids.py                                                  [domain]
   canonical.py                                                                 [profile]
@@ -59,7 +63,8 @@ server/src/shopfront_server/
              stores/{memory,dynamodb}.py                                        [domain]
   tools/     server.py context.py schemas.py grounding.py speech.py guard.py
              confirm.py search.py cards.py render.py
-             discovery.py catalog.py knowledge.py booking.py orders.py quotes.py owner.py   [tools]
+             discovery.py catalog.py knowledge.py booking.py orders.py quotes.py owner.py
+             requests.py (Alexa+ compatibility: check_request_status, cancel_request)   [tools]
   app/       main.py wiring.py security.py links.py owner_api.py notifier.py
              background.py run.py                                               [app]
 server/tests/
@@ -84,7 +89,7 @@ work package that uses it.
 ## 2. Layering and dependencies
 
 ```
-mcp_tasks  (mcp, mcp-types, anyio, pydantic)          generic, no Shopfront imports
+mcp_tasks  (mcp, mcp-types, anyio, pydantic)          generic, no AskOnce imports
 profile    -> canonical, clock, errors                read-only views of profile documents
 domain     -> profile, mcp_tasks, ids, clock, errors  rules, plans, commits, owner decisions
 tools      -> domain, profile, mcp_tasks, mcp         MCP surface, speech, grounding, cards
@@ -114,7 +119,7 @@ client ──HTTP POST /mcp──▶ CORSMiddleware ─▶ Route("/mcp", Streama
         (TransportSecuritySettings: Host allow-list 421, Origin allow-list 403)
         ├─ MCP-Protocol-Version: 2026-07-28 → modern per-request path (no session, MRTR, tasks)
         └─ handshake version / no header   → legacy stateful SSE path (sessions in-process)
-   MCPServer("shopfront") middleware: SDK OpenTelemetry span → RequestStateBoundary
+   MCPServer("askonce") middleware: SDK OpenTelemetry span → RequestStateBoundary
        → OutputGuardMiddleware (tools.guard) → extensions: TasksExtension interceptor → Apps
        → tool function (Resolve resolvers first, then the body)
 ```
@@ -135,15 +140,15 @@ client ──HTTP POST /mcp──▶ CORSMiddleware ─▶ Route("/mcp", Streama
   localhost-only default.
 
 **Replicas.** Every replica shares two things:
-- `RequestStateSecurity(keys=[...], ttl=SHOPFRONT_REQUEST_STATE_TTL_S)`, with keys of at least 32
+- `RequestStateSecurity(keys=[...], ttl=ASKONCE_REQUEST_STATE_TTL_S)`, with keys of at least 32
   bytes, from env;
-- the fixed server name `shopfront`, which is the request-state audience.
+- the fixed server name `askonce`, which is the request-state audience.
 
 A confirmation round can therefore land on another replica.
 
 **AgentCore Runtime:**
-- It requires `python -m shopfront_server`, which serves `0.0.0.0:8000/mcp` on ARM64 (the image sets
-  `SHOPFRONT_HOST=0.0.0.0`; outside the image, dev binds `127.0.0.1` because its keys are published).
+- It requires `python -m askonce_server`, which serves `0.0.0.0:8000/mcp` on ARM64 (the image sets
+  `ASKONCE_HOST=0.0.0.0`; outside the image, dev binds `127.0.0.1` because its keys are published).
 - AgentCore pins a microVM by `Mcp-Session-Id`, but 2026-07-28 clients never send one. The design does
   not depend on affinity: all state is in DynamoDB.
 
@@ -270,6 +275,8 @@ defaults that do not validate.
 | `ask_owner` | **business_id**, **question**, fact_ref | `CommitmentResult` (always a Task) | Q | task |
 | `get_task` | **task_id** | `TaskStatusResult{task_status, status_message, commitment, result}` | R | task |
 | `reply_to_owner` | **task_id**, **answer** (≤ 1000 chars) | `TaskStatusResult` | C | task |
+| `check_request_status` | **request_id_or_code** (task id, reference or 8-digit booking code), business_id (with a reference or code) | `RequestStatusResult{found, status, reference, task_id, task_status, status_message, commitment, result}` | R | task |
+| `cancel_request` | **request_id_or_code**, business_id, confirm_token | `CancelRequestResult` (`CommitmentResult` + `confirm_token`) | D | commitment |
 
 **`CommitmentResult`** has `status`, `reference`, `task_id`, `commitment: CommitmentView`,
 `alternatives[SlotView]`, `missing_fields` and `replayed`.
@@ -367,7 +374,7 @@ defaults that do not validate.
   characters) cannot be said back. So a confirmed or approved booking also says an 8-digit code ("Your
   booking code is 0 4 9 7, 3 0 7 3."), kept as the `tail` of the speech so the 240-character cap never
   drops it, shown on the card ("Booking code") and cited as a fact (`<module>/<id>#booking_code`,
-  evidence `urn:shopfront:commitment:<id>`).
+  evidence `urn:askonce:commitment:<id>`).
   - The code is the first 5 base32 characters of the derived commitment id (25 bits) as a
     zero-padded decimal (`ids.spoken_reference`; e.g. `c_exyqr…` -> `04973073`). Nothing new is stored,
     so existing bookings have codes too.
@@ -413,6 +420,27 @@ defaults that do not validate.
   3. `OwnerService.absorb_customer_answers` stores the reply on the commitment at once (see §9).
   4. The result is get_task's, with "Thanks, I've passed that on to Rosa."; if the owner decided in
      the meantime, that outcome is shown instead.
+- **Alexa+ compatibility layer (`tools/requests.py`).** Alexa+'s documented client never mentions the
+  Tasks extension, so two plain tools give any client the `tasks/get` and `tasks/cancel` flows.
+  1. `locate` accepts what the customer has: a task id (`t_...`, nothing else needed), or a reference
+     (`c_...`) or spoken booking code, which are per business and need `business_id` (a `ToolError`
+     says so). A task must be the caller's (`task_manager.get(principal=...)`), a commitment's
+     `principal` must be the caller's; unknown, expired, foreign and malformed inputs all answer "I
+     couldn't find a request with that reference" (`found: false`). Without auth the id or code is the
+     capability, exactly as for `get_task` and `cancel_booking`.
+  2. `check_request_status` renders get_task's `task_status_result` while the request has a live task,
+     else the stored commitment (a booking confirmed on the spot, or a task past its TTL).
+  3. `cancel_request` withdraws a request still waiting for the owner (`task_manager.cancel` plus
+     `OwnerService.on_task_cancelled`, as `tasks/cancel` does), or cancels a confirmed or approved
+     booking (`BookingService.plan_cancel` and `cancel`, as `cancel_booking` does). A decided,
+     answered or expired request is left alone ("That request has already been declined...").
+  4. Confirmation first. A client that declared form elicitation gets the MRTR read-back. Any other
+     client gets the read-back as `speak` with `status: not_confirmed` and a `confirm_token`, and calls
+     again with the token after the customer says yes. The token is
+     `ids.derive("k", "cancel_request|<principal>|<request>")`: stateless and bound to that caller and
+     request.
+  5. `_meta.ui.invoking`/`invoked` are not set: `McpUiToolMeta` has no such fields and `Apps.tool()`
+     refuses extra `_meta.ui` keys (friction log #13).
 
 ## 7. MRTR confirmation (every transactional tool)
 
@@ -491,7 +519,7 @@ due by card within 48 hours of Rosa's approval, and the rest at pickup. Shall I 
   visit window, normalised intake values, and question text.
 - Two retries of one request therefore hash identically, on any replica.
 
-**Derived ids** (`ids.IdFactory`, HMAC-SHA256 under `SHOPFRONT_ID_KEY`):
+**Derived ids** (`ids.IdFactory`, HMAC-SHA256 under `ASKONCE_ID_KEY`):
 - `commitment_id = c_<HMAC("c"|key)>`
 - `task_id = t_<HMAC("t"|key)>`
 
@@ -630,10 +658,10 @@ The original `defer()` is kept as `ensure_task` + `adopt`.
 
 **Renderer** (`tools.render`). It builds a `CommitmentResult` serialised exactly like an SDK tool result,
 so `Client.call_tool`'s re-validation against `outputSchema` passes. The owner's free text goes through
-`guard.sanitize_speak` and is cited as `urn:shopfront:owner-answer:<commitment_id>`.
+`guard.sanitize_speak` and is cited as `urn:askonce:owner-answer:<commitment_id>`.
 
 **Expiry.**
-- `app.background.run_sweeper` calls `OwnerService.expire_due()` every `SHOPFRONT_SWEEP_INTERVAL_S`
+- `app.background.run_sweeper` calls `OwnerService.expire_due()` every `ASKONCE_SWEEP_INTERVAL_S`
   seconds.
 - The owner_approval module's `on_expiry` decides what happens:
   - `notify_customer` completes the task as `expired`;
@@ -668,7 +696,7 @@ so `Client.call_tool`'s re-validation against `outputSchema` passes. The owner's
 **Owner tokens** (`app.links.OwnerLinkSigner`):
 - **Format:** `b64url(claims).b64url(HMAC-SHA256)`, with claims `{v, biz, scope: inbox|decide, cid, exp,
   kid}`.
-- **Keys** come from `SHOPFRONT_OWNER_LINK_KEYS`: the first signs, all verify, so keys can rotate.
+- **Keys** come from `ASKONCE_OWNER_LINK_KEYS`: the first signs, all verify, so keys can rotate.
 - **Checks:** the HMAC is compared with `hmac.compare_digest`, and the expiry is checked against the
   injected clock.
 - **Scope:** an `inbox` token authorises its whole business; a `decide` token authorises exactly one
@@ -708,7 +736,7 @@ client that cannot show a free-text question can do the same: with
   - **`tasks/list`:** a convenience, served only to authenticated principals
     (`TasksExtension(list_anonymous=False)` is the default; anonymous callers get `-32602`). Without
     auth every caller shares `anonymous`, so a listing would hand out every customer's task ids.
-    Shopfront also wires `serve_list=False` (`app.wiring`) until MCP auth exists, so the method is not
+    AskOnce also wires `serve_list=False` (`app.wiring`) until MCP auth exists, so the method is not
     bound at all (`-32601`). With auth: `serve_list=True`, keeping `list_anonymous=False`.
   - **Errors:** unknown, expired or foreign tasks, and invalid transitions, all give `-32602`.
 - **Changes from the prototype:**
@@ -721,8 +749,8 @@ client that cannot show a free-text question can do the same: with
     are configurable.
 - **Tests:** 7 in-process tests pass now (transparent resolve, input_required, list, cancel, both
   degradation paths, idempotent ids, sync fallback). The tasks work package adds the remaining coverage.
-- **DynamoDB:** its own table, `shopfront-tasks` (hash key `taskId`, GSI `byPrincipal`, TTL
-  `expiresAt`). It keeps the package independent of Shopfront's single-table design.
+- **DynamoDB:** its own table, `askonce-tasks` (hash key `taskId`, GSI `byPrincipal`, TTL
+  `expiresAt`). It keeps the package independent of AskOnce's single-table design.
 
 ## 11. Availability engine (`domain.availability`)
 
@@ -770,10 +798,10 @@ fixed `sessions`), and `services[].resource_ids`, `party_size` and `buffer_minut
 | Port | Memory (tests, dev) | DynamoDB (AWS) |
 |---|---|---|
 | `ProfileStore` | `InMemoryProfileStore` (seeded by `load_profile_dir`), plus `CachingProfileStore` | `DynamoProfileStore`, wrapped in `CachingProfileStore(ttl 30 s)` |
-| `TaskStore` | `InMemoryTaskStore` | `DynamoTaskStore` (table `shopfront-tasks`) |
-| `CommitmentStore`, `CapacityStore`, `IdempotencyStore` | `MemoryState` (one lock, shared) | `Dynamo*Store` (single table `shopfront`) |
+| `TaskStore` | `InMemoryTaskStore` | `DynamoTaskStore` (table `askonce-tasks`) |
+| `CommitmentStore`, `CapacityStore`, `IdempotencyStore` | `MemoryState` (one lock, shared) | `Dynamo*Store` (single table `askonce`) |
 
-**Single table `shopfront`** (`pk`, `sk` strings; TTL attribute `expires_at`; on-demand; region
+**Single table `askonce`** (`pk`, `sk` strings; TTL attribute `expires_at`; on-demand; region
 ap-southeast-2):
 
 ```
@@ -848,7 +876,7 @@ directory in sync.
 `client_supports_apps(ctx)` may be used to drop the card on voice-only clients, but the default is to
 always include it, because it is small.
 
-## 15. Configuration (env, prefix `SHOPFRONT_`, `config.Settings`)
+## 15. Configuration (env, prefix `ASKONCE_`, `config.Settings`)
 
 | Variable | Default (dev) | Notes |
 |---|---|---|
@@ -864,7 +892,7 @@ always include it, because it is small.
 | `ID_KEY` | DEV-ONLY key | Derives commitment and task ids. |
 | `ADMIN_TOKEN` | DEV-ONLY | For the link-minting endpoint. The DEV token is off in prod and in anything that looks deployed; a real one there needs 32 bytes. |
 | `STORAGE` | `memory` | `memory` or `dynamodb`. |
-| `DYNAMODB_TABLE`, `DYNAMODB_TASKS_TABLE` | `shopfront`, `shopfront-tasks` | |
+| `DYNAMODB_TABLE`, `DYNAMODB_TASKS_TABLE` | `askonce`, `askonce-tasks` | |
 | `AWS_REGION`, `DYNAMODB_ENDPOINT_URL` | `ap-southeast-2`, unset | |
 | `PROFILE_DIRS`, `FALLBACK_PROFILE` | `profiles/`, `schema/example-profile.json` | |
 | `PROFILE_SCHEMA_PATH` | `schema/business-profile.schema.json` | Copied into the container image. |
@@ -873,7 +901,7 @@ always include it, because it is small.
 | `TASK_POLL_INTERVAL_MS`, `TASK_DEFAULT_TTL_MS` | 3000, 48 h | |
 | `KEEP_WAITING_MAX_DAYS` | 30 | The longest an `on_expiry: keep_waiting` request waits for the owner. |
 | `IDEMPOTENCY_TTL_S`, `OWNER_LINK_TTL_S`, `SWEEP_INTERVAL_S` | 24 h, 7 d, 60 | |
-| `OTEL_SERVICE_NAME`, `LOG_LEVEL` | `shopfront-mcp`, `INFO` | |
+| `OTEL_SERVICE_NAME`, `LOG_LEVEL` | `askonce-mcp`, `INFO` | |
 
 Secrets live in Secrets Manager and are injected as env at deploy time. None are ever in code or in a
 profile.
@@ -883,17 +911,17 @@ or any of `PUBLIC_BASE_URL`, `ALLOWED_HOSTS`, `ALLOWED_ORIGINS`, `CORS_ORIGINS` 
 (dotted, an IP address or `*`; loopback and single-label names such as `testserver` stay local). It then
 refuses DEV-ONLY secrets and short admin tokens and checks invariants strictly, even if `ENV` was
 forgotten. `ALLOWED_HOSTS` / `ALLOWED_ORIGINS` entries the transport can never match are refused in every
-env. All problems are reported together; `python -m shopfront_server` prints one line per problem and
+env. All problems are reported together; `python -m askonce_server` prints one line per problem and
 exits with code 2, and validation errors never echo the input (`hide_input_in_errors`).
 
 ## 16. Observability
 
 **The SDK already emits a SERVER span for each MCP request**, named `tools/call <tool>` with `gen_ai.*`
-attributes. Shopfront adds INTERNAL child spans named `shopfront.<area>.<op>` through
+attributes. AskOnce adds INTERNAL child spans named `askonce.<area>.<op>` through
 `observability.span`, `aspan` and `traced`.
 
 **Span attributes:**
-- `shopfront.business_id`, `module_id`, `tool`, `outcome` (ok, handoff, withheld, pending_owner,
+- `askonce.business_id`, `module_id`, `tool`, `outcome` (ok, handoff, withheld, pending_owner,
   replayed…), `commitment_id`, `task_id`, `idempotent_replay` and `fact_count`.
 - **Never PII.** Use `observability.redact` for logs.
 - **Never a raw capability id.** Commitment and task ids are recorded as `observability.id_digest(id)`.

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from shopfront_server.profile.snapshots import (
+from askonce_server.profile.snapshots import (
     DirectorySnapshotProvider,
     NullSnapshotProvider,
     SnapshotProvider,

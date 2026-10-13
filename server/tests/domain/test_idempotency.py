@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from shopfront_server.domain.idempotency import idempotency_key, new_record
+from askonce_server.domain.idempotency import idempotency_key, new_record
 
 
 def key(**overrides: object) -> str:

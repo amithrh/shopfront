@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 from tools_support import loaded
 
-from shopfront_server.tools import knowledge
+from askonce_server.tools import knowledge
 
 
 @pytest.mark.parametrize(

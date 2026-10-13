@@ -1,0 +1,24 @@
+[project]
+name = "askonce-infra"
+version = "0.1.0"
+description = "AWS CDK app for AskOnce (stack AskOnceCore, ap-southeast-2)."
+requires-python = ">=3.12"
+dependencies = [
+    # Pinned to releases published before 2026-09-28. The CLI is pinned separately (cdk.json / README).
+    "aws-cdk-lib==2.270.0",
+    "constructs==10.8.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+]
+
+[tool.uv]
+package = false
+exclude-newer = "2026-09-28T00:00:00Z"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"

@@ -6,7 +6,7 @@ readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
-authors = [{ name = "Shopfront contributors" }]
+authors = [{ name = "AskOnce contributors" }]
 keywords = ["mcp", "model-context-protocol", "tasks", "sep-2663", "long-running", "dynamodb"]
 classifiers = [
     "Development Status :: 3 - Alpha",

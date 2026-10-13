@@ -15,19 +15,19 @@ from botocore.exceptions import ClientError
 from botocore.stub import ANY, Stubber
 from support import SCHEMA_PATH, make_live
 
-from shopfront_server import errors
-from shopfront_server.profile.directory import DirectoryEntry, build_directory_entry
-from shopfront_server.profile.dynamodb import (
+from askonce_server import errors
+from askonce_server.profile.directory import DirectoryEntry, build_directory_entry
+from askonce_server.profile.dynamodb import (
     DynamoProfileStore,
     directory_key,
     profile_key,
     request_token,
 )
-from shopfront_server.profile.model import Profile
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 
-TABLE = "shopfront"
+TABLE = "askonce"
 CANCELLED = "Transaction cancelled, please refer cancellation reasons for specific reasons"
 
 

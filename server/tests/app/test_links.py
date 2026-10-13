@@ -10,15 +10,15 @@ from urllib.parse import parse_qs, urlsplit
 import pytest
 from support import FIXED_NOW
 
-from shopfront_server.app.links import (
+from askonce_server.app.links import (
     AUTH_FAILED,
     MAX_TOKEN_LENGTH,
     OwnerLinkSigner,
     key_fingerprint,
     main,
 )
-from shopfront_server.clock import FixedClock
-from shopfront_server.errors import AuthError
+from askonce_server.clock import FixedClock
+from askonce_server.errors import AuthError
 
 KEY_A = b"link-key-A-0123456789abcdef0123456789"
 KEY_B = b"link-key-B-0123456789abcdef0123456789"
@@ -223,16 +223,16 @@ def test_urls_quote_path_segments(signer: OwnerLinkSigner) -> None:
 @pytest.fixture
 def link_env(monkeypatch: pytest.MonkeyPatch) -> str:
     key = "cli-test-link-key-0123456789abcdef0123"
-    monkeypatch.setenv("SHOPFRONT_OWNER_LINK_KEYS", key)
-    monkeypatch.setenv("SHOPFRONT_PUBLIC_BASE_URL", "https://owner.example")
+    monkeypatch.setenv("ASKONCE_OWNER_LINK_KEYS", key)
+    monkeypatch.setenv("ASKONCE_PUBLIC_BASE_URL", "https://owner.example")
     # A public base URL means "deployed": every DEV-ONLY key is refused, not just the link key.
-    monkeypatch.setenv("SHOPFRONT_REQUEST_STATE_KEYS", "cli-test-request-state-key-0123456789abcdef")
-    monkeypatch.setenv("SHOPFRONT_ID_KEY", "cli-test-id-key-0123456789abcdef0123456789")
+    monkeypatch.setenv("ASKONCE_REQUEST_STATE_KEYS", "cli-test-request-state-key-0123456789abcdef")
+    monkeypatch.setenv("ASKONCE_ID_KEY", "cli-test-id-key-0123456789abcdef0123456789")
     return key
 
 
 def cli_signer(key: str) -> OwnerLinkSigner:
-    from shopfront_server.clock import SystemClock
+    from askonce_server.clock import SystemClock
 
     return OwnerLinkSigner([key.encode()], clock=SystemClock(), default_ttl_s=60, public_base_url="https://x")
 
@@ -263,7 +263,7 @@ def test_cli_runs_as_a_module(link_env: str) -> None:
     import sys
 
     out = subprocess.run(
-        [sys.executable, "-m", "shopfront_server.app.links", "mint", "--business", BIZ],
+        [sys.executable, "-m", "askonce_server.app.links", "mint", "--business", BIZ],
         capture_output=True,
         text=True,
         check=True,

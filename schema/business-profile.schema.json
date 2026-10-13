@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://shopfront.dev/schema/business-profile.schema.json",
-  "title": "Shopfront Business Profile",
-  "description": "One tenant of the Shopfront multi-tenant MCP server: a vertical-neutral core (business, locations, sources, open_questions, certification) plus capability modules keyed by module id, each optional and independent. Website text is untrusted data: it enters the profile only as quoted evidence, never as instructions. Design notes: docs/design/profile-schema.md.",
+  "$id": "https://askonce.dev/schema/business-profile.schema.json",
+  "title": "AskOnce Business Profile",
+  "description": "One tenant of the AskOnce multi-tenant MCP server: a vertical-neutral core (business, locations, sources, open_questions, certification) plus capability modules keyed by module id, each optional and independent. Website text is untrusted data: it enters the profile only as quoted evidence, never as instructions. Design notes: docs/design/profile-schema.md.",
   "$comment": "Base: generic draft (modules map with type dispatch, vocabulary as data, flat intake fields, location kinds, slotting, shared owner-approval base). Grafted from the grounding draft: integer cents, verbatim-quote evidence, owner_confirmed, stable fact refs, injection canaries, sha256-bound certification runs, idempotency guard, loader invariants. Grafted from the voice-tools draft: spoken_name + synonyms, URL-free spoken text, FDA allergen and dietary enums, facility-wide may-contain, flat approval rules with a spoken reason, read-back + say-before-confirm, x-read-by tool tags.",
   "type": "object",
   "required": ["schema_version", "profile_id", "revision", "business", "sources", "modules", "open_questions", "certification"],
@@ -93,7 +93,7 @@
     "timezone": { "type": "string", "pattern": "^(UTC|[A-Z][A-Za-z_]+(/[A-Za-z0-9_+-]+){1,2})$", "description": "IANA zone, e.g. America/Chicago." },
     "weekdays": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] } },
     "url": { "type": "string", "format": "uri", "maxLength": 2048, "pattern": "^https?://\\S+$" },
-    "source_url": { "type": "string", "maxLength": 2048, "pattern": "^(https?://\\S+|urn:shopfront:owner-(answer|edit):[a-z0-9][a-z0-9_-]{0,63})$", "description": "A web page, or an owner answer/edit as a URN, so every fact has a uniform source URL." },
+    "source_url": { "type": "string", "maxLength": 2048, "pattern": "^(https?://\\S+|urn:askonce:owner-(answer|edit):[a-z0-9][a-z0-9_-]{0,63})$", "description": "A web page, or an owner answer/edit as a URN, so every fact has a uniform source URL." },
     "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "evidence": {
       "type": "object", "additionalProperties": false, "required": ["url", "quote"],
@@ -108,7 +108,7 @@
         "evidence": { "type": "array", "minItems": 1, "maxItems": 10, "items": { "$ref": "#/$defs/evidence" } }
       },
       "if": { "properties": { "owner_confirmed": { "const": true } } },
-      "then": { "properties": { "evidence": { "contains": { "properties": { "url": { "pattern": "^urn:shopfront:owner-" } } } } } }
+      "then": { "properties": { "evidence": { "contains": { "properties": { "url": { "pattern": "^urn:askonce:owner-" } } } } } }
     },
     "confirmed_provenance": { "$ref": "#/$defs/provenance", "properties": { "owner_confirmed": { "const": true } }, "description": "Safety facts exist only once the owner confirms them." },
     "allergen": { "enum": ["milk", "eggs", "fish", "shellfish", "tree_nuts", "peanuts", "wheat", "soybeans", "sesame"], "description": "FDA major food allergens (shellfish = crustacean shellfish). Gluten is the dietary claim gluten_free, never inferred from wheat." },
@@ -512,8 +512,8 @@
       },
       "allOf": [
         { "if": { "properties": { "kind": { "const": "web_page" } } }, "then": { "required": ["retrieved_at", "content_sha256"], "properties": { "url": { "pattern": "^https?://" } } } },
-        { "if": { "properties": { "kind": { "const": "owner_answer" } } }, "then": { "required": ["question_id"], "properties": { "url": { "pattern": "^urn:shopfront:owner-answer:" } } } },
-        { "if": { "properties": { "kind": { "const": "owner_edit" } } }, "then": { "properties": { "url": { "pattern": "^urn:shopfront:owner-edit:" } } } }
+        { "if": { "properties": { "kind": { "const": "owner_answer" } } }, "then": { "required": ["question_id"], "properties": { "url": { "pattern": "^urn:askonce:owner-answer:" } } } },
+        { "if": { "properties": { "kind": { "const": "owner_edit" } } }, "then": { "properties": { "url": { "pattern": "^urn:askonce:owner-edit:" } } } }
       ]
     },
     "question": {

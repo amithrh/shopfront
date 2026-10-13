@@ -14,11 +14,11 @@ from typing import Any
 import httpx
 import pytest
 
-from shopfront_server.app import run
-from shopfront_server.app.links import OwnerLinkSigner
-from shopfront_server.app.owner_api import MAX_BODY_BYTES
-from shopfront_server.observability import RedactSecretsFilter, id_digest, redact_secrets, uvicorn_log_config
-from shopfront_server.tools.context import finish
+from askonce_server.app import run
+from askonce_server.app.links import OwnerLinkSigner
+from askonce_server.app.owner_api import MAX_BODY_BYTES
+from askonce_server.observability import RedactSecretsFilter, id_digest, redact_secrets, uvicorn_log_config
+from askonce_server.tools.context import finish
 
 pytestmark = pytest.mark.anyio
 
@@ -52,7 +52,7 @@ def test_uvicorn_runs_with_the_redacting_log_config(monkeypatch: pytest.MonkeyPa
     assert "redact_secrets" in config["handlers"]["default"]["filters"]
     seen: dict[str, Any] = {}
     for name in list(os.environ):
-        if name.startswith("SHOPFRONT_"):
+        if name.startswith("ASKONCE_"):
             monkeypatch.delenv(name)
     monkeypatch.setattr(run, "create_app", lambda settings: object())
     monkeypatch.setattr(run, "configure_logging", lambda level: None)
@@ -62,14 +62,14 @@ def test_uvicorn_runs_with_the_redacting_log_config(monkeypatch: pytest.MonkeyPa
 
 
 def test_capability_ids_are_digested_in_spans(monkeypatch: pytest.MonkeyPatch) -> None:
-    from shopfront_server import observability
-    from shopfront_server.tools.schemas import CommitmentResult
+    from askonce_server import observability
+    from askonce_server.tools.schemas import CommitmentResult
 
     recorded: dict[str, Any] = {}
     monkeypatch.setattr(observability, "set_attributes", lambda span, **attrs: recorded.update(attrs))
     finish(CommitmentResult(speak="Done.", status="confirmed"), None, outcome="ok", commitment_id="c_secret", task_id="t_secret")
-    assert recorded["shopfront.commitment_id"] == id_digest("c_secret")
-    assert recorded["shopfront.task_id"] == id_digest("t_secret")
+    assert recorded["askonce.commitment_id"] == id_digest("c_secret")
+    assert recorded["askonce.task_id"] == id_digest("t_secret")
     assert "c_secret" not in str(recorded) and "t_secret" not in str(recorded)
 
 

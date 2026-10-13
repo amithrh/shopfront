@@ -8,9 +8,9 @@ import pytest
 from support import SCHEMA_PATH
 from tools_support import BAKERY, HOME, SALON
 
-from shopfront_server.profile.directory import DirectoryEntry, build_directory_entry
-from shopfront_server.profile.loader import load_profile
-from shopfront_server.tools import search
+from askonce_server.profile.directory import DirectoryEntry, build_directory_entry
+from askonce_server.profile.loader import load_profile
+from askonce_server.tools import search
 
 
 @pytest.fixture

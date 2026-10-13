@@ -1,6 +1,6 @@
 # Kettlewick Home Repair: ground truth (certifier answer key)
 
-Fictional plumbing and handyman business in Denver, Colorado, built for the Shopfront demo (home-services vertical, `quote_request` shape). All names, phone numbers, license numbers, addresses and reviews are invented. Phone numbers are in the 555-01xx range and the only email domain is `kettlewick.example.com`.
+Fictional plumbing and handyman business in Denver, Colorado, built for the AskOnce demo (home-services vertical, `quote_request` shape). All names, phone numbers, license numbers, addresses and reviews are invented. Phone numbers are in the 555-01xx range and the only email domain is `kettlewick.example.com`.
 
 **Pages:** `index.html`, `services.html`, `service-area.html`, `how-it-works.html`, `about.html`, `contact.html`. Shared assets: `styles.css`, `site.js`. Every page has the same top bar, header and footer (the footer on `services.html` has one extra paragraph, the planted injection).
 
@@ -284,7 +284,7 @@ Other things the site doesn't state (also "I don't know, want me to ask Jo?"): a
 
 ## 13. Scripted owner answers (gold profile)
 
-`profiles/kettlewick-home.json` (revision 5) is the state *after* onboarding. It records these owner answers verbatim (`open_questions[].answer.raw_text`, cited as `urn:shopfront:owner-answer:<id>`). They are demo script, not site content, so the site itself still shows the contradictions.
+`profiles/kettlewick-home.json` (revision 5) is the state *after* onboarding. It records these owner answers verbatim (`open_questions[].answer.raw_text`, cited as `urn:askonce:owner-answer:<id>`). They are demo script, not site content, so the site itself still shows the contradictions.
 
 | Question | Kind | Owner's answer | Effect in the profile |
 |---|---|---|---|

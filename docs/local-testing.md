@@ -1,6 +1,6 @@
 # Local testing
 
-Run Shopfront on your own machine and try it the way a judge or an MCP host would. Nothing touches AWS:
+Run AskOnce on your own machine and try it the way a judge or an MCP host would. Nothing touches AWS:
 storage is in memory, so restarting the server clears every order, booking and task.
 
 ## 1. Seed the demo businesses as "live"
@@ -16,7 +16,7 @@ server/.venv/bin/python scripts/dev_seed_live.py
 ## 2. Start the server
 
 ```bash
-cd server && SHOPFRONT_PROFILE_DIRS=../.local/profiles-live SHOPFRONT_CORS_ORIGINS=http://localhost:6274,http://localhost:5173 uv run python -m shopfront_server
+cd server && ASKONCE_PROFILE_DIRS=../.local/profiles-live ASKONCE_CORS_ORIGINS=http://localhost:6274,http://localhost:5173 uv run python -m askonce_server
 ```
 
 MCP is served at `http://localhost:8000/mcp` (protocol 2026-07-28, with a legacy 2025-11-25 fallback). The owner REST

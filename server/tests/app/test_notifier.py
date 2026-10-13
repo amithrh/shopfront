@@ -8,10 +8,10 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from shopfront_server.app.links import OwnerLinkSigner
-from shopfront_server.app.notifier import OutboxMessage, OwnerWebNotifier
-from shopfront_server.domain.ports import OwnerNotifier
-from shopfront_server.observability import id_digest
+from askonce_server.app.links import OwnerLinkSigner
+from askonce_server.app.notifier import OutboxMessage, OwnerWebNotifier
+from askonce_server.domain.ports import OwnerNotifier
+from askonce_server.observability import id_digest
 
 pytestmark = pytest.mark.anyio
 
@@ -35,7 +35,7 @@ async def test_notify_records_a_decision_link(world: Any, app_signer: OwnerLinkS
 
 async def test_notify_logs_ids_only(world: Any, app_signer: OwnerLinkSigner, caplog: pytest.LogCaptureFixture) -> None:
     notifier = OwnerWebNotifier(app_signer)
-    with caplog.at_level(logging.INFO, logger="shopfront.notifier"):
+    with caplog.at_level(logging.INFO, logger="askonce.notifier"):
         await notifier.notify(object(), world.commitment("c_new2"))  # type: ignore[arg-type]
     # The commitment id is a bearer capability without auth: only its digest is logged (SEC-4).
     assert f"business=thimbleberry-bakehouse commitment={id_digest('c_new2')} kind=custom_order" in caplog.text

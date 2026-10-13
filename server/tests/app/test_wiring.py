@@ -13,13 +13,13 @@ from support import PROFILES_DIR, SCHEMA_PATH, TEST_KEY, pending
 
 from mcp_tasks import InMemoryTaskStore
 from mcp_tasks.dynamodb import DynamoTaskStore
-from shopfront_server.app import wiring
-from shopfront_server.app.links import OwnerLinkSigner
-from shopfront_server.app.notifier import OwnerWebNotifier
-from shopfront_server.app.wiring import LazyDynamoDBClient, build_deps
-from shopfront_server.clock import FixedClock
-from shopfront_server.config import Settings
-from shopfront_server.deps import ShopfrontDeps
+from askonce_server.app import wiring
+from askonce_server.app.links import OwnerLinkSigner
+from askonce_server.app.notifier import OwnerWebNotifier
+from askonce_server.app.wiring import LazyDynamoDBClient, build_deps
+from askonce_server.clock import FixedClock
+from askonce_server.config import Settings
+from askonce_server.deps import AskOnceDeps
 
 
 def dynamo_settings(tmp_path: Path, **overrides: Any) -> Settings:
@@ -68,7 +68,7 @@ def test_dynamo_wiring_shares_one_client_and_makes_no_calls(
     settings = dynamo_settings(tmp_path, strict_invariants=True)
     deps, signer = build_deps(settings, clock=clock, dynamodb_client=client)
 
-    assert isinstance(deps, ShopfrontDeps) and isinstance(signer, OwnerLinkSigner)
+    assert isinstance(deps, AskOnceDeps) and isinstance(signer, OwnerLinkSigner)
     caching = deps.profiles
     assert isinstance(caching, recorded_stores["CachingProfileStore"])
     inner = caching.args[0]
@@ -117,8 +117,8 @@ def test_profiles_cannot_seed_dynamodb(tmp_path: Path, clock: FixedClock, record
 def test_dynamo_wiring_with_the_real_stores_makes_no_calls(
     tmp_path: Path, clock: FixedClock, stubbed_dynamodb: tuple[Any, Stubber]
 ) -> None:
-    from shopfront_server.domain.stores.dynamodb import DynamoCommitmentStore
-    from shopfront_server.profile.store import CachingProfileStore
+    from askonce_server.domain.stores.dynamodb import DynamoCommitmentStore
+    from askonce_server.profile.store import CachingProfileStore
 
     client, _stub = stubbed_dynamodb
     deps, _ = pending(

@@ -12,20 +12,20 @@ from typing import Any
 import pytest
 from jsonschema import Draft202012Validator
 
-import shopfront_server
+import askonce_server
 from mcp import Client
 from mcp_tasks import InMemoryTaskStore, TaskManager, TasksExtension
-from shopfront_server.canonical import profile_sha256
-from shopfront_server.config import DEV_ID_KEY, Settings
-from shopfront_server.domain.models import (
+from askonce_server.canonical import profile_sha256
+from askonce_server.config import DEV_ID_KEY, Settings
+from askonce_server.domain.models import (
     ALLOWED_TRANSITIONS,
     OPEN_STATUSES,
     RELEASES_HOLDS,
     SETTLED_STATUSES,
     can_transition,
 )
-from shopfront_server.ids import IdFactory, new_id
-from shopfront_server.tools.schemas import CommitmentResult, Grounded, check_spoken
+from askonce_server.ids import IdFactory, new_id
+from askonce_server.tools.schemas import CommitmentResult, Grounded, check_spoken
 
 from support import SCHEMA_PATH, apps_advertisement, load_raw_profiles, make_live
 
@@ -44,11 +44,13 @@ EXPECTED_TOOLS = [
     "ask_owner",
     "get_task",
     "reply_to_owner",
+    "check_request_status",
+    "cancel_request",
 ]
 
 
 def test_every_module_imports() -> None:
-    for info in pkgutil.walk_packages(shopfront_server.__path__, prefix="shopfront_server."):
+    for info in pkgutil.walk_packages(askonce_server.__path__, prefix="askonce_server."):
         if info.name.endswith("__main__"):
             continue
         importlib.import_module(info.name)
@@ -60,11 +62,11 @@ def test_settings_reject_dev_secrets_in_prod() -> None:
 
 
 def test_settings_parse_comma_lists(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("SHOPFRONT_ALLOWED_HOSTS", "mcp.example.com, localhost:*")
+    monkeypatch.setenv("ASKONCE_ALLOWED_HOSTS", "mcp.example.com, localhost:*")
     # A public host means "deployed", which refuses the DEV-ONLY keys: supply real-looking ones.
-    monkeypatch.setenv("SHOPFRONT_REQUEST_STATE_KEYS", "arch-request-state-key-0123456789abcdef")
-    monkeypatch.setenv("SHOPFRONT_OWNER_LINK_KEYS", "arch-owner-link-key-0123456789abcdef0123")
-    monkeypatch.setenv("SHOPFRONT_ID_KEY", "arch-id-key-0123456789abcdef0123456789")
+    monkeypatch.setenv("ASKONCE_REQUEST_STATE_KEYS", "arch-request-state-key-0123456789abcdef")
+    monkeypatch.setenv("ASKONCE_OWNER_LINK_KEYS", "arch-owner-link-key-0123456789abcdef0123")
+    monkeypatch.setenv("ASKONCE_ID_KEY", "arch-id-key-0123456789abcdef0123456789")
     assert Settings().allowed_hosts == ["mcp.example.com", "localhost:*"]
 
 
@@ -129,7 +131,7 @@ def test_round2_idempotency_replay_settled_statuses_are_exactly_the_terminal_one
 
 
 def _standin_deps() -> Any:
-    """Just enough of ShopfrontDeps for build_mcp_server (tools are not called)."""
+    """Just enough of AskOnceDeps for build_mcp_server (tools are not called)."""
     return SimpleNamespace(
         settings=Settings(env="test"), tasks=TasksExtension(TaskManager(InMemoryTaskStore())), profiles=None
     )
@@ -137,7 +139,7 @@ def _standin_deps() -> Any:
 
 @pytest.mark.anyio
 async def test_mcp_surface_matches_design() -> None:
-    from shopfront_server.tools.server import build_mcp_server
+    from askonce_server.tools.server import build_mcp_server
 
     server = build_mcp_server(_standin_deps())
     async with Client(server, extensions=[apps_advertisement()]) as client:
@@ -149,7 +151,7 @@ async def test_mcp_surface_matches_design() -> None:
         for tool in tools:
             assert tool.output_schema is not None, tool.name
             assert "speak" in tool.output_schema["properties"], tool.name
-            assert tool.meta and tool.meta["ui"]["resourceUri"].startswith("ui://shopfront/"), tool.name
+            assert tool.meta and tool.meta["ui"]["resourceUri"].startswith("ui://askonce/"), tool.name
             hidden = {"ctx", "plan", "confirmation", "intake"}
             assert not hidden & set(tool.input_schema.get("properties", {})), tool.name
         resources = (await client.list_resources()).resources
@@ -159,9 +161,9 @@ async def test_mcp_surface_matches_design() -> None:
 # --------------------------------------------------------------------------- layering (design §2)
 
 _FORBIDDEN_IMPORTS: dict[str, tuple[str, ...]] = {
-    "shopfront_server.profile": ("shopfront_server.domain", "shopfront_server.tools", "shopfront_server.app"),
-    "shopfront_server.domain": ("shopfront_server.tools", "shopfront_server.app"),
-    "shopfront_server.tools": ("shopfront_server.app",),
+    "askonce_server.profile": ("askonce_server.domain", "askonce_server.tools", "askonce_server.app"),
+    "askonce_server.domain": ("askonce_server.tools", "askonce_server.app"),
+    "askonce_server.tools": ("askonce_server.app",),
 }
 
 
@@ -183,7 +185,7 @@ def test_layering_is_respected() -> None:
     tools and app layers only through its ports)."""
     from pathlib import Path
 
-    root = Path(shopfront_server.__file__).parent
+    root = Path(askonce_server.__file__).parent
     violations: list[str] = []
     for package, forbidden in _FORBIDDEN_IMPORTS.items():
         for path in sorted((root / package.rsplit(".", 1)[1]).rglob("*.py")):
@@ -193,13 +195,13 @@ def test_layering_is_respected() -> None:
     assert violations == []
 
 
-def test_mcp_tasks_is_independent_of_shopfront() -> None:
+def test_mcp_tasks_is_independent_of_askonce() -> None:
     from pathlib import Path
 
     import mcp_tasks
 
     for path in Path(mcp_tasks.__file__).parent.rglob("*.py"):
-        assert not any(n.startswith("shopfront_server") for n in _imported_modules(path)), path.name
+        assert not any(n.startswith("askonce_server") for n in _imported_modules(path)), path.name
 
 
 _ELICITATION_BUILDERS: dict[str, set[tuple[str, str]]] = {
@@ -223,7 +225,7 @@ def test_round2_mrtr_guard_every_elicitation_is_built_by_a_guarded_builder() -> 
     import ast
     from pathlib import Path
 
-    root = Path(shopfront_server.__file__).parent
+    root = Path(askonce_server.__file__).parent
     found: dict[str, set[tuple[str, str]]] = {name: set() for name in _ELICITATION_BUILDERS}
 
     class Calls(ast.NodeVisitor):

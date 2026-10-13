@@ -14,10 +14,10 @@ from zoneinfo import ZoneInfo
 import anyio
 import pytest
 
-from shopfront_server.domain.planning import CommitOutcome, CommitPlan
-from shopfront_server.errors import InvalidState, NotFound, UnknownItem
-from shopfront_server.profile.factref import resolve
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.planning import CommitOutcome, CommitPlan
+from askonce_server.errors import InvalidState, NotFound, UnknownItem
+from askonce_server.profile.factref import resolve
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 
@@ -208,7 +208,7 @@ async def test_colour_bookings_wait_for_the_owner(domain: Domain, salon: Profile
     other = await domain.bookings.plan(
         salon, item="all over color", start="2026-10-16T13:00", party_size=None, intake=details("ines"), principal="anonymous"
     )
-    with caplog.at_level(logging.ERROR, logger="shopfront.domain"):
+    with caplog.at_level(logging.ERROR, logger="askonce.domain"):
         failed_notice = await domain.bookings.commit(salon, other, task_id="t_other")
     assert failed_notice.commitment is not None and failed_notice.commitment.status == "pending_owner"
     assert "owner notification failed" in caplog.text

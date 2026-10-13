@@ -7,10 +7,10 @@ from typing import Any
 
 import pytest
 
-from shopfront_server.domain.pricing import price_for, selected_choices
-from shopfront_server.errors import UnknownItem
-from shopfront_server.profile.factref import FACT_REF_PATTERN
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.pricing import price_for, selected_choices
+from askonce_server.errors import UnknownItem
+from askonce_server.profile.factref import FACT_REF_PATTERN
+from askonce_server.profile.model import Profile
 
 CAKE = "menu/custom-cake"
 

@@ -9,9 +9,9 @@ import pytest
 from support import ElicitationScript
 from tools_support import BAKERY, BIG_CAKE, HOME, SALON, SMALL_CAKE, Stack, assert_grounded, structured
 
-from shopfront_server.domain.planning import CommitOutcome, PlanProblem
-from shopfront_server.domain.services.owner import OwnerDecisionInput
-from shopfront_server.ids import spoken_reference
+from askonce_server.domain.planning import CommitOutcome, PlanProblem
+from askonce_server.domain.services.owner import OwnerDecisionInput
+from askonce_server.ids import spoken_reference
 
 pytestmark = pytest.mark.anyio
 
@@ -663,7 +663,7 @@ async def test_round2_misc_low_spoken_code_cancels_the_booking(stack: Stack, eli
     assert lines["Booking code"] == f"{code[:4]} {code[4:]}" and lines["Reference"] == booked["reference"]
     await assert_grounded(stack.deps, booked)
     code_fact = next(f for f in booked["facts"] if f["fact_ref"].endswith("#booking_code"))
-    assert code_fact["value"] == code and code_fact["evidence_url"].startswith("urn:shopfront:commitment:")
+    assert code_fact["value"] == code and code_fact["evidence_url"].startswith("urn:askonce:commitment:")
 
     async with stack.client(elicit, mode="legacy") as later:  # the customer calls back
         cancelled = structured(await later.call_tool("cancel_booking", {"business_id": SALON, "reference": f"{code[:4]} {code[4:]}"}))
@@ -759,9 +759,9 @@ async def test_round2_misc_low_anonymous_replay_of_an_approved_booking_carries_n
     stack: Stack, elicit: ElicitationScript
 ) -> None:
     """Withholding the code is moot if the replay names the booking elsewhere: an owner's note is cited
-    as `<module>/<id>#owner_note` with evidence `urn:shopfront:owner-answer:<id>`. In a replay the id is
+    as `<module>/<id>#owner_note` with evidence `urn:askonce:owner-answer:<id>`. In a replay the id is
     replaced by its digest, so the note stays grounded but nothing in the result can cancel the booking."""
-    from shopfront_server.observability import id_digest
+    from askonce_server.observability import id_digest
 
     booking = {"business_id": SALON, "item": "root touch up", "start": "2026-10-16T10:00"}
     async with stack.client(elicit) as alice:
@@ -777,6 +777,6 @@ async def test_round2_misc_low_anonymous_replay_of_an_approved_booking_carries_n
         assert secret not in str(replay), secret
     alias = id_digest(created["reference"])
     note = next(f for f in replay["facts"] if f["fact_ref"].endswith("#owner_note"))
-    assert note["fact_ref"] == f"appointments/{alias}#owner_note" and note["evidence_url"] == f"urn:shopfront:owner-answer:{alias}"
-    assert f"urn:shopfront:owner-answer:{alias}" in {c["url"] for c in replay["card"]["citations"]}
+    assert note["fact_ref"] == f"appointments/{alias}#owner_note" and note["evidence_url"] == f"urn:askonce:owner-answer:{alias}"
+    assert f"urn:askonce:owner-answer:{alias}" in {c["url"] for c in replay["card"]["citations"]}
     await assert_grounded(stack.deps, replay)

@@ -5,8 +5,8 @@ from __future__ import annotations
 import hashlib
 from typing import Any
 
-from shopfront_server.canonical import canonical_bytes, profile_sha256, sha256_hex
-from shopfront_server.profile.model import Profile, freeze
+from askonce_server.canonical import canonical_bytes, profile_sha256, sha256_hex
+from askonce_server.profile.model import Profile, freeze
 
 
 def test_canonical_bytes_sort_keys_and_drop_whitespace() -> None:

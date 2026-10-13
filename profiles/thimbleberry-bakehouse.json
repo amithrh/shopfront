@@ -71,7 +71,7 @@
               {"url": "https://thimbleberry.example.com/index.html", "quote": "Open Tuesday to Sunday. Closed Mondays."},
               {"url": "https://thimbleberry.example.com/contact.html", "quote": "We're closed on Thanksgiving Day, December 25 and January 1."},
               {
-                "url": "urn:shopfront:owner-answer:q-saturday-close",
+                "url": "urn:askonce:owner-answer:q-saturday-close",
                 "quote": "We close at 6:00 pm on Saturdays. The Visit us page is right; the About page is out of date."
               }
             ]
@@ -160,7 +160,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Country sourdough $9.00 A 1.5 lb round with a dark, crackly crust, fermented for 36 hours. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -173,7 +173,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Country sourdough $9.00 A 1.5 lb round with a dark, crackly crust, fermented for 36 hours. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -205,7 +205,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Seeded rye $10.00 Rye and wheat with sunflower, flax and sesame seeds. Slices thin and keeps for days. Vegan Contains: wheat, sesame"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -218,7 +218,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Seeded rye $10.00 Rye and wheat with sunflower, flax and sesame seeds. Slices thin and keeps for days. Vegan Contains: wheat, sesame"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -250,7 +250,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Olive & rosemary loaf $10.50 Sourdough studded with green olives and fresh rosemary. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -263,7 +263,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Olive & rosemary loaf $10.50 Sourdough studded with green olives and fresh rosemary. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -295,7 +295,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Baguette $4.50 Thin crust, open crumb. Out of the oven by 10:00 am. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -308,7 +308,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Baguette $4.50 Thin crust, open crumb. Out of the oven by 10:00 am. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -340,7 +340,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Challah $11.00 A six-strand braided egg bread topped with sesame seeds. Fridays and Saturdays only Contains: wheat, eggs, sesame"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -376,7 +376,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Gluten-free sandwich loaf $12.00 Brown rice and sorghum flour, soft enough for sandwiches. Gluten-free Contains: eggs"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -389,7 +389,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Gluten-free sandwich loaf $12.00 Brown rice and sorghum flour, soft enough for sandwiches. Gluten-free Contains: eggs"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -425,7 +425,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Butter croissant $4.25 Laminated over three days with cultured butter. Contains: wheat, milk, eggs"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -457,7 +457,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Chocolate croissant $4.75 Two bars of dark chocolate in every one. Contains: wheat, milk, eggs, soy"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -488,7 +488,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Almond croissant $5.25 Twice baked with almond cream and toasted sliced almonds. Contains: wheat, milk, eggs, tree nuts (almonds)"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -520,7 +520,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Orange-cardamom morning bun $4.50 Croissant dough rolled with orange zest, cardamom and sugar. Contains: wheat, milk, eggs"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -552,7 +552,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Seasonal fruit hand pie $5.50 All-butter crust. The fruit changes with the season; ask at the counter what's inside this week. Contains: wheat, milk"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -584,7 +584,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Cheddar-chive scone $4.00 Sharp white cheddar and fresh chives. Contains: wheat, milk, eggs"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -616,7 +616,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Vegan blueberry muffin $3.75 Made with soy milk and topped with cinnamon-sugar crumble. Vegan Contains: wheat, soy"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -629,7 +629,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Vegan blueberry muffin $3.75 Made with soy milk and topped with cinnamon-sugar crumble. Vegan Contains: wheat, soy"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -661,7 +661,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Brown-butter chocolate chip $3.25 Crisp edges, soft middle, flaky salt on top. Contains: wheat, milk, eggs, soy"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -693,7 +693,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Oatmeal raisin $3.00 Chewy, with a little cinnamon. Contains: wheat, milk, eggs"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -725,7 +725,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Hazelnut shortbread $3.00 Made with toasted Oregon hazelnuts. Contains: wheat, milk, tree nuts (hazelnuts)"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -756,7 +756,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Peanut butter $3.00 Classic fork-pressed, with roasted peanuts. Contains: wheat, milk, eggs, peanuts"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -788,7 +788,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Ginger molasses $3.00 Soft and spicy, rolled in raw sugar. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -801,7 +801,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Ginger molasses $3.00 Soft and spicy, rolled in raw sugar. Vegan Contains: wheat"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -833,7 +833,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Flourless chocolate crinkle $3.50 Fudgy, made with cocoa and egg whites. Gluten-free Contains: eggs, soy"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -846,7 +846,7 @@
                   "url": "https://thimbleberry.example.com/menu.html",
                   "quote": "Flourless chocolate crinkle $3.50 Fudgy, made with cocoa and egg whites. Gluten-free Contains: eggs, soy"
                 },
-                {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
               ]
             }
           },
@@ -927,7 +927,7 @@
                       "owner_confirmed": true,
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/menu.html", "quote": "Vanilla bean contains: wheat, milk, eggs."},
-                        {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                        {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
                       ]
                     }
                   }
@@ -943,7 +943,7 @@
                       "owner_confirmed": true,
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/menu.html", "quote": "Dark chocolate contains: wheat, milk, eggs, soy."},
-                        {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+                        {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
                       ]
                     }
                   }
@@ -1059,7 +1059,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Vanilla bean wheat, milk, eggs Available Available"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1081,7 +1081,7 @@
                           "quote": "Dark chocolate wheat, milk, eggs, soy Available Available"
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1103,7 +1103,7 @@
                           "quote": "Lemon-poppyseed wheat, milk, eggs Available Not available"
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1125,7 +1125,7 @@
                           "quote": "Carrot with walnuts wheat, milk, eggs, tree nuts (walnuts) Not available Not available"
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1147,7 +1147,7 @@
                           "quote": "Hazelnut praline wheat, milk, eggs, tree nuts (hazelnuts) Not available Not available"
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1169,7 +1169,7 @@
                           "quote": "Birthday sprinkle wheat, milk, eggs, soy Not available Not available"
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1192,7 +1192,7 @@
                           "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1208,7 +1208,7 @@
                           "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1231,7 +1231,7 @@
                           "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1247,7 +1247,7 @@
                           "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1270,7 +1270,7 @@
                           "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1286,7 +1286,7 @@
                           "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1309,7 +1309,7 @@
                           "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1325,7 +1325,7 @@
                           "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1348,7 +1348,7 @@
                           "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1364,7 +1364,7 @@
                           "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
                         },
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1391,7 +1391,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Marionberry jam none of the major allergens"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1409,7 +1409,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Lemon curd milk, eggs"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1428,7 +1428,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Salted caramel milk"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1447,7 +1447,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Chocolate ganache milk, soy"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1474,7 +1474,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Vanilla buttercream milk"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1493,7 +1493,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Chocolate buttercream milk, soy"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1512,7 +1512,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Cream cheese frosting milk"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1531,7 +1531,7 @@
                       "evidence": [
                         {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "Vegan vanilla buttercream soy"},
                         {
-                          "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                          "url": "urn:askonce:owner-answer:q-cake-allergens",
                           "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
                         }
                       ]
@@ -1622,7 +1622,7 @@
               "url": "https://thimbleberry.example.com/menu.html",
               "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others."
             },
-            {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+            {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
           ]
         }
       }
@@ -1833,7 +1833,7 @@
                 "quote": "They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces. We don't recommend them for people with celiac disease."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                "url": "urn:askonce:owner-answer:q-cake-allergens",
                 "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
               }
             ]
@@ -1854,7 +1854,7 @@
                 "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
               },
               {
-                "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                "url": "urn:askonce:owner-answer:q-cake-allergens",
                 "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
               }
             ]
@@ -1872,7 +1872,7 @@
               {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "We can't make a cake that is both gluten-free and vegan."},
               {"url": "https://thimbleberry.example.com/faq.html", "quote": "No, we can't make a cake that is both."},
               {
-                "url": "urn:shopfront:owner-answer:q-cake-allergens",
+                "url": "urn:askonce:owner-answer:q-cake-allergens",
                 "quote": "Yes, the cake allergens and the gluten-free and vegan details are all correct."
               }
             ]
@@ -1895,7 +1895,7 @@
                 "url": "https://thimbleberry.example.com/custom-cakes.html",
                 "quote": "Every other flavor is made without nuts in the recipe, but tree nuts and peanuts are used in our kitchen every day, so we can't promise a nut-free cake."
               },
-              {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+              {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
             ]
           }
         },
@@ -1912,7 +1912,7 @@
                 "url": "https://thimbleberry.example.com/menu.html",
                 "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
               },
-              {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+              {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
             ]
           }
         },
@@ -1934,7 +1934,7 @@
                 "url": "https://thimbleberry.example.com/faq.html",
                 "quote": "All of them are made with gluten-free ingredients in a kitchen that uses wheat flour every day, so we can't guarantee they're free of gluten traces and don't recommend them for people with celiac disease."
               },
-              {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+              {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
             ]
           }
         },
@@ -1959,7 +1959,7 @@
                 "url": "https://thimbleberry.example.com/faq.html",
                 "quote": "Our country sourdough, seeded rye, olive & rosemary loaf and baguette are vegan, along with the vegan blueberry muffin and the ginger molasses cookie. Vegan custom cakes come in vanilla bean or dark chocolate (add $10.00 per cake, or per tier)."
               },
-              {"url": "urn:shopfront:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
+              {"url": "urn:askonce:owner-answer:q-menu-allergens", "quote": "Yes, everything on the menu is correct."}
             ]
           }
         },
@@ -2301,7 +2301,7 @@
             },
             {"url": "https://thimbleberry.example.com/contact.html", "quote": "We're closed on Thanksgiving Day, December 25 and January 1."},
             {
-              "url": "urn:shopfront:owner-answer:q-custom-cake-capacity",
+              "url": "urn:askonce:owner-answer:q-custom-cake-capacity",
               "quote": "Two custom cakes a day. That's all our decorating bench can handle."
             }
           ]
@@ -2405,7 +2405,7 @@
         "evidence": [
           {"url": "https://thimbleberry.example.com/custom-cakes.html", "quote": "She reviews each one herself and replies within 24 hours."},
           {
-            "url": "urn:shopfront:owner-edit:onboarding-settings",
+            "url": "urn:askonce:owner-edit:onboarding-settings",
             "quote": "Send approvals to my phone. If I haven't answered within two days, let the customer know."
           }
         ]
@@ -2477,36 +2477,36 @@
     },
     "owner-q-saturday-close": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-saturday-close",
+      "url": "urn:askonce:owner-answer:q-saturday-close",
       "title": "Answer from Rosa",
       "question_id": "q-saturday-close",
       "retrieved_at": "2026-10-12T16:08:30Z"
     },
     "owner-q-custom-cake-capacity": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-custom-cake-capacity",
+      "url": "urn:askonce:owner-answer:q-custom-cake-capacity",
       "title": "Answer from Rosa",
       "question_id": "q-custom-cake-capacity",
       "retrieved_at": "2026-10-12T16:09:05Z"
     },
     "owner-q-menu-allergens": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-menu-allergens",
+      "url": "urn:askonce:owner-answer:q-menu-allergens",
       "title": "Answer from Rosa",
       "question_id": "q-menu-allergens",
       "retrieved_at": "2026-10-12T16:09:40Z"
     },
     "owner-q-cake-allergens": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-cake-allergens",
+      "url": "urn:askonce:owner-answer:q-cake-allergens",
       "title": "Answer from Rosa",
       "question_id": "q-cake-allergens",
       "retrieved_at": "2026-10-12T16:10:02Z"
     },
     "owner-settings": {
       "kind": "owner_edit",
-      "url": "urn:shopfront:owner-edit:onboarding-settings",
-      "title": "Rosa's Shopfront settings",
+      "url": "urn:askonce:owner-edit:onboarding-settings",
+      "title": "Rosa's AskOnce settings",
       "retrieved_at": "2026-10-12T16:11:00Z"
     }
   },

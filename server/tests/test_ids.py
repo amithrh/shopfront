@@ -6,7 +6,7 @@ import secrets
 
 import pytest
 
-from shopfront_server.ids import BOOKING_CODE_DIGITS, IdFactory, new_id, reference_prefix, spoken_reference
+from askonce_server.ids import BOOKING_CODE_DIGITS, IdFactory, new_id, reference_prefix, spoken_reference
 
 
 def test_round2_misc_low_code_round_trips_to_the_id_prefix() -> None:

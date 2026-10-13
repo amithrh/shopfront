@@ -105,7 +105,7 @@
             { "url": "https://kettlewick.example.com/service-area.html", "quote": "Scheduled work and after-hours emergency plumbing." },
             { "url": "https://kettlewick.example.com/index.html", "quote": "Most of central Denver is in our core area, from Sunnyside and Highland to Park Hill, Washington Park and Virginia Village." },
             { "url": "https://kettlewick.example.com/service-area.html", "quote": "Central Park" },
-            { "url": "urn:shopfront:owner-answer:q-central-park", "quote": "Central Park is core: no travel fee, and we take after-hours emergencies there." }
+            { "url": "urn:askonce:owner-answer:q-central-park", "quote": "Central Park is core: no travel fee, and we take after-hours emergencies there." }
           ]
         }
       },
@@ -151,7 +151,7 @@
             { "url": "https://kettlewick.example.com/service-area.html", "quote": "Scheduled work only. We don't run after-hours emergency calls out here, but we'll handle an emergency during regular hours." },
             { "url": "https://kettlewick.example.com/index.html", "quote": "Lakewood, Edgewater, Lowry, Glendale and a few other nearby areas are in our extended area." },
             { "url": "https://kettlewick.example.com/how-it-works.html", "quote": "Not at the moment. Wheat Ridge (80033) and Arvada are outside our service area." },
-            { "url": "urn:shopfront:owner-answer:q-wheat-ridge", "quote": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page." }
+            { "url": "urn:askonce:owner-answer:q-wheat-ridge", "quote": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page." }
           ]
         }
       }
@@ -812,7 +812,7 @@
             "evidence": [
               { "url": "https://kettlewick.example.com/how-it-works.html", "quote": "Jo Lindqvist, our owner and master plumber, reads every request herself." },
               { "url": "https://kettlewick.example.com/how-it-works.html", "quote": "You'll get one of three replies, by text or email:" },
-              { "url": "urn:shopfront:owner-answer:q-quote-turnaround", "quote": "Within 24 hours, weekends included." }
+              { "url": "urn:askonce:owner-answer:q-quote-turnaround", "quote": "Within 24 hours, weekends included." }
             ]
           }
         },
@@ -1008,7 +1008,7 @@
           "provenance": {
             "owner_confirmed": true,
             "evidence": [
-              { "url": "urn:shopfront:owner-answer:q-wheat-ridge", "quote": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page. Send those customers to the office and we'll refer them to a plumber who works there." },
+              { "url": "urn:askonce:owner-answer:q-wheat-ridge", "quote": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page. Send those customers to the office and we'll refer them to a plumber who works there." },
               { "url": "https://kettlewick.example.com/service-area.html", "quote": "We don't take jobs in these areas, or anywhere in Boulder County, but we're glad to pass along a licensed contractor we trust." },
               { "url": "https://kettlewick.example.com/service-area.html", "quote": "Arvada" },
               { "url": "https://kettlewick.example.com/service-area.html", "quote": "Aurora" },
@@ -1044,8 +1044,8 @@
             "owner_confirmed": true,
             "evidence": [
               { "url": "https://kettlewick.example.com/how-it-works.html", "quote": "Not at the moment. Wheat Ridge (80033) and Arvada are outside our service area. Call the office and we'll refer you to a licensed plumber who works there." },
-              { "url": "urn:shopfront:owner-answer:q-wheat-ridge", "quote": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page." },
-              { "url": "urn:shopfront:owner-answer:q-wheat-ridge", "quote": "Send those customers to the office and we'll refer them to a plumber who works there." }
+              { "url": "urn:askonce:owner-answer:q-wheat-ridge", "quote": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page." },
+              { "url": "urn:askonce:owner-answer:q-wheat-ridge", "quote": "Send those customers to the office and we'll refer them to a plumber who works there." }
             ]
           }
         },
@@ -1061,7 +1061,7 @@
             "evidence": [
               { "url": "https://kettlewick.example.com/service-area.html", "quote": "Central Park" },
               { "url": "https://kettlewick.example.com/service-area.html", "quote": "Scheduled work and after-hours emergency plumbing." },
-              { "url": "urn:shopfront:owner-answer:q-central-park", "quote": "Central Park is core: no travel fee, and we take after-hours emergencies there." }
+              { "url": "urn:askonce:owner-answer:q-central-park", "quote": "Central Park is core: no travel fee, and we take after-hours emergencies there." }
             ]
           }
         },
@@ -1278,7 +1278,7 @@
           "provenance": {
             "owner_confirmed": true,
             "evidence": [
-              { "url": "urn:shopfront:owner-answer:q-lead-safety", "quote": "Yes, that's correct." },
+              { "url": "urn:askonce:owner-answer:q-lead-safety", "quote": "Yes, that's correct." },
               { "url": "https://kettlewick.example.com/services.html", "quote": "Homes built before 1978: we follow lead-safe work practices as an RRP-certified firm." },
               { "url": "https://kettlewick.example.com/services.html", "quote": "If we suspect asbestos, for example in a popcorn ceiling, we stop and refer you to a licensed abatement contractor." },
               { "url": "https://kettlewick.example.com/about.html", "quote": "Lead-safe certified firm (RRP) for work in homes built before 1978" }
@@ -1584,8 +1584,8 @@
         "evidence": [
           { "url": "https://kettlewick.example.com/how-it-works.html", "quote": "Jo Lindqvist, our owner and master plumber, reads every request herself." },
           { "url": "https://kettlewick.example.com/about.html", "quote": "Reviews every quote request and writes every quote." },
-          { "url": "urn:shopfront:owner-answer:q-quote-turnaround", "quote": "Within 24 hours, weekends included." },
-          { "url": "urn:shopfront:owner-answer:q-quote-turnaround", "quote": "If a request has sat for 48 hours without an answer from me, tell the customer and have them call the office." }
+          { "url": "urn:askonce:owner-answer:q-quote-turnaround", "quote": "Within 24 hours, weekends included." },
+          { "url": "urn:askonce:owner-answer:q-quote-turnaround", "quote": "If a request has sat for 48 hours without an answer from me, tell the customer and have them call the office." }
         ]
       }
     }
@@ -1650,25 +1650,25 @@
     },
     "answer-q-wheat-ridge": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-wheat-ridge",
+      "url": "urn:askonce:owner-answer:q-wheat-ridge",
       "title": "Owner answer: is Wheat Ridge (80033) served?",
       "question_id": "q-wheat-ridge"
     },
     "answer-q-central-park": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-central-park",
+      "url": "urn:askonce:owner-answer:q-central-park",
       "title": "Owner answer: is Central Park (80238) core or extended?",
       "question_id": "q-central-park"
     },
     "answer-q-quote-turnaround": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-quote-turnaround",
+      "url": "urn:askonce:owner-answer:q-quote-turnaround",
       "title": "Owner answer: how fast quote requests are answered",
       "question_id": "q-quote-turnaround"
     },
     "answer-q-lead-safety": {
       "kind": "owner_answer",
-      "url": "urn:shopfront:owner-answer:q-lead-safety",
+      "url": "urn:askonce:owner-answer:q-lead-safety",
       "title": "Owner answer: lead-safe and asbestos practices confirmed",
       "question_id": "q-lead-safety"
     }

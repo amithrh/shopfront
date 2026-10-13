@@ -13,11 +13,11 @@ from typing import Any
 
 import pytest
 
-from shopfront_server.domain.models import Commitment
-from shopfront_server.domain.planning import CommitPlan
-from shopfront_server.domain.services.owner import OwnerDecisionInput
-from shopfront_server.errors import InvalidDecision, InvalidState, NotFound
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.models import Commitment
+from askonce_server.domain.planning import CommitPlan
+from askonce_server.domain.services.owner import OwnerDecisionInput
+from askonce_server.errors import InvalidDecision, InvalidState, NotFound
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 
@@ -464,7 +464,7 @@ async def test_round2_idempotency_replay_used_up_attempts_are_refused_not_replay
 ) -> None:
     """Once every attempt at one request is settled, the next identical request used to replay the last
     settled (declined) commitment. It is now refused with `too_many_attempts` and nothing is written."""
-    from shopfront_server.domain.services import base
+    from askonce_server.domain.services import base
 
     monkeypatch.setattr(base, "MAX_GENERATIONS", 2)
 
@@ -595,7 +595,7 @@ async def test_round2_cancel_releases_the_hook_retries_after_a_concurrent_change
 async def test_round2_cancel_releases_a_hook_that_keeps_losing_logs_and_the_inbox_finishes_the_job(
     domain: Domain, bakery: Profile, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
-    from shopfront_server.errors import ConcurrencyConflict
+    from askonce_server.errors import ConcurrencyConflict
 
     cake = await big_cake(domain, bakery)
     store = domain.ctx.commitments

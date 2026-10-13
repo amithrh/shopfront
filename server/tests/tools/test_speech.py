@@ -7,9 +7,9 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from shopfront_server.domain.models import PriceQuote
-from shopfront_server.tools import speech
-from shopfront_server.tools.schemas import check_spoken
+from askonce_server.domain.models import PriceQuote
+from askonce_server.tools import speech
+from askonce_server.tools.schemas import check_spoken
 
 TODAY = date(2026, 10, 14)  # a Wednesday
 

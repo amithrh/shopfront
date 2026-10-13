@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://shopfront.example/schema/business-profile/grounding/v1.json",
-  "title": "Shopfront Business Profile (grounding lens)",
-  "description": "One tenant of the Shopfront multi-tenant MCP server. Design rule: every customer-facing fact lives exactly once in the flat `facts` ledger, keyed by a stable fact ID, with a normalized typed value and provenance. Modules and the business block only hold structure and FactRefs into the ledger. An assistant reply is grounded iff every claim it makes is a (fact_id, value_type, value) triple that byte-equals the ledger entry under RFC 8785 canonical JSON and the fact is statable (see x-invariants INV-09/INV-10). Website text is untrusted data: it only reaches the profile as quoted evidence, never as instructions.",
+  "$id": "https://askonce.example/schema/business-profile/grounding/v1.json",
+  "title": "AskOnce Business Profile (grounding lens)",
+  "description": "One tenant of the AskOnce multi-tenant MCP server. Design rule: every customer-facing fact lives exactly once in the flat `facts` ledger, keyed by a stable fact ID, with a normalized typed value and provenance. Modules and the business block only hold structure and FactRefs into the ledger. An assistant reply is grounded iff every claim it makes is a (fact_id, value_type, value) triple that byte-equals the ledger entry under RFC 8785 canonical JSON and the fact is statable (see x-invariants INV-09/INV-10). Website text is untrusted data: it only reaches the profile as quoted evidence, never as instructions.",
   "type": "object",
   "required": [
     "schema_version",
@@ -189,7 +189,7 @@
       "description": "Web page URL, or a URN for an owner answer/edit, so every fact has a uniform 'source URL'.",
       "type": "string",
       "format": "uri",
-      "pattern": "^(https?://[^\\s]+|urn:shopfront:(owner-answer|owner-edit):[a-z0-9_]{1,64})$"
+      "pattern": "^(https?://[^\\s]+|urn:askonce:(owner-answer|owner-edit):[a-z0-9_]{1,64})$"
     },
     "JsonPointer": { "type": "string", "pattern": "^(/([^~/]|~[01])*)*$" },
     "ValueType": {
@@ -567,12 +567,12 @@
           "if": { "properties": { "kind": { "const": "owner_answer" } } },
           "then": {
             "required": ["question_id"],
-            "properties": { "trust": { "const": "owner_attested" }, "url": { "pattern": "^urn:shopfront:owner-answer:" } }
+            "properties": { "trust": { "const": "owner_attested" }, "url": { "pattern": "^urn:askonce:owner-answer:" } }
           }
         },
         {
           "if": { "properties": { "kind": { "const": "owner_edit" } } },
-          "then": { "properties": { "trust": { "const": "owner_attested" }, "url": { "pattern": "^urn:shopfront:owner-edit:" } } }
+          "then": { "properties": { "trust": { "const": "owner_attested" }, "url": { "pattern": "^urn:askonce:owner-edit:" } } }
         }
       ]
     },

@@ -9,10 +9,10 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from shopfront_server.domain.planning import CommitPlan
-from shopfront_server.errors import UnknownModule
-from shopfront_server.profile.factref import resolve
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.planning import CommitPlan
+from askonce_server.errors import UnknownModule
+from askonce_server.profile.factref import resolve
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 

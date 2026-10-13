@@ -1,10 +1,10 @@
 # Business Profile schema (v1.0)
 
-- **Schema:** `schema/business-profile.schema.json` (JSON Schema 2020-12, `$id` `https://shopfront.dev/schema/business-profile.schema.json`, 585 lines)
+- **Schema:** `schema/business-profile.schema.json` (JSON Schema 2020-12, `$id` `https://askonce.dev/schema/business-profile.schema.json`, 585 lines)
 - **Example:** `schema/example-profile.json` (Thimbleberry Bakehouse, every module type, validates)
 - **Drafts judged:** `schema/drafts/profile-{generic,grounding,voice-tools}.schema.json`
 
-A Business Profile is the only thing that differs between two tenants of the Shopfront MCP server. The onboarding agent writes it from a website plus the owner's answers. The certifier checks replies against it, and the MCP tools read from it. This document covers three things:
+A Business Profile is the only thing that differs between two tenants of the AskOnce MCP server. The onboarding agent writes it from a website plus the owner's answers. The certifier checks replies against it, and the MCP tools read from it. This document covers three things:
 - how the three drafts were scored;
 - what the final schema took from each;
 - how every section is meant to be used.
@@ -77,7 +77,7 @@ All three draft examples validate against their own schema (re-checked with json
 - **Money.** Integer `amount_cents` plus `currency`.
 - **Evidence.**
   - Each item is `{url, quote}`, where the quote is verbatim.
-  - Owner answers get a uniform URL: `urn:shopfront:owner-answer:<question id>`.
+  - Owner answers get a uniform URL: `urn:askonce:owner-answer:<question id>`.
 - **`owner_confirmed: true` requires owner evidence.** It must include an owner URN, so nobody can claim a confirmation that never happened.
 - **Stable addressing instead of positional pointers.** A `fact_ref` such as `menu/celebration-cake#allergens` or `custom-cakes#availability.capacity_per_day` is built from ids, so it survives re-extraction. This gives the ledger's stability without a separate ledger.
 - **Sources.** Each source has a `content_sha256` snapshot. The quote-in-snapshot check (L3) is what catches extractor hallucination deterministically.
@@ -161,7 +161,7 @@ The map key is the module id: the tool-facing handle and the scope of fact refs 
 | `booking` | `services`, `slotting`, `availability`, `intake_fields`, `confirmation` | check_availability, book, cancel_booking | `services` reference catalog items; `resources` (stylists, tables, instructors); `slotting` is `interval` (`step_minutes`) or `fixed` (`sessions` with day, start time and capacity). Optional `approval` for owner review. |
 | `custom_order` | `items`, `availability`, `approval`, `intake_fields`, `confirmation` | check_availability, place_custom_order, get_task | Made-to-order goods. The item's option groups become the `choices` slot. |
 | `quote_request` | `items`, `approval` (mode `always`, decisions include `quote`), `intake_fields`, `confirmation` | check_service_area, request_quote, get_task | Job priced per request. The owner's reply comes back as an MCP Task. The assistant never estimates a price. Optional `visit_windows`. |
-| `owner_approval` | `approver.spoken_name`, `channel`, `expected_response_minutes`, `expires_after_minutes`, `on_expiry`, `provenance` | ask_owner, get_task | Where approvals and "ask the owner" Tasks go. Contact handles live in tenant config, never in the profile. `on_expiry` applies once `expires_after_minutes` pass: `notify_customer` expires the request, `auto_decline` declines it, and `keep_waiting` keeps it open until its service time (a booking's start, the end of an order's day), or at most `SHOPFRONT_KEEP_WAITING_MAX_DAYS` (30) after it was made, then expires it like `notify_customer`. |
+| `owner_approval` | `approver.spoken_name`, `channel`, `expected_response_minutes`, `expires_after_minutes`, `on_expiry`, `provenance` | ask_owner, get_task | Where approvals and "ask the owner" Tasks go. Contact handles live in tenant config, never in the profile. `on_expiry` applies once `expires_after_minutes` pass: `notify_customer` expires the request, `auto_decline` declines it, and `keep_waiting` keeps it open until its service time (a booking's start, the end of an order's day), or at most `ASKONCE_KEEP_WAITING_MAX_DAYS` (30) after it was made, then expires it like `notify_customer`. |
 | `x-*` | `type` | (ignored) | Extension; facts inside are never statable. |
 
 **Pieces shared by transactional modules:**
@@ -196,7 +196,7 @@ The map key is the module id: the tool-facing handle and the scope of fact refs 
 - **Provenance.** `{owner_confirmed, evidence: [{url, quote}]}`.
   - **Nearest-provenance rule (L5).** A fact's provenance is the closest enclosing `provenance`. For example, an item's `price` is covered by the item's provenance, and its `allergens` by their own.
   - **Several quotes.** An object can cite several quotes (menu page plus owner answer).
-- **Evidence URL** is a web page or `urn:shopfront:owner-(answer|edit):<id>`. The quote is the page's verbatim words, or the owner's exact words.
+- **Evidence URL** is a web page or `urn:askonce:owner-(answer|edit):<id>`. The quote is the page's verbatim words, or the owner's exact words.
 - **`sources`** is written by **onboarding code, not the LLM**. There is one entry per fetched snapshot (`content_sha256`, `retrieved_at`) or owner answer/edit.
 - **`injection_canaries`.** Planted instructions found on a page, kept only so the certifier can prove they never reach output (L8). They are never extracted into facts.
 
@@ -325,7 +325,7 @@ valid
 - **7/7 profiles for other shapes are accepted.** Salon, home services, fitness studio, food truck, tutor, florist, and the bakery with an `x-waitlist` module and `x-*` keys.
 
 ## 8. Known gaps and open decisions
-1. **Quote-in-snapshot (L3) needs snapshots.** The loader (`server/src/shopfront_server/profile/`) enforces L1-L11, but it can only check L3 when a snapshot provider is configured. Without one, L3 is reported as skipped, and lenient (dev) mode downgrades L3, L7 and L11 to warnings.
+1. **Quote-in-snapshot (L3) needs snapshots.** The loader (`server/src/askonce_server/profile/`) enforces L1-L11, but it can only check L3 when a snapshot provider is configured. Without one, L3 is reported as skipped, and lenient (dev) mode downgrades L3, L7 and L11 to warnings.
 2. **Attribute values aren't typed by the schema** (L9). For example, a tutor profile with `grade_levels: [6, 7, 8]` validates even though the vocabulary enum says `g6…`.
 3. **The example's quotes and hashes are illustrative.** `schema/example-profile.json` is a schema-only variant of the bakery (120 Elm Street, Springfield, IL): it shares the demo bakery's name and `profile_id` but not its address, its quotes don't come from the demo site, and its hashes are placeholders. The profiles that match the demo sites are `profiles/*.json`: their quotes pass L3 against the pages in `sites/<profile_id>/`, and their `content_sha256` values are the real page hashes. The planted canary and the 6 pm vs 7 pm contradiction are designed in.
 4. **Custom-order approval mode.** PLAN.md says custom_order "needs owner approval". The schema requires an `approval` block but allows `when_any_rule_matches`. The example routes cakes for more than 24 people, or with any dietary need, to Rosa, so the cold-open "gluten-free cake for 30" still becomes a Task. Use `mode: always` if every custom order should wait for the owner.

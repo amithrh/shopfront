@@ -13,9 +13,9 @@ from support import ElicitationScript
 from tools_support import BAKERY, CANARY, Stack, loaded, strings_of, structured
 
 from mcp_tasks import TaskRecord
-from shopfront_server.profile.model import Profile
-from shopfront_server.tools import guard
-from shopfront_server.tools.schemas import (
+from askonce_server.profile.model import Profile
+from askonce_server.tools import guard
+from askonce_server.tools.schemas import (
     SPEAK_MAX,
     Card,
     CommitmentResult,
@@ -181,7 +181,7 @@ def _wire(payload: dict[str, Any], **extra: Any) -> dict[str, Any]:
         "isError": False,
         "resultType": "complete",
         "structuredContent": payload,
-        "_meta": {"io.modelcontextprotocol/serverInfo": {"name": "shopfront"}},
+        "_meta": {"io.modelcontextprotocol/serverInfo": {"name": "askonce"}},
         **extra,
     }
 
@@ -282,7 +282,7 @@ def _round(message: str = "How many servings do you need?", **schema: Any) -> di
         "resultType": "input_required",
         "inputRequests": {"intake": {"method": "elicitation/create", "params": {"mode": "form", "message": message, "requestedSchema": form}}},
         "requestState": "opaque-ROSAFREE-state",
-        "_meta": {"io.modelcontextprotocol/serverInfo": {"name": "shopfront"}},
+        "_meta": {"io.modelcontextprotocol/serverInfo": {"name": "askonce"}},
     }
 
 

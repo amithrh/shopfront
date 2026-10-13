@@ -15,9 +15,9 @@ from tools_support import BAKERY, BIG_CAKE, Stack, structured
 
 from mcp import Client
 from mcp.server.apps import Apps
-from shopfront_server.domain.services.owner import OwnerDecisionInput
-from shopfront_server.tools import cards
-from shopfront_server.tools.server import TOOLS
+from askonce_server.domain.services.owner import OwnerDecisionInput
+from askonce_server.tools import cards
+from askonce_server.tools.server import TOOLS
 
 pytestmark = pytest.mark.anyio
 
@@ -36,6 +36,8 @@ EXPECTED_CARDS = {
     "ask_owner": cards.TASK_CARD,
     "get_task": cards.TASK_CARD,
     "reply_to_owner": cards.TASK_CARD,
+    "check_request_status": cards.TASK_CARD,
+    "cancel_request": cards.COMMITMENT_CARD,
 }
 
 

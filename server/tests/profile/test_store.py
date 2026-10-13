@@ -13,11 +13,11 @@ import anyio
 import pytest
 from support import SCHEMA_PATH, make_live
 
-from shopfront_server import errors
-from shopfront_server.clock import FixedClock
-from shopfront_server.profile.directory import DirectoryEntry
-from shopfront_server.profile.model import Profile
-from shopfront_server.profile.store import (
+from askonce_server import errors
+from askonce_server.clock import FixedClock
+from askonce_server.profile.directory import DirectoryEntry
+from askonce_server.profile.model import Profile
+from askonce_server.profile.store import (
     CachingProfileStore,
     InMemoryProfileStore,
     ProfileStore,

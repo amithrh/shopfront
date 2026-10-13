@@ -13,10 +13,10 @@ import pytest
 from fastapi import FastAPI
 from pydantic import SecretStr
 
-from shopfront_server.app.links import OwnerLinkSigner
-from shopfront_server.app.main import create_app
-from shopfront_server.clock import FixedClock
-from shopfront_server.config import DEV_ADMIN_TOKEN, Settings
+from askonce_server.app.links import OwnerLinkSigner
+from askonce_server.app.main import create_app
+from askonce_server.clock import FixedClock
+from askonce_server.config import DEV_ADMIN_TOKEN, Settings
 
 pytestmark = pytest.mark.anyio
 
@@ -371,8 +371,8 @@ async def test_round2_prod_safety_admin_route_off_when_a_public_host_is_configur
 
 
 def test_fallback_decision_options(world: Any) -> None:
-    from shopfront_server.app.owner_api import decision_options
-    from shopfront_server.domain.services.owner import ANSWER_FIELD
+    from askonce_server.app.owner_api import decision_options
+    from askonce_server.domain.services.owner import ANSWER_FIELD
 
     bakery = world.profiles._profiles[BAKERY]
     pending = world.commitment("c_f1")

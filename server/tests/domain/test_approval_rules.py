@@ -6,8 +6,8 @@ from typing import Any
 
 import pytest
 
-from shopfront_server.domain.approval_rules import evaluate_approval, rule_matches
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.approval_rules import evaluate_approval, rule_matches
+from askonce_server.profile.model import Profile
 
 CAKE = "menu/custom-cake"
 

@@ -1,4 +1,4 @@
-"""Strands interop: run `strands_tasks_interop.py` under the onboarding venv against a live Shopfront server.
+"""Strands interop: run `strands_tasks_interop.py` under the onboarding venv against a live AskOnce server.
 
 Strands 1.57.1 ships its own SEP-2663 client (on mcp 2.1.1), written independently of `mcp_tasks`. The
 script places a big custom-cake order that becomes an owner task, the owner approves over the signed REST
@@ -19,7 +19,7 @@ from typing import Any
 import pytest
 from e2e_support import ADMIN_TOKEN, BAKERY, Shop, injection_canaries, loaded, running_shop
 
-from shopfront_server.config import REPO_ROOT
+from askonce_server.config import REPO_ROOT
 
 ONBOARDING_PYTHON = REPO_ROOT / "onboarding" / ".venv" / "bin" / "python"
 SCRIPT = Path(__file__).with_name("strands_tasks_interop.py")
@@ -63,7 +63,7 @@ def test_strands_client_completes_an_owner_approved_task(shop: Shop) -> None:
     summary = json.loads(completed.stdout.strip().splitlines()[-1])
     print(json.dumps(summary))  # visible with -rP
     assert summary["ok"] is True
-    assert summary["tools"] == 14
+    assert summary["tools"] == 16
     assert summary["call_tool_sync"]["status"] == "approved"
     submitted = summary["submit_tool_sync"]
     assert submitted["handle"] == "MCPCreateTaskResult" and submitted["handle_status"] == "working"

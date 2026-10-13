@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 from pydantic import SecretStr
 
-from shopfront_server.config import (
+from askonce_server.config import (
     DEV_ADMIN_TOKEN,
     DEV_ID_KEY,
     DEV_OWNER_LINK_KEY,
@@ -41,7 +41,7 @@ def prod(**overrides: Any) -> Settings:
 
 
 def test_fixed_names() -> None:
-    assert MCP_PATH == "/mcp" and SERVER_NAME == "shopfront"
+    assert MCP_PATH == "/mcp" and SERVER_NAME == "askonce"
 
 
 def test_dev_defaults_work_out_of_the_box() -> None:
@@ -129,12 +129,12 @@ def test_dev_admin_token_is_fine_outside_prod() -> None:
 
 def test_list_settings_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
     keys = '["k1-0123456789abcdef0123456789abcd", "k2-0123456789abcdef0123456789abcd"]'
-    monkeypatch.setenv("SHOPFRONT_OWNER_LINK_KEYS", keys)
+    monkeypatch.setenv("ASKONCE_OWNER_LINK_KEYS", keys)
     # Public CORS origins mean "deployed": every DEV-ONLY key is refused, not just the link key.
-    monkeypatch.setenv("SHOPFRONT_REQUEST_STATE_KEYS", "env-request-state-key-0123456789abcdef")
-    monkeypatch.setenv("SHOPFRONT_ID_KEY", "env-id-key-0123456789abcdef0123456789")
-    monkeypatch.setenv("SHOPFRONT_CORS_ORIGINS", "https://owner.example, https://host.example")
-    monkeypatch.setenv("SHOPFRONT_SWEEP_INTERVAL_S", "5")
+    monkeypatch.setenv("ASKONCE_REQUEST_STATE_KEYS", "env-request-state-key-0123456789abcdef")
+    monkeypatch.setenv("ASKONCE_ID_KEY", "env-id-key-0123456789abcdef0123456789")
+    monkeypatch.setenv("ASKONCE_CORS_ORIGINS", "https://owner.example, https://host.example")
+    monkeypatch.setenv("ASKONCE_SWEEP_INTERVAL_S", "5")
     settings = Settings()
     assert [k.get_secret_value()[:2] for k in settings.owner_link_keys] == ["k1", "k2"]
     assert settings.cors_origins == ["https://owner.example", "https://host.example"]
@@ -177,7 +177,7 @@ REAL_ADMIN = SecretStr("a-real-admin-token-0123456789abcdef")
     ],
 )
 def test_round2_prod_safety_public_allowed_host_or_origin_counts_as_deployed(public: dict[str, Any]) -> None:
-    """SEC-5 R1: with SHOPFRONT_ENV forgotten, a public Host/Origin/CORS entry alone means "deployed"."""
+    """SEC-5 R1: with ASKONCE_ENV forgotten, a public Host/Origin/CORS entry alone means "deployed"."""
     with pytest.raises(ValueError, match="DEV-ONLY"):
         Settings(**public)
     settings = Settings(**public, **REAL)
@@ -190,10 +190,10 @@ def test_round2_prod_safety_public_allowed_host_or_origin_counts_as_deployed(pub
     "local",
     [
         {"allowed_hosts": ["testserver", "localhost:*"]},
-        {"allowed_hosts": ["shopfront:8000", "[::1]:8000", "app.localhost:*"]},
-        {"cors_origins": ["http://localhost:6274", "http://shopfront:8000"]},
+        {"allowed_hosts": ["askonce:8000", "[::1]:8000", "app.localhost:*"]},
+        {"cors_origins": ["http://localhost:6274", "http://askonce:8000"]},
         {"public_base_url": "http://testserver"},
-        {"public_base_url": "http://shopfront:8000"},
+        {"public_base_url": "http://askonce:8000"},
         {},
     ],
 )
@@ -209,7 +209,7 @@ def test_round2_prod_safety_local_names_keep_dev_ergonomics(local: dict[str, Any
     ("value", "local"),
     [
         ("localhost:*", True), ("127.0.0.1:*", True), ("[::1]:8000", True), ("testserver", True),
-        ("http://localhost:6274", True), ("http://shopfront:8000", True), ("x.localhost", True),
+        ("http://localhost:6274", True), ("http://askonce:8000", True), ("x.localhost", True),
         ("mcp.example.com", False), ("10.0.0.5:8000", False), ("*", False), ("*.example.com", False),
         ("https://app.example.com", False), ("[2001:db8::1]:8000", False), ("http://[2001:db8::1]", False),
     ],
@@ -382,14 +382,14 @@ def test_round2_prod_safety_bind_host_default(monkeypatch: pytest.MonkeyPatch) -
     assert Settings(env="test").host == "127.0.0.1"
     assert prod().host == "0.0.0.0"
     assert prod(host="10.0.0.7").host == "10.0.0.7"  # explicit wins
-    assert Settings(host="0.0.0.0").host == "0.0.0.0"  # e.g. the image's SHOPFRONT_HOST in a dev container
-    monkeypatch.setenv("SHOPFRONT_ENV", "prod")
-    monkeypatch.setenv("SHOPFRONT_STORAGE", "dynamodb")
-    monkeypatch.setenv("SHOPFRONT_ALLOWED_HOSTS", "mcp.example.com")
-    monkeypatch.setenv("SHOPFRONT_PUBLIC_BASE_URL", "https://mcp.example.com")
-    monkeypatch.setenv("SHOPFRONT_REQUEST_STATE_KEYS", "env-request-state-key-0123456789abcdef")
-    monkeypatch.setenv("SHOPFRONT_OWNER_LINK_KEYS", "env-owner-link-key-0123456789abcdef0123")
-    monkeypatch.setenv("SHOPFRONT_ID_KEY", "env-id-key-0123456789abcdef0123456789")
+    assert Settings(host="0.0.0.0").host == "0.0.0.0"  # e.g. the image's ASKONCE_HOST in a dev container
+    monkeypatch.setenv("ASKONCE_ENV", "prod")
+    monkeypatch.setenv("ASKONCE_STORAGE", "dynamodb")
+    monkeypatch.setenv("ASKONCE_ALLOWED_HOSTS", "mcp.example.com")
+    monkeypatch.setenv("ASKONCE_PUBLIC_BASE_URL", "https://mcp.example.com")
+    monkeypatch.setenv("ASKONCE_REQUEST_STATE_KEYS", "env-request-state-key-0123456789abcdef")
+    monkeypatch.setenv("ASKONCE_OWNER_LINK_KEYS", "env-owner-link-key-0123456789abcdef0123")
+    monkeypatch.setenv("ASKONCE_ID_KEY", "env-id-key-0123456789abcdef0123456789")
     assert Settings().host == "0.0.0.0"  # env from the environment, host unset
-    monkeypatch.setenv("SHOPFRONT_HOST", "127.0.0.1")
+    monkeypatch.setenv("ASKONCE_HOST", "127.0.0.1")
     assert Settings().host == "127.0.0.1"

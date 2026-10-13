@@ -50,10 +50,10 @@ from mcp.shared.exceptions import MCPError
 from mcp_tasks.client import TaskHandle, TasksClientExtension, TaskState, get_task
 from support import FIXED_NOW, ElicitationScript, apps_advertisement, make_live
 
-from shopfront_server.app.links import signer_from_settings
-from shopfront_server.app.notifier import OutboxMessage
-from shopfront_server.clock import FixedClock
-from shopfront_server.profile.model import Profile
+from askonce_server.app.links import signer_from_settings
+from askonce_server.app.notifier import OutboxMessage
+from askonce_server.clock import FixedClock
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 
@@ -585,7 +585,7 @@ class TestMcpApps:
     async def test_card_tools_and_ui_resources(self, shop: Shop) -> None:
         async with customer(shop, ElicitationScript(), mode="plain", apps=True) as client:
             tools = (await client.list_tools()).tools
-            assert len(tools) == 14
+            assert len(tools) == 16
             uris = set()
             for tool in tools:
                 ui = (tool.meta or {}).get("ui")

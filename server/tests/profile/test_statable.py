@@ -8,10 +8,10 @@ from typing import Any
 
 import pytest
 
-from shopfront_server.profile.factref import FactRef, resolve
-from shopfront_server.profile.loader import LoadedProfile
-from shopfront_server.profile.model import Profile
-from shopfront_server.profile.statable import disputed_by, is_safety_field, statability
+from askonce_server.profile.factref import FactRef, resolve
+from askonce_server.profile.loader import LoadedProfile
+from askonce_server.profile.model import Profile
+from askonce_server.profile.statable import disputed_by, is_safety_field, statability
 
 
 def _reopen(doc: dict[str, Any], question_id: str) -> dict[str, Any]:

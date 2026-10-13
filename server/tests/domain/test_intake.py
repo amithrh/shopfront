@@ -7,7 +7,7 @@ from typing import Any
 
 import pytest
 
-from shopfront_server.domain.intake import (
+from askonce_server.domain.intake import (
     country_calling_code,
     field_specs,
     nonce_payload,
@@ -15,8 +15,8 @@ from shopfront_server.domain.intake import (
     normalize_phone,
     normalize_value,
 )
-from shopfront_server.domain.planning import IntakeFieldSpec
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.planning import IntakeFieldSpec
+from askonce_server.profile.model import Profile
 
 US = "en-US"
 

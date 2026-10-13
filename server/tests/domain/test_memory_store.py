@@ -8,17 +8,17 @@ from typing import Any
 import anyio
 import pytest
 
-from shopfront_server.clock import FixedClock
-from shopfront_server.domain.idempotency import new_record
-from shopfront_server.domain.models import CapacityHold, Commitment
-from shopfront_server.domain.ports import CapacityExhausted, Committed, Duplicate
-from shopfront_server.domain.stores.memory import (
+from askonce_server.clock import FixedClock
+from askonce_server.domain.idempotency import new_record
+from askonce_server.domain.models import CapacityHold, Commitment
+from askonce_server.domain.ports import CapacityExhausted, Committed, Duplicate
+from askonce_server.domain.stores.memory import (
     InMemoryCapacityStore,
     InMemoryCommitmentStore,
     InMemoryIdempotencyStore,
     MemoryState,
 )
-from shopfront_server.errors import ConcurrencyConflict, InvalidState, NotFound
+from askonce_server.errors import ConcurrencyConflict, InvalidState, NotFound
 
 pytestmark = pytest.mark.anyio
 

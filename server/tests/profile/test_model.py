@@ -12,9 +12,9 @@ from zoneinfo import ZoneInfo
 import pytest
 from pydantic import JsonValue, TypeAdapter
 
-from shopfront_server import errors
-from shopfront_server.canonical import profile_sha256
-from shopfront_server.profile.model import FrozenDict, FrozenList, Profile, freeze, thaw
+from askonce_server import errors
+from askonce_server.canonical import profile_sha256
+from askonce_server.profile.model import FrozenDict, FrozenList, Profile, freeze, thaw
 
 
 @pytest.fixture

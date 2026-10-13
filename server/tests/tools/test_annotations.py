@@ -15,7 +15,9 @@ from tools_support import Stack
 
 pytestmark = pytest.mark.anyio
 
-REACHES_THE_OWNER = {"book", "cancel_booking", "place_custom_order", "request_quote", "ask_owner", "reply_to_owner"}
+REACHES_THE_OWNER = {
+    "book", "cancel_booking", "place_custom_order", "request_quote", "ask_owner", "reply_to_owner", "cancel_request",
+}  # fmt: skip
 
 
 async def _annotations(stack: Stack, elicit: ElicitationScript) -> dict[str, Any]:
@@ -44,7 +46,8 @@ async def test_round2_misc_low_ask_owner_is_not_idempotent_and_cancel_is_destruc
     annotations = await _annotations(stack, elicit)
     # Without auth every ask_owner call mixes in a fresh nonce, so a retry asks the owner again.
     assert annotations["ask_owner"].idempotent_hint is False and annotations["ask_owner"].destructive_hint is False
-    assert annotations["cancel_booking"].destructive_hint is True and annotations["cancel_booking"].idempotent_hint is True
+    for name in ("cancel_booking", "cancel_request"):
+        assert annotations[name].destructive_hint is True and annotations[name].idempotent_hint is True, name
     for name in ("book", "place_custom_order", "request_quote", "reply_to_owner"):
         assert annotations[name].idempotent_hint is True and annotations[name].destructive_hint is False, name
 

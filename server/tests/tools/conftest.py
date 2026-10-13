@@ -23,7 +23,7 @@ from tools_support import (  # noqa: E402
     reopen_question,
 )
 
-from shopfront_server.profile.model import Profile  # noqa: E402
+from askonce_server.profile.model import Profile  # noqa: E402
 
 
 @pytest.fixture

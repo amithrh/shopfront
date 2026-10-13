@@ -10,9 +10,9 @@ import pytest
 from support import make_live
 from tools_support import BAKERY, SALON, Stack, loaded
 
-from shopfront_server.profile.model import Profile
-from shopfront_server.tools import grounding
-from shopfront_server.tools.schemas import Fact, PolicyResult, check_spoken
+from askonce_server.profile.model import Profile
+from askonce_server.tools import grounding
+from askonce_server.tools.schemas import Fact, PolicyResult, check_spoken
 
 pytestmark = pytest.mark.anyio
 
@@ -66,7 +66,7 @@ def test_citations_carry_source_title_and_quote(bakery: Profile) -> None:
 
 
 def test_owner_answer_citations_name_the_approver(bakery: Profile) -> None:
-    fact = Fact(fact_ref="info/x#answer", value="y", evidence_url="urn:shopfront:owner-answer:q-1", owner_confirmed=True)
+    fact = Fact(fact_ref="info/x#answer", value="y", evidence_url="urn:askonce:owner-answer:q-1", owner_confirmed=True)
     [citation] = grounding.citations_for(bakery, [fact, fact])
     assert citation.title == "Confirmed by Rosa" and citation.quote is None
 

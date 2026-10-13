@@ -10,10 +10,10 @@ import pytest
 from jsonschema import Draft202012Validator
 from tools_support import BAKERY, CANARY, HOME, SALON, Stack
 
-from shopfront_server.domain.models import Commitment, OwnerDecision
-from shopfront_server.domain.planning import CommitPlan
-from shopfront_server.tools import render
-from shopfront_server.tools.schemas import CommitmentResult, check_spoken
+from askonce_server.domain.models import Commitment, OwnerDecision
+from askonce_server.domain.planning import CommitPlan
+from askonce_server.tools import render
+from askonce_server.tools.schemas import CommitmentResult, check_spoken
 
 pytestmark = pytest.mark.anyio
 
@@ -70,7 +70,7 @@ async def test_pending_and_approved_cake(stack: Stack) -> None:
     data = check(render.commitment_result(profile, approved))
     assert data["speak"] == "Good news: Rosa confirmed your custom cake for Sunday, October 18. The total is $120. Rosa says: See you Sunday!"
     owner_fact = next(f for f in data["facts"] if f["fact_ref"].endswith("#owner_note"))
-    assert owner_fact["evidence_url"] == f"urn:shopfront:owner-answer:{pending.commitment_id}"
+    assert owner_fact["evidence_url"] == f"urn:askonce:owner-answer:{pending.commitment_id}"
     assert owner_fact["owner_confirmed"] is True and owner_fact["value"] == "See you Sunday!"
     assert "menu/custom-cake/size/10in-round#price" in [f["fact_ref"] for f in data["facts"]]
 
@@ -251,7 +251,7 @@ async def test_round2_request_info_a_request_back_with_the_owner_says_the_answer
 
 async def test_round2_misc_low_booking_code_survives_a_long_owner_note(stack: Stack) -> None:
     """VUX-11: the code is the tail of the speech, so the 240-character cap drops anything but it."""
-    from shopfront_server.ids import spoken_reference
+    from askonce_server.ids import spoken_reference
 
     salon = await stack.deps.profiles.get_live(SALON)
     plan = await stack.deps.bookings.plan(

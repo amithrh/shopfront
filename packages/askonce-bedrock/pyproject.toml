@@ -1,0 +1,42 @@
+[project]
+name = "askonce-bedrock"
+version = "0.1.0"
+description = "A small Amazon Bedrock model router: per-model token buckets, ThrottlingException backoff with failover across inference profiles, and per-model metrics."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "AskOnce contributors" }]
+keywords = ["bedrock", "aws", "converse", "rate-limit", "throttling", "inference-profile"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
+]
+dependencies = ["boto3>=1.40"]
+
+[build-system]
+requires = ["uv_build>=0.10.5,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+# botocore's Stubber (the unit tests) arrives with boto3.
+dev = ["boto3==1.43.111", "pytest==9.1.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "-ra"
+filterwarnings = ["ignore::DeprecationWarning:botocore.*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "B", "UP"]

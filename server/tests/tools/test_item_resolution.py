@@ -19,8 +19,8 @@ import pytest
 from support import ElicitationScript, add_dispute, make_live
 from tools_support import BAKERY, HOME, SALON, Stack, assert_grounded, build_stack, loaded, structured
 
-from shopfront_server.profile.model import Profile
-from shopfront_server.tools import catalog, matching
+from askonce_server.profile.model import Profile
+from askonce_server.tools import catalog, matching
 
 pytestmark = pytest.mark.anyio
 

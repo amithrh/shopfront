@@ -10,13 +10,13 @@ from typing import Any
 import pytest
 from support import EXAMPLE_PROFILE, SCHEMA_PATH, make_live
 
-from shopfront_server.canonical import profile_sha256
-from shopfront_server.errors import ProfileInvalid
-from shopfront_server.profile.invariants import LoadReport
-from shopfront_server.profile.loader import LoadedProfile, load_profile, load_profile_file
-from shopfront_server.profile.model import Profile
-from shopfront_server.profile.schema import json_pointer, load_schema, validate_schema
-from shopfront_server.profile.snapshots import SnapshotProvider
+from askonce_server.canonical import profile_sha256
+from askonce_server.errors import ProfileInvalid
+from askonce_server.profile.invariants import LoadReport
+from askonce_server.profile.loader import LoadedProfile, load_profile, load_profile_file
+from askonce_server.profile.model import Profile
+from askonce_server.profile.schema import json_pointer, load_schema, validate_schema
+from askonce_server.profile.snapshots import SnapshotProvider
 
 GOLD = ["thimbleberry-bakehouse", "quillfern-salon", "kettlewick-home"]
 

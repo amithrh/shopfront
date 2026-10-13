@@ -18,10 +18,10 @@ from typing import Any
 import pytest
 from support import EXAMPLE_PROFILE, PROFILES_DIR, SCHEMA_PATH
 
-from shopfront_server.config import REPO_ROOT
-from shopfront_server.errors import ProfileInvalid
-from shopfront_server.profile.loader import LoadedProfile, load_profile
-from shopfront_server.profile.snapshots import DirectorySnapshotProvider, SnapshotProvider
+from askonce_server.config import REPO_ROOT
+from askonce_server.errors import ProfileInvalid
+from askonce_server.profile.loader import LoadedProfile, load_profile
+from askonce_server.profile.snapshots import DirectorySnapshotProvider, SnapshotProvider
 
 GOLD_IDS = ("thimbleberry-bakehouse", "quillfern-salon", "kettlewick-home")
 SITES_DIR = REPO_ROOT / "sites"

@@ -12,8 +12,8 @@ from tools_support import BAKERY, SALON, Stack
 from mcp.server.elicitation import render_elicitation_schema
 from mcp.server.mcpserver import AcceptedElicitation, CancelledElicitation, DeclinedElicitation, Elicit
 from mcp.server.mcpserver.resolve import _accepted
-from shopfront_server.domain.planning import CommitPlan, IntakeFieldSpec, PlanProblem
-from shopfront_server.tools import confirm
+from askonce_server.domain.planning import CommitPlan, IntakeFieldSpec, PlanProblem
+from askonce_server.tools import confirm
 
 pytestmark = pytest.mark.anyio
 
@@ -251,7 +251,7 @@ async def test_confirmation_question_is_skipped_for_plans_with_problems(stack: S
 
 
 def test_needs_owner() -> None:
-    from shopfront_server.domain.models import ApprovalCheck
+    from askonce_server.domain.models import ApprovalCheck
 
     base: dict[str, Any] = dict(
         business_id="b", module_id="m", principal="p", profile_revision=1, idempotency_key="idem_x", operation="book"

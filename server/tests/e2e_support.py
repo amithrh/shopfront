@@ -1,4 +1,4 @@
-"""A real Shopfront server for end-to-end tests: the full app under uvicorn on a free 127.0.0.1 port.
+"""A real AskOnce server for end-to-end tests: the full app under uvicorn on a free 127.0.0.1 port.
 
 `running_shop(tmp_path, profiles, canaries)` wires the real `build_deps` (memory storage, fixed clock) and
 `create_app`, serves it on its own thread and event loop, and yields a `Shop`: the base URL plus read-only
@@ -17,15 +17,15 @@ from typing import Any
 
 from support import FIXED_NOW, SCHEMA_PATH, TEST_KEY, bind_localhost, serve
 
-from shopfront_server.app.links import OwnerLinkSigner
-from shopfront_server.app.main import create_app
-from shopfront_server.app.notifier import OwnerWebNotifier
-from shopfront_server.app.wiring import build_deps
-from shopfront_server.clock import FixedClock
-from shopfront_server.config import Settings
-from shopfront_server.deps import ShopfrontDeps
-from shopfront_server.profile.loader import load_profile
-from shopfront_server.profile.model import Profile
+from askonce_server.app.links import OwnerLinkSigner
+from askonce_server.app.main import create_app
+from askonce_server.app.notifier import OwnerWebNotifier
+from askonce_server.app.wiring import build_deps
+from askonce_server.clock import FixedClock
+from askonce_server.config import Settings
+from askonce_server.deps import AskOnceDeps
+from askonce_server.profile.loader import load_profile
+from askonce_server.profile.model import Profile
 
 BAKERY = "thimbleberry-bakehouse"
 SALON = "quillfern-salon"
@@ -42,7 +42,7 @@ class Shop:
     """One running server: its base URL, its (thread-owned) deps, and what every client saw."""
 
     url: str
-    deps: ShopfrontDeps
+    deps: AskOnceDeps
     settings: Settings
     signer: OwnerLinkSigner
     canaries: list[str]

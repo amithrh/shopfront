@@ -17,7 +17,7 @@ import copy
 import json
 from pathlib import Path
 
-from shopfront_server.canonical import profile_sha256
+from askonce_server.canonical import profile_sha256
 
 REPO = Path(__file__).resolve().parents[1]
 SRC = REPO / "profiles"

@@ -20,7 +20,7 @@ import pytest
 from support import ElicitationScript
 from tools_support import BAKERY, HOME, SALON, Stack, structured
 
-from shopfront_server.tools.schemas import Fact, TaskStatusResult
+from askonce_server.tools.schemas import Fact, TaskStatusResult
 
 pytestmark = pytest.mark.anyio
 
@@ -184,7 +184,7 @@ def test_the_walker_accepts_the_portable_spellings() -> None:
 
 async def test_every_tool_schema_is_portable(client: Any) -> None:
     tools = (await client.list_tools()).tools
-    assert len(tools) >= 14
+    assert len(tools) >= 16
     problems = [
         f"{tool.name}.{kind}{problem}"
         for tool in tools

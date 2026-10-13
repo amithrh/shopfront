@@ -1,4 +1,4 @@
-"""Shared fixtures for the Shopfront server test suite.
+"""Shared fixtures for the AskOnce server test suite.
 
 Layering (each fixture only depends on the ones above it):
 
@@ -37,8 +37,8 @@ from support import (
     make_live,
 )
 
-from shopfront_server.clock import FixedClock
-from shopfront_server.config import Settings
+from askonce_server.clock import FixedClock
+from askonce_server.config import Settings
 
 
 # --------------------------------------------------------------------------- anyio
@@ -93,7 +93,7 @@ def profiles(live_raw_profiles: dict[str, dict[str, Any]]) -> list[Any]:
     """Live `Profile` objects for every gold profile (through the real loader, lenient mode)."""
 
     def build() -> list[Any]:
-        from shopfront_server.profile.loader import load_profile
+        from askonce_server.profile.loader import load_profile
 
         return [
             load_profile(doc, schema_path=SCHEMA_PATH, strict=False).profile for doc in live_raw_profiles.values()
@@ -105,7 +105,7 @@ def profiles(live_raw_profiles: dict[str, dict[str, Any]]) -> list[Any]:
 @pytest.fixture
 def deps_and_signer(settings: Settings, clock: FixedClock, profiles: list[Any]) -> tuple[Any, Any]:
     def build() -> tuple[Any, Any]:
-        from shopfront_server.app.wiring import build_deps
+        from askonce_server.app.wiring import build_deps
 
         return build_deps(settings, clock=clock, profiles=profiles)
 
@@ -133,7 +133,7 @@ def elicitation() -> ElicitationScript:
 @pytest.fixture
 def mcp_server(deps: Any) -> Any:
     def build() -> Any:
-        from shopfront_server.tools.server import build_mcp_server
+        from askonce_server.tools.server import build_mcp_server
 
         return build_mcp_server(deps)
 
@@ -181,7 +181,7 @@ def http_app(settings: Settings, deps: Any) -> Iterator[Any]:
     """FastAPI TestClient around `create_app` (runs the lifespan, so /mcp works)."""
 
     def build() -> Any:
-        from shopfront_server.app.main import create_app
+        from askonce_server.app.main import create_app
 
         return create_app(settings, deps=deps)
 

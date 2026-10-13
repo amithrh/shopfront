@@ -33,7 +33,7 @@
             "evidence": [
               { "url": "https://thimbleberry.example/about", "quote": "We're open Tuesday to Saturday, 7 am to 6 pm." },
               { "url": "https://thimbleberry.example/about", "quote": "Closed Thanksgiving Day and the day after." },
-              { "url": "urn:shopfront:owner-answer:q-hours", "quote": "We close at 6. The contact page is out of date." }
+              { "url": "urn:askonce:owner-answer:q-hours", "quote": "We close at 6. The contact page is out of date." }
             ]
           }
         },
@@ -116,7 +116,7 @@
                       "owner_confirmed": true,
                       "evidence": [
                         { "url": "https://thimbleberry.example/menu", "quote": "Our gluten-free vanilla sponge contains milk and eggs." },
-                        { "url": "urn:shopfront:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
+                        { "url": "urn:askonce:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
                       ]
                     }
                   },
@@ -126,7 +126,7 @@
                       "owner_confirmed": true,
                       "evidence": [
                         { "url": "https://thimbleberry.example/menu", "quote": "Sponges: vanilla, chocolate, or gluten-free vanilla (+$8)." },
-                        { "url": "urn:shopfront:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
+                        { "url": "urn:askonce:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
                       ]
                     }
                   }
@@ -140,7 +140,7 @@
               "owner_confirmed": true,
               "evidence": [
                 { "url": "https://thimbleberry.example/menu", "quote": "Celebration cakes contain milk, eggs and wheat." },
-                { "url": "urn:shopfront:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
+                { "url": "urn:askonce:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
               ]
             }
           },
@@ -166,7 +166,7 @@
               "owner_confirmed": true,
               "evidence": [
                 { "url": "https://thimbleberry.example/menu", "quote": "Sourdough: flour, water, salt. Contains wheat. Vegan." },
-                { "url": "urn:shopfront:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
+                { "url": "urn:askonce:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
               ]
             }
           },
@@ -176,7 +176,7 @@
               "owner_confirmed": true,
               "evidence": [
                 { "url": "https://thimbleberry.example/menu", "quote": "Sourdough: flour, water, salt. Contains wheat. Vegan." },
-                { "url": "urn:shopfront:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
+                { "url": "urn:askonce:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
               ]
             }
           },
@@ -233,7 +233,7 @@
           "owner_confirmed": true,
           "evidence": [
             { "url": "https://thimbleberry.example/menu", "quote": "Everything is made in a kitchen that also handles tree nuts and peanuts." },
-            { "url": "urn:shopfront:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
+            { "url": "urn:askonce:owner-answer:q-allergens", "quote": "Yes, that's all correct." }
           ]
         }
       }
@@ -252,7 +252,7 @@
           "applies_to": ["custom-cakes"],
           "provenance": {
             "owner_confirmed": true,
-            "evidence": [{ "url": "urn:shopfront:owner-answer:q-deposit", "quote": "Half up front once I confirm, and they get it back if they cancel at least two days before pickup." }]
+            "evidence": [{ "url": "urn:askonce:owner-answer:q-deposit", "quote": "Half up front once I confirm, and they get it back if they cancel at least two days before pickup." }]
           }
         },
         {
@@ -329,7 +329,7 @@
           "owner_confirmed": true,
           "evidence": [
             { "url": "https://thimbleberry.example/custom-cakes", "quote": "Please order custom cakes at least 48 hours ahead and no more than 8 weeks out. Pickup from 10 am." },
-            { "url": "urn:shopfront:owner-answer:q-capacity", "quote": "Two custom cakes a day, that's my limit." }
+            { "url": "urn:askonce:owner-answer:q-capacity", "quote": "Two custom cakes a day, that's my limit." }
           ]
         }
       },
@@ -353,7 +353,7 @@
             "when": "dietary_needs",
             "op": "present",
             "reason_spoken": "Rosa checks every special-diet cake herself, so I'll send your request to her.",
-            "provenance": { "owner_confirmed": true, "evidence": [{ "url": "urn:shopfront:owner-edit:onboarding-settings", "quote": "I want to check every gluten-free or dairy-free cake myself." }] }
+            "provenance": { "owner_confirmed": true, "evidence": [{ "url": "urn:askonce:owner-edit:onboarding-settings", "quote": "I want to check every gluten-free or dairy-free cake myself." }] }
           }
         ],
         "decisions": ["approve", "decline", "counter_offer", "suggest_time"],
@@ -413,7 +413,7 @@
       "expires_after_minutes": 1440,
       "on_expiry": "notify_customer",
       "answers_unknown_questions": true,
-      "provenance": { "owner_confirmed": true, "evidence": [{ "url": "urn:shopfront:owner-edit:onboarding-settings", "quote": "I usually reply within two hours." }] }
+      "provenance": { "owner_confirmed": true, "evidence": [{ "url": "urn:askonce:owner-edit:onboarding-settings", "quote": "I usually reply within two hours." }] }
     }
   },
 
@@ -428,11 +428,11 @@
     "web-menu": { "kind": "web_page", "url": "https://thimbleberry.example/menu", "title": "Menu", "retrieved_at": "2026-10-12T15:02:13Z", "content_sha256": "84f816d729762e8d5ad1c784555d9438bc325b1e8831d47ac5f8c17d949be0c8" },
     "web-custom": { "kind": "web_page", "url": "https://thimbleberry.example/custom-cakes", "title": "Custom cakes", "retrieved_at": "2026-10-12T15:02:14Z", "content_sha256": "6e58c474f6075d90753a6f7cc5f1fa6b991852bc2b61d0c7af4a4464f47574b8" },
     "web-catering": { "kind": "web_page", "url": "https://thimbleberry.example/catering", "title": "Catering", "retrieved_at": "2026-10-12T15:02:14Z", "content_sha256": "5f5ad1ed2d723b74e32bf0ca7be791fe1f93b0fd0ad6dbd36813ba87e1299b42" },
-    "owner-q-hours": { "kind": "owner_answer", "url": "urn:shopfront:owner-answer:q-hours", "title": "Answer from Rosa, Oct 12", "question_id": "q-hours", "retrieved_at": "2026-10-12T15:07:12Z" },
-    "owner-q-allergens": { "kind": "owner_answer", "url": "urn:shopfront:owner-answer:q-allergens", "title": "Answer from Rosa, Oct 12", "question_id": "q-allergens", "retrieved_at": "2026-10-12T15:07:40Z" },
-    "owner-q-capacity": { "kind": "owner_answer", "url": "urn:shopfront:owner-answer:q-capacity", "title": "Answer from Rosa, Oct 12", "question_id": "q-capacity", "retrieved_at": "2026-10-12T15:08:05Z" },
-    "owner-q-deposit": { "kind": "owner_answer", "url": "urn:shopfront:owner-answer:q-deposit", "title": "Answer from Rosa, Oct 12", "question_id": "q-deposit", "retrieved_at": "2026-10-12T15:08:30Z" },
-    "owner-settings": { "kind": "owner_edit", "url": "urn:shopfront:owner-edit:onboarding-settings", "title": "Rosa's settings", "retrieved_at": "2026-10-12T15:09:00Z" }
+    "owner-q-hours": { "kind": "owner_answer", "url": "urn:askonce:owner-answer:q-hours", "title": "Answer from Rosa, Oct 12", "question_id": "q-hours", "retrieved_at": "2026-10-12T15:07:12Z" },
+    "owner-q-allergens": { "kind": "owner_answer", "url": "urn:askonce:owner-answer:q-allergens", "title": "Answer from Rosa, Oct 12", "question_id": "q-allergens", "retrieved_at": "2026-10-12T15:07:40Z" },
+    "owner-q-capacity": { "kind": "owner_answer", "url": "urn:askonce:owner-answer:q-capacity", "title": "Answer from Rosa, Oct 12", "question_id": "q-capacity", "retrieved_at": "2026-10-12T15:08:05Z" },
+    "owner-q-deposit": { "kind": "owner_answer", "url": "urn:askonce:owner-answer:q-deposit", "title": "Answer from Rosa, Oct 12", "question_id": "q-deposit", "retrieved_at": "2026-10-12T15:08:30Z" },
+    "owner-settings": { "kind": "owner_edit", "url": "urn:askonce:owner-edit:onboarding-settings", "title": "Rosa's settings", "retrieved_at": "2026-10-12T15:09:00Z" }
   },
 
   "open_questions": [

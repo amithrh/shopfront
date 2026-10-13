@@ -7,7 +7,7 @@ import logging
 import anyio
 import pytest
 
-from shopfront_server.app.background import run_sweeper, sweep_once
+from askonce_server.app.background import run_sweeper, sweep_once
 
 pytestmark = pytest.mark.anyio
 
@@ -63,7 +63,7 @@ async def test_initial_delay_is_honoured() -> None:
 async def test_sweeper_logs_failures_and_keeps_going(caplog: pytest.LogCaptureFixture) -> None:
     owner = CountingOwner(failures=2)
     owner.target = 4
-    with caplog.at_level(logging.ERROR, logger="shopfront.sweeper"), anyio.fail_after(5):
+    with caplog.at_level(logging.ERROR, logger="askonce.sweeper"), anyio.fail_after(5):
         async with anyio.create_task_group() as tg:
             tg.start_soon(lambda: run_sweeper(owner, interval_s=0.01))
             await owner.reached.wait()
@@ -73,7 +73,7 @@ async def test_sweeper_logs_failures_and_keeps_going(caplog: pytest.LogCaptureFi
 
 
 async def test_sweep_once_reports_what_happened(caplog: pytest.LogCaptureFixture) -> None:
-    with caplog.at_level(logging.INFO, logger="shopfront.sweeper"):
+    with caplog.at_level(logging.INFO, logger="askonce.sweeper"):
         assert await sweep_once(CountingOwner(handled=2)) == 2
         assert await sweep_once(CountingOwner(failures=1)) is None
     assert "handled 2 request(s)" in caplog.text

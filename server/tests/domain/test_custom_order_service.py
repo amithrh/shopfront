@@ -13,10 +13,10 @@ from typing import Any
 import anyio
 import pytest
 
-from shopfront_server.domain.planning import CommitOutcome, CommitPlan
-from shopfront_server.errors import UnknownItem
-from shopfront_server.profile.factref import resolve
-from shopfront_server.profile.model import Profile
+from askonce_server.domain.planning import CommitOutcome, CommitPlan
+from askonce_server.errors import UnknownItem
+from askonce_server.profile.factref import resolve
+from askonce_server.profile.model import Profile
 
 pytestmark = pytest.mark.anyio
 

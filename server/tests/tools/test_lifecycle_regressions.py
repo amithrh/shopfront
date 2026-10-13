@@ -20,11 +20,11 @@ from tools_support import BAKERY, BIG_CAKE, HOME, SALON, Stack, build_stack, loa
 from mcp import Client
 from mcp_tasks import InMemoryTaskStore, TaskNotFound
 from mcp_tasks.client import TaskHandle, TasksClientExtension, cancel_task, get_task, list_tasks
-from shopfront_server.domain.planning import CommitOutcome, PlanProblem
-from shopfront_server.domain.services.owner import OwnerDecisionInput
-from shopfront_server.errors import InvalidState
-from shopfront_server.profile.model import Profile
-from shopfront_server.tools import guard
+from askonce_server.domain.planning import CommitOutcome, PlanProblem
+from askonce_server.domain.services.owner import OwnerDecisionInput
+from askonce_server.errors import InvalidState
+from askonce_server.profile.model import Profile
+from askonce_server.tools import guard
 
 pytestmark = pytest.mark.anyio
 
@@ -252,7 +252,7 @@ async def test_round2_capacity_race_a_retry_long_after_a_lost_race_gets_a_task_t
     the retry. The reused task kept the lost attempt's TTL, so a retry 30 h later got a task that died
     5 h before Rosa's deadline: the customer's get_task failed, request_info vanished from the inbox
     and Rosa's approval never reached the customer."""
-    from shopfront_server.tools.confirm import TASK_TTL_SLACK_MS
+    from askonce_server.tools.confirm import TASK_TTL_SLACK_MS
 
     lost = lose_the_first_commit(stack, monkeypatch)
     clock = stack.deps.clock
@@ -559,7 +559,7 @@ async def test_round2_idempotency_replay_a_request_past_its_attempts_is_refused_
     """Once every attempt at one request was settled, the next identical request replayed the last
     settled one ("Sorry, Rosa can't take your custom cake"). Anyone who knew a customer's exact details
     could burn the attempts and have the customer's real request answered with a stale decline."""
-    from shopfront_server.domain.services import base
+    from askonce_server.domain.services import base
 
     monkeypatch.setattr(base, "MAX_GENERATIONS", 2)
     async with stack.client(elicit) as client:

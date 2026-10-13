@@ -1,0 +1,17 @@
+# Build context for server/Dockerfile (built from the repository root). Allow-list: only what the
+# image needs is sent to the builder, so local venvs, .local/ (live profile copies) and secrets never are.
+*
+!server/pyproject.toml
+!server/uv.lock
+!server/README.md
+!server/src/
+!packages/mcp-tasks/pyproject.toml
+!packages/mcp-tasks/README.md
+!packages/mcp-tasks/LICENSE
+!packages/mcp-tasks/src/
+!schema/
+!profiles/
+!scripts/dev_seed_live.py
+**/__pycache__
+**/*.pyc
+**/.venv

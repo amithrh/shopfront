@@ -1,7 +1,7 @@
 [project]
-name = "shopfront-server"
+name = "askonce-server"
 version = "0.1.0"
-description = "Shopfront: one multi-tenant MCP server that makes certified small businesses Alexa+-ready."
+description = "AskOnce: one multi-tenant MCP server that makes certified small businesses Alexa+-ready."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

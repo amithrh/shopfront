@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from support import TEST_KEY
 
-from shopfront_server.app.security import (
+from askonce_server.app.security import (
     MCP_EXPOSED_HEADERS,
     MCP_REQUEST_HEADERS,
     cors_options,
@@ -13,7 +13,7 @@ from shopfront_server.app.security import (
     origin_allowed,
     transport_security,
 )
-from shopfront_server.config import Settings
+from askonce_server.config import Settings
 
 KEYS = {"request_state_keys": [TEST_KEY], "owner_link_keys": [TEST_KEY + "-links"], "id_key": TEST_KEY + "-ids"}
 """Non-DEV keys: a public host or origin makes the settings look deployed, which refuses DEV-ONLY keys."""
@@ -75,6 +75,6 @@ def test_cors_origins_missing_from_the_transport_allow_list_are_reported() -> No
 
 def test_round2_prod_safety_origin_allowed_is_shared_with_the_settings_guard() -> None:
     """The prod guard and the startup warning use the same transport rule (no drift)."""
-    from shopfront_server import config
+    from askonce_server import config
 
     assert origin_allowed is config.origin_allowed

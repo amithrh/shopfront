@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.shopfront.example/business-profile/1.0/profile-generic.schema.json",
-  "title": "Shopfront Business Profile (generic, module-based)",
-  "description": "One schema for every small business served by the Shopfront multi-tenant MCP server. A profile is a vertical-neutral core (identity, locations, hours, sources) plus a map of capability modules (catalog, knowledge, booking, custom_order, quote_request, owner_approval). Vertical-specific vocabulary (allergens, stylist level, subject, servings) is declared as data in `vocabulary`, never as schema fields.",
+  "$id": "https://schemas.askonce.example/business-profile/1.0/profile-generic.schema.json",
+  "title": "AskOnce Business Profile (generic, module-based)",
+  "description": "One schema for every small business served by the AskOnce multi-tenant MCP server. A profile is a vertical-neutral core (identity, locations, hours, sources) plus a map of capability modules (catalog, knowledge, booking, custom_order, quote_request, owner_approval). Vertical-specific vocabulary (allergens, stylist level, subject, servings) is declared as data in `vocabulary`, never as schema fields.",
   "$comment": "Design rules. (1) No vertical-specific keys anywhere: verticals differ only in module selection, vocabulary, intake_fields and certification cases, all of which are data in a template. (2) Strict core: every structural object uses unevaluatedProperties:false so an extraction model cannot invent fields; the only open doors are `x-*` keys, `attributes` maps typed by `vocabulary`, and `x-*` module types. (3) Every customer-facing fact sits in an object that carries `provenance`, so the certifier can map any stated price, allergen, hour or policy back to a JSON Pointer plus a source. (4) Safety invariants are schema constants (confirmation before commit), not configuration. (5) Cross-references (module ids, item ids, source ids, field keys) are checked by the profile loader, since JSON Schema cannot express referential integrity.",
   "type": "object",
   "required": ["schema_version", "profile_id", "status", "business", "modules", "sources"],

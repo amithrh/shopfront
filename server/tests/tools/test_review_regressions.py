@@ -19,9 +19,9 @@ from tools_support import BAKERY, BIG_CAKE, CANARY, HOME, INTAKE, SALON, SMALL_C
 
 from mcp import Client
 from mcp_tasks.client import TasksClientExtension, get_task
-from shopfront_server.domain.services.owner import OwnerDecisionInput
-from shopfront_server.profile.model import Profile
-from shopfront_server.tools import confirm, guard, render
+from askonce_server.domain.services.owner import OwnerDecisionInput
+from askonce_server.profile.model import Profile
+from askonce_server.tools import confirm, guard, render
 
 pytestmark = pytest.mark.anyio
 

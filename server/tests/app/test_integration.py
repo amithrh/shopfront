@@ -14,7 +14,7 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from shopfront_server.app.main import create_app
+from askonce_server.app.main import create_app
 
 pytestmark = pytest.mark.anyio
 
@@ -40,7 +40,7 @@ def test_real_app_health_and_tools(http_app: TestClient) -> None:
         headers={"accept": "application/json, text/event-stream", "mcp-protocol-version": "2026-07-28",
                  "mcp-method": "tools/list"},
     )
-    assert response.status_code == 200 and len(response.json()["result"]["tools"]) == 14
+    assert response.status_code == 200 and len(response.json()["result"]["tools"]) == 16
 
 
 async def test_owner_approves_through_the_api_and_the_task_completes(

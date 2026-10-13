@@ -7,8 +7,8 @@ from typing import Any
 
 import pytest
 
-from shopfront_server.profile.directory import DirectoryEntry, build_directory_entry
-from shopfront_server.profile.loader import LoadedProfile
+from askonce_server.profile.directory import DirectoryEntry, build_directory_entry
+from askonce_server.profile.loader import LoadedProfile
 
 
 def _entry(doc: dict[str, Any], load_doc: Callable[..., LoadedProfile]) -> DirectoryEntry:
