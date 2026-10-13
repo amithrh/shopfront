@@ -51,6 +51,19 @@ async def plan_quote(domain: Domain, home: Profile, **kwargs: Any) -> CommitPlan
         ("80033", None, False, None),
         (None, "Boulder", False, None),
         (None, None, None, None),
+        # unlisted: a "no" only where the profile says so (policies/outside-area) or in another region
+        ("80010", None, False, None),
+        ("90210", None, False, None),
+        (None, "Aurora", False, None),
+        ("80239", None, None, None),
+        (None, "Denver", None, None),
+        (None, "Stapleton", None, None),
+        # how people write a listed place
+        (None, "Lakewood, CO", True, "extended-area"),
+        (None, "lakewood co", True, "extended-area"),
+        (None, "Highlands", True, "core-area"),
+        (None, "Cap Hill", True, "core-area"),
+        (None, "Wash Park", True, "core-area"),
     ],
 )
 def test_service_area(
@@ -110,6 +123,8 @@ async def test_visit_window_from_intake_and_no_preference(domain: Domain, home: 
 async def test_quote_problems(domain: Domain, home: Profile) -> None:
     outside = await plan_quote(domain, home, intake={**JOB, "zip": "80033"})
     assert [(p.code, p.field) for p in outside.problems] == [("outside_service_area", "zip")]
+    unlisted = await plan_quote(domain, home, intake={**JOB, "zip": "80239"})  # policies/unlisted-zip: Jo decides
+    assert unlisted.ok, unlisted.problems
     sunday = await plan_quote(domain, home, day="2026-10-18")
     assert [p.code for p in sunday.problems] == ["closed"]
     assert [a.day for a in sunday.problems[0].alternatives] == [date(2026, 10, 19), date(2026, 10, 20), date(2026, 10, 21)]

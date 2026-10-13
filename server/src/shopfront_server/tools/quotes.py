@@ -14,7 +14,9 @@ from mcp.server.mcpserver import (
     Resolve,
 )
 from shopfront_server.domain.planning import CommitPlan
+from shopfront_server.domain.services.quote import service_area_locations
 from shopfront_server.errors import UnknownModule
+from shopfront_server.profile.model import Profile
 from shopfront_server.tools import grounding, speech
 from shopfront_server.tools.booking import AnyModuleArg, DetailsArg, ItemArg
 from shopfront_server.tools.catalog import commit_item
@@ -91,6 +93,14 @@ async def check_service_area(
             )
             return finish(result, profile, outcome="withheld", module_id=check.module_id)
         facts = grounding.dedupe_facts([s.fact for s in stated if s.fact is not None])
+        if check.served is None and postal is None and _lists_postal_codes(profile, check.module_id):
+            # "Denver", "Stapleton": a town the areas don't list, where the ZIP code decides.
+            result = ServiceAreaResult(
+                speak=speech.sentences(f"I can't tell from the name alone whether {profile.spoken_name} covers it. What's the ZIP code where the work is?"),
+                card=grounding.notice_card("Which ZIP code?"),
+                module_id=check.module_id,
+            )
+            return finish(result, profile, outcome="needs_info", module_id=check.module_id)
         if check.served is None:
             result = grounding.unknown_answer(
                 profile,
@@ -121,6 +131,12 @@ async def check_service_area(
             served=check.served,
         )
         return finish(result, profile, outcome="served" if check.served else "not_served", module_id=check.module_id)
+
+
+def _lists_postal_codes(profile: Profile, module_id: str) -> bool:
+    """Whether the module's service areas are (also) listed by postal code."""
+    module = profile.module(module_id)
+    return any((location.get("area") or {}).get("postal_codes") for location in service_area_locations(profile, module))
 
 
 # ---------------------------------------------------------------------------- request_quote: resolver chain

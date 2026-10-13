@@ -42,7 +42,7 @@ from shopfront_server.errors import DisputedFact
 from shopfront_server.ids import reference_prefix
 from shopfront_server.profile.model import Profile
 from shopfront_server.tools import grounding, render, speech
-from shopfront_server.tools.catalog import TRANSACTIONAL, commit_item, resolve_item
+from shopfront_server.tools.catalog import TRANSACTIONAL, commit_item, resolve_item, unmet_result
 from shopfront_server.tools.confirm import (
     SKIPPED_CONFIRMATION,
     ConfirmCommit,
@@ -63,8 +63,11 @@ StartArg = Annotated[
     Field(description="Requested start, local ISO-8601 like 2026-10-17T10:00 (business timezone).", max_length=40),
 ]
 PartySizeArg = Annotated[int | None, Field(description="Number of people (default 1).", ge=1, le=100)]
+DetailValue = str | int | float | bool | list[str | int | float | bool] | None
+"""One answer in `details`: text, a number, yes/no, or several options. Spelled out rather than `Any`
+so the input schema stays portable (every subschema typed; see `tools.schemas`)."""
 DetailsArg = Annotated[
-    dict[str, Any] | None,
+    dict[str, DetailValue] | None,
     Field(
         description=(
             "Answers to the business's questions keyed by field key (e.g. customer_name). After a "
@@ -73,7 +76,7 @@ DetailsArg = Annotated[
     ),
 ]
 BookingDetailsArg = Annotated[
-    dict[str, Any] | None,
+    dict[str, DetailValue] | None,
     Field(
         description=(
             "Answers to the booking questions keyed by field key (e.g. customer_name), including option "
@@ -139,6 +142,10 @@ async def check_availability(
         first, last = parse_day(date_from, "date_from"), parse_day(date_to, "date_to")
         check_range(first, last, deps.clock.now().astimezone(profile.timezone).date())
         lookup = resolve_item(profile, item, module_type=TRANSACTIONAL)
+        if lookup.unmet_dietary:
+            # "a nut-free cake": never the plain cake's openings as if it could be made nut-free.
+            result = unmet_result(profile, lookup, asked=item, result_type=AvailabilityResult)
+            return finish(result, profile, outcome="handoff")
         if lookup.found is None:
             if lookup.candidates:
                 names = [c.spoken_name for c in lookup.candidates]

@@ -14,14 +14,19 @@ Every tool returns a model derived from `Grounded`, so every result's `structure
 
 This module is a frozen contract shared by the tools layer, the renderer used for task results, the
 reference host and the certifier. Changing a field is a cross-package change.
+
+Schema portability: every subschema of every tool's `inputSchema` and `outputSchema` says what it
+accepts (a `type`, `enum`, `const`, `$ref` or `anyOf`), because some MCP clients refuse the empty
+schema `{}` / `true` that pydantic emits for `Any` and `JsonValue`. Free-form JSON is `JsonData`, an
+explicit recursive union of the JSON types; `tests/tools/test_schema_portability.py` enforces this.
 """
 
 from __future__ import annotations
 
 import re
-from typing import Annotated, Any, Literal
+from typing import Annotated, Literal
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, Field, JsonValue
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, Strict, StrictBool, StrictFloat, StrictInt, StrictStr
 
 SPEAK_MAX = 240
 _FORBIDDEN_SPOKEN = re.compile(r"(https?:|www\.|[<>{}\[\]|*#_~`\\\n])", re.IGNORECASE)
@@ -38,6 +43,20 @@ def check_spoken(text: str) -> str:
 
 SpokenText = Annotated[str, AfterValidator(check_spoken)]
 
+type JsonData = (
+    StrictStr
+    | StrictInt
+    | StrictFloat
+    | StrictBool
+    | Annotated[list[JsonData], Strict()]
+    | Annotated[dict[str, JsonData], Strict()]
+    | None
+)
+"""Any JSON value, spelled out (`$defs.JsonData`: an `anyOf` of the seven JSON types). Use it instead
+of `Any` / `pydantic.JsonValue`, whose JSON Schema is the untyped `{}` (see the module docstring).
+Members are strict, so it validates exactly like `JsonValue`: no tuples, sets, bytes or non-string
+keys, and `True` stays a bool rather than becoming 1."""
+
 
 class _Out(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -50,7 +69,7 @@ class Fact(_Out):
     """One profile fact a result relies on."""
 
     fact_ref: str = Field(description="Stable fact address, e.g. menu/celebration-cake#price.")
-    value: JsonValue = Field(description="The fact's value exactly as in the profile (prices in cents).")
+    value: JsonData = Field(description="The fact's value exactly as in the profile (prices in cents).")
     evidence_url: str | None = Field(
         default=None, description="Where it came from: a web page or urn:shopfront:owner-answer:<id>."
     )
@@ -83,7 +102,7 @@ class CardAction(_Out):
 
     label: str
     tool: str
-    arguments: dict[str, JsonValue] = Field(default_factory=dict)
+    arguments: dict[str, JsonData] = Field(default_factory=dict)
     input: CardInput | None = Field(default=None, exclude_if=lambda value: value is None)
     """Omitted from the payload when unset, so actions without input keep their wire shape."""
 
@@ -193,11 +212,23 @@ class CatalogResult(Grounded):
     total: int = 0
 
 
+def _unset(value: object) -> bool:
+    return value is None
+
+
 class OptionChoiceView(_Out):
     choice_id: str
     spoken_name: str
     price: PriceView | None = None
     price_delta: PriceView | None = None
+    allergens: list[str] | None = Field(
+        default=None, exclude_if=_unset, description="Owner-confirmed allergens of this choice (matched options only)."
+    )
+    dietary: list[str] | None = Field(
+        default=None, exclude_if=_unset, description="Owner-confirmed dietary tags of this choice (matched options only)."
+    )
+    serves: int | None = Field(default=None, exclude_if=_unset, description="How many it serves (matched options only).")
+    """The three fields above are omitted from the payload when unset, so `options` keeps its wire shape."""
 
 
 class OptionGroupView(_Out):
@@ -217,6 +248,14 @@ class ItemDetailResult(Grounded):
     dietary: list[str] | None = Field(default=None, description="Owner-confirmed; None = unknown.")
     facility_may_contain: list[str] | None = None
     offered_via: list[str] = Field(default_factory=list, description="Module ids that sell/book this item.")
+    matched_options: list[OptionGroupView] = Field(
+        default_factory=list,
+        exclude_if=lambda value: not value,
+        description=(
+            "Option choices the customer's words point at: named ('10 inch'), or meeting a dietary need "
+            "('gluten-free') or a head count ('for 30'). Omitted when there are none."
+        ),
+    )
 
 
 class PolicyResult(Grounded):
@@ -301,4 +340,4 @@ class TaskStatusResult(Grounded):
     task_status: Literal["working", "input_required", "completed", "failed", "cancelled"]
     status_message: str | None = None
     commitment: CommitmentView | None = None
-    result: dict[str, Any] | None = Field(default=None, description="Final structured result once completed.")
+    result: dict[str, JsonData] | None = Field(default=None, description="Final structured result once completed.")

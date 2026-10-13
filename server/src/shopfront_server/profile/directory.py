@@ -30,6 +30,9 @@ class DirectoryEntry(BaseModel):
     """Business synonyms ('thimbleberry', 'the bakery on elm')."""
     item_terms: list[str] = Field(default_factory=list)
     """Lowercased item names, spoken names and synonyms across catalog modules."""
+    item_term_groups: list[list[str]] = Field(default_factory=list)
+    """Per item: its lowercased names and synonyms plus its option choices', so the words of one need
+    ("put together ikea furniture") can be read against one item's vocabulary."""
     dietary_tags: list[str] = Field(default_factory=list)
     """Owner-confirmed dietary tags offered on any item or choice (e.g. gluten_free)."""
     localities: list[str] = Field(default_factory=list)
@@ -77,16 +80,24 @@ def build_directory_entry(profile: Profile) -> DirectoryEntry:
 
     summary = business("summary_spoken")
     item_terms: list[str] = []
+    term_groups: list[list[str]] = []
     dietary: list[str] = []
     for module_id, item in profile.catalog_items():
         item_path = (str(item["id"]),)
+        own: list[str] = []
         for field in ("name", "spoken_name", "synonyms"):
-            item_terms += _strings(_statable_value(profile, FactRef(module_id, item_path, field)))
+            own += _strings(_statable_value(profile, FactRef(module_id, item_path, field)))
+        item_terms += own
+        group_terms = list(own)
         dietary += _confirmed_tags(profile, FactRef(module_id, item_path, "dietary"))
         for group in entity_dicts(item.get("options")):
             for choice in entity_dicts(group.get("choices")):
-                choice_ref = FactRef(module_id, (*item_path, str(group["id"]), str(choice["id"])), "dietary")
-                dietary += _confirmed_tags(profile, choice_ref)
+                choice_path = (*item_path, str(group["id"]), str(choice["id"]))
+                dietary += _confirmed_tags(profile, FactRef(module_id, choice_path, "dietary"))
+                for field in ("name", "spoken_name", "synonyms"):
+                    group_terms += _strings(_statable_value(profile, FactRef(module_id, choice_path, field)))
+        if group_terms:
+            term_groups.append(_unique_lower(group_terms))
 
     localities: list[str] = []
     postal_codes: list[str] = []
@@ -120,6 +131,7 @@ def build_directory_entry(profile: Profile) -> DirectoryEntry:
         keywords=_unique_lower(_strings(business("keywords"))),
         synonyms=_unique_lower(_strings(business("synonyms"))),
         item_terms=_unique_lower(item_terms),
+        item_term_groups=term_groups,
         dietary_tags=sorted(set(_unique_lower(dietary))),
         localities=_unique_lower(localities),
         postal_codes=list(dict.fromkeys(code.strip() for code in postal_codes if code.strip())),

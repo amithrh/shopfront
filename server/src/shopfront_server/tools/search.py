@@ -2,7 +2,10 @@
 
 Scoring (deterministic, explainable; each matched signal is reported in `matched_on`):
   category  +3  a category token, or a synonym of one (CATEGORY_SYNONYMS), appears in `category`/`need`
-  item      +2  a need phrase matches an item term (name, spoken name, synonym), longest match first
+  item      +2  a need phrase matches an item term (name, spoken name, synonym), longest match first;
+                or one item's words (its terms and its option choices') explain most of the need,
+                including its last word ("someone to put together ikea furniture": put, together and
+                furniture are words of the furniture assembly item)
   dietary   +2  a dietary phrase in `need` ("gluten free", "vegan") matches an offered dietary tag
   keyword   +1  a business keyword or synonym appears in `need`
   locality  +2  `locality` matches a locality or postal code (address or service area) and is a hard
@@ -69,6 +72,13 @@ DIETARY_PHRASES: dict[str, tuple[str, ...]] = {
     "kosher": ("kosher",),
 }
 """Customer phrases for each dietary tag of the profile schema's closed enum."""
+
+NEED_FILLER: frozenset[str] = frozenset(
+    """a an the some any my me i we our you your it its someone somebody anyone who that which can could
+    will would to for of with and or in on at from need want looking find get help please do doe is are
+    be have ha just something anything fix repair install done""".split()
+)
+"""Words of a need that say nothing about what is needed (normalised: "does" arrives as "doe")."""
 
 SCORE_CATEGORY = 3.0
 SCORE_ITEM = 2.0
@@ -171,7 +181,7 @@ def score_entry(entry: DirectoryEntry, *, need: str, category: str | None) -> tu
             score += SCORE_CATEGORY
             matched.append("category")
             break
-    if _first_match(need_text, entry.item_terms):
+    if _first_match(need_text, entry.item_terms) or _item_words_match(need_text, entry.item_term_groups):
         score += SCORE_ITEM
         matched.append("item")
     for tag in entry.dietary_tags:
@@ -183,6 +193,21 @@ def score_entry(entry: DirectoryEntry, *, need: str, category: str | None) -> tu
         score += SCORE_KEYWORD
         matched.append("keyword")
     return score, matched
+
+
+def _item_words_match(need_text: str, groups: Sequence[Sequence[str]]) -> bool:
+    """One item's words explain at least two of the need's words, more than they leave over, and its
+    last word (the thing needed): "put together ikea furniture" for furniture assembly, never
+    "chocolate chip pancakes" for a chocolate chip cookie."""
+    words = [w for w in need_text.split() if w not in NEED_FILLER]
+    if len(words) < 2:
+        return False
+    for terms in groups:
+        vocabulary = {w for term in terms for w in normalize(term).split()} - NEED_FILLER
+        explained = [w for w in words if w in vocabulary]
+        if len(explained) >= 2 and len(explained) > len(words) - len(explained) and words[-1] in vocabulary:
+            return True
+    return False
 
 
 def _specificity(match: Match) -> int:

@@ -8,8 +8,19 @@ Conventions beyond the schema (generic, none business-specific):
     from the `item` argument when unanswered.
   * Service area: an intake value under a postal-code key (`zip`, `postal_code`, `postcode`,
     `zip_code`) is checked against the fulfilment service areas; a definite miss is the problem
-    `outside_service_area`, an undecidable one (radius-only areas) is left to the owner. A check that
-    relied on a disputed area fact is the problem `disputed_fact` instead (L6), whichever way it went.
+    `outside_service_area`, an undecidable one is left to the owner. A check that relied on a disputed
+    area fact is the problem `disputed_fact` instead (L6), whichever way it went.
+  * What counts as a definite miss: a listed area is not a promise to refuse everything else, so a
+    location the areas do not list is only a "no" when the profile says so, through a knowledge entry
+    whose `facts.service_zone` is `outside` (its postal-code facts, under a key containing `postal` or
+    `zip`, and the places its variants and spoken answer name: "We don't take jobs in Wheat Ridge,
+    Arvada, ... or Boulder County"), or, for a postal code, when it is in another region altogether
+    (no listed or referred-out code shares its first three characters: 90210 for a Denver plumber).
+    An unlisted code in the same region (80239) or an unlisted town ("Denver", "Stapleton") cannot be
+    decided (`served=None`), and the owner decides.
+  * Place names match whatever their case, punctuation, accents or plural ("highlands"), with a
+    state or region after a comma or matching the business's own ("Lakewood, CO", "Lakewood CO"),
+    and as a short form whose every word starts the listed name's ("Cap Hill", "Wash Park").
   * Visit window: the requested arrival window must overlap the requested day's opening lines
     (problem `outside_hours` otherwise), so the owner is never sent an impossible request.
 """
@@ -57,6 +68,10 @@ POSTAL_KEYS: tuple[str, ...] = ("postal_code", "zip", "zip_code", "postcode", "p
 """Intake keys whose value is checked against the service area."""
 
 _US_ZIP_PLUS_FOUR = re.compile(r"^(\d{5})-?\d{4}$")
+REGION_PREFIX = 3
+"""Postal codes sharing this many leading characters are in the same region (a US ZIP's sectional
+centre: 802xx is Denver)."""
+OUTSIDE_ZONE = "outside"
 
 
 class ServiceAreaCheck(BaseModel):
@@ -75,6 +90,75 @@ def normalize_postal_code(text: str) -> str:
     compact = re.sub(r"\s+", "", text).upper()
     plus_four = _US_ZIP_PLUS_FOUR.match(compact)
     return plus_four.group(1) if plus_four else compact
+
+
+def place_key(text: str) -> str:
+    """`normalize_name` with simple plurals folded: "Highlands" -> "highland"."""
+    words = [w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is")) else w for w in normalize_name(text).split()]
+    return " ".join(words)
+
+
+def _wanted_places(profile: Profile, locality: str) -> list[str]:
+    """The place keys `locality` may name: as said, before a comma ("Lakewood, CO") and without a
+    trailing region of the business's own addresses ("Lakewood CO")."""
+    regions = {
+        place_key(str((location.get("address") or {}).get("region") or ""))
+        for location in profile.locations()
+        if isinstance(location.get("address"), dict)
+    } - {""}
+    keys = [place_key(locality), place_key(locality.split(",")[0])]
+    for key in list(keys):
+        words = key.split()
+        if len(words) > 1 and words[-1] in regions:
+            keys.append(" ".join(words[:-1]))
+    return [k for k in dict.fromkeys(keys) if k]
+
+
+def _short_form(wanted: str, known: str) -> bool:
+    """'cap hill' for 'capitol hill': same number of words, each the start (3+ letters) of the listed
+    word, at least one of them whole."""
+    said, listed = wanted.split(), known.split()
+    if len(said) != len(listed) or len(said) < 2:
+        return False
+    pairs = list(zip(said, listed, strict=True))
+    return all(len(a) >= 3 and b.startswith(a) for a, b in pairs) and any(a == b for a, b in pairs)
+
+
+def _match_place(wanted: list[str], places: dict[str, str]) -> str | None:
+    """The profile's own spelling of the listed place `wanted` names, if any."""
+    for key in wanted:
+        if key in places:
+            return places[key]
+    for key in wanted:
+        for known, spelled in places.items():
+            if _short_form(key, known):
+                return spelled
+    return None
+
+
+def _contains_place(text: str, place: str) -> bool:
+    return bool(place) and f" {place} " in f" {place_key(text)} "
+
+
+def outside_statements(profile: Profile) -> list[tuple[str, JsonObj]]:
+    """`(entry ref, entry)` of every knowledge entry stating places the business does not serve."""
+    return [
+        (f"{module_id}/{entry['id']}", entry)
+        for module_id, entry in profile.knowledge_entries()
+        if str((entry.get("facts") or {}).get("service_zone") or "") == OUTSIDE_ZONE
+    ]
+
+
+def _outside_codes(entry: JsonObj) -> dict[str, set[str]]:
+    """Postal-code facts of an outside statement: fact key -> normalised codes."""
+    out: dict[str, set[str]] = {}
+    for key, value in (entry.get("facts") or {}).items():
+        if "postal" not in key and "zip" not in key:
+            continue
+        values = value if isinstance(value, list) else [value]
+        codes = {normalize_postal_code(m) for v in values if isinstance(v, str) for m in re.split(r"[,;]", v) if m.strip()}
+        out[key] = {c for c in codes if c}
+    return out
 
 
 def service_area_locations(profile: Profile, module: JsonObj) -> list[JsonObj]:
@@ -96,23 +180,27 @@ class QuoteService(CommitmentServiceBase):
     def check_service_area(
         self, profile: Profile, *, postal_code: str | None, locality: str | None, module_id: str | None = None
     ) -> ServiceAreaCheck:
-        """Match against the module's fulfilment `location_ids` service areas (postal codes, localities).
+        """Match against the module's fulfilment `location_ids` service areas (postal codes, localities),
+        then against the profile's outside statements (see the module docstring).
 
         A radius-only area cannot be decided without geocoding: `served=None` (hand off to the owner).
-        No postal code and no locality also gives `served=None`. Raises `errors.UnknownModule` when the
-        business has no (such) quote_request module.
+        No postal code and no locality also gives `served=None`, and so does a location neither listed
+        nor stated to be outside. Raises `errors.UnknownModule` when the business has no (such)
+        quote_request module.
         """
         mid, module = self._module(profile, module_id)
         locations = service_area_locations(profile, module)
         wanted_code = normalize_postal_code(postal_code) if postal_code and postal_code.strip() else None
-        wanted_place = normalize_name(locality) if locality and locality.strip() else None
+        wanted_places = _wanted_places(profile, locality) if locality and locality.strip() else []
         checked_refs: list[str] = []
         undecidable = False
+        listed_codes: set[str] = set()
         for location in locations:
             area = location.get("area") or {}
             loc_id = location["id"]
             codes = {normalize_postal_code(str(code)) for code in area.get("postal_codes", ()) or ()}
-            places = {normalize_name(str(place)): str(place) for place in area.get("localities", ()) or ()}
+            places = {place_key(str(place)): str(place) for place in area.get("localities", ()) or ()}
+            listed_codes |= codes
             if wanted_code and wanted_code in codes:
                 return ServiceAreaCheck(
                     served=True,
@@ -121,12 +209,13 @@ class QuoteService(CommitmentServiceBase):
                     matched=wanted_code,
                     fact_refs=[f"locations/{loc_id}#area.postal_codes"],
                 )
-            if wanted_place and wanted_place in places:
+            matched = _match_place(wanted_places, places) if wanted_places else None
+            if matched is not None:
                 return ServiceAreaCheck(
                     served=True,
                     module_id=mid,
                     location_id=loc_id,
-                    matched=places[wanted_place],  # the profile's own spelling, never the caller's text
+                    matched=matched,  # the profile's own spelling, never the caller's text
                     fact_refs=[f"locations/{loc_id}#area.localities"],
                 )
             if area.get("radius"):
@@ -134,17 +223,24 @@ class QuoteService(CommitmentServiceBase):
                 checked_refs.append(f"locations/{loc_id}#area.radius")
             if wanted_code and codes:
                 checked_refs.append(f"locations/{loc_id}#area.postal_codes")
-            if wanted_place and places:
+            if wanted_places and places:
                 checked_refs.append(f"locations/{loc_id}#area.localities")
-        if (wanted_code is None and wanted_place is None) or undecidable or not locations:
+        if (wanted_code is None and not wanted_places) or undecidable or not locations:
             return ServiceAreaCheck(served=None, module_id=mid, fact_refs=list(dedupe(checked_refs)))
-        # A locality-only miss is not definite when postal codes could still match (and vice versa).
-        decidable = any(
-            (wanted_code and (loc.get("area") or {}).get("postal_codes"))
-            or (wanted_place and (loc.get("area") or {}).get("localities"))
-            for loc in locations
-        )
-        return ServiceAreaCheck(served=False if decidable else None, module_id=mid, fact_refs=list(dedupe(checked_refs)))
+        referred: set[str] = set()
+        for entry_ref, entry in outside_statements(profile):
+            for key, codes in _outside_codes(entry).items():
+                referred |= codes
+                if wanted_code and wanted_code in codes:
+                    return ServiceAreaCheck(served=False, module_id=mid, fact_refs=list(dedupe([*checked_refs, f"{entry_ref}#facts.{key}"])))
+            texts = [*(str(v) for v in entry.get("question_variants") or ()), str(entry.get("answer_spoken") or "")]
+            if any(_contains_place(text, key) for key in wanted_places for text in texts):
+                return ServiceAreaCheck(served=False, module_id=mid, fact_refs=list(dedupe([*checked_refs, f"{entry_ref}#answer_spoken"])))
+        if wanted_code and listed_codes:
+            region = wanted_code[:REGION_PREFIX]
+            if len(wanted_code) > REGION_PREFIX and not any(code[:REGION_PREFIX] == region for code in listed_codes | referred):
+                return ServiceAreaCheck(served=False, module_id=mid, fact_refs=list(dedupe(checked_refs)))
+        return ServiceAreaCheck(served=None, module_id=mid, fact_refs=list(dedupe(checked_refs)))
 
     async def open_days(
         self,

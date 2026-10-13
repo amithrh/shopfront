@@ -205,6 +205,25 @@ def price(price: JsonObj | Any | None) -> str | None:
     return None
 
 
+def price_delta(delta: JsonObj | Any | None) -> str | None:
+    """An option's `price_delta` as speech: fixed 1200 per tier -> "$12 more per tier", a range ->
+    "$10 to $20 more"; None for anything without a spoken amount (free, quote only, from)."""
+    if delta is None:
+        return None
+    kind = _field(delta, "kind")
+    currency = _field(delta, "currency") or "USD"
+    amount = _field(delta, "amount_cents")
+    per = _per(_field(delta, "per"))
+    if amount is None or kind not in ("fixed", "range"):
+        return None
+    top = _field(delta, "max_cents") if kind == "range" else None
+    if top is not None:
+        return f"{money(amount, currency)} to {money(top, currency)} more{per}"
+    if amount < 0:
+        return f"{money(-amount, currency)} less{per}"
+    return f"{money(amount, currency)} more{per}"
+
+
 # ---------------------------------------------------------------------------- dates and times
 
 

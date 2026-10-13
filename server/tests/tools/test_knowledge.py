@@ -58,3 +58,26 @@ def test_every_gold_question_variant_finds_its_entry(live_raw_profiles: dict[str
                 if best is None or f"{best[0]}/{best[1]['id']}" not in owners:
                     misses.append((profile.profile_id, f"{module_id}/{entry['id']}", variant, best and best[1]["id"]))
     assert misses == []
+
+
+def test_place_names_ages_and_synonyms_fold() -> None:
+    units = (("central", "park"),)
+    assert knowledge.tokens("Is Central Park in your service area?", units) == frozenset({"central park", "service", "area"})
+    assert knowledge.tokens("is there parking", units) == frozenset({"park"})  # never the neighbourhood
+    assert knowledge.tokens("can my 16 year old let you in") == frozenset({"teen", "let"})
+    assert knowledge.tokens("Can my teenager let you in?") == frozenset({"teen", "let"})
+    assert knowledge.tokens("do you accept checks") == frozenset({"take", "check"})
+
+
+def test_variants_and_answer_together_can_explain_a_question() -> None:
+    entry = {
+        "id": "turnaround",
+        "topic": "response_time",
+        "question_variants": ["How fast will Jo get back to me?", "How long does a quote take?"],
+        "answer_spoken": "Jo replies to every quote request within 24 hours.",
+    }
+    question = knowledge.tokens("how fast will i get a quote")
+    assert knowledge.unexplained(question, entry) == 0
+    assert knowledge.score_entry(question, entry, None) >= knowledge.MATCH_THRESHOLD
+    # A word neither the variants nor the answer contain keeps the partial rule: no answer.
+    assert knowledge.score_entry(knowledge.tokens("how fast will my pizza arrive"), entry, None) == 0.0

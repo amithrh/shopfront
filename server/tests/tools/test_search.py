@@ -126,3 +126,20 @@ def test_dietary_needs_an_offered_tag() -> None:
     ranked = search.rank([with_tag, without], need="vegan bakery")
     assert ranked[0].entry.business_id == "v"
     assert "dietary" in ranked[0].matched_on and "dietary" not in ranked[1].matched_on
+
+
+def test_one_items_words_can_explain_a_need() -> None:
+    """'put together ikea furniture': no item term is contained in the need, but one item's words
+    (its synonyms and its option choices') explain most of it, its last word included."""
+    handy = entry(
+        "h",
+        "Handy Co",
+        categories=["handyman"],
+        item_terms=["furniture assembly", "put together a dresser"],
+        item_term_groups=[["furniture assembly", "put together a dresser", "chair", "dresser"]],
+    )
+    bakery = entry("b", "Cookie Co", categories=["bakery"], item_term_groups=[["chocolate chip cookie", "chocolate chip"]])
+    ranked = search.rank([handy, bakery], need="someone to put together ikea furniture")
+    assert [m.entry.business_id for m in ranked] == ["h"] and ranked[0].matched_on == ["item"]
+    assert search.rank([handy, bakery], need="chocolate chip pancakes") == []  # the head is not explained
+    assert search.rank([handy, bakery], need="ikea furniture") == []  # one word is not most of two

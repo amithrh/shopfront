@@ -66,7 +66,7 @@ from shopfront_server.domain.services.base import TASK_TTL_SLACK, owner_deadline
 from shopfront_server.observability import id_digest
 from shopfront_server.profile.model import JsonObj, Profile
 from shopfront_server.tools import grounding, render, speech
-from shopfront_server.tools.catalog import resolve_item
+from shopfront_server.tools.catalog import resolve_item, unmet_result
 from shopfront_server.tools.guard import payload_has_canary
 from shopfront_server.tools.context import finish, get_deps, live_profile, tool_span
 from shopfront_server.tools.schemas import Card, CardAction, CardLine, CommitmentResult
@@ -781,15 +781,21 @@ _MODULE_TYPE_OF_KIND = {"booking": "booking", "custom_order": "custom_order", "q
 
 def ambiguous_item_result(profile: Profile, plan: CommitPlan, *, tool: str, asked: str | None) -> CommitmentResult | None:
     """'Did you mean women's cut and style, men's cut or men's cut and beard trim?' for a plan whose item
-    did not resolve because several items match what the customer said (the same resolution
+    did not resolve because several items match what the customer said, or one only once a misspelt
+    word is corrected (the same resolution
     `check_availability` and `find_item` use), else None. Nothing is stored; the card offers each
-    candidate as a retry of the same tool."""
+    candidate as a retry of the same tool. A dietary need no candidate is confirmed to meet ("a
+    nut-free cake") is a `not_offered` hand-off instead."""
     module_type = _MODULE_TYPE_OF_KIND.get(plan.kind)
     if not asked or module_type is None or not plan.problems or plan.problems[0].code != "unknown_item":
         return None
     lookup = resolve_item(profile, asked, module_type=module_type)
-    if lookup.found is not None or len(lookup.candidates) < 2:
-        return None
+    if lookup.unmet_dietary:
+        # "a nut-free cake": the items exist, but none is confirmed to meet the need. Nothing is
+        # ordered as the plain item; the owner can be asked instead.
+        return unmet_result(profile, lookup, asked=asked, result_type=CommitmentResult, status="not_offered")
+    if lookup.found is not None or not lookup.candidates:
+        return None  # (one candidate: a misspelling the customer should confirm, "Did you mean water heater ...?")
     names = [c.spoken_name for c in lookup.candidates]
     facts = grounding.facts_for(profile, [f"{c.ref}#spoken_name" for c in lookup.candidates])
     return CommitmentResult(

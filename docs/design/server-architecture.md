@@ -230,6 +230,17 @@ All tools are registered by `tools.server.build_mcp_server`, in this order. Outp
 parameters (`ctx`, `plan`, `confirmation`) are filled by resolvers and never appear in `inputSchema`
 (verified by `test_architecture.py`).
 
+**Schema portability.** Every subschema of every `inputSchema` and `outputSchema` declares what it
+accepts (`type`, `enum`, `const`, `$ref` or `anyOf`). Free-form JSON (`Fact.value`,
+`CardAction.arguments`, `TaskStatusResult.result`) is `schemas.JsonData`, an explicit recursive
+`anyOf` of the seven JSON types in `$defs.JsonData`, never `Any` / `pydantic.JsonValue` (whose schema
+is the untyped `{}` the MCP Inspector flags and some clients refuse). Its members are strict, so it
+validates exactly like `JsonValue`. Tool inputs stay `$defs`-free: `details` is
+`dict[str, str | int | float | bool | list[...] | None]` inline. `tests/tools/test_schema_portability.py`
+walks every schema and fails on untyped or boolean `true` subschemas, type arrays, remote or dangling
+`$ref`s, nested `$defs`, 2019-09+/conditional/vendor keywords, undeclared `required` names and
+defaults that do not validate.
+
 **Annotations:**
 - **R** = read-only, idempotent, closed-world: reads the published profile and the server's own
   records, nothing leaves the server.
@@ -248,7 +259,7 @@ parameters (`ctx`, `plan`, `confirmation`) are filled by resolvers and never app
 | `find_business` | **need**, category, locality, limit≤10 | `FindBusinessResult{businesses[BusinessMatch]}` | R | business |
 | `get_business_info` | **business_id**, topics[summary,hours,location,contact], on_date | `BusinessInfoResult{name, open_now?, hours?, address, phone}` | R | business |
 | `get_catalog` | **business_id**, category, query, limit≤25 | `CatalogResult{items[ItemSummary], total}` | R | items |
-| `find_item` | **business_id**, **item**, aspects[price,options,allergens,dietary,duration,availability,description] | `ItemDetailResult{item, options, allergens?, may_contain?, dietary?, facility_may_contain?, offered_via}` | R | items |
+| `find_item` | **business_id**, **item**, aspects[price,options,allergens,dietary,duration,availability,description] | `ItemDetailResult{item, options, allergens?, may_contain?, dietary?, facility_may_contain?, offered_via, matched_options?}` | R | items |
 | `ask_policy` | **business_id**, **question**, topic | `PolicyResult{entry_ref, topic}` (`answer_spoken` returned verbatim as `speak`) | R | business |
 | `check_availability` | **business_id**, **item**, date_from, date_to, party_size, module_id, resource, limit | `AvailabilityResult{slots[SlotView]}`: times (booking) or days (custom order, quote) | R | commitment |
 | `book` | **business_id**, **item**, **start**, party_size, details{}, module_id, resource | `CommitmentResult` | C | commitment |
@@ -277,7 +288,9 @@ parameters (`ctx`, `plan`, `confirmation`) are filled by resolvers and never app
 - **find_business.**
   1. `profiles.list_live()` returns `DirectoryEntry[]`.
   2. `search.rank(need, category, locality)` scores category synonyms, item terms, dietary tags,
-     keywords and locality.
+     keywords and locality. An item also matches when one item's words (its terms and its option
+     choices', `DirectoryEntry.item_term_groups`) explain most of the need, its last word included
+     ("someone to put together ikea furniture" -> furniture assembly).
   3. The result is the top N, with `matched_on`.
   4. Facts are `business#name` and `business#categories` for each match.
 - **get_business_info.**
@@ -287,16 +300,55 @@ parameters (`ctx`, `plan`, `confirmation`) are filled by resolvers and never app
   4. Address and contact come from `business#contact` and `locations/<id>#address`.
 - **get_catalog / find_item.**
   1. `get_live`.
-  2. The item is resolved by id, name, spoken name or synonym. An ambiguous item gives a short list;
-     an unknown one gives the `not_offered` hand-off.
-  3. Price facts are `<item ref>#price` and choice prices.
-  4. Allergens use `state(<item>#allergens)` and `state(<catalog>#facility_may_contain)`: unknown gives
-     a hand-off, never "no allergens".
+  2. The item is resolved by `tools.matching` (shared with check_availability, book,
+     place_custom_order and request_quote): ref or id, exact name / spoken name / synonym, then a
+     scored match over the customer's words. Dietary phrases ("gluten-free", "no nuts") and head counts
+     ("for 30", "serves 25") are modifiers; filler ("a", "my", "fix", "please") never needs explaining;
+     plurals are folded, and so are word forms of catalog words ("clogging" -> clog, "draining" ->
+     drain, "replace" -> replacement, "12" -> twelve). A count ("two dressers", "3 chairs") needs no
+     explaining, and a size ("75 inch", "2 by 2 foot") picks the option choice whose published range
+     holds it ("up to 2 by 2 feet"). Each item is scored by how its terms, its option choices' terms
+     ("10 inch", "carrot cake", "long hair"; inside an item its own words are implied, so the drain
+     cleaning's "sink drain" is "sink") and its vocabulary explain the remaining words; words may be
+     left over ("clogged kitchen sink") only when more are explained and the head of the phrase is
+     ("pumpkin pie" never borrows the hand pie). Modifiers are checked against statable facts only: a
+     dietary tag holds when the item's owner-confirmed tags carry it or one option choice carries it
+     (that choice becomes the focus); a head count holds when the item or a choice serves that many.
+     Ranking: unmet dietary tags, unmet head count, unexplained words, whether the head is explained
+     ("fix a leaky faucet" is the faucet), match kind; the longest match breaks a tie only when nothing
+     was left unexplained.
+  3. Several equally good items give "Did you mean ...?", and so does an item found only by correcting
+     a one-letter misspelling ("drywal patch"); an unknown one gives the `not_offered` hand-off, and so
+     does a match whose leftover words the business's not-offered statement names (a knowledge entry
+     with topic `not_offered`: "replace my sewer line" is not the drain cleaning); a dietary need no
+     candidate is confirmed to meet gives "I don't know whether the custom cake comes nut-free. Want me
+     to ask Rosa?" (also from check_availability and, as `not_offered`, from the commit tools: never an
+     order for the plain item).
+  4. find_item leads with the focus choices ("The custom cake has gluten-free cake flavors for $12 more
+     per tier", "The smallest custom cake for that many is the ten inch round, which serves up to 36
+     for $120", "For the custom cake, the cake flavor can be carrot with walnuts") and returns them as
+     `matched_options` (price, price delta, owner-confirmed allergens and dietary tags, serves).
+     get_catalog(query) lists every item that meets the modifiers.
+  5. Price facts are `<item ref>#price` and choice prices / price deltas.
+  6. Allergens use `state(<item>#allergens)` and `state(<catalog>#facility_may_contain)`: unknown gives
+     a hand-off, never "no allergens". With a focus, the focus choices' allergens are spoken, plus what
+     the other option groups (filling, frosting) can add.
 - **ask_policy.**
   1. Match `question` and `topic` against the entries' `question_variants` and `topic`, using a token
-     overlap score with a threshold.
+     overlap score with a threshold (`tools.knowledge`). An entry whose variants and spoken answer
+     together contain every word of a multi-word question also qualifies, and topics that leave fewer
+     of the question's words unexplained rank first ("how fast will I get a quote" -> the turnaround
+     entry, not "How do I get a quote?"). The business's multi-word place names are single words, so
+     "parking" never matches the Central Park entry.
   2. `speak = answer_spoken` (verbatim). Facts are `<module>/<entry>#answer_spoken` and `#facts.*`.
   3. With no match above the threshold, the reply is the hand-off.
+- **check_service_area.** `QuoteService.check_service_area` matches the module's service areas
+  (postal codes; localities by case, punctuation, plural, a trailing state and short forms like "Cap
+  Hill"). A location they don't list is a definite "no" only when a knowledge entry with
+  `facts.service_zone: outside` lists its postal code or names the place, or when a postal code is in
+  another region (no listed or referred-out code shares its first three characters). Anything else
+  is `served=None`: an unlisted town asks for the ZIP code, an unlisted ZIP hands off to the owner,
+  and request_quote sends the request (the owner decides).
 - **check_availability.**
   1. The module type of the item's transactional module picks the method: `BookingService.open_slots`,
      or `CustomOrderService.open_days` / quote days.
