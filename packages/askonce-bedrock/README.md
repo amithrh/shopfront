@@ -16,8 +16,27 @@ model is pushed past its budget:
 | Transient errors | `ServiceUnavailableException`, `InternalServerException`, `ModelTimeoutException` and connection errors fail over. |
 | Bad requests | Any other error (for example a malformed message list) raises at once: it would fail on every model. |
 | Metrics | `router.metrics.snapshot()`: calls, successes, throttles, errors, unavailable, tokens and latency per model. |
+| Spend cap | A persistent cost ledger with a hard budget (default $5.00); see below. |
 
 Only `boto3` is required. License: Apache-2.0.
+
+## Spend cap
+
+Every call is priced from the Converse `usage` (input, output and prompt-cache tokens) with a deliberately
+conservative price table (`PRICES_PER_MTOK` in `ledger.py`, sources cited there; unknown models are priced like
+the most expensive Claude tier) and added to a persistent ledger:
+
+| Piece | Behaviour |
+|---|---|
+| Ledger file | `<repo root>/.local/bedrock-spend.json` (git-ignored); `ASKONCE_BEDROCK_LEDGER` overrides it. Shared by every process on the machine: `flock` on a sidecar `.lock` file, atomic writes. A file that cannot be parsed raises `LedgerError`; it is never reset to $0. |
+| Hard cap | `ASKONCE_BEDROCK_BUDGET_USD`, default **$5.00** in total. Before each attempt the router reserves the call's worst case (request characters / 3 input tokens, +600 with tools, plus `maxTokens` output, 8192 if unset) at that model's price. If spent + in-flight reservations + this estimate would pass the cap, `BudgetExceeded` is raised and nothing is sent. |
+| Settling | A successful call replaces its reservation with the actual cost (`RouterResult.cost_usd`); a failed or interrupted one releases it. Reservations of dead processes are dropped. |
+| Opt-out | The ledger is on by default (`BedrockRouter(...)` and `from_env`); pass `ledger=None` to turn it off. |
+
+```bash
+python -m askonce_bedrock.spend          # spent, remaining, per-model calls/tokens/cost
+python -m askonce_bedrock.spend --json
+```
 
 ## Roles
 
@@ -60,6 +79,8 @@ manage that yourself.
 | `ASKONCE_BEDROCK_RPM` | `apac.amazon.nova-lite-v1:0=40,au.anthropic.claude-sonnet-4-6=5` | Per-model overrides |
 | `ASKONCE_BEDROCK_BURST` | `2` | Bucket size |
 | `ASKONCE_BEDROCK_MAX_WAIT_S` | `15` | Longest a call waits for capacity |
+| `ASKONCE_BEDROCK_BUDGET_USD` | `5` | Total spend cap across all runs |
+| `ASKONCE_BEDROCK_LEDGER` | `/tmp/spend.json` | Ledger file (default `<repo root>/.local/bedrock-spend.json`) |
 
 ## Tests
 

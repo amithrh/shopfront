@@ -14,7 +14,10 @@ budget on purpose:
   * a model that cannot be used at all (access denied, unknown or unsupported model id) is parked for
     `unavailable_cooldown_s` and the call fails over; transient server errors fail over too;
   * a request the model rejects as invalid raises at once (it would fail on every model);
-  * `metrics` counts calls, successes, throttles and errors per model.
+  * `metrics` counts calls, successes, throttles and errors per model;
+  * every call is priced into a persistent spend ledger with a hard cap (default $5.00): before a
+    call, its worst-case cost is reserved, and `BudgetExceeded` is raised instead of calling when the
+    cap would be passed (see `askonce_bedrock.ledger`).
 
 Only boto3 is needed. The router is synchronous and thread-safe (Strands calls models from worker
 threads); from asyncio use `await asyncio.to_thread(router.converse, ...)`.
@@ -35,6 +38,8 @@ import time
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
+
+from askonce_bedrock.ledger import Reservation, SpendLedger, worst_case_tokens
 
 logger = logging.getLogger("askonce.bedrock")
 
@@ -140,6 +145,8 @@ class RouterResult:
     model_id: str
     role: str
     attempts: tuple[Attempt, ...]
+    cost_usd: float | None = None
+    """Estimated cost of the successful call (None when the router has no ledger)."""
 
     @property
     def text(self) -> str:
@@ -319,6 +326,9 @@ def classify(exc: BaseException) -> str:
 Operation = Callable[[Any, str], dict[str, Any]]
 """`op(client, model_id) -> response`: one Bedrock runtime call for one model."""
 
+_DEFAULT_LEDGER: Any = object()
+"""Sentinel: build the ledger from the environment (`SpendLedger.from_env`)."""
+
 
 class BedrockRouter:
     """Routes calls for a role across its models (see module docstring)."""
@@ -331,10 +341,15 @@ class BedrockRouter:
         clock: Callable[[], float] = time.monotonic,
         sleep: Callable[[float], None] = time.sleep,
         rng: random.Random | None = None,
+        ledger: SpendLedger | None = _DEFAULT_LEDGER,
     ) -> None:
+        """`ledger`: the spend ledger and budget cap; by default `SpendLedger.from_env()` (file
+        `ASKONCE_BEDROCK_LEDGER`, cap `ASKONCE_BEDROCK_BUDGET_USD`, $5.00). Pass `None` to run
+        without one (no cap!)."""
         self.client = client
         self.config = config or RouterConfig()
         self.metrics = Metrics()
+        self.ledger: SpendLedger | None = SpendLedger.from_env() if ledger is _DEFAULT_LEDGER else ledger
         self._clock = clock
         self._sleep = sleep
         self._rng = rng or random.Random()
@@ -345,12 +360,18 @@ class BedrockRouter:
 
     @classmethod
     def from_env(
-        cls, *, session: Any = None, region: str | None = None, config: RouterConfig | None = None
+        cls,
+        *,
+        session: Any = None,
+        region: str | None = None,
+        config: RouterConfig | None = None,
+        ledger: SpendLedger | None = _DEFAULT_LEDGER,
     ) -> BedrockRouter:
         """A router over a fresh `bedrock-runtime` client (botocore retries off: the router retries).
 
         Region: `region`, else `AWS_REGION` / `AWS_DEFAULT_REGION`, else ap-southeast-2. Credentials come
-        from `session` (a `boto3.Session`) or the default chain (`AWS_PROFILE`)."""
+        from `session` (a `boto3.Session`) or the default chain (`AWS_PROFILE`). `ledger`: as in `__init__`
+        (default: `SpendLedger.from_env()`, the $5.00 cap)."""
         import boto3
         from botocore.config import Config
 
@@ -361,7 +382,7 @@ class BedrockRouter:
             region_name=region,
             config=Config(retries={"total_max_attempts": 1, "mode": "standard"}, read_timeout=120, connect_timeout=10),
         )
-        return cls(client, config or RouterConfig.from_env())
+        return cls(client, config or RouterConfig.from_env(), ledger=ledger)
 
     # -- capacity --------------------------------------------------------------------------
 
@@ -405,10 +426,22 @@ class BedrockRouter:
 
     # -- calls -----------------------------------------------------------------------------
 
-    def run(self, role: str, op: Operation, *, max_wait_s: float | None = None) -> RouterResult:
+    def run(
+        self,
+        role: str,
+        op: Operation,
+        *,
+        max_wait_s: float | None = None,
+        worst_case: tuple[int, int] | None = None,
+    ) -> RouterResult:
         """Run `op(client, model_id)` on the first model of `role` with capacity, failing over on
         throttles, unusable models and transient errors. Raises `RouterExhausted`, or the error of a
-        request that is invalid in itself."""
+        request that is invalid in itself.
+
+        With a ledger, `worst_case` = (input tokens, output tokens) is reserved against the budget
+        before each attempt (priced for that attempt's model); `BudgetExceeded` is raised, without
+        calling, if the cap would be passed. Without `worst_case` only an exhausted budget blocks the
+        call. Successful calls are recorded from the response `usage`."""
         models = self.models(role)
         deadline = self._clock() + (self.config.max_wait_s if max_wait_s is None else max_wait_s)
         attempts: list[Attempt] = []
@@ -416,10 +449,16 @@ class BedrockRouter:
             for model_id in models:
                 if self._cooling(model_id) > 0 or not self.bucket(model_id).try_acquire():
                     continue
+                reservation: Reservation | None = None
+                if self.ledger is not None:
+                    # Raises BudgetExceeded (nothing sent) when the cap would be passed.
+                    reservation = self.ledger.reserve(model_id, *(worst_case or (0, 0)))
                 started = self._clock()
                 try:
                     response = op(self.client, model_id)
                 except Exception as exc:  # noqa: BLE001 - classified below; fatal ones re-raised
+                    if reservation is not None:
+                        self.ledger.release(reservation)  # type: ignore[union-attr]
                     elapsed = self._clock() - started
                     kind = classify(exc)
                     if kind == "fatal":
@@ -435,13 +474,19 @@ class BedrockRouter:
                         self._cool(model_id, self.config.unavailable_cooldown_s)
                     logger.warning("bedrock %s on %s (role %s): %s", kind, model_id, role, error_code(exc) or exc)
                     continue
+                except BaseException:  # KeyboardInterrupt / cancellation: free the held budget, then stop
+                    if reservation is not None:
+                        self.ledger.release(reservation)  # type: ignore[union-attr]
+                    raise
                 elapsed = self._clock() - started
                 self._reset_strikes(model_id)
-                self.metrics.record(
-                    model_id, "ok", elapsed, response.get("usage") if isinstance(response, dict) else None
-                )
+                usage = response.get("usage") if isinstance(response, dict) else None
+                self.metrics.record(model_id, "ok", elapsed, usage)
+                cost = self.ledger.settle(reservation, model_id, usage) if self.ledger is not None else None
                 attempts.append(Attempt(model_id, "ok", elapsed))
-                return RouterResult(response=response, model_id=model_id, role=role, attempts=tuple(attempts))
+                return RouterResult(
+                    response=response, model_id=model_id, role=role, attempts=tuple(attempts), cost_usd=cost
+                )
             wait = self._next_capacity(models)
             now = self._clock()
             if wait is None or now + wait > deadline:
@@ -479,4 +524,4 @@ class BedrockRouter:
         def op(client: Any, model_id: str) -> dict[str, Any]:
             return client.converse(modelId=model_id, **request)
 
-        return self.run(role, op, max_wait_s=max_wait_s)
+        return self.run(role, op, max_wait_s=max_wait_s, worst_case=worst_case_tokens(request))

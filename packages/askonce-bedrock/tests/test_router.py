@@ -276,3 +276,4 @@ def test_from_env_builds_a_client_in_the_project_region(monkeypatch: pytest.Monk
     router = BedrockRouter.from_env(session=session)
     assert router.client.meta.region_name == "ap-southeast-2"
     assert router.client.meta.config.retries["total_max_attempts"] == 1  # the router does the retrying
+    assert router.ledger is not None and router.ledger.budget_usd == 5.0  # the $5 cap is on by default
