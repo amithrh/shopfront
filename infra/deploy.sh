@@ -30,7 +30,7 @@ cdk() { npx -y "aws-cdk@${CDK_VERSION}" "$@"; }
 output() {  # output <key>: a stack output, or empty when the stack/output does not exist
   aws cloudformation describe-stacks --stack-name "$STACK" --region "$REGION" \
     --query "Stacks[0].Outputs[?OutputKey=='$1'].OutputValue | [0]" --output text 2>/dev/null \
-    | sed 's/^None$//'
+    | sed 's/^None$//' || true
 }
 strip_host() { sed -E 's#^https?://##; s#/.*$##' <<<"$1"; }
 
