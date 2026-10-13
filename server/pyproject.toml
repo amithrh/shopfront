@@ -1,0 +1,44 @@
+[project]
+name = "shopfront-server"
+version = "0.1.0"
+description = "Shopfront: one multi-tenant MCP server that makes certified small businesses Alexa+-ready."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.43.111",
+    "fastapi==0.141.1",
+    "httpx==0.28.1",
+    "jsonschema>=4.26.0",
+    "mcp==2.2.0",
+    "mcp-tasks",
+    "opentelemetry-api==1.45.0",
+    "pydantic==2.13.5",
+    "pydantic-settings==2.15.0",
+    "rfc8785==0.1.4",
+    "tzdata==2026.4",
+    "uvicorn==0.54.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.5,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "opentelemetry-sdk==1.45.0",
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.0",
+]
+
+[tool.uv.sources]
+mcp-tasks = { path = "../packages/mcp-tasks", editable = true }
+
+[tool.uv]
+# Transitive pins: keep every resolved package published before 2026-09-28.
+constraint-dependencies = ["python-dotenv==1.2.3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = "-ra --import-mode=importlib"
+filterwarnings = ["ignore::DeprecationWarning:botocore.*"]

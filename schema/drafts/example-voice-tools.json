@@ -1,0 +1,196 @@
+{
+  "$schema": "./profile-voice-tools.schema.json",
+  "meta": {
+    "schema_version": "0.1",
+    "status": "needs_owner_input",
+    "profile_version": 3,
+    "updated_at": "2026-10-12T15:40:00Z"
+  },
+  "business_id": "thimbleberry-bakehouse",
+  "capabilities": ["catalog", "knowledge", "custom_order", "owner_approval"],
+  "business": {
+    "display_name": "Thimbleberry Bakehouse & Café",
+    "spoken_name": "Thimbleberry Bakehouse",
+    "aliases": ["thimbleberry", "thimbleberry bakery", "the bakery on elm"],
+    "vertical": "bakery",
+    "discovery_keywords": ["birthday cakes", "custom cakes", "gluten-free", "cupcakes", "bread"],
+    "summary_spoken": "A family bakery in downtown Maplewood known for custom celebration cakes, including gluten-free ones.",
+    "location": {
+      "address_display": "214 Elm Street, Maplewood, OH 43000",
+      "area_spoken": "downtown Maplewood, on Elm Street",
+      "city": "Maplewood",
+      "region": "OH",
+      "postal_code": "43000",
+      "country": "US"
+    },
+    "contact": {
+      "phone": "+16145550142",
+      "website": "https://thimbleberry.example"
+    },
+    "timezone": "America/New_York",
+    "currency": "USD",
+    "locale": "en-US",
+    "hours": {
+      "weekly": [
+        { "days": ["tue", "wed", "thu", "fri"], "open": "07:00", "close": "18:00" },
+        { "days": ["sat"], "open": "08:00", "close": "16:00" }
+      ],
+      "closures": [
+        { "start": "2026-11-26", "end": "2026-11-27", "reason_spoken": "Thanksgiving" }
+      ],
+      "src": ["owner-hours"]
+    },
+    "src": ["home", "contact"]
+  },
+  "voice": {
+    "list_limit": 3,
+    "pronunciations": [
+      { "text": "Kouign-amann", "sounds_like": "queen ah-mahn" }
+    ]
+  },
+  "sources": [
+    { "id": "home", "kind": "web_page", "title": "Home page", "url": "https://thimbleberry.example/" },
+    { "id": "menu", "kind": "web_page", "title": "Menu", "url": "https://thimbleberry.example/menu", "excerpt": "Celebration cake, 8 inch, serves 12, $48. 10 inch, serves 20, $72. Gluten-free sponge available." },
+    { "id": "about", "kind": "web_page", "title": "About us", "url": "https://thimbleberry.example/about", "excerpt": "Open Tuesday to Saturday until 6 pm." },
+    { "id": "contact", "kind": "web_page", "title": "Contact", "url": "https://thimbleberry.example/contact", "excerpt": "Tue-Fri 7am-6pm, Sat 8am-4pm." },
+    { "id": "orders", "kind": "web_page", "title": "Custom orders", "url": "https://thimbleberry.example/custom-orders", "excerpt": "Please order custom cakes at least 48 hours ahead. We make up to 2 custom cakes per day. Pickup only." },
+    { "id": "owner-hours", "kind": "owner_answer", "title": "Answer from Rosa, Oct 12", "clarification_id": "q-sat-hours", "captured_at": "2026-10-12T15:31:00Z" }
+  ],
+  "catalog": {
+    "facility_may_contain": ["tree_nuts", "peanuts"],
+    "facility_src": ["menu"],
+    "items": [
+      {
+        "id": "celebration-cake",
+        "display_name": "Custom Celebration Cake",
+        "spoken_name": "celebration cake",
+        "synonyms": ["birthday cake", "custom cake", "party cake", "layer cake"],
+        "category": "cakes",
+        "fulfillment": ["custom_order"],
+        "price": { "kind": "from", "amount": 48, "per": "each" },
+        "variants": [
+          { "id": "8in", "display_name": "8-inch (serves 12)", "spoken_name": "eight inch", "synonyms": ["small", "8 inch"], "price": { "kind": "fixed", "amount": 48 }, "serves": 12 },
+          { "id": "10in", "display_name": "10-inch (serves 20)", "spoken_name": "ten inch", "synonyms": ["large", "10 inch"], "price": { "kind": "fixed", "amount": 72 }, "serves": 20 }
+        ],
+        "choices": [
+          {
+            "id": "sponge",
+            "spoken_question": "Which sponge would you like: vanilla, chocolate, or gluten-free vanilla?",
+            "required": true,
+            "options": [
+              { "id": "vanilla", "spoken_name": "vanilla" },
+              { "id": "chocolate", "spoken_name": "chocolate", "synonyms": ["choc", "chocolate fudge"] },
+              {
+                "id": "gf-vanilla",
+                "spoken_name": "gluten-free vanilla",
+                "synonyms": ["gluten free", "no gluten", "celiac friendly"],
+                "extra_price": { "kind": "fixed", "amount": 8 },
+                "dietary": ["gluten_free"]
+              }
+            ],
+            "src": ["menu"]
+          }
+        ],
+        "allergens": { "declared": true, "contains": ["milk", "eggs", "wheat"], "src": ["menu"] },
+        "note_spoken": "The gluten-free sponge is made without wheat, in a kitchen that also handles nuts.",
+        "src": ["menu"]
+      },
+      {
+        "id": "sourdough",
+        "display_name": "Country Sourdough Loaf",
+        "spoken_name": "sourdough loaf",
+        "synonyms": ["sourdough", "bread", "country loaf"],
+        "category": "bread",
+        "fulfillment": ["walk_in"],
+        "price": { "kind": "fixed", "amount": 9, "per": "each" },
+        "dietary": ["vegan"],
+        "allergens": { "declared": false, "src": ["menu"] },
+        "available_days": ["fri", "sat"],
+        "src": ["menu"]
+      }
+    ]
+  },
+  "knowledge": {
+    "entries": [
+      {
+        "id": "custom-lead-time",
+        "topic": "pickup",
+        "question_variants": ["how far ahead do I order a cake", "can I get a cake tomorrow", "how much notice do you need"],
+        "answer_spoken": "Custom cakes need at least 48 hours notice, and they're pickup only from the shop on Elm Street.",
+        "src": ["orders"]
+      },
+      {
+        "id": "nut-kitchen",
+        "topic": "allergen_handling",
+        "question_variants": ["is it nut free", "do you use nuts", "is it safe for a nut allergy"],
+        "answer_spoken": "Everything is made in a kitchen that also handles tree nuts and peanuts, so we can't promise anything is nut free.",
+        "answer_card": "All products are prepared in a shared kitchen with tree nuts and peanuts.",
+        "src": ["menu"]
+      }
+    ]
+  },
+  "custom_order": {
+    "availability": {
+      "weekly": [
+        { "days": ["tue", "wed", "thu", "fri"], "open": "10:00", "close": "18:00" },
+        { "days": ["sat"], "open": "10:00", "close": "16:00" }
+      ],
+      "capacity_per_day": 2,
+      "lead_time_hours": 48,
+      "max_advance_days": 60,
+      "blackout_dates": [{ "start": "2026-11-26", "end": "2026-11-27", "reason_spoken": "Thanksgiving" }],
+      "src": ["orders", "owner-hours"]
+    },
+    "limits": { "max_servings": 60, "src": ["orders"] },
+    "handoff": ["pickup"],
+    "dialog": {
+      "collect_required": ["item_id", "variant_id", "choices", "date", "customer_name", "customer_phone"],
+      "collect_optional": ["servings", "message_text", "dietary_needs", "notes"],
+      "readback": ["variant_id", "choices", "date", "message_text", "price"],
+      "say_before_confirm": ["nut-kitchen"],
+      "confirmation_required": true
+    },
+    "approval": {
+      "mode": "when_any_rule_matches",
+      "rules": [
+        { "field": "servings", "op": ">", "value": 24, "reason_spoken": "Orders for more than 24 people need Rosa's okay, so I'll send it to her.", "src": ["orders"] },
+        { "field": "dietary_needs", "op": "present", "reason_spoken": "Rosa checks every special diet request herself, so I'll send it to her." }
+      ]
+    }
+  },
+  "owner_approval": {
+    "owner_spoken_name": "Rosa",
+    "channel": "owner_web_page",
+    "expected_response_hours": 2,
+    "expires_after_hours": 24,
+    "on_expiry": "decline_and_notify",
+    "owner_can": ["approve", "decline", "suggest_time", "answer_question"],
+    "answer_unknown_questions": true
+  },
+  "clarifications": [
+    {
+      "id": "q-sat-hours",
+      "kind": "contradiction",
+      "field": "/business/hours",
+      "question": "What time do you close on Saturdays?",
+      "why": "Your About page says you're open until 6 pm, but your Contact page says Saturday closes at 4 pm.",
+      "evidence_src": ["about", "contact"],
+      "options": [
+        { "label": "4 pm", "value": "16:00" },
+        { "label": "6 pm", "value": "18:00" }
+      ],
+      "blocking": true,
+      "status": "answered",
+      "answer": { "value": "16:00", "answered_at": "2026-10-12T15:31:00Z" }
+    },
+    {
+      "id": "q-sourdough-allergens",
+      "kind": "missing",
+      "field": "/catalog/items/1/allergens",
+      "question": "Which allergens are in the sourdough loaf?",
+      "why": "Customers ask about allergens, and the menu doesn't list them for the sourdough.",
+      "blocking": false,
+      "status": "open"
+    }
+  ]
+}

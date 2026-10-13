@@ -1,0 +1,1124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.shopfront.example/business-profile/1.0/profile-generic.schema.json",
+  "title": "Shopfront Business Profile (generic, module-based)",
+  "description": "One schema for every small business served by the Shopfront multi-tenant MCP server. A profile is a vertical-neutral core (identity, locations, hours, sources) plus a map of capability modules (catalog, knowledge, booking, custom_order, quote_request, owner_approval). Vertical-specific vocabulary (allergens, stylist level, subject, servings) is declared as data in `vocabulary`, never as schema fields.",
+  "$comment": "Design rules. (1) No vertical-specific keys anywhere: verticals differ only in module selection, vocabulary, intake_fields and certification cases, all of which are data in a template. (2) Strict core: every structural object uses unevaluatedProperties:false so an extraction model cannot invent fields; the only open doors are `x-*` keys, `attributes` maps typed by `vocabulary`, and `x-*` module types. (3) Every customer-facing fact sits in an object that carries `provenance`, so the certifier can map any stated price, allergen, hour or policy back to a JSON Pointer plus a source. (4) Safety invariants are schema constants (confirmation before commit), not configuration. (5) Cross-references (module ids, item ids, source ids, field keys) are checked by the profile loader, since JSON Schema cannot express referential integrity.",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "status", "business", "modules", "sources"],
+  "properties": {
+    "schema_version": {
+      "description": "Major.minor of this schema. Minor versions are additive only, so a 1.x reader accepts any 1.y profile.",
+      "type": "string",
+      "pattern": "^1\\.[0-9]+$"
+    },
+    "profile_id": { "$ref": "#/$defs/id", "description": "Tenant id used by find_business and every business-scoped tool." },
+    "template": {
+      "description": "The vertical template that seeded this profile (vocabulary, default modules, intake fields, certification cases). Informational: the profile is self-contained.",
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id", "examples": ["bakery", "salon", "home_services", "florist", "fitness_studio", "tutor", "food_truck"] },
+        "version": { "$ref": "#/$defs/version" }
+      },
+      "unevaluatedProperties": false
+    },
+    "status": {
+      "description": "Lifecycle. Only `live` profiles are returned by find_business.",
+      "enum": ["draft", "needs_owner_input", "certifying", "certified", "live", "suspended"]
+    },
+    "business": { "$ref": "#/$defs/business" },
+    "vocabulary": { "$ref": "#/$defs/vocabulary" },
+    "modules": {
+      "description": "Capability modules keyed by module id. The id is the tool-facing handle (e.g. get_catalog(business, module='menu')), so a business may have several modules of one type (e.g. two booking modules for classes and private sessions).",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/module" }
+    },
+    "sources": {
+      "description": "Provenance registry keyed by source id. Web content is untrusted data; owner answers are trusted.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/source" }
+    },
+    "open_questions": {
+      "description": "Clarifying questions for the owner: missing information and contradictions found during onboarding.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/question" }
+    },
+    "certification": { "$ref": "#/$defs/certification" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+  "unevaluatedProperties": false,
+  "allOf": [
+    {
+      "$comment": "Invariant: if any module needs an owner decision (custom_order, quote_request), at least one owner_approval module must exist. Pattern: not(additionalProperties: not X) == 'some module matches X'.",
+      "if": {
+        "required": ["modules"],
+        "properties": {
+          "modules": {
+            "not": {
+              "additionalProperties": {
+                "not": { "required": ["type"], "properties": { "type": { "enum": ["custom_order", "quote_request"] } } }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "modules": {
+            "not": {
+              "additionalProperties": {
+                "not": { "required": ["type"], "properties": { "type": { "const": "owner_approval" } } }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Invariant: a certified or live profile has a passing certification and no open blocking question.",
+      "if": { "required": ["status"], "properties": { "status": { "enum": ["certified", "live"] } } },
+      "then": {
+        "required": ["certification"],
+        "properties": {
+          "certification": { "properties": { "result": { "const": "passed" } } },
+          "open_questions": {
+            "not": {
+              "contains": {
+                "required": ["blocking", "status"],
+                "properties": { "blocking": { "const": true }, "status": { "const": "open" } }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "key": {
+      "description": "Machine key for attributes and form fields.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,39}$"
+    },
+    "ref": {
+      "description": "Reference to a module ('menu') or an entry inside a module ('menu/gf-chocolate-cake', 'info/cancellation'). Resolved by the loader.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}(/[a-z0-9][a-z0-9_-]{0,63})?$"
+    },
+    "slug": {
+      "description": "Open vocabulary token. Recommended values are listed in `examples`; new verticals may add their own.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,39}$"
+    },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$" },
+    "short_text": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "speakable": {
+      "description": "Text the assistant may say aloud. Kept short for voice; stored as data and never interpreted as instructions.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    },
+    "long_text": { "type": "string", "maxLength": 2000 },
+    "url": { "type": "string", "format": "uri", "pattern": "^https?://", "maxLength": 2048 },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$" },
+    "time": {
+      "description": "Local wall-clock time HH:MM (24h). '24:00' marks end of day. An end earlier than its start means the window crosses midnight.",
+      "type": "string",
+      "pattern": "^(([01][0-9]|2[0-3]):[0-5][0-9]|24:00)$"
+    },
+    "duration": {
+      "description": "ISO 8601 duration, e.g. PT45M, P3D, P2W.",
+      "type": "string",
+      "pattern": "^P(?!$)([0-9]+Y)?([0-9]+M)?([0-9]+W)?([0-9]+D)?(T(?=[0-9])([0-9]+H)?([0-9]+M)?([0-9]+S)?)?$"
+    },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "weekday": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] },
+    "json_pointer": { "type": "string", "pattern": "^(/([^~/]|~[01])*)*$" },
+    "ids": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+    "refs": { "type": "array", "items": { "$ref": "#/$defs/ref" }, "uniqueItems": true },
+
+    "provenance": {
+      "description": "Where a fact came from. Required on every object that holds a customer-facing fact.",
+      "type": "object",
+      "required": ["sources"],
+      "properties": {
+        "sources": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "status": {
+          "description": "extracted: read from a source, not yet confirmed. owner_confirmed: extracted and confirmed by the owner. owner_provided: supplied by the owner (no web source).",
+          "enum": ["extracted", "owner_confirmed", "owner_provided"],
+          "default": "extracted"
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "quote": { "description": "Short verbatim excerpt supporting the fact, for citation cards.", "type": "string", "maxLength": 280 }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "source": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["web_page", "owner_answer", "owner_edit", "document", "template"] },
+        "url": { "$ref": "#/$defs/url" },
+        "title": { "$ref": "#/$defs/short_text" },
+        "question_id": { "$ref": "#/$defs/id", "description": "For owner_answer: the open_questions entry it answers." },
+        "retrieved_at": { "type": "string", "format": "date-time" },
+        "content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "web_page" } } }, "then": { "required": ["url", "retrieved_at"] } },
+        { "if": { "properties": { "kind": { "const": "owner_answer" } } }, "then": { "required": ["question_id"] } }
+      ]
+    },
+
+    "money": {
+      "type": "object",
+      "required": ["amount"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "$ref": "#/$defs/currency", "description": "Defaults to business.currency." }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "quantity": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "$ref": "#/$defs/slug", "examples": ["person", "inch", "kg", "minute", "sq_ft", "stem"] }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "price": {
+      "description": "A price fact. `model` covers fixed menu prices, 'from $45' services, ranges, per-unit rates and quote-only work.",
+      "type": "object",
+      "required": ["model"],
+      "properties": {
+        "model": { "enum": ["fixed", "from", "range", "per_unit", "quote", "free"] },
+        "amount": { "type": "number", "minimum": 0 },
+        "max_amount": { "type": "number", "minimum": 0 },
+        "unit": { "$ref": "#/$defs/slug", "description": "For per_unit (and optionally fixed): what one price buys.", "examples": ["hour", "person", "dozen", "session", "visit", "stem"] },
+        "currency": { "$ref": "#/$defs/currency" },
+        "note": { "$ref": "#/$defs/speakable" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "if": { "properties": { "model": { "enum": ["fixed", "from", "per_unit"] } } }, "then": { "required": ["amount"] } },
+        { "if": { "properties": { "model": { "const": "range" } } }, "then": { "required": ["amount", "max_amount"] } },
+        { "if": { "properties": { "model": { "const": "per_unit" } } }, "then": { "required": ["unit"] } },
+        { "if": { "properties": { "model": { "enum": ["quote", "free"] } } }, "then": { "not": { "required": ["amount"] } } }
+      ]
+    },
+
+    "schedule": {
+      "description": "Opening hours or availability: weekly windows plus dated exceptions. Reused for business hours, resource availability, delivery windows and owner quiet hours.",
+      "type": "object",
+      "properties": {
+        "timezone": { "$ref": "#/$defs/timezone", "description": "Defaults to business.timezone." },
+        "weekly": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["days", "start", "end"],
+            "properties": {
+              "days": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/weekday" } },
+              "start": { "$ref": "#/$defs/time" },
+              "end": { "$ref": "#/$defs/time" },
+              "label": { "$ref": "#/$defs/short_text" }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["date", "closed"],
+            "properties": {
+              "date": { "$ref": "#/$defs/date" },
+              "end_date": { "$ref": "#/$defs/date" },
+              "closed": { "type": "boolean" },
+              "windows": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["start", "end"],
+                  "properties": { "start": { "$ref": "#/$defs/time" }, "end": { "$ref": "#/$defs/time" } },
+                  "unevaluatedProperties": false
+                }
+              },
+              "reason": { "$ref": "#/$defs/short_text" }
+            },
+            "unevaluatedProperties": false,
+            "if": { "properties": { "closed": { "const": false } } },
+            "then": { "required": ["windows"] }
+          }
+        },
+        "by_appointment_only": { "type": "boolean", "default": false },
+        "note": { "$ref": "#/$defs/speakable" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "unevaluatedProperties": false,
+      "anyOf": [{ "required": ["weekly"] }, { "required": ["by_appointment_only"] }]
+    },
+
+    "timezone": { "description": "IANA time zone.", "type": "string", "pattern": "^(UTC|[A-Z][A-Za-z_]+(/[A-Za-z0-9_+-]+){1,2})$" },
+    "locale": { "description": "BCP 47 tag.", "type": "string", "pattern": "^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$" },
+
+    "address": {
+      "type": "object",
+      "required": ["line1", "locality", "country"],
+      "properties": {
+        "line1": { "$ref": "#/$defs/short_text" },
+        "line2": { "$ref": "#/$defs/short_text" },
+        "locality": { "$ref": "#/$defs/short_text" },
+        "region": { "$ref": "#/$defs/short_text" },
+        "postal_code": { "type": "string", "maxLength": 16 },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "area": {
+      "description": "A geographic area: served postal codes, localities, or a radius. Used for service areas, delivery zones and mobile stops.",
+      "type": "object",
+      "properties": {
+        "postal_codes": { "type": "array", "items": { "type": "string", "maxLength": 16 }, "uniqueItems": true },
+        "localities": { "type": "array", "items": { "$ref": "#/$defs/short_text" }, "uniqueItems": true },
+        "radius": {
+          "type": "object",
+          "required": ["distance", "unit", "from"],
+          "properties": {
+            "distance": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "enum": ["km", "mi"] },
+            "from": { "$ref": "#/$defs/id", "description": "Location id the radius is measured from." }
+          },
+          "unevaluatedProperties": false
+        },
+        "description": { "$ref": "#/$defs/speakable" }
+      },
+      "minProperties": 1,
+      "unevaluatedProperties": false
+    },
+
+    "location": {
+      "description": "Where the business operates. storefront: fixed address. mobile: a recurring stop (food truck, market stall), one location per stop. service_area: the business travels to the customer (home services, in-home tutoring). virtual: online.",
+      "type": "object",
+      "required": ["id", "kind"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["storefront", "mobile", "service_area", "virtual"] },
+        "name": { "$ref": "#/$defs/short_text" },
+        "address": { "$ref": "#/$defs/address" },
+        "area": { "$ref": "#/$defs/area" },
+        "hours": { "$ref": "#/$defs/schedule" },
+        "directions": { "$ref": "#/$defs/speakable" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "if": { "properties": { "kind": { "enum": ["storefront", "mobile"] } } }, "then": { "required": ["address"] } },
+        { "if": { "properties": { "kind": { "const": "service_area" } } }, "then": { "required": ["area"] } }
+      ]
+    },
+
+    "business": {
+      "description": "Vertical-neutral identity used for discovery (find_business) and for business-wide facts.",
+      "type": "object",
+      "required": ["name", "categories", "locale", "timezone", "currency", "locations", "provenance"],
+      "properties": {
+        "name": { "$ref": "#/$defs/short_text" },
+        "spoken_name": { "$ref": "#/$defs/short_text", "description": "How a voice assistant should say the name, if different." },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/short_text" }, "uniqueItems": true },
+        "summary": { "$ref": "#/$defs/speakable", "description": "One spoken sentence: what the business is." },
+        "categories": {
+          "description": "Open category tokens for discovery. Not a closed enum: new verticals add tokens, not schema.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" },
+          "examples": [["bakery"], ["hair_salon"], ["plumber", "handyman"], ["florist"], ["fitness_studio"], ["tutor"], ["food_truck"]]
+        },
+        "keywords": { "type": "array", "items": { "$ref": "#/$defs/short_text" }, "uniqueItems": true },
+        "locale": { "$ref": "#/$defs/locale" },
+        "languages": { "type": "array", "items": { "$ref": "#/$defs/locale" }, "uniqueItems": true },
+        "timezone": { "$ref": "#/$defs/timezone" },
+        "currency": { "$ref": "#/$defs/currency" },
+        "website": { "$ref": "#/$defs/url" },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "phone": { "type": "string", "pattern": "^\\+?[0-9 ().-]{7,20}$" },
+            "email": { "type": "string", "format": "email", "maxLength": 254 },
+            "url": { "$ref": "#/$defs/url" }
+          },
+          "unevaluatedProperties": false
+        },
+        "locations": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/location" } },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "unevaluatedProperties": false
+    },
+
+    "vocabulary": {
+      "description": "Vertical vocabulary as data. A bakery declares allergens and servings; a salon declares hair_length; a tutor declares subject and grade_level. Items, choices and knowledge entries then carry `attributes` keyed by these definitions, and the loader type-checks values against them.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/key" },
+          "additionalProperties": { "$ref": "#/$defs/attribute_def" }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "attribute_def": {
+      "type": "object",
+      "required": ["label", "type", "claim_class"],
+      "properties": {
+        "label": { "$ref": "#/$defs/short_text" },
+        "description": { "$ref": "#/$defs/speakable" },
+        "type": { "enum": ["text", "number", "integer", "boolean", "enum", "multi_enum", "quantity", "duration", "date", "money"] },
+        "enum": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/slug" } },
+        "enum_labels": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/slug" },
+          "additionalProperties": { "$ref": "#/$defs/short_text" }
+        },
+        "unit": { "$ref": "#/$defs/slug" },
+        "applies_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["item", "option_choice", "offering", "bookable", "knowledge_entry", "location", "resource"] }
+        },
+        "claim_class": {
+          "description": "Tells the certifier how strictly to ground statements about this attribute. price, safety, availability and policy claims must match the profile exactly; safety claims are never inferred.",
+          "enum": ["price", "safety", "availability", "policy", "spec", "descriptive"]
+        },
+        "absent_means": {
+          "description": "How to treat an item that lacks this attribute. 'unknown' (the default, and the only safe value for allergens) makes the assistant say it doesn't know and offer to ask the owner.",
+          "enum": ["unknown", "false", "not_applicable"],
+          "default": "unknown"
+        }
+      },
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "if": { "properties": { "type": { "enum": ["enum", "multi_enum"] } } }, "then": { "required": ["enum"] } },
+        { "if": { "properties": { "claim_class": { "const": "safety" } } }, "then": { "properties": { "absent_means": { "const": "unknown" } } } }
+      ]
+    },
+
+    "attribute_scalar": {
+      "anyOf": [
+        { "type": "string", "maxLength": 400 },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "array", "maxItems": 50, "items": { "anyOf": [{ "type": "string", "maxLength": 120 }, { "type": "number" }] } },
+        { "$ref": "#/$defs/quantity" },
+        { "$ref": "#/$defs/money" }
+      ]
+    },
+
+    "attributes": {
+      "description": "Values keyed by vocabulary.attributes. A value is either plain (covered by the enclosing object's provenance) or {value, provenance} when one fact has its own source, e.g. allergens from a separate allergen page.",
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/key" },
+      "additionalProperties": {
+        "anyOf": [
+          { "$ref": "#/$defs/attribute_scalar" },
+          {
+            "type": "object",
+            "required": ["value", "provenance"],
+            "properties": {
+              "value": { "$ref": "#/$defs/attribute_scalar" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "unevaluatedProperties": false
+          }
+        ]
+      }
+    },
+
+    "field": {
+      "description": "One input the assistant collects from a customer (or the owner). Deliberately flat and primitive so it maps 1:1 onto an MCP form-elicitation requestedSchema property, onto generated tool inputSchemas, and onto the owner's phone page. Bakery cake size, salon hair length and a plumber's job description are all just fields.",
+      "type": "object",
+      "required": ["key", "label", "type"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "label": { "$ref": "#/$defs/short_text" },
+        "help": { "$ref": "#/$defs/speakable" },
+        "type": {
+          "enum": ["text", "long_text", "integer", "number", "boolean", "choice", "multi_choice", "date", "datetime", "time", "email", "phone", "postal_code", "money", "item_ref"]
+        },
+        "required": { "type": "boolean", "default": false },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["value", "label"],
+            "properties": {
+              "value": { "type": "string", "maxLength": 64 },
+              "label": { "$ref": "#/$defs/short_text" }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "options_from": {
+          "description": "Draw choices from a catalog module (optionally one category) instead of listing them.",
+          "type": "object",
+          "required": ["module"],
+          "properties": { "module": { "$ref": "#/$defs/id" }, "category": { "$ref": "#/$defs/id" } },
+          "unevaluatedProperties": false
+        },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "max_length": { "type": "integer", "minimum": 1, "maximum": 2000 },
+        "unit": { "$ref": "#/$defs/slug" },
+        "maps_to": { "$ref": "#/$defs/key", "description": "Vocabulary attribute this field captures, e.g. a 'dietary_needs' field maps_to 'dietary'." },
+        "pii": { "type": "boolean", "default": false, "description": "Personal data: redacted from traces and never echoed to other customers." }
+      },
+      "unevaluatedProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "enum": ["choice", "multi_choice", "item_ref"] } } },
+          "then": { "anyOf": [{ "required": ["options"] }, { "required": ["options_from"] }] }
+        },
+        {
+          "if": { "properties": { "type": { "enum": ["email", "phone"] } } },
+          "then": { "properties": { "pii": { "const": true } }, "required": ["pii"] }
+        }
+      ]
+    },
+
+    "option_group": {
+      "description": "A choice a customer makes about an item or offering: size, flavor, stylist level, session length.",
+      "type": "object",
+      "required": ["id", "name", "choices"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/short_text" },
+        "select": { "enum": ["single", "multi"], "default": "single" },
+        "required": { "type": "boolean", "default": false },
+        "choices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "name": { "$ref": "#/$defs/short_text" },
+              "price_delta": { "type": "number" },
+              "price": { "$ref": "#/$defs/price", "description": "Use instead of price_delta when the choice has its own absolute price." },
+              "duration": { "$ref": "#/$defs/duration" },
+              "attributes": { "$ref": "#/$defs/attributes" },
+              "available": { "type": "boolean", "default": true }
+            },
+            "unevaluatedProperties": false,
+            "not": { "required": ["price_delta", "price"] }
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "capacity_rule": {
+      "description": "A limit the business can honour honestly, e.g. 'at most 2 custom cakes a day' or '12 people per class'.",
+      "type": "object",
+      "required": ["per", "max"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "per": { "enum": ["slot", "session", "day", "week"] },
+        "max": { "type": "integer", "minimum": 1 },
+        "counts": { "enum": ["bookings", "orders", "people", "units"], "default": "orders" },
+        "applies_to": { "$ref": "#/$defs/refs", "description": "Items, offerings, bookables or categories; empty means the whole module." },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "lead_time": {
+      "type": "object",
+      "properties": {
+        "min_notice": { "$ref": "#/$defs/duration" },
+        "max_advance": { "$ref": "#/$defs/duration" },
+        "same_day_cutoff": { "$ref": "#/$defs/time" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "minProperties": 1,
+      "unevaluatedProperties": false
+    },
+
+    "fulfillment_option": {
+      "type": "object",
+      "required": ["id", "kind"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["pickup", "delivery", "shipping", "on_site", "at_customer", "virtual"] },
+        "label": { "$ref": "#/$defs/short_text" },
+        "location_ids": { "$ref": "#/$defs/ids" },
+        "area": { "$ref": "#/$defs/area" },
+        "fee": { "$ref": "#/$defs/price" },
+        "minimum_order": { "$ref": "#/$defs/money" },
+        "hours": { "$ref": "#/$defs/schedule" },
+        "lead_time": { "$ref": "#/$defs/lead_time" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "if": { "properties": { "kind": { "enum": ["delivery", "at_customer"] } } }, "then": { "required": ["area"] } },
+        { "if": { "properties": { "kind": { "enum": ["pickup", "on_site"] } } }, "then": { "required": ["location_ids"] } }
+      ]
+    },
+
+    "confirmation": {
+      "description": "Safety invariant: every commit (booking, order, request) is preceded by a form-elicitation confirmation. `before_commit` is a constant so no profile can disable it.",
+      "type": "object",
+      "required": ["before_commit"],
+      "properties": {
+        "before_commit": { "const": true },
+        "read_back": {
+          "description": "Field keys (and the special keys 'item', 'when', 'price') read back to the customer before they confirm.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/key" }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "question": {
+      "description": "A clarifying question for the owner. Targets are JSON Pointers into this profile, so the mechanism is vertical-neutral.",
+      "type": "object",
+      "required": ["id", "kind", "targets", "prompt", "answer_field", "blocking", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["missing", "contradiction", "ambiguous", "confirm"] },
+        "targets": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/json_pointer" } },
+        "prompt": { "$ref": "#/$defs/speakable", "description": "Owner-facing question." },
+        "why": { "$ref": "#/$defs/speakable", "description": "Shown to the owner: why we are asking." },
+        "candidates": {
+          "description": "Conflicting or possible values found, each with its source.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["value", "provenance"],
+            "properties": {
+              "value": true,
+              "label": { "$ref": "#/$defs/short_text" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "answer_field": { "$ref": "#/$defs/field" },
+        "blocking": { "type": "boolean", "description": "Blocks certification until answered." },
+        "status": { "enum": ["open", "answered", "dismissed"] },
+        "answer": true,
+        "answered_at": { "type": "string", "format": "date-time" }
+      },
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "contradiction" } } }, "then": { "required": ["candidates"], "properties": { "candidates": { "minItems": 2 } } } },
+        { "if": { "properties": { "status": { "const": "answered" } } }, "then": { "required": ["answer", "answered_at"] } }
+      ]
+    },
+
+    "certification": {
+      "description": "Result of the deterministic certifier. Cases live in the vertical template; the profile records the outcome.",
+      "type": "object",
+      "required": ["result"],
+      "properties": {
+        "result": { "enum": ["not_run", "passed", "failed"] },
+        "suite": {
+          "type": "object",
+          "required": ["id", "version"],
+          "properties": { "id": { "$ref": "#/$defs/id" }, "version": { "$ref": "#/$defs/version" } },
+          "unevaluatedProperties": false
+        },
+        "profile_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "Digest of the profile that was certified; any edit invalidates certification." },
+        "ran_at": { "type": "string", "format": "date-time" },
+        "cases_total": { "type": "integer", "minimum": 0 },
+        "cases_passed": { "type": "integer", "minimum": 0 },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["case_id", "check"],
+            "properties": {
+              "case_id": { "$ref": "#/$defs/id" },
+              "check": {
+                "$ref": "#/$defs/slug",
+                "examples": ["grounded_fact", "confirm_before_commit", "injection_not_echoed", "idempotent_retry", "task_lifecycle", "schema_conformance"]
+              },
+              "pointer": { "$ref": "#/$defs/json_pointer" },
+              "detail": { "$ref": "#/$defs/speakable" }
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      },
+      "unevaluatedProperties": false,
+      "if": { "properties": { "result": { "const": "passed" } } },
+      "then": { "required": ["suite", "ran_at", "cases_total", "cases_passed"], "properties": { "failures": { "maxItems": 0 } } }
+    },
+
+    "module": {
+      "description": "Dispatcher: validates a module against the definition selected by `type`. Unknown types must be `x-*` extension modules, which runtimes ignore.",
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "anyOf": [
+            { "enum": ["catalog", "knowledge", "booking", "custom_order", "quote_request", "owner_approval"] },
+            { "type": "string", "pattern": "^x-[a-z0-9][a-z0-9_.-]*$" }
+          ]
+        }
+      },
+      "allOf": [
+        { "if": { "required": ["type"], "properties": { "type": { "const": "catalog" } } }, "then": { "$ref": "#/$defs/catalog_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "knowledge" } } }, "then": { "$ref": "#/$defs/knowledge_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "booking" } } }, "then": { "$ref": "#/$defs/booking_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "custom_order" } } }, "then": { "$ref": "#/$defs/custom_order_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "quote_request" } } }, "then": { "$ref": "#/$defs/quote_request_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "owner_approval" } } }, "then": { "$ref": "#/$defs/owner_approval_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "pattern": "^x-" } } }, "then": { "$ref": "#/$defs/extension_module" } }
+      ]
+    },
+
+    "module_base": {
+      "description": "Fields every module shares.",
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string" },
+        "title": { "$ref": "#/$defs/short_text" },
+        "description": { "$ref": "#/$defs/speakable" },
+        "enabled": { "type": "boolean", "default": true },
+        "location_ids": { "$ref": "#/$defs/ids", "description": "Locations this module applies to; empty means all." },
+        "policy_refs": { "$ref": "#/$defs/refs", "description": "Knowledge entries that govern this module (cancellation, deposit, refund), so a policy is stated once and cited everywhere." }
+      },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true }
+    },
+
+    "transactional_base": {
+      "description": "Shared by every module that commits something on the customer's behalf (booking, custom_order, quote_request).",
+      "allOf": [{ "$ref": "#/$defs/module_base" }],
+      "required": ["confirmation"],
+      "properties": {
+        "intake_fields": { "type": "array", "items": { "$ref": "#/$defs/field" } },
+        "confirmation": { "$ref": "#/$defs/confirmation" },
+        "lead_time": { "$ref": "#/$defs/lead_time" },
+        "capacity_rules": { "type": "array", "items": { "$ref": "#/$defs/capacity_rule" } }
+      }
+    },
+
+    "owner_mediated_base": {
+      "description": "A request that becomes an MCP Task and waits for an owner decision. custom_order and quote_request are thin specializations; a florist's event consultation or a tutor's trial-lesson request is the same shape with different intake_fields.",
+      "allOf": [{ "$ref": "#/$defs/transactional_base" }],
+      "required": ["intake_fields", "approval"],
+      "properties": {
+        "intake_fields": { "minItems": 1 },
+        "approval": {
+          "type": "object",
+          "required": ["module", "decisions"],
+          "properties": {
+            "module": { "$ref": "#/$defs/id", "description": "The owner_approval module that receives the Task." },
+            "response_sla": { "$ref": "#/$defs/duration", "description": "What the assistant may promise, e.g. 'Rosa usually replies within 4 hours'." },
+            "decisions": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "enum": ["approve", "decline", "counter_offer", "quote", "request_info", "suggest_time"] }
+            },
+            "response_fields": {
+              "description": "What the owner fills in when deciding (quoted price, earliest visit). Rendered generically on the owner phone page.",
+              "type": "array",
+              "items": { "$ref": "#/$defs/field" }
+            }
+          },
+          "unevaluatedProperties": false
+        }
+      }
+    },
+
+    "item": {
+      "description": "Anything sold or offered: a product, service, class, membership, package or menu item.",
+      "type": "object",
+      "required": ["id", "name", "provenance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/short_text" },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/short_text" }, "uniqueItems": true },
+        "description": { "$ref": "#/$defs/speakable" },
+        "kind": { "$ref": "#/$defs/slug", "examples": ["product", "service", "class", "membership", "package", "menu_item", "rental", "gift_card"] },
+        "category_ids": { "$ref": "#/$defs/ids" },
+        "price": { "$ref": "#/$defs/price" },
+        "duration": { "$ref": "#/$defs/duration" },
+        "options": { "type": "array", "items": { "$ref": "#/$defs/option_group" } },
+        "attributes": { "$ref": "#/$defs/attributes" },
+        "availability": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "enum": ["available", "limited", "seasonal", "made_to_order", "sold_out", "discontinued"] },
+            "note": { "$ref": "#/$defs/speakable" },
+            "hours": { "$ref": "#/$defs/schedule" }
+          },
+          "unevaluatedProperties": false
+        },
+        "handled_by": { "$ref": "#/$defs/ids", "description": "Transactional modules that can act on this item (book it, custom-order it, quote it)." },
+        "tags": { "type": "array", "items": { "$ref": "#/$defs/slug" }, "uniqueItems": true },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "unevaluatedProperties": false
+    },
+
+    "catalog_module": {
+      "allOf": [{ "$ref": "#/$defs/module_base" }],
+      "required": ["items"],
+      "properties": {
+        "type": { "const": "catalog" },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "name": { "$ref": "#/$defs/short_text" },
+              "description": { "$ref": "#/$defs/speakable" }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "items": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/item" } },
+        "fulfillment": { "type": "array", "items": { "$ref": "#/$defs/fulfillment_option" } }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "knowledge_module": {
+      "allOf": [{ "$ref": "#/$defs/module_base" }],
+      "required": ["entries"],
+      "properties": {
+        "type": { "const": "knowledge" },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "topic", "question", "answer", "provenance"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "topic": {
+                "$ref": "#/$defs/slug",
+                "examples": ["hours", "cancellation", "refund", "deposit", "allergens", "delivery", "parking", "payment", "accessibility", "age_policy", "waiver", "warranty", "licensing", "cross_contact"]
+              },
+              "question": { "$ref": "#/$defs/speakable", "description": "Canonical customer question." },
+              "alt_questions": { "type": "array", "items": { "$ref": "#/$defs/speakable" } },
+              "answer": { "$ref": "#/$defs/speakable", "description": "Short spoken answer; the citation goes on the card, not in speech." },
+              "details": { "$ref": "#/$defs/long_text" },
+              "facts": { "$ref": "#/$defs/attributes", "description": "Structured facts inside the policy (notice period, fee, percent) so the certifier can check numbers." },
+              "applies_to": { "$ref": "#/$defs/refs" },
+              "valid_from": { "$ref": "#/$defs/date" },
+              "valid_until": { "$ref": "#/$defs/date" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+            "unevaluatedProperties": false
+          }
+        },
+        "fallback": {
+          "description": "What happens when the profile has no answer. offer_ask_owner: 'I don't know. Want me to ask Rosa?' which starts a Task.",
+          "type": "object",
+          "required": ["strategy"],
+          "properties": {
+            "strategy": { "enum": ["offer_ask_owner", "say_unknown"] },
+            "approval_module": { "$ref": "#/$defs/id" }
+          },
+          "unevaluatedProperties": false,
+          "if": { "properties": { "strategy": { "const": "offer_ask_owner" } } },
+          "then": { "required": ["approval_module"] }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "booking_module": {
+      "description": "Time-slot booking. One shape covers appointments (salon, tutor), reservations with party size (tables) and fixed sessions with capacity (fitness classes), via `slotting`.",
+      "allOf": [{ "$ref": "#/$defs/transactional_base" }],
+      "required": ["bookables", "slotting", "availability"],
+      "properties": {
+        "type": { "const": "booking" },
+        "bookables": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "duration", "provenance"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "item": { "$ref": "#/$defs/ref", "description": "Catalog item this books (name and price come from there)." },
+              "name": { "$ref": "#/$defs/short_text" },
+              "duration": { "$ref": "#/$defs/duration" },
+              "buffer_after": { "$ref": "#/$defs/duration" },
+              "party_size": {
+                "type": "object",
+                "properties": { "min": { "type": "integer", "minimum": 1 }, "max": { "type": "integer", "minimum": 1 } },
+                "unevaluatedProperties": false
+              },
+              "resource_kinds": { "type": "array", "items": { "$ref": "#/$defs/slug" }, "uniqueItems": true, "description": "Any resource of these kinds can serve it." },
+              "resource_ids": { "$ref": "#/$defs/ids", "description": "Only these resources can serve it." },
+              "price": { "$ref": "#/$defs/price", "description": "Only when not taken from `item`." },
+              "attributes": { "$ref": "#/$defs/attributes" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "unevaluatedProperties": false,
+            "anyOf": [{ "required": ["item"] }, { "required": ["name"] }]
+          }
+        },
+        "resources": {
+          "description": "Who or what is booked: stylist, chair, table, room, instructor, tutor, technician, van.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "kind"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "kind": { "$ref": "#/$defs/slug" },
+              "name": { "$ref": "#/$defs/short_text" },
+              "capacity": { "type": "integer", "minimum": 1, "default": 1 },
+              "hours": { "$ref": "#/$defs/schedule", "description": "Overrides module availability for this resource." },
+              "attributes": { "$ref": "#/$defs/attributes" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "slotting": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["strategy", "step"],
+              "properties": {
+                "strategy": { "const": "interval" },
+                "step": { "$ref": "#/$defs/duration" }
+              },
+              "unevaluatedProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["strategy", "sessions"],
+              "properties": {
+                "strategy": { "const": "sessions" },
+                "sessions": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "bookable", "days", "start", "capacity"],
+                    "properties": {
+                      "id": { "$ref": "#/$defs/id" },
+                      "bookable": { "$ref": "#/$defs/id" },
+                      "days": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/weekday" } },
+                      "start": { "$ref": "#/$defs/time" },
+                      "capacity": { "type": "integer", "minimum": 1 },
+                      "resource_id": { "$ref": "#/$defs/id" },
+                      "location_id": { "$ref": "#/$defs/id" }
+                    },
+                    "unevaluatedProperties": false
+                  }
+                }
+              },
+              "unevaluatedProperties": false
+            }
+          ]
+        },
+        "availability": { "$ref": "#/$defs/schedule", "description": "When bookings may start. Slot rules come from the owner's answers, not a fake calendar." },
+        "owner_review": {
+          "description": "Optional: bookings outside these rules become owner Tasks instead of being refused.",
+          "type": "object",
+          "required": ["when", "approval_module"],
+          "properties": {
+            "when": { "enum": ["never", "outside_rules", "always"] },
+            "approval_module": { "$ref": "#/$defs/id" }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "custom_order_module": {
+      "description": "Made-to-order goods that need owner approval: celebration cakes, event flowers, catering trays.",
+      "allOf": [{ "$ref": "#/$defs/owner_mediated_base" }],
+      "required": ["offerings"],
+      "properties": {
+        "type": { "const": "custom_order" },
+        "offerings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "provenance"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "item": { "$ref": "#/$defs/ref" },
+              "category": { "$ref": "#/$defs/ref" },
+              "name": { "$ref": "#/$defs/short_text" },
+              "description": { "$ref": "#/$defs/speakable" },
+              "starting_price": { "$ref": "#/$defs/price" },
+              "options": { "type": "array", "items": { "$ref": "#/$defs/option_group" } },
+              "attributes": { "$ref": "#/$defs/attributes" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "unevaluatedProperties": false,
+            "anyOf": [{ "required": ["item"] }, { "required": ["category"] }, { "required": ["name"] }]
+          }
+        },
+        "pricing": {
+          "type": "object",
+          "required": ["model"],
+          "properties": {
+            "model": { "enum": ["owner_quotes", "catalog_estimate", "fixed"] },
+            "note": { "$ref": "#/$defs/speakable" }
+          },
+          "unevaluatedProperties": false
+        },
+        "fulfillment": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/fulfillment_option" } }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "quote_request_module": {
+      "description": "Work priced per job (home services, events, tutoring packages): the customer describes the job, area and preferred window; the owner replies with a quote via an MCP Task.",
+      "allOf": [{ "$ref": "#/$defs/owner_mediated_base" }],
+      "required": ["services"],
+      "properties": {
+        "type": { "const": "quote_request" },
+        "services": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "provenance"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "item": { "$ref": "#/$defs/ref" },
+              "name": { "$ref": "#/$defs/short_text" },
+              "description": { "$ref": "#/$defs/speakable" },
+              "typical_price": { "$ref": "#/$defs/price" },
+              "provenance": { "$ref": "#/$defs/provenance" }
+            },
+            "unevaluatedProperties": false,
+            "anyOf": [{ "required": ["item"] }, { "required": ["name"] }]
+          }
+        },
+        "service_area_location_ids": { "$ref": "#/$defs/ids", "description": "service_area locations; requests outside them are declined politely." },
+        "arrival_windows": {
+          "description": "Named windows the customer may prefer (morning, afternoon).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "start", "end"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "label": { "$ref": "#/$defs/short_text" },
+              "start": { "$ref": "#/$defs/time" },
+              "end": { "$ref": "#/$defs/time" }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "site_visit": {
+          "type": "object",
+          "required": ["offered"],
+          "properties": { "offered": { "type": "boolean" }, "fee": { "$ref": "#/$defs/price" } },
+          "unevaluatedProperties": false
+        },
+        "quote_valid_for": { "$ref": "#/$defs/duration" }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "owner_approval_module": {
+      "description": "How owner decisions are reached. Contact handles and secrets live in tenant config, never in the profile.",
+      "allOf": [{ "$ref": "#/$defs/module_base" }],
+      "required": ["approver", "channels"],
+      "properties": {
+        "type": { "const": "owner_approval" },
+        "approver": {
+          "type": "object",
+          "required": ["display_name"],
+          "properties": {
+            "display_name": { "$ref": "#/$defs/short_text", "description": "Name the assistant uses: 'I'll ask Rosa.'" },
+            "role": { "$ref": "#/$defs/short_text" }
+          },
+          "unevaluatedProperties": false
+        },
+        "channels": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": {
+                "anyOf": [
+                  { "enum": ["web_inbox", "email", "sms"] },
+                  { "type": "string", "pattern": "^x-[a-z0-9][a-z0-9_.-]*$" }
+                ]
+              },
+              "handle_ref": { "$ref": "#/$defs/id", "description": "Opaque pointer into tenant config." }
+            },
+            "unevaluatedProperties": false
+          }
+        },
+        "response_sla": { "$ref": "#/$defs/duration" },
+        "quiet_hours": { "$ref": "#/$defs/schedule" },
+        "on_timeout": {
+          "type": "object",
+          "required": ["after", "action"],
+          "properties": {
+            "after": { "$ref": "#/$defs/duration" },
+            "action": { "enum": ["remind_owner", "notify_customer", "auto_decline"] }
+          },
+          "unevaluatedProperties": false
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "extension_module": {
+      "description": "Forward-compatible escape hatch for capabilities this schema version does not know (e.g. x-waitlist). Runtimes that do not implement it ignore it, and the certifier never lets the assistant state facts from it.",
+      "allOf": [{ "$ref": "#/$defs/module_base" }],
+      "properties": {
+        "type": { "type": "string", "pattern": "^x-[a-z0-9][a-z0-9_.-]*$" },
+        "spec": { "$ref": "#/$defs/url" }
+      }
+    }
+  }
+}

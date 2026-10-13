@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" role="img" aria-labelledby="t"><title id="t">Illustrated portrait of a stylist with a short, side-swept crop</title>
+  <rect width="300" height="360" fill="#C5D5CC"/>
+  <path d="M40,360 V150 A110,110 0 0 1 260,150 V360 Z" fill="#DFEAE3"/>
+  <path d="M44,360 C52,292 96,262 150,262 C204,262 248,292 256,360 Z" fill="#3B1E3F"/>
+  <path d="M134,200 L134,272 L166,272 L166,200 Z" fill="#3B1E3F"/>
+  <ellipse cx="150" cy="168" rx="40" ry="50" fill="#3B1E3F"/>
+  <path d="M108,176 C98,124 128,100 160,103 C192,106 206,130 196,172 C193,152 186,142 177,137 C166,152 138,162 114,168 C111,170 109,173 108,176 Z" fill="#241A2B"/>
+  <path d="M108,176 C107,190 109,200 113,208 L116,184 Z" fill="#241A2B"/>
+  <g fill="none" stroke="#B7A3C4" stroke-width="3" stroke-linecap="round" opacity=".85">
+    <path d="M126,120 C148,111 174,114 190,132"/>
+    <path d="M118,140 C138,130 158,133 172,141"/>
+  </g>
+  <circle cx="112" cy="206" r="7" fill="none" stroke="#F7C45A" stroke-width="2.5"/>
+</svg>

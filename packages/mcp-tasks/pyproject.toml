@@ -1,0 +1,67 @@
+[project]
+name = "mcp-tasks"
+version = "0.1.0"
+description = "SEP-2663 Tasks extension (io.modelcontextprotocol/tasks) for the MCP Python SDK 2.2: server extension, client extension and pluggable task stores."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "Shopfront contributors" }]
+keywords = ["mcp", "model-context-protocol", "tasks", "sep-2663", "long-running", "dynamodb"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: AnyIO",
+    "Framework :: Pydantic :: 2",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+# Keep these lists in sync with server/uv.lock (it records them for the editable install).
+dependencies = [
+    "anyio>=4.9",
+    "mcp>=2.2.0,<2.3",
+    "mcp-types>=2.2.0,<2.3",
+    "pydantic>=2.12",
+]
+
+[project.optional-dependencies]
+# The DynamoDB store takes an injected boto3 client; boto3 is only needed by callers that build one.
+dynamodb = ["boto3>=1.40"]
+
+[build-system]
+requires = ["uv_build>=0.10.5,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+# httpx (used by the HTTP test) arrives with mcp; botocore (Stubber tests) with boto3.
+dev = [
+    "boto3==1.43.111",
+    "pytest==9.1.1",
+    "uvicorn==0.54.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = "-ra"
+markers = [
+    "http: serves the MCP app under uvicorn on a free 127.0.0.1 port (loopback only); deselect with -m 'not http'",
+]
+filterwarnings = ["ignore::DeprecationWarning:botocore.*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "B", "UP"]
+ignore = ["UP040"]  # keep `X: TypeAlias = ...` (a plain runtime alias) rather than a PEP 695 `type` statement
+
+[tool.ruff.lint.isort]
+known-first-party = ["mcp_tasks", "support"]

@@ -1,0 +1,586 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shopfront.dev/schema/business-profile.schema.json",
+  "title": "Shopfront Business Profile",
+  "description": "One tenant of the Shopfront multi-tenant MCP server: a vertical-neutral core (business, locations, sources, open_questions, certification) plus capability modules keyed by module id, each optional and independent. Website text is untrusted data: it enters the profile only as quoted evidence, never as instructions. Design notes: docs/design/profile-schema.md.",
+  "$comment": "Base: generic draft (modules map with type dispatch, vocabulary as data, flat intake fields, location kinds, slotting, shared owner-approval base). Grafted from the grounding draft: integer cents, verbatim-quote evidence, owner_confirmed, stable fact refs, injection canaries, sha256-bound certification runs, idempotency guard, loader invariants. Grafted from the voice-tools draft: spoken_name + synonyms, URL-free spoken text, FDA allergen and dietary enums, facility-wide may-contain, flat approval rules with a spoken reason, read-back + say-before-confirm, x-read-by tool tags.",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "revision", "business", "sources", "modules", "open_questions", "certification"],
+  "additionalProperties": false,
+  "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema_version": { "const": "1.0" },
+    "profile_id": { "$ref": "#/$defs/id", "description": "Tenant id. find_business returns it; every business-scoped tool takes it." },
+    "revision": { "$ref": "#/$defs/count", "description": "Bumped on every edit. A certification run binds to one revision." },
+    "updated_at": { "$ref": "#/$defs/timestamp" },
+    "template": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version"],
+      "description": "Vertical template that seeded this profile (vocabulary, default modules, intake fields, certification cases). Adding a vertical = a template + cases, never code.",
+      "properties": { "id": { "$ref": "#/$defs/key" }, "version": { "$ref": "#/$defs/version" } }
+    },
+    "business": { "$ref": "#/$defs/business" },
+    "vocabulary": {
+      "type": "object", "additionalProperties": false,
+      "description": "Vertical words as data (serves, stylist_level, subject). Safety vocabularies (allergens, dietary) are fixed enums in the core instead, because they are regulated, not per-business.",
+      "properties": { "attributes": { "type": "object", "propertyNames": { "$ref": "#/$defs/key" }, "additionalProperties": { "$ref": "#/$defs/attribute_def" } } }
+    },
+    "modules": {
+      "type": "object", "minProperties": 1,
+      "description": "Capability modules keyed by module id (the tool-facing handle and the scope of fact refs). `type` selects the definition, so a business may run two modules of one type.",
+      "propertyNames": { "$ref": "#/$defs/id", "not": { "enum": ["business", "locations"] } },
+      "additionalProperties": { "$ref": "#/$defs/module" }
+    },
+    "sources": {
+      "type": "object", "minProperties": 1,
+      "description": "Registry of every page snapshot and owner answer that evidence may cite, keyed by source id.",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/source" }
+    },
+    "open_questions": { "type": "array", "items": { "$ref": "#/$defs/question" } },
+    "certification": { "$ref": "#/$defs/certification" }
+  },
+  "allOf": [
+    {
+      "$comment": "R1: a module that routes requests to the owner (has `approval`) needs an owner_approval module. not(additionalProperties: not X) = some module matches X.",
+      "if": { "properties": { "modules": { "not": { "additionalProperties": { "not": { "required": ["approval"] } } } } } },
+      "then": { "properties": { "modules": { "not": { "additionalProperties": { "not": { "required": ["type"], "properties": { "type": { "const": "owner_approval" } } } } } } } }
+    },
+    {
+      "$comment": "R2: a certified or live profile has no open blocking question (missing info, contradiction or safety confirmation).",
+      "if": { "properties": { "certification": { "properties": { "status": { "enum": ["certified", "live"] } } } } },
+      "then": { "properties": { "open_questions": { "not": { "contains": { "required": ["blocking", "status"], "properties": { "blocking": { "const": true }, "status": { "const": "open" } } } } } } }
+    }
+  ],
+  "x-invariants": [
+    "L1 refs: every ref, fact_ref, location id, approval.module and session item resolves; approval.module names an owner_approval module; transactional `items` name catalog items or categories.",
+    "L2 ids: entity ids are unique within their module, location ids within business, source urls within sources.",
+    "L3 evidence: every evidence.url matches a `sources` entry, and its quote occurs verbatim (NFC, whitespace collapsed) in that source's snapshot (content_sha256).",
+    "L4 units: every price currency equals business.currency; times are local to business.timezone, which must exist in tzdata.",
+    "L5 nearest provenance: a fact's provenance is the closest enclosing `provenance`. Facts under x-* keys or x-* modules are never statable.",
+    "L6 statable: a fact may be stated only if present and not targeted by an open contradiction. Absent = unknown -> 'I don't know. Want me to ask <approver>?'. Safety facts are owner-confirmed by schema.",
+    "L7 certification: certified_run is the last run, passed with cases_passed == cases_total, and its profile_sha256 == sha256(JCS(profile without certification)); any edit bumps revision and resets status to draft.",
+    "L8 canaries: no injection_canaries quote ever appears in a tool result, elicitation message or reply.",
+    "L9 vocabulary: attribute keys are declared in vocabulary.attributes and values match type/enum; approval_rule.when and read_back keys name an intake field or a built-in (item, choices, when, price, party_size, visit_window, order_total_cents).",
+    "L10 contradictions: candidates have pairwise different values and evidence from different sources.",
+    "L11 contact: every booking, custom_order and quote_request module has an intake field of type phone or email, and every request carries a value for at least one of them (without auth, the contact is what keeps two customers' identical requests apart)."
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$", "description": "Stable lowercase id. Never encodes a value or list position, so it survives re-extraction." },
+    "ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "key": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,39}$", "description": "snake_case machine key or open vocabulary token." },
+    "ref": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}(/[a-z0-9][a-z0-9_-]{0,63})?$", "description": "<module id> or <module id>/<entity id>, e.g. menu/celebration-cake." },
+    "refs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "fact_ref": {
+      "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}(/[a-z0-9][a-z0-9_-]{0,63}){0,3}#[a-z][a-z0-9_]{0,39}(\\.[a-z][a-z0-9_]{0,39}){0,3}$",
+      "description": "Stable address of one fact: <scope>[/<id>...]#<field>[.<subfield>], scope = business | locations | a module id. E.g. business#name, locations/main#hours, menu/celebration-cake/size/10in#price, custom-cakes#availability.capacity_per_day. Used by the certifier and owner questions instead of positional JSON Pointers."
+    },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$" },
+    "count": { "type": "integer", "minimum": 1 },
+    "text": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "spoken_name": { "type": "string", "minLength": 1, "maxLength": 40, "pattern": "^[^<>{}\\[\\]|*#_~`@/\\\\\\n]+$", "description": "What the assistant says: a few plain words, no symbols or codes." },
+    "spoken": {
+      "type": "string", "minLength": 1, "maxLength": 240, "pattern": "^(?!.*(https?:|www\\.))[^<>{}\\[\\]|*#_~`\\\\\\n]+$",
+      "description": "At most two short sentences for speech. No URLs or markup (which also blocks most planted injections). Numbers must equal the structured fields."
+    },
+    "synonyms": { "type": "array", "maxItems": 10, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 40 }, "description": "Lowercase phrasings customers say, including common mishearings. Resolve speech to an id." },
+    "cents": { "type": "integer", "minimum": 0, "description": "Money in minor units. Never floats." },
+    "minutes": { "type": "integer", "minimum": 0, "description": "Every duration is whole minutes (48 hours = 2880)." },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "ISO 4217." },
+    "time": { "type": "string", "pattern": "^(([01][0-9]|2[0-3]):[0-5][0-9]|24:00)$", "description": "Local 24h HH:MM in business.timezone; 24:00 = closes at midnight." },
+    "date": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$" },
+    "timestamp": { "type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,6})?Z$", "description": "UTC instant." },
+    "timezone": { "type": "string", "pattern": "^(UTC|[A-Z][A-Za-z_]+(/[A-Za-z0-9_+-]+){1,2})$", "description": "IANA zone, e.g. America/Chicago." },
+    "weekdays": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] } },
+    "url": { "type": "string", "format": "uri", "maxLength": 2048, "pattern": "^https?://\\S+$" },
+    "source_url": { "type": "string", "maxLength": 2048, "pattern": "^(https?://\\S+|urn:shopfront:owner-(answer|edit):[a-z0-9][a-z0-9_-]{0,63})$", "description": "A web page, or an owner answer/edit as a URN, so every fact has a uniform source URL." },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["url", "quote"],
+      "description": "quote = verbatim words from that source (the owner's exact words for an answer); the certifier checks it occurs in the snapshot.",
+      "properties": { "url": { "$ref": "#/$defs/source_url" }, "quote": { "type": "string", "minLength": 1, "maxLength": 500 } }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false, "required": ["owner_confirmed", "evidence"],
+      "description": "Where a fact came from. Covers every fact in the object that carries it, down to the next nested provenance.",
+      "properties": {
+        "owner_confirmed": { "type": "boolean", "description": "True only once the owner confirmed or supplied it; the evidence must then include an owner URN." },
+        "evidence": { "type": "array", "minItems": 1, "maxItems": 10, "items": { "$ref": "#/$defs/evidence" } }
+      },
+      "if": { "properties": { "owner_confirmed": { "const": true } } },
+      "then": { "properties": { "evidence": { "contains": { "properties": { "url": { "pattern": "^urn:shopfront:owner-" } } } } } }
+    },
+    "confirmed_provenance": { "$ref": "#/$defs/provenance", "properties": { "owner_confirmed": { "const": true } }, "description": "Safety facts exist only once the owner confirms them." },
+    "allergen": { "enum": ["milk", "eggs", "fish", "shellfish", "tree_nuts", "peanuts", "wheat", "soybeans", "sesame"], "description": "FDA major food allergens (shellfish = crustacean shellfish). Gluten is the dietary claim gluten_free, never inferred from wheat." },
+    "allergen_list": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/allergen" } },
+    "dietary_tag": { "enum": ["gluten_free", "vegan", "vegetarian", "dairy_free", "egg_free", "nut_free", "peanut_free", "soy_free", "sugar_free", "halal", "kosher"], "description": "Claims the business itself makes. Never derived from ingredients." },
+    "allergens": {
+      "type": "object", "additionalProperties": false, "required": ["contains", "provenance"],
+      "description": "Owner-confirmed allergen facts. Absent = unknown (say so and offer to ask the owner). contains: [] = none of the nine. may_contain = item-specific cross-contact.",
+      "properties": { "contains": { "$ref": "#/$defs/allergen_list" }, "may_contain": { "$ref": "#/$defs/allergen_list" }, "provenance": { "$ref": "#/$defs/confirmed_provenance" } }
+    },
+    "dietary": {
+      "type": "object", "additionalProperties": false, "required": ["tags", "provenance"],
+      "properties": { "tags": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/dietary_tag" } }, "provenance": { "$ref": "#/$defs/confirmed_provenance" } }
+    },
+    "price": {
+      "type": "object", "additionalProperties": false, "required": ["kind"],
+      "description": "from = 'starting at'. quote_only = never state a number; offer a quote request.",
+      "properties": {
+        "kind": { "enum": ["fixed", "from", "range", "quote_only", "free"] },
+        "amount_cents": { "$ref": "#/$defs/cents" }, "max_cents": { "$ref": "#/$defs/cents" }, "currency": { "$ref": "#/$defs/currency" },
+        "per": { "$ref": "#/$defs/key", "examples": ["each", "dozen", "person", "hour", "visit", "stem"] }
+      },
+      "dependentRequired": { "amount_cents": ["currency"], "max_cents": ["currency"] },
+      "allOf": [
+        { "if": { "properties": { "kind": { "enum": ["fixed", "from"] } } }, "then": { "required": ["amount_cents"], "not": { "required": ["max_cents"] } } },
+        { "if": { "properties": { "kind": { "const": "range" } } }, "then": { "required": ["amount_cents", "max_cents"] } },
+        { "if": { "properties": { "kind": { "enum": ["quote_only", "free"] } } }, "then": { "not": { "anyOf": [{ "required": ["amount_cents"] }, { "required": ["max_cents"] }] } } }
+      ]
+    },
+    "weekly": {
+      "type": "array", "maxItems": 21,
+      "description": "Timetable lines ('Tue-Sat 07:00-18:00'). A day with no line is closed; two lines on one day = split shift.",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["days", "open", "close"],
+        "properties": { "days": { "$ref": "#/$defs/weekdays" }, "open": { "$ref": "#/$defs/time" }, "close": { "$ref": "#/$defs/time" } }
+      }
+    },
+    "closures": {
+      "type": "array", "maxItems": 50, "description": "Dated closures; `to` is inclusive, omit it for one day.",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["from"],
+        "properties": { "from": { "$ref": "#/$defs/date" }, "to": { "$ref": "#/$defs/date" }, "reason_spoken": { "$ref": "#/$defs/spoken_name" } }
+      }
+    },
+    "hours": {
+      "type": "object", "additionalProperties": false, "required": ["weekly", "provenance"],
+      "properties": {
+        "weekly": { "$ref": "#/$defs/weekly" }, "closures": { "$ref": "#/$defs/closures" },
+        "note_spoken": { "$ref": "#/$defs/spoken", "description": "e.g. 'By appointment only.'" }, "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "address": {
+      "type": "object", "additionalProperties": false, "required": ["line1", "locality", "country"],
+      "properties": {
+        "line1": { "$ref": "#/$defs/text" }, "line2": { "$ref": "#/$defs/text" }, "locality": { "$ref": "#/$defs/text" }, "region": { "$ref": "#/$defs/text" },
+        "postal_code": { "type": "string", "maxLength": 16 }, "country": { "type": "string", "pattern": "^[A-Z]{2}$" }
+      }
+    },
+    "area": {
+      "type": "object", "additionalProperties": false, "minProperties": 1,
+      "description": "Where the business travels or delivers. Ask customers for a ZIP or town, never a full address.",
+      "properties": {
+        "postal_codes": { "type": "array", "uniqueItems": true, "items": { "type": "string", "maxLength": 16 } },
+        "localities": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/spoken_name" } },
+        "radius": {
+          "type": "object", "additionalProperties": false, "required": ["distance", "unit", "from_location"],
+          "properties": { "distance": { "type": "number", "exclusiveMinimum": 0 }, "unit": { "enum": ["mi", "km"] }, "from_location": { "$ref": "#/$defs/id" } }
+        }
+      }
+    },
+    "location": {
+      "type": "object", "additionalProperties": false, "required": ["id", "kind", "provenance"],
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "description": "storefront = fixed address; mobile = one recurring stop (food truck, market stall); service_area = the business travels to the customer; virtual = online.",
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "kind": { "enum": ["storefront", "mobile", "service_area", "virtual"] }, "name": { "$ref": "#/$defs/text" },
+        "spoken_area": { "$ref": "#/$defs/spoken_name", "description": "Easy to say: 'on Elm Street, downtown'." },
+        "address": { "$ref": "#/$defs/address" }, "area": { "$ref": "#/$defs/area" }, "hours": { "$ref": "#/$defs/hours" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "enum": ["storefront", "mobile"] } } }, "then": { "required": ["address"] } },
+        { "if": { "properties": { "kind": { "const": "service_area" } } }, "then": { "required": ["area"] } }
+      ]
+    },
+    "business": {
+      "type": "object", "additionalProperties": false, "x-read-by": ["find_business", "get_business_info"],
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "required": ["name", "spoken_name", "categories", "locale", "timezone", "currency", "locations", "provenance"],
+      "properties": {
+        "name": { "$ref": "#/$defs/text", "description": "As written, for cards." }, "spoken_name": { "$ref": "#/$defs/spoken_name" }, "synonyms": { "$ref": "#/$defs/synonyms" },
+        "summary_spoken": { "$ref": "#/$defs/spoken" },
+        "categories": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/key" }, "description": "Open discovery tokens (bakery, hair_salon, plumber, tutor). New verticals add tokens, not schema." },
+        "keywords": { "type": "array", "maxItems": 15, "uniqueItems": true, "items": { "type": "string", "minLength": 2, "maxLength": 40 } },
+        "locale": { "type": "string", "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$" }, "timezone": { "$ref": "#/$defs/timezone" }, "currency": { "$ref": "#/$defs/currency" },
+        "website": { "$ref": "#/$defs/url" },
+        "contact": {
+          "type": "object", "additionalProperties": false,
+          "properties": { "phone": { "type": "string", "pattern": "^\\+[1-9][0-9]{6,14}$", "description": "E.164." }, "email": { "type": "string", "format": "email", "maxLength": 254 } }
+        },
+        "locations": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/location" } },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "attribute_def": {
+      "type": "object", "additionalProperties": false, "required": ["label", "type", "claim_class"],
+      "properties": {
+        "label": { "$ref": "#/$defs/text" }, "type": { "enum": ["text", "integer", "number", "boolean", "enum", "multi_enum"] },
+        "enum": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/key" } },
+        "unit": { "$ref": "#/$defs/key", "examples": ["person", "inch", "sq_ft"] },
+        "claim_class": { "enum": ["price", "safety", "availability", "policy", "spec", "descriptive"], "description": "How strictly the certifier grounds statements about it; all but descriptive must match exactly." },
+        "absent_means": { "enum": ["unknown", "false", "not_applicable"], "default": "unknown" }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "enum": ["enum", "multi_enum"] } } }, "then": { "required": ["enum"] } },
+        { "if": { "properties": { "claim_class": { "const": "safety" } } }, "then": { "properties": { "absent_means": { "const": "unknown" } } } }
+      ]
+    },
+    "attributes": {
+      "type": "object", "propertyNames": { "$ref": "#/$defs/key" },
+      "description": "Values keyed by vocabulary.attributes (the loader type-checks them). Covered by the enclosing provenance.",
+      "additionalProperties": { "type": ["string", "number", "boolean", "array"], "maxLength": 400, "items": { "type": ["string", "number"] } }
+    },
+    "option_group": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "choices"],
+      "description": "A choice the customer makes about an item: size, flavor, stylist level, session length.",
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/text" }, "spoken_question": { "$ref": "#/$defs/spoken" },
+        "required": { "type": "boolean", "default": false }, "max_selections": { "$ref": "#/$defs/count", "default": 1 },
+        "choices": {
+          "type": "array", "minItems": 1, "maxItems": 12,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "spoken_name"],
+            "description": "price = absolute price with this choice; price_delta = add-on ('+$8'). Allergens/dietary on a choice describe the item as configured with it (they replace the item-level values).",
+            "properties": {
+              "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/text" }, "spoken_name": { "$ref": "#/$defs/spoken_name" }, "synonyms": { "$ref": "#/$defs/synonyms" },
+              "price": { "$ref": "#/$defs/price" }, "price_delta": { "$ref": "#/$defs/price" }, "duration_minutes": { "$ref": "#/$defs/minutes" },
+              "attributes": { "$ref": "#/$defs/attributes" }, "allergens": { "$ref": "#/$defs/allergens" }, "dietary": { "$ref": "#/$defs/dietary" }
+            },
+            "not": { "required": ["price", "price_delta"] }
+          }
+        }
+      }
+    },
+    "item": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "spoken_name", "provenance"],
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true },
+      "description": "Anything sold or offered: product, service, class, job type, package. The single home of its name, price and duration; transactional modules only reference it.",
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/text" }, "spoken_name": { "$ref": "#/$defs/spoken_name" }, "synonyms": { "$ref": "#/$defs/synonyms" },
+        "description_spoken": { "$ref": "#/$defs/spoken" }, "category_ids": { "$ref": "#/$defs/ids" },
+        "price": { "$ref": "#/$defs/price" }, "duration_minutes": { "$ref": "#/$defs/minutes" },
+        "options": { "type": "array", "maxItems": 6, "items": { "$ref": "#/$defs/option_group" } },
+        "attributes": { "$ref": "#/$defs/attributes" }, "allergens": { "$ref": "#/$defs/allergens" }, "dietary": { "$ref": "#/$defs/dietary" },
+        "availability": {
+          "type": "object", "additionalProperties": false, "required": ["status"], "description": "days: omit if available whenever open.",
+          "properties": { "status": { "enum": ["available", "limited", "seasonal", "made_to_order", "sold_out"] }, "days": { "$ref": "#/$defs/weekdays" }, "note_spoken": { "$ref": "#/$defs/spoken" } }
+        },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "field": {
+      "type": "object", "additionalProperties": false, "required": ["key", "label", "type"],
+      "description": "One flat input. Maps 1:1 to an MCP form-elicitation property and a tool argument. Cake size, hair length and job description are all just fields.",
+      "properties": {
+        "key": { "$ref": "#/$defs/key" }, "label": { "$ref": "#/$defs/text" }, "spoken_prompt": { "$ref": "#/$defs/spoken" },
+        "type": { "enum": ["text", "long_text", "integer", "number", "boolean", "choice", "multi_choice", "date", "time", "email", "phone", "money"], "description": "money = integer cents in business.currency." },
+        "required": { "type": "boolean", "default": false },
+        "options": {
+          "type": "array", "minItems": 1, "maxItems": 20,
+          "items": { "type": "object", "additionalProperties": false, "required": ["value", "label"], "properties": { "value": { "type": "string", "maxLength": 64 }, "label": { "$ref": "#/$defs/text" } } }
+        },
+        "min": { "type": "number" }, "max": { "type": "number" }, "max_length": { "type": "integer", "minimum": 1, "maximum": 2000 },
+        "pii": { "type": "boolean", "default": false, "description": "Redacted from traces; never echoed to anyone else." }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "enum": ["choice", "multi_choice"] } } }, "then": { "required": ["options"] } },
+        { "if": { "properties": { "type": { "enum": ["email", "phone"] } } }, "then": { "required": ["pii"], "properties": { "pii": { "const": true } } } }
+      ]
+    },
+    "confirmation": {
+      "type": "object", "additionalProperties": false, "required": ["before_commit", "idempotency", "read_back"],
+      "description": "Fixed guard, not tenant config: every commit follows a form-elicitation confirmation and carries an idempotency key, so retries never double-book.",
+      "properties": {
+        "before_commit": { "const": true }, "idempotency": { "const": "required" },
+        "read_back": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/key" }, "description": "Intake keys or built-ins read back before 'Shall I send it?'." },
+        "say_before_confirm": { "$ref": "#/$defs/refs", "maxItems": 2, "description": "Knowledge entries said before confirming (deposit, cancellation)." }
+      }
+    },
+    "availability": {
+      "type": "object", "additionalProperties": false, "required": ["provenance"],
+      "description": "Honest rule-based availability (no calendar sync). The server computes open slots from these rules minus existing commitments. Omit `weekly` to use location hours.",
+      "properties": {
+        "weekly": { "$ref": "#/$defs/weekly" }, "closures": { "$ref": "#/$defs/closures" },
+        "capacity_per_slot": { "$ref": "#/$defs/count" }, "capacity_per_day": { "$ref": "#/$defs/count", "description": "'At most 2 custom cakes a day.'" },
+        "lead_time_minutes": { "$ref": "#/$defs/minutes" }, "max_advance_minutes": { "$ref": "#/$defs/minutes" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "fulfillment": {
+      "type": "object", "additionalProperties": false, "required": ["modes", "provenance"],
+      "properties": {
+        "modes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["pickup", "delivery", "on_site", "at_customer", "virtual"] } },
+        "location_ids": { "$ref": "#/$defs/ids", "description": "Pickup/on-site locations, or service_area locations for delivery/at_customer." },
+        "fee": { "$ref": "#/$defs/price" }, "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "approval_rule": {
+      "type": "object", "additionalProperties": false, "required": ["when", "op", "reason_spoken", "provenance"],
+      "description": "'Over 24 servings needs Rosa's okay' = {when: servings, op: '>', value: 24}.",
+      "properties": {
+        "when": { "$ref": "#/$defs/key", "description": "An intake field key or a built-in (item, order_total_cents, party_size, lead_minutes)." },
+        "op": { "enum": [">", ">=", "<", "<=", "==", "in", "present"] },
+        "value": { "type": ["number", "string", "array"], "maxLength": 64, "items": { "type": "string", "maxLength": 64 } },
+        "reason_spoken": { "$ref": "#/$defs/spoken" }, "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "allOf": [
+        { "if": { "properties": { "op": { "const": "present" } } }, "then": { "not": { "required": ["value"] } }, "else": { "required": ["value"] } },
+        { "if": { "properties": { "op": { "const": "in" } } }, "then": { "properties": { "value": { "type": "array", "minItems": 1 } } } }
+      ]
+    },
+    "approval": {
+      "type": "object", "additionalProperties": false, "required": ["module", "mode", "decisions"],
+      "description": "Shared owner-approval base: when a confirmed request becomes an MCP Task for the owner instead of completing at once.",
+      "properties": {
+        "module": { "$ref": "#/$defs/id", "description": "The owner_approval module that receives the Task." }, "mode": { "enum": ["always", "when_any_rule_matches"] },
+        "rules": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/approval_rule" } },
+        "decisions": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["approve", "decline", "counter_offer", "quote", "suggest_time", "request_info"] } },
+        "response_fields": { "type": "array", "items": { "$ref": "#/$defs/field" }, "description": "What the owner fills in (final price, quote, earliest visit) on the owner page." }
+      },
+      "if": { "properties": { "mode": { "const": "when_any_rule_matches" } } },
+      "then": { "required": ["rules"], "properties": { "rules": { "minItems": 1 } } }
+    },
+    "module": {
+      "type": "object", "required": ["type"],
+      "description": "Dispatcher: `type` picks the definition. x-* types are extension modules that runtimes may ignore.",
+      "properties": { "type": { "anyOf": [{ "enum": ["catalog", "knowledge", "booking", "custom_order", "quote_request", "owner_approval"] }, { "type": "string", "pattern": "^x-[a-z0-9][a-z0-9_.-]*$" }] } },
+      "allOf": [
+        { "if": { "required": ["type"], "properties": { "type": { "const": "catalog" } } }, "then": { "$ref": "#/$defs/catalog_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "knowledge" } } }, "then": { "$ref": "#/$defs/knowledge_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "booking" } } }, "then": { "$ref": "#/$defs/booking_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "custom_order" } } }, "then": { "$ref": "#/$defs/custom_order_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "quote_request" } } }, "then": { "$ref": "#/$defs/quote_request_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "const": "owner_approval" } } }, "then": { "$ref": "#/$defs/owner_approval_module" } },
+        { "if": { "required": ["type"], "properties": { "type": { "pattern": "^x-" } } }, "then": { "$ref": "#/$defs/module_common" } }
+      ]
+    },
+    "module_common": {
+      "type": "object", "description": "provenance here covers module-level facts that have no closer provenance (visit windows, intake options).",
+      "properties": { "type": { "type": "string" }, "title": { "$ref": "#/$defs/text" }, "enabled": { "type": "boolean", "default": true }, "provenance": { "$ref": "#/$defs/provenance" } },
+      "patternProperties": { "^x-[a-z0-9][a-z0-9_.-]*$": true }
+    },
+    "transactional_common": {
+      "$ref": "#/$defs/module_common", "required": ["intake_fields", "confirmation"],
+      "description": "Shared by every module that commits something for the customer (booking, custom_order, quote_request).",
+      "properties": {
+        "intake_fields": { "type": "array", "minItems": 1, "maxItems": 15, "items": { "$ref": "#/$defs/field" } },
+        "confirmation": { "$ref": "#/$defs/confirmation" }, "availability": { "$ref": "#/$defs/availability" },
+        "fulfillment": { "$ref": "#/$defs/fulfillment" }, "approval": { "$ref": "#/$defs/approval" }
+      }
+    },
+    "catalog_module": {
+      "$ref": "#/$defs/module_common", "x-read-by": ["get_catalog", "find_item"], "required": ["items"], "unevaluatedProperties": false,
+      "properties": {
+        "type": { "const": "catalog" },
+        "categories": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": false, "required": ["id", "spoken_name"], "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/text" }, "spoken_name": { "$ref": "#/$defs/spoken_name" } } }
+        },
+        "items": { "type": "array", "minItems": 1, "maxItems": 500, "items": { "$ref": "#/$defs/item" } },
+        "facility_may_contain": {
+          "type": "object", "additionalProperties": false, "required": ["allergens", "provenance"],
+          "description": "Kitchen-wide cross-contact statement. Must accompany every allergen or dietary answer from this catalog.",
+          "properties": { "allergens": { "$ref": "#/$defs/allergen_list", "minItems": 1 }, "provenance": { "$ref": "#/$defs/confirmed_provenance" } }
+        }
+      }
+    },
+    "knowledge_module": {
+      "$ref": "#/$defs/module_common", "x-read-by": ["ask_policy"], "required": ["entries"], "unevaluatedProperties": false,
+      "properties": {
+        "type": { "const": "knowledge" },
+        "entries": {
+          "type": "array", "minItems": 1, "maxItems": 100,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "topic", "question_variants", "answer_spoken", "provenance"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "topic": { "$ref": "#/$defs/key", "examples": ["cancellation", "deposit", "refund", "parking", "payment", "accessibility", "warranty", "licensing"] },
+              "question_variants": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "type": "string", "minLength": 3, "maxLength": 120 } },
+              "answer_spoken": { "$ref": "#/$defs/spoken", "description": "Returned verbatim by ask_policy; the citation goes on the card." },
+              "answer_card": { "type": "string", "minLength": 1, "maxLength": 1000, "description": "Longer text for the card only, never read aloud." },
+              "facts": { "$ref": "#/$defs/attributes", "description": "Numbers inside the policy (deposit_percent, notice_minutes) so the certifier can check them." },
+              "applies_to": { "$ref": "#/$defs/refs" }, "provenance": { "$ref": "#/$defs/provenance" }
+            }
+          }
+        }
+      }
+    },
+    "booking_module": {
+      "$ref": "#/$defs/transactional_common", "x-read-by": ["check_availability", "book", "cancel_booking"], "required": ["services", "slotting", "availability"], "unevaluatedProperties": false,
+      "description": "Appointments (salon, tutor), tables (party size) and fixed classes (fitness), via `slotting`.",
+      "properties": {
+        "type": { "const": "booking" },
+        "services": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["item"],
+            "properties": {
+              "item": { "$ref": "#/$defs/ref", "description": "Catalog item; name, price and duration come from there." },
+              "resource_ids": { "$ref": "#/$defs/ids", "description": "Only these resources can serve it; omit for any." },
+              "party_size": { "type": "object", "additionalProperties": false, "properties": { "min": { "$ref": "#/$defs/count" }, "max": { "$ref": "#/$defs/count" } } },
+              "buffer_minutes": { "$ref": "#/$defs/minutes" }
+            }
+          }
+        },
+        "resources": {
+          "type": "array", "description": "Who or what is booked: stylist, chair, table, instructor, tutor, crew.",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "kind", "spoken_name", "provenance"],
+            "properties": { "id": { "$ref": "#/$defs/id" }, "kind": { "$ref": "#/$defs/key" }, "spoken_name": { "$ref": "#/$defs/spoken_name" }, "attributes": { "$ref": "#/$defs/attributes" }, "provenance": { "$ref": "#/$defs/provenance" } }
+          }
+        },
+        "slotting": {
+          "type": "object", "additionalProperties": false, "required": ["mode"],
+          "description": "interval = appointments every step_minutes inside availability; fixed = scheduled sessions with a capacity.",
+          "properties": {
+            "mode": { "enum": ["interval", "fixed"] }, "step_minutes": { "type": "integer", "minimum": 5, "maximum": 480 },
+            "sessions": {
+              "type": "array", "minItems": 1,
+              "items": {
+                "type": "object", "additionalProperties": false, "required": ["id", "item", "days", "start", "capacity"],
+                "properties": {
+                  "id": { "$ref": "#/$defs/id" }, "item": { "$ref": "#/$defs/ref" }, "days": { "$ref": "#/$defs/weekdays" }, "start": { "$ref": "#/$defs/time" },
+                  "capacity": { "$ref": "#/$defs/count" }, "resource_id": { "$ref": "#/$defs/id" }, "location_id": { "$ref": "#/$defs/id" }
+                }
+              }
+            },
+            "provenance": { "$ref": "#/$defs/provenance" }
+          },
+          "if": { "properties": { "mode": { "const": "interval" } } },
+          "then": { "required": ["step_minutes"], "not": { "required": ["sessions"] } },
+          "else": { "required": ["sessions", "provenance"], "not": { "required": ["step_minutes"] } }
+        }
+      }
+    },
+    "custom_order_module": {
+      "$ref": "#/$defs/transactional_common", "x-read-by": ["check_availability", "place_custom_order", "get_task"], "required": ["items", "availability", "approval"], "unevaluatedProperties": false,
+      "description": "Made-to-order goods that need the owner: celebration cakes, event flowers, catering trays.",
+      "properties": {
+        "type": { "const": "custom_order" },
+        "items": { "$ref": "#/$defs/refs", "minItems": 1, "description": "Catalog items or categories that can be custom-ordered; their option groups become the `choices` slot." }
+      }
+    },
+    "quote_request_module": {
+      "$ref": "#/$defs/transactional_common", "x-read-by": ["check_service_area", "request_quote", "get_task"], "required": ["items", "approval"], "unevaluatedProperties": false,
+      "description": "Work priced per job: the customer describes the job, area and preferred window; the owner replies with a quote via an MCP Task. The assistant never estimates a price.",
+      "properties": {
+        "type": { "const": "quote_request" },
+        "items": { "$ref": "#/$defs/refs", "minItems": 1, "description": "Job types (catalog items, usually price kind from or quote_only)." },
+        "visit_windows": {
+          "type": "array", "maxItems": 4,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "spoken_name", "start", "end"],
+            "properties": { "id": { "$ref": "#/$defs/id" }, "spoken_name": { "$ref": "#/$defs/spoken_name" }, "start": { "$ref": "#/$defs/time" }, "end": { "$ref": "#/$defs/time" } }
+          }
+        },
+        "approval": { "properties": { "mode": { "const": "always" }, "decisions": { "contains": { "const": "quote" } } } }
+      }
+    },
+    "owner_approval_module": {
+      "$ref": "#/$defs/module_common", "x-read-by": ["ask_owner", "get_task"], "unevaluatedProperties": false,
+      "required": ["approver", "channel", "expected_response_minutes", "expires_after_minutes", "on_expiry", "provenance"],
+      "description": "How owner decisions are reached as MCP Tasks. Contact handles and secrets live in tenant config, never in the profile.",
+      "properties": {
+        "type": { "const": "owner_approval" },
+        "approver": {
+          "type": "object", "additionalProperties": false, "required": ["spoken_name"],
+          "properties": { "spoken_name": { "$ref": "#/$defs/spoken_name", "description": "'I'll ask Rosa.'" }, "role": { "$ref": "#/$defs/text" } }
+        },
+        "channel": { "anyOf": [{ "enum": ["owner_web"] }, { "type": "string", "pattern": "^x-[a-z0-9][a-z0-9_.-]*$" }] },
+        "expected_response_minutes": { "$ref": "#/$defs/count", "description": "Spoken as an expectation: 'she usually answers within 2 hours'." },
+        "expires_after_minutes": { "$ref": "#/$defs/count" }, "on_expiry": { "enum": ["notify_customer", "keep_waiting", "auto_decline"] },
+        "answers_unknown_questions": { "type": "boolean", "default": true, "description": "Unknown facts become 'I don't know. Want me to ask Rosa?' Tasks." },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "url"],
+      "description": "Written by onboarding code, not the LLM: one entry per fetched page snapshot or owner answer/edit.",
+      "properties": {
+        "kind": { "enum": ["web_page", "owner_answer", "owner_edit"] }, "url": { "$ref": "#/$defs/source_url" }, "title": { "$ref": "#/$defs/text" },
+        "retrieved_at": { "$ref": "#/$defs/timestamp" }, "question_id": { "$ref": "#/$defs/id" },
+        "content_sha256": { "$ref": "#/$defs/sha256", "description": "Immutable snapshot that evidence quotes are checked against." },
+        "injection_canaries": {
+          "type": "array", "description": "Text that tried to instruct the assistant. Never extracted; kept so certification can prove it never reaches output.",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["quote", "reason"],
+            "properties": { "quote": { "type": "string", "minLength": 1, "maxLength": 1000 }, "reason": { "enum": ["prompt_injection", "hidden_text", "instruction_to_assistant"] } }
+          }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "web_page" } } }, "then": { "required": ["retrieved_at", "content_sha256"], "properties": { "url": { "pattern": "^https?://" } } } },
+        { "if": { "properties": { "kind": { "const": "owner_answer" } } }, "then": { "required": ["question_id"], "properties": { "url": { "pattern": "^urn:shopfront:owner-answer:" } } } },
+        { "if": { "properties": { "kind": { "const": "owner_edit" } } }, "then": { "properties": { "url": { "pattern": "^urn:shopfront:owner-edit:" } } } }
+      ]
+    },
+    "question": {
+      "type": "object", "additionalProperties": false, "required": ["id", "kind", "targets", "prompt", "why", "blocking", "status"],
+      "description": "A clarifying question for the owner, asked by form elicitation or on the owner page. `why` shows the owner the evidence in plain words.",
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["missing", "contradiction", "confirm"], "description": "confirm = a safety fact the site states that the owner must confirm before it can be said." },
+        "targets": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/fact_ref" } },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 300 }, "why": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "candidates": {
+          "type": "array", "maxItems": 6, "description": "Values found, each with its own evidence. A contradiction lists every conflicting reading.",
+          "items": { "type": "object", "additionalProperties": false, "required": ["value", "label", "evidence"], "properties": { "value": true, "label": { "$ref": "#/$defs/text" }, "evidence": { "$ref": "#/$defs/evidence" } } }
+        },
+        "answer_field": { "$ref": "#/$defs/field" },
+        "blocking": { "type": "boolean", "description": "Certification cannot pass while this is open." }, "status": { "enum": ["open", "answered", "dismissed"] },
+        "answer": {
+          "type": "object", "additionalProperties": false, "required": ["value", "answered_at"],
+          "properties": { "value": true, "raw_text": { "type": "string", "maxLength": 1000, "description": "Owner's verbatim words." }, "answered_at": { "$ref": "#/$defs/timestamp" } }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "contradiction" } } }, "then": { "required": ["candidates"], "properties": { "candidates": { "minItems": 2 } } } },
+        { "if": { "properties": { "kind": { "const": "confirm" } } }, "then": { "required": ["candidates"], "properties": { "candidates": { "minItems": 1 } } } },
+        { "if": { "properties": { "status": { "const": "answered" } } }, "then": { "required": ["answer"] } },
+        { "if": { "properties": { "status": { "const": "open" } } }, "then": { "not": { "required": ["answer"] } } }
+      ]
+    },
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "suite", "profile_revision", "profile_sha256", "started_at", "result", "cases_total", "cases_passed"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "suite": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "$ref": "#/$defs/key" }, "version": { "$ref": "#/$defs/version" } } },
+        "profile_revision": { "$ref": "#/$defs/count" },
+        "profile_sha256": { "$ref": "#/$defs/sha256", "description": "sha256 of the RFC 8785 canonical profile without `certification`." },
+        "started_at": { "$ref": "#/$defs/timestamp" }, "finished_at": { "$ref": "#/$defs/timestamp" },
+        "result": { "enum": ["passed", "failed"] }, "cases_total": { "type": "integer", "minimum": 0 }, "cases_passed": { "type": "integer", "minimum": 0 },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["case_id", "check", "detail"],
+            "properties": {
+              "case_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]{0,120}$" },
+              "check": { "enum": ["grounded_fact", "unknown_handed_off", "disputed_fact_withheld", "confirm_before_commit", "idempotent_retry", "injection_canary", "task_lifecycle", "schema_conformance", "quote_in_snapshot"] },
+              "fact_ref": { "$ref": "#/$defs/fact_ref" }, "detail": { "type": "string", "minLength": 1, "maxLength": 500 },
+              "trace_id": { "type": "string", "pattern": "^[a-f0-9]{32}$", "description": "OTel trace in AgentCore Observability." }
+            }
+          }
+        }
+      },
+      "if": { "properties": { "result": { "const": "passed" } } },
+      "then": { "properties": { "failures": { "maxItems": 0 } } },
+      "else": { "required": ["failures"], "properties": { "failures": { "minItems": 1 } } }
+    },
+    "certification": {
+      "type": "object", "additionalProperties": false, "required": ["status", "runs"],
+      "description": "Lifecycle plus deterministic certifier results. Only live profiles are returned by find_business.",
+      "properties": {
+        "status": { "enum": ["draft", "failed", "certified", "live"] },
+        "certified_run": { "$ref": "#/$defs/id", "description": "The passing run this status rests on (must be the last run)." },
+        "runs": { "type": "array", "items": { "$ref": "#/$defs/run" }, "description": "Append-only, oldest first." }
+      },
+      "allOf": [
+        { "if": { "properties": { "status": { "enum": ["certified", "live"] } } }, "then": { "required": ["certified_run"], "properties": { "runs": { "minItems": 1, "contains": { "properties": { "result": { "const": "passed" } } } } } } },
+        { "if": { "properties": { "status": { "const": "failed" } } }, "then": { "properties": { "runs": { "minItems": 1, "contains": { "properties": { "result": { "const": "failed" } } } } } } }
+      ]
+    }
+  }
+}

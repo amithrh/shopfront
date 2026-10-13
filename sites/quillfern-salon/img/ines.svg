@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" role="img" aria-labelledby="t"><title id="t">Illustrated portrait of a stylist with long, wavy balayage hair</title>
+  <defs>
+    <linearGradient id="hair" x1="0" y1="110" x2="0" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2A1712"/><stop offset=".38" stop-color="#5C3420"/><stop offset=".72" stop-color="#C68A48"/><stop offset="1" stop-color="#F3D08E"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="360" fill="#E8C3CB"/>
+  <path d="M40,360 V150 A110,110 0 0 1 260,150 V360 Z" fill="#F3DDE2"/>
+  <path d="M112,170 C106,240 116,290 122,330 L178,330 C184,290 194,240 188,170 Z" fill="url(#hair)"/>
+  <path d="M44,360 C52,292 96,262 150,262 C204,262 248,292 256,360 Z" fill="#3B1E3F"/>
+  <path d="M134,200 L134,272 L166,272 L166,200 Z" fill="#3B1E3F"/>
+  <ellipse cx="150" cy="168" rx="40" ry="50" fill="#3B1E3F"/>
+  <path d="M108,176 C102,128 126,110 150,110 C176,110 200,128 192,176 C184,150 168,138 150,138 C132,138 116,150 108,176 Z" fill="url(#hair)"/>
+  <path d="M110,165 C98,215 112,250 102,290 C94,320 106,345 98,360 L132,360 C136,336 124,312 134,282 C144,250 128,215 128,180 C127,172 120,166 110,165 Z" fill="url(#hair)"/>
+  <path d="M190,165 C202,215 188,250 198,290 C206,320 194,345 202,360 L168,360 C164,336 176,312 166,282 C156,250 172,215 172,180 C173,172 180,166 190,165 Z" fill="url(#hair)"/>
+  <g fill="none" stroke="#F6D79A" stroke-width="2.5" stroke-linecap="round" opacity=".75">
+    <path d="M112,214 C106,246 118,270 110,300 C104,322 112,340 108,356"/>
+    <path d="M188,214 C194,246 182,270 190,300 C196,322 188,340 192,356"/>
+  </g>
+</svg>

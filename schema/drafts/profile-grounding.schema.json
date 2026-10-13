@@ -1,0 +1,1109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shopfront.example/schema/business-profile/grounding/v1.json",
+  "title": "Shopfront Business Profile (grounding lens)",
+  "description": "One tenant of the Shopfront multi-tenant MCP server. Design rule: every customer-facing fact lives exactly once in the flat `facts` ledger, keyed by a stable fact ID, with a normalized typed value and provenance. Modules and the business block only hold structure and FactRefs into the ledger. An assistant reply is grounded iff every claim it makes is a (fact_id, value_type, value) triple that byte-equals the ledger entry under RFC 8785 canonical JSON and the fact is statable (see x-invariants INV-09/INV-10). Website text is untrusted data: it only reaches the profile as quoted evidence, never as instructions.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "profile_id",
+    "profile_revision",
+    "created_at",
+    "updated_at",
+    "template",
+    "business",
+    "grounding_policy",
+    "sources",
+    "facts",
+    "modules",
+    "questions",
+    "contradictions",
+    "certification",
+    "publication"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "profile_id": {
+      "$ref": "#/$defs/Slug",
+      "description": "Tenant ID used by find_business and every business-scoped tool. Immutable."
+    },
+    "profile_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic. Incremented on every change to anything except `certification` and `publication`. Certification binds to (revision, sha256)."
+    },
+    "created_at": { "$ref": "#/$defs/Timestamp" },
+    "updated_at": { "$ref": "#/$defs/Timestamp" },
+    "template": {
+      "description": "Vertical = template + certification suite, never code. The template declares which modules, entity attributes and question prompts a vertical uses.",
+      "type": "object",
+      "required": ["template_id", "template_version"],
+      "additionalProperties": false,
+      "properties": {
+        "template_id": { "$ref": "#/$defs/Slug" },
+        "template_version": { "$ref": "#/$defs/Semver" }
+      }
+    },
+    "business": { "$ref": "#/$defs/Business" },
+    "grounding_policy": { "$ref": "#/$defs/GroundingPolicy" },
+    "sources": {
+      "description": "Registry of every document a fact was taken from: website snapshots and owner answers. Keyed by source ID.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/SourceId" },
+      "additionalProperties": { "$ref": "#/$defs/Source" }
+    },
+    "facts": {
+      "description": "The fact ledger. Key = stable fact ID (`<subject path>.<attribute>`, e.g. `catalog.item.choc-fudge-cake.price`). Object keys make IDs unique by construction. IDs never encode values or list positions, so they survive re-extraction.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/FactId" },
+      "additionalProperties": { "$ref": "#/$defs/Fact" }
+    },
+    "modules": { "$ref": "#/$defs/Modules" },
+    "questions": {
+      "description": "Clarifying questions for the owner: missing info, contradictions, safety confirmations. Asked through MCP form elicitation or the owner page.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/Question" }
+    },
+    "contradictions": {
+      "description": "Detected disagreements between sources, each with every conflicting claim and its evidence, plus the owner's resolution.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/Contradiction" }
+    },
+    "certification": { "$ref": "#/$defs/Certification" },
+    "publication": { "$ref": "#/$defs/Publication" }
+  },
+  "allOf": [
+    {
+      "$comment": "GATE-1: a profile can only be live while certified.",
+      "if": {
+        "required": ["publication"],
+        "properties": { "publication": { "required": ["state"], "properties": { "state": { "const": "live" } } } }
+      },
+      "then": {
+        "properties": { "certification": { "required": ["status"], "properties": { "status": { "const": "certified" } } } }
+      }
+    },
+    {
+      "$comment": "GATE-2: a certified profile has no open blocking contradiction and no open blocking question.",
+      "if": {
+        "required": ["certification"],
+        "properties": { "certification": { "required": ["status"], "properties": { "status": { "const": "certified" } } } }
+      },
+      "then": {
+        "properties": {
+          "contradictions": {
+            "not": {
+              "contains": {
+                "required": ["status", "severity"],
+                "properties": { "status": { "const": "open" }, "severity": { "const": "blocking" } }
+              }
+            }
+          },
+          "questions": {
+            "not": {
+              "contains": {
+                "required": ["status", "blocking"],
+                "properties": { "status": { "const": "open" }, "blocking": { "const": true } }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "x-invariants": [
+    { "id": "INV-01", "rule": "Every FactRef anywhere in the profile resolves to a key of `facts`." },
+    { "id": "INV-02", "rule": "Every Evidence.source_id resolves in `sources`; Evidence.url and Evidence.content_sha256 equal the source's url and content_sha256." },
+    { "id": "INV-03", "rule": "Every Evidence.quote occurs verbatim (after Unicode NFC and whitespace collapse) in the snapshot identified by content_sha256. This catches extractor hallucination deterministically." },
+    { "id": "INV-04", "rule": "fact.status == 'disputed' iff an open Contradiction has contradiction.fact_id == that fact ID, and fact.contradiction_id names it." },
+    { "id": "INV-05", "rule": "Canonical form: set-valued arrays (AllergenSet lists, TagSet, ServiceArea lists) are sorted ascending and unique; Interval lists are sorted by `opens`. Hence RFC 8785 (JCS) byte equality == semantic equality." },
+    { "id": "INV-06", "rule": "Every Money/MoneyRange currency equals business.currency. Every time_of_day/weekly_hours/date_hours value is local to business.timezone; every Timestamp is UTC." },
+    { "id": "INV-07", "rule": "If certification.status == 'certified' then certified_revision == profile_revision and certified_profile_sha256 == sha256(JCS(profile without `certification` and `publication`)); any mismatch forces status 'stale'." },
+    { "id": "INV-08", "rule": "If publication.state == 'live' then publication.live_revision == certification.certified_revision." },
+    { "id": "INV-09", "rule": "A fact is STATABLE iff status == 'active' AND visibility == 'customer' AND (provenance.owner_confirmed OR kind NOT IN grounding_policy.require_owner_confirmation_kinds) AND (no unconfirmed fact older than grounding_policy.max_unconfirmed_age) AND today (business.timezone) is within [valid_from, valid_until]." },
+    { "id": "INV-10", "rule": "A Claim matches iff claim.fact_id IN facts AND the fact is STATABLE AND claim.value_type == fact.value_type AND JCS(claim.value) == JCS(fact.value). A reply passes fact_grounding iff every claim matches and every price/allergen/hours/duration/policy surface form in the reply text is covered by a claim." },
+    { "id": "INV-11", "rule": "No quarantined_spans[].quote of any source ever appears in a tool result, elicitation message or assistant reply (injection canaries)." },
+    { "id": "INV-12", "rule": "Question.answer.normalized.value_type == Question.answer_spec.value_type; Contradiction.claims values are pairwise different under JCS; resolution.final_value equals the value at value_path of the fact at resulting_fact_revision." },
+    { "id": "INV-13", "rule": "Fact IDs are stable: re-extraction may change value, provenance and revision, never the key. Renaming an entity = retract old facts + add new facts." },
+    { "id": "INV-14", "rule": "certification.runs is append-only and ordered by started_at; each run's summary counts equal the tally of its cases." }
+  ],
+  "$defs": {
+    "Slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+    },
+    "FactId": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z0-9][a-z0-9_-]*){1,6}$",
+      "description": "Dotted path: <namespace>.<entity type>.<entity slug>.<attribute>, e.g. business.hours.regular, catalog.item.gf-vanilla-cake.allergens."
+    },
+    "FactRef": {
+      "$ref": "#/$defs/FactId",
+      "description": "Reference into the `facts` ledger (INV-01)."
+    },
+    "SourceId": { "type": "string", "pattern": "^src_[a-z0-9_]{1,60}$" },
+    "QuestionId": { "type": "string", "pattern": "^q_[a-z0-9_]{1,60}$" },
+    "ContradictionId": { "type": "string", "pattern": "^ctr_[a-z0-9_]{1,60}$" },
+    "RunId": { "type": "string", "pattern": "^cert_[a-z0-9_]{1,60}$" },
+    "Semver": { "type": "string", "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$" },
+    "Sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "Timestamp": {
+      "description": "RFC 3339 instant, always UTC (Z). Pattern makes it assertive even when format validation is off.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(\\.\\d{1,6})?Z$"
+    },
+    "Date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$"
+    },
+    "Time24": {
+      "description": "Local wall-clock time, 24h HH:MM, in business.timezone.",
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+    },
+    "Time24Close": {
+      "description": "Like Time24 but allows 24:00 for closing at midnight.",
+      "type": "string",
+      "pattern": "^(([01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+    },
+    "Duration": {
+      "description": "ISO 8601 duration, e.g. PT45M, PT48H, P3D. Canonical form: the largest exact unit the source stated (certifier normalizes to seconds when comparing surface forms).",
+      "type": "string",
+      "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+    },
+    "IanaTimezone": {
+      "type": "string",
+      "pattern": "^(UTC|[A-Z][A-Za-z_]+(/[A-Z0-9][A-Za-z0-9_+-]+){1,2})$",
+      "examples": ["America/Chicago", "America/Los_Angeles"]
+    },
+    "Currency": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "ISO 4217." },
+    "Locale": { "type": "string", "pattern": "^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|\\d{3}))?$", "description": "BCP 47." },
+    "HttpUrl": { "type": "string", "format": "uri", "pattern": "^https?://[^\\s]+$" },
+    "SourceUrl": {
+      "description": "Web page URL, or a URN for an owner answer/edit, so every fact has a uniform 'source URL'.",
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https?://[^\\s]+|urn:shopfront:(owner-answer|owner-edit):[a-z0-9_]{1,64})$"
+    },
+    "JsonPointer": { "type": "string", "pattern": "^(/([^~/]|~[01])*)*$" },
+    "ValueType": {
+      "type": "string",
+      "enum": [
+        "money",
+        "money_range",
+        "duration",
+        "time_of_day",
+        "weekly_hours",
+        "date",
+        "date_hours",
+        "boolean",
+        "integer",
+        "quantity",
+        "percent",
+        "allergen_set",
+        "tag_set",
+        "text",
+        "phone",
+        "email",
+        "url",
+        "address",
+        "service_area"
+      ]
+    },
+    "Money": {
+      "type": "object",
+      "required": ["amount_cents", "currency"],
+      "additionalProperties": false,
+      "properties": {
+        "amount_cents": { "type": "integer", "minimum": 0 },
+        "currency": { "$ref": "#/$defs/Currency" }
+      }
+    },
+    "MoneyRange": {
+      "description": "'From $X' or '$X-$Y'. max_cents omitted = open-ended ('from').",
+      "type": "object",
+      "required": ["min_cents", "currency"],
+      "additionalProperties": false,
+      "properties": {
+        "min_cents": { "type": "integer", "minimum": 0 },
+        "max_cents": { "type": "integer", "minimum": 0 },
+        "currency": { "$ref": "#/$defs/Currency" }
+      }
+    },
+    "Quantity": {
+      "type": "object",
+      "required": ["amount", "unit"],
+      "additionalProperties": false,
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "unit": {
+          "type": "string",
+          "enum": ["count", "person", "serving", "item", "order", "slot", "inch", "cm", "mi", "km", "g", "kg", "oz", "lb", "sq_ft", "sq_m"]
+        }
+      }
+    },
+    "Interval": {
+      "type": "object",
+      "required": ["opens", "closes"],
+      "additionalProperties": false,
+      "properties": {
+        "opens": { "$ref": "#/$defs/Time24" },
+        "closes": { "$ref": "#/$defs/Time24Close" }
+      }
+    },
+    "DayIntervals": {
+      "description": "Empty array = closed that day (closure is an explicit fact, not an absence).",
+      "type": "array",
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/Interval" }
+    },
+    "WeeklyHours": {
+      "type": "object",
+      "required": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+      "additionalProperties": false,
+      "properties": {
+        "mon": { "$ref": "#/$defs/DayIntervals" },
+        "tue": { "$ref": "#/$defs/DayIntervals" },
+        "wed": { "$ref": "#/$defs/DayIntervals" },
+        "thu": { "$ref": "#/$defs/DayIntervals" },
+        "fri": { "$ref": "#/$defs/DayIntervals" },
+        "sat": { "$ref": "#/$defs/DayIntervals" },
+        "sun": { "$ref": "#/$defs/DayIntervals" }
+      }
+    },
+    "DateHours": {
+      "description": "Hours override for one date (holiday, special opening).",
+      "type": "object",
+      "required": ["date", "intervals"],
+      "additionalProperties": false,
+      "properties": {
+        "date": { "$ref": "#/$defs/Date" },
+        "intervals": { "$ref": "#/$defs/DayIntervals" }
+      }
+    },
+    "Allergen": {
+      "type": "string",
+      "enum": ["celery", "crustacean_shellfish", "egg", "fish", "gluten", "lupin", "milk", "mollusc", "mustard", "peanut", "sesame", "soy", "sulphite", "tree_nut", "wheat"]
+    },
+    "AllergenSet": {
+      "description": "All three lists required so 'not mentioned' is never confused with 'free from'.",
+      "type": "object",
+      "required": ["contains", "may_contain", "free_from"],
+      "additionalProperties": false,
+      "properties": {
+        "contains": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/Allergen" } },
+        "may_contain": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/Allergen" } },
+        "free_from": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/Allergen" } }
+      }
+    },
+    "TagSet": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_]{0,40}$" }
+    },
+    "Address": {
+      "type": "object",
+      "required": ["street", "locality", "postal_code", "country"],
+      "additionalProperties": false,
+      "properties": {
+        "street": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "locality": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "region": { "type": "string", "maxLength": 100 },
+        "postal_code": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" }
+      }
+    },
+    "ServiceArea": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "postal_codes": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 16 } },
+        "localities": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 100 } },
+        "center_postal_code": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "radius": {
+          "allOf": [{ "$ref": "#/$defs/Quantity" }],
+          "properties": { "unit": { "enum": ["mi", "km"] } }
+        }
+      }
+    },
+    "TypedValue": {
+      "description": "Discriminated (value_type, value) pair with normalized units. Reused by Fact, Claim, Question answers and Contradiction claims so all comparisons share one shape.",
+      "type": "object",
+      "properties": {
+        "value_type": { "$ref": "#/$defs/ValueType" },
+        "value": true
+      },
+      "allOf": [
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "money" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/Money" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "money_range" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/MoneyRange" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "duration" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/Duration" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "time_of_day" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/Time24Close" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "weekly_hours" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/WeeklyHours" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "date" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/Date" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "date_hours" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/DateHours" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "boolean" } } }, "then": { "properties": { "value": { "type": "boolean" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "integer" } } }, "then": { "properties": { "value": { "type": "integer" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "quantity" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/Quantity" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "percent" } } }, "then": { "properties": { "value": { "type": "number", "minimum": 0, "maximum": 100 } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "allergen_set" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/AllergenSet" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "tag_set" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/TagSet" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "text" } } }, "then": { "properties": { "value": { "type": "string", "minLength": 1, "maxLength": 600 } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "phone" } } }, "then": { "properties": { "value": { "type": "string", "pattern": "^\\+[1-9]\\d{6,14}$", "description": "E.164" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "email" } } }, "then": { "properties": { "value": { "type": "string", "format": "email", "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "url" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/HttpUrl" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "address" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/Address" } } } },
+        { "if": { "required": ["value_type"], "properties": { "value_type": { "const": "service_area" } } }, "then": { "properties": { "value": { "$ref": "#/$defs/ServiceArea" } } } }
+      ]
+    },
+    "Claim": {
+      "description": "The unit the certifier checks (INV-10). MCP tool results return the claims they used (with a citation built from the fact's evidence), and the host attaches the claims behind each reply sentence.",
+      "type": "object",
+      "required": ["fact_id", "value_type", "value"],
+      "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+      "properties": {
+        "fact_id": { "$ref": "#/$defs/FactRef" },
+        "surface_text": { "type": "string", "maxLength": 300, "description": "The words in the reply that carry the claim, e.g. 'forty-eight dollars'." }
+      },
+      "unevaluatedProperties": false
+    },
+    "ObservedClaim": {
+      "description": "What the certifier saw in a reply. fact_id is absent when the claim was ungrounded.",
+      "type": "object",
+      "required": ["surface_text"],
+      "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+      "dependentRequired": { "value": ["value_type"] },
+      "properties": {
+        "fact_id": { "$ref": "#/$defs/FactRef" },
+        "surface_text": { "type": "string", "maxLength": 300 }
+      },
+      "unevaluatedProperties": false
+    },
+    "Evidence": {
+      "description": "One piece of provenance: where the fact was read, the verbatim words, and when.",
+      "type": "object",
+      "required": ["source_id", "url", "quote", "content_sha256", "extracted_at"],
+      "additionalProperties": false,
+      "properties": {
+        "source_id": { "$ref": "#/$defs/SourceId" },
+        "url": { "$ref": "#/$defs/SourceUrl" },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Verbatim snippet from the source (INV-03). For owner answers, the owner's exact words."
+        },
+        "content_sha256": { "$ref": "#/$defs/Sha256", "description": "Hash of the source snapshot the quote was taken from (INV-02)." },
+        "extracted_at": { "$ref": "#/$defs/Timestamp" },
+        "locator": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "section_heading": { "type": "string", "maxLength": 200 },
+            "css_selector": { "type": "string", "maxLength": 300 },
+            "char_start": { "type": "integer", "minimum": 0 },
+            "char_end": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "extractor": {
+          "type": "object",
+          "required": ["agent", "run_id"],
+          "additionalProperties": false,
+          "properties": {
+            "agent": { "type": "string", "enum": ["onboarding_agent", "owner_console"] },
+            "model_id": { "type": "string", "maxLength": 120 },
+            "run_id": { "type": "string", "minLength": 1, "maxLength": 120 }
+          }
+        }
+      }
+    },
+    "Provenance": {
+      "type": "object",
+      "required": ["origin", "owner_confirmed", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "origin": {
+          "type": "string",
+          "enum": ["extracted", "owner_provided"],
+          "description": "extracted = read from the website; owner_provided = the site never said it, the owner did."
+        },
+        "owner_confirmed": { "type": "boolean" },
+        "confirmation": {
+          "type": "object",
+          "required": ["confirmed_at", "method"],
+          "additionalProperties": false,
+          "properties": {
+            "confirmed_at": { "$ref": "#/$defs/Timestamp" },
+            "method": { "type": "string", "enum": ["question_answer", "owner_console_edit", "bulk_review"] },
+            "question_id": { "$ref": "#/$defs/QuestionId" }
+          },
+          "if": { "properties": { "method": { "const": "question_answer" } } },
+          "then": { "required": ["question_id"] }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": { "$ref": "#/$defs/Evidence" }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "owner_confirmed": { "const": true } } }, "then": { "required": ["confirmation"] } },
+        { "if": { "properties": { "owner_confirmed": { "const": false } } }, "then": { "not": { "required": ["confirmation"] } } },
+        { "if": { "properties": { "origin": { "const": "owner_provided" } } }, "then": { "properties": { "owner_confirmed": { "const": true } } } }
+      ]
+    },
+    "FactKind": {
+      "description": "Semantic category. Drives the grounding policy (which kinds need owner confirmation) and which surface forms the certifier scans for.",
+      "type": "string",
+      "enum": [
+        "name",
+        "description",
+        "price",
+        "allergens",
+        "dietary",
+        "hours",
+        "hours_exception",
+        "lead_time",
+        "size",
+        "capacity",
+        "duration",
+        "deposit",
+        "policy",
+        "contact",
+        "location",
+        "service_area",
+        "payment",
+        "staff",
+        "availability_rule",
+        "other"
+      ]
+    },
+    "Fact": {
+      "type": "object",
+      "required": ["kind", "label", "value_type", "value", "visibility", "status", "provenance", "revision", "updated_at"],
+      "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+      "properties": {
+        "kind": { "$ref": "#/$defs/FactKind" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 120, "description": "Owner-facing label, e.g. 'Chocolate fudge cake price'." },
+        "visibility": {
+          "type": "string",
+          "enum": ["customer", "internal"],
+          "description": "internal facts (e.g. daily capacity) drive tool logic but must never be stated (certifier check internal_fact_withheld)."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "disputed", "superseded", "retracted"],
+          "description": "Lifecycle, orthogonal to owner confirmation. Only active facts can be statable."
+        },
+        "contradiction_id": { "$ref": "#/$defs/ContradictionId" },
+        "superseded_by": { "$ref": "#/$defs/FactRef" },
+        "provenance": { "$ref": "#/$defs/Provenance" },
+        "display": { "type": "string", "maxLength": 200, "description": "Optional canonical rendering for cards ('$48.00'). Informational; never compared." },
+        "valid_from": { "$ref": "#/$defs/Date" },
+        "valid_until": { "$ref": "#/$defs/Date" },
+        "extraction_confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Informational only; never used for pass/fail." },
+        "revision": { "type": "integer", "minimum": 1 },
+        "updated_at": { "$ref": "#/$defs/Timestamp" }
+      },
+      "unevaluatedProperties": false,
+      "dependentSchemas": {
+        "contradiction_id": { "properties": { "status": { "const": "disputed" } } },
+        "superseded_by": { "properties": { "status": { "const": "superseded" } } }
+      },
+      "if": { "properties": { "status": { "const": "disputed" } } },
+      "then": { "required": ["contradiction_id"] },
+      "else": {
+        "if": { "properties": { "status": { "const": "superseded" } } },
+        "then": { "required": ["superseded_by"] }
+      }
+    },
+    "Source": {
+      "type": "object",
+      "required": ["kind", "url", "trust", "captured_at", "content_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "enum": ["web_page", "owner_answer", "owner_edit"] },
+        "url": { "$ref": "#/$defs/SourceUrl" },
+        "title": { "type": "string", "maxLength": 200 },
+        "trust": {
+          "type": "string",
+          "enum": ["untrusted_web", "owner_attested"],
+          "description": "Web text is always untrusted data. Only owner answers/edits are attested."
+        },
+        "captured_at": { "$ref": "#/$defs/Timestamp" },
+        "content_sha256": { "$ref": "#/$defs/Sha256" },
+        "snapshot_uri": { "type": "string", "pattern": "^s3://[a-z0-9.-]{3,63}/\\S+$", "description": "Immutable stored snapshot used for INV-03." },
+        "http_status": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "question_id": { "$ref": "#/$defs/QuestionId" },
+        "quarantined_spans": {
+          "description": "Text on the page that tried to instruct the assistant (prompt injection, hidden text). Kept only as canaries for certification (INV-11); never extracted into facts.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["span_id", "quote", "reason", "detected_at"],
+            "additionalProperties": false,
+            "properties": {
+              "span_id": { "type": "string", "pattern": "^qs_[a-z0-9_]{1,60}$" },
+              "quote": { "type": "string", "minLength": 1, "maxLength": 1000 },
+              "reason": { "type": "string", "enum": ["prompt_injection", "hidden_text", "instruction_to_assistant", "suspicious_link"] },
+              "detected_at": { "$ref": "#/$defs/Timestamp" }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "web_page" } } },
+          "then": { "properties": { "trust": { "const": "untrusted_web" }, "url": { "pattern": "^https?://" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "owner_answer" } } },
+          "then": {
+            "required": ["question_id"],
+            "properties": { "trust": { "const": "owner_attested" }, "url": { "pattern": "^urn:shopfront:owner-answer:" } }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "owner_edit" } } },
+          "then": { "properties": { "trust": { "const": "owner_attested" }, "url": { "pattern": "^urn:shopfront:owner-edit:" } } }
+        }
+      ]
+    },
+    "Business": {
+      "type": "object",
+      "required": ["display_name", "timezone", "currency", "locale", "website", "facts"],
+      "additionalProperties": false,
+      "properties": {
+        "display_name": { "type": "string", "minLength": 1, "maxLength": 120, "description": "UI/search label only. The statable name is facts.name." },
+        "timezone": { "$ref": "#/$defs/IanaTimezone" },
+        "currency": { "$ref": "#/$defs/Currency" },
+        "locale": { "$ref": "#/$defs/Locale" },
+        "website": { "$ref": "#/$defs/HttpUrl" },
+        "facts": {
+          "type": "object",
+          "required": ["name", "hours"],
+          "properties": {
+            "name": { "$ref": "#/$defs/FactRef" },
+            "hours": { "$ref": "#/$defs/FactRef" },
+            "phone": { "$ref": "#/$defs/FactRef" },
+            "email": { "$ref": "#/$defs/FactRef" },
+            "address": { "$ref": "#/$defs/FactRef" },
+            "service_area": { "$ref": "#/$defs/FactRef" },
+            "payment_methods": { "$ref": "#/$defs/FactRef" },
+            "hours_exceptions": { "type": "array", "items": { "$ref": "#/$defs/FactRef" } }
+          },
+          "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,40}$" },
+          "additionalProperties": { "$ref": "#/$defs/FactRef" }
+        }
+      }
+    },
+    "GroundingPolicy": {
+      "type": "object",
+      "required": ["require_owner_confirmation_kinds", "unknown_fact_behavior", "disputed_fact_behavior", "max_unconfirmed_age", "citation_display"],
+      "additionalProperties": false,
+      "properties": {
+        "require_owner_confirmation_kinds": {
+          "description": "Kinds that are only statable once owner_confirmed. Safety floor: must include allergens and dietary.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/FactKind" },
+          "allOf": [{ "contains": { "const": "allergens" } }, { "contains": { "const": "dietary" } }]
+        },
+        "unknown_fact_behavior": {
+          "const": "offer_owner_question",
+          "description": "No fact -> 'I don't know. Want me to ask <owner>?' -> owner Task. Never guess."
+        },
+        "disputed_fact_behavior": { "const": "withhold_and_offer_owner_question" },
+        "max_unconfirmed_age": { "$ref": "#/$defs/Duration", "description": "Unconfirmed extracted facts older than this stop being statable until re-extracted." },
+        "citation_display": { "type": "string", "enum": ["card", "spoken_and_card"], "description": "card = sources on the ui:// card, not read aloud." }
+      }
+    },
+    "EntityFacts": {
+      "description": "attribute -> FactRef map on an entity.",
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,40}$" },
+      "additionalProperties": { "$ref": "#/$defs/FactRef" }
+    },
+    "CommitGuard": {
+      "description": "Fixed by schema, not configurable per tenant: anything irreversible needs an elicitation confirmation and an idempotency key.",
+      "type": "object",
+      "required": ["customer_confirmation", "idempotency", "idempotency_window"],
+      "additionalProperties": false,
+      "properties": {
+        "customer_confirmation": { "const": "elicitation_required" },
+        "idempotency": { "const": "required" },
+        "idempotency_window": { "$ref": "#/$defs/Duration" }
+      }
+    },
+    "FieldSpec": {
+      "description": "Customer input collected by a commit tool. input_type maps onto MCP form-elicitation primitive types.",
+      "type": "object",
+      "required": ["field_id", "label", "input_type", "required"],
+      "additionalProperties": false,
+      "properties": {
+        "field_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,40}$" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "input_type": { "type": "string", "enum": ["string", "integer", "number", "boolean", "date", "time", "datetime", "enum", "money"] },
+        "required": { "type": "boolean" },
+        "choices": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 80 } },
+        "max_length": { "type": "integer", "minimum": 1, "maximum": 2000 },
+        "minimum": { "type": "number" },
+        "maximum": { "type": "number" },
+        "pii": { "type": "string", "enum": ["none", "contact", "coarse_location"], "default": "none" }
+      },
+      "if": { "properties": { "input_type": { "const": "enum" } } },
+      "then": { "required": ["choices"] }
+    },
+    "Modules": {
+      "description": "Closed set of capability modules (these are code). A vertical template picks a subset and fills them with FactRefs.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "dependentRequired": {
+        "custom_order": ["owner_approval"],
+        "quote_request": ["owner_approval"]
+      },
+      "properties": {
+        "catalog": {
+          "type": "object",
+          "required": ["items"],
+          "additionalProperties": false,
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["item_id", "facts"],
+                "additionalProperties": false,
+                "properties": {
+                  "item_id": { "$ref": "#/$defs/Slug" },
+                  "facts": {
+                    "allOf": [{ "$ref": "#/$defs/EntityFacts" }],
+                    "required": ["name", "price"]
+                  },
+                  "tags": { "$ref": "#/$defs/TagSet" },
+                  "orderable_via": { "type": "string", "enum": ["none", "custom_order", "booking"] }
+                }
+              }
+            }
+          }
+        },
+        "knowledge": {
+          "type": "object",
+          "required": ["entries"],
+          "additionalProperties": false,
+          "properties": {
+            "entries": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["entry_id", "topic", "answer_fact_ids"],
+                "additionalProperties": false,
+                "properties": {
+                  "entry_id": { "$ref": "#/$defs/Slug" },
+                  "topic": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,40}$" },
+                  "utterance_hints": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+                  "answer_fact_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/FactRef" } }
+                }
+              }
+            }
+          }
+        },
+        "booking": {
+          "type": "object",
+          "required": ["services", "availability", "commit_guard"],
+          "additionalProperties": false,
+          "properties": {
+            "services": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["service_id", "facts"],
+                "additionalProperties": false,
+                "properties": {
+                  "service_id": { "$ref": "#/$defs/Slug" },
+                  "facts": { "allOf": [{ "$ref": "#/$defs/EntityFacts" }], "required": ["name", "duration", "price"] }
+                }
+              }
+            },
+            "availability": {
+              "type": "object",
+              "required": ["hours_fact", "slot_granularity", "parallel_capacity"],
+              "additionalProperties": false,
+              "properties": {
+                "hours_fact": { "$ref": "#/$defs/FactRef" },
+                "slot_granularity": { "$ref": "#/$defs/Duration" },
+                "parallel_capacity": { "type": "integer", "minimum": 1 },
+                "lead_time_fact": { "$ref": "#/$defs/FactRef" },
+                "max_advance_fact": { "$ref": "#/$defs/FactRef" }
+              }
+            },
+            "policy_fact_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/FactRef" } },
+            "commit_guard": { "$ref": "#/$defs/CommitGuard" }
+          }
+        },
+        "custom_order": {
+          "type": "object",
+          "required": ["lead_time_fact", "daily_capacity_fact", "fields", "owner_approval_required", "commit_guard"],
+          "additionalProperties": false,
+          "properties": {
+            "eligible_item_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/Slug" } },
+            "lead_time_fact": { "$ref": "#/$defs/FactRef" },
+            "daily_capacity_fact": { "$ref": "#/$defs/FactRef" },
+            "deposit_fact": { "$ref": "#/$defs/FactRef" },
+            "policy_fact_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/FactRef" } },
+            "fields": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/FieldSpec" } },
+            "owner_approval_required": { "const": true },
+            "commit_guard": { "$ref": "#/$defs/CommitGuard" }
+          }
+        },
+        "quote_request": {
+          "type": "object",
+          "required": ["service_area_fact", "job_categories", "fields", "price_disclosure", "owner_approval_required", "commit_guard"],
+          "additionalProperties": false,
+          "properties": {
+            "service_area_fact": { "$ref": "#/$defs/FactRef" },
+            "response_target_fact": { "$ref": "#/$defs/FactRef" },
+            "job_categories": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["category_id", "facts"],
+                "additionalProperties": false,
+                "properties": {
+                  "category_id": { "$ref": "#/$defs/Slug" },
+                  "facts": { "allOf": [{ "$ref": "#/$defs/EntityFacts" }], "required": ["name"] }
+                }
+              }
+            },
+            "fields": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/FieldSpec" } },
+            "price_disclosure": {
+              "const": "owner_quote_only",
+              "description": "The assistant never estimates a job price; only the owner's Task reply carries one."
+            },
+            "owner_approval_required": { "const": true },
+            "commit_guard": { "$ref": "#/$defs/CommitGuard" }
+          }
+        },
+        "owner_approval": {
+          "type": "object",
+          "required": ["channel", "approver_name_fact", "response_timeout", "on_timeout"],
+          "additionalProperties": false,
+          "properties": {
+            "channel": { "type": "string", "enum": ["owner_web"] },
+            "approver_name_fact": { "$ref": "#/$defs/FactRef", "description": "Who 'I'll ask ...' refers to; a statable fact like any other." },
+            "response_timeout": { "$ref": "#/$defs/Duration" },
+            "on_timeout": { "type": "string", "enum": ["notify_customer_no_answer", "keep_pending", "auto_decline"] }
+          }
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": ["question_id", "reason", "prompt", "why", "target_fact_ids", "answer_spec", "blocking", "priority", "status", "asked_at"],
+      "additionalProperties": false,
+      "properties": {
+        "question_id": { "$ref": "#/$defs/QuestionId" },
+        "reason": {
+          "type": "string",
+          "enum": ["missing_required", "missing_optional", "contradiction", "ambiguous", "safety_confirmation", "certification_failure"]
+        },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "why": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Shown to the owner: why we are asking." },
+        "target_fact_ids": {
+          "description": "Facts the answer creates or confirms. May name facts not yet in the ledger (missing info).",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/FactId" }
+        },
+        "contradiction_id": { "$ref": "#/$defs/ContradictionId" },
+        "certification_run_id": { "$ref": "#/$defs/RunId" },
+        "answer_spec": {
+          "type": "object",
+          "required": ["value_type"],
+          "additionalProperties": false,
+          "properties": {
+            "value_type": { "$ref": "#/$defs/ValueType" },
+            "choices": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "required": ["label", "value_type", "value"],
+                "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+                "properties": {
+                  "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+                  "from_claim_index": { "type": "integer", "minimum": 0, "description": "For contradiction questions: which Contradiction.claims entry this choice is." }
+                },
+                "unevaluatedProperties": false
+              }
+            },
+            "allow_free_text": { "type": "boolean", "default": true }
+          }
+        },
+        "blocking": { "type": "boolean", "description": "true = certification cannot pass while this is open (GATE-2)." },
+        "priority": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "status": { "type": "string", "enum": ["open", "answered", "skipped", "superseded"] },
+        "asked_at": { "$ref": "#/$defs/Timestamp" },
+        "answer": {
+          "type": "object",
+          "required": ["answered_at", "source_id", "raw_text", "normalized", "applied_to_fact_ids"],
+          "additionalProperties": false,
+          "properties": {
+            "answered_at": { "$ref": "#/$defs/Timestamp" },
+            "source_id": { "$ref": "#/$defs/SourceId", "description": "The owner_answer source that holds this answer; facts cite it as evidence." },
+            "raw_text": { "type": "string", "minLength": 1, "maxLength": 1000, "description": "Owner's verbatim words." },
+            "normalized": {
+              "type": "object",
+              "required": ["value_type", "value"],
+              "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+              "unevaluatedProperties": false
+            },
+            "applied_to_fact_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/FactRef" } }
+          }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "reason": { "const": "contradiction" } } }, "then": { "required": ["contradiction_id"] } },
+        { "if": { "properties": { "reason": { "const": "certification_failure" } } }, "then": { "required": ["certification_run_id"] } },
+        { "if": { "properties": { "status": { "const": "answered" } } }, "then": { "required": ["answer"] } },
+        { "if": { "properties": { "status": { "const": "open" } } }, "then": { "not": { "required": ["answer"] } } }
+      ]
+    },
+    "Contradiction": {
+      "type": "object",
+      "required": ["contradiction_id", "fact_id", "value_path", "description", "severity", "detected_at", "detected_by", "claims", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "contradiction_id": { "$ref": "#/$defs/ContradictionId" },
+        "fact_id": { "$ref": "#/$defs/FactRef", "description": "The single ledger fact in dispute." },
+        "value_path": {
+          "$ref": "#/$defs/JsonPointer",
+          "description": "Pointer into the fact's value that disagrees ('' = whole value), e.g. /sat/0/closes."
+        },
+        "description": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "severity": { "type": "string", "enum": ["blocking", "warning"] },
+        "detected_at": { "$ref": "#/$defs/Timestamp" },
+        "detected_by": {
+          "type": "object",
+          "required": ["agent", "run_id"],
+          "additionalProperties": false,
+          "properties": {
+            "agent": { "type": "string", "enum": ["onboarding_agent", "certifier"] },
+            "run_id": { "type": "string", "minLength": 1, "maxLength": 120 }
+          }
+        },
+        "claims": {
+          "description": "Every conflicting reading, each with its own evidence. Values are typed at value_path, not the whole fact.",
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["value_type", "value", "evidence"],
+            "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+            "properties": { "evidence": { "$ref": "#/$defs/Evidence" } },
+            "unevaluatedProperties": false
+          }
+        },
+        "question_id": { "$ref": "#/$defs/QuestionId" },
+        "status": { "type": "string", "enum": ["open", "resolved", "dismissed"] },
+        "resolution": {
+          "type": "object",
+          "required": ["resolved_at", "resolved_by", "method", "final_value", "evidence"],
+          "additionalProperties": false,
+          "properties": {
+            "resolved_at": { "$ref": "#/$defs/Timestamp" },
+            "resolved_by": { "type": "string", "enum": ["owner"] },
+            "method": { "type": "string", "enum": ["chose_claim", "owner_supplied_value", "fact_retracted"] },
+            "chosen_claim_index": { "type": "integer", "minimum": 0 },
+            "final_value": {
+              "type": "object",
+              "required": ["value_type", "value"],
+              "allOf": [{ "$ref": "#/$defs/TypedValue" }],
+              "unevaluatedProperties": false
+            },
+            "question_id": { "$ref": "#/$defs/QuestionId" },
+            "evidence": { "$ref": "#/$defs/Evidence", "description": "The owner's answer, quoted." },
+            "resulting_fact_revision": { "type": "integer", "minimum": 1 }
+          },
+          "if": { "properties": { "method": { "const": "chose_claim" } } },
+          "then": { "required": ["chosen_claim_index"] }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "status": { "const": "resolved" } } }, "then": { "required": ["resolution"] } },
+        { "if": { "properties": { "status": { "const": "open" } } }, "then": { "not": { "required": ["resolution"] } } },
+        { "if": { "properties": { "severity": { "const": "blocking" } } }, "then": { "required": ["question_id"] } }
+      ]
+    },
+    "CheckId": {
+      "type": "string",
+      "enum": [
+        "fact_grounding",
+        "unknown_fact_handoff",
+        "disputed_fact_withheld",
+        "internal_fact_withheld",
+        "confirmation_before_commit",
+        "idempotent_retry",
+        "injection_canary",
+        "owner_task_lifecycle",
+        "mcp_schema_conformance",
+        "provenance_quote_in_snapshot",
+        "profile_integrity"
+      ]
+    },
+    "FailureCode": {
+      "type": "string",
+      "enum": [
+        "FACT_NOT_FOUND",
+        "FACT_VALUE_MISMATCH",
+        "FACT_TYPE_MISMATCH",
+        "FACT_NOT_STATABLE",
+        "UNGROUNDED_CLAIM",
+        "DISPUTED_FACT_STATED",
+        "INTERNAL_FACT_DISCLOSED",
+        "UNKNOWN_NOT_HANDED_OFF",
+        "COMMIT_WITHOUT_CONFIRMATION",
+        "DUPLICATE_COMMIT",
+        "CANARY_LEAKED",
+        "TASK_LIFECYCLE_VIOLATION",
+        "SCHEMA_NONCONFORMANT",
+        "QUOTE_NOT_IN_SNAPSHOT",
+        "REF_UNRESOLVED"
+      ]
+    },
+    "CaseResult": {
+      "type": "object",
+      "required": ["case_id", "check", "result"],
+      "additionalProperties": false,
+      "properties": {
+        "case_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]{0,120}$" },
+        "check": { "$ref": "#/$defs/CheckId" },
+        "result": { "type": "string", "enum": ["pass", "fail", "error", "skipped"] },
+        "utterance": { "type": "string", "maxLength": 500, "description": "Generated customer message (LLM-written input; pass/fail is decided in code on the trace)." },
+        "expected_fact_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/FactRef" } },
+        "trace_id": { "type": "string", "pattern": "^[a-f0-9]{32}$", "description": "OTel trace ID in AgentCore Observability." },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code", "message"],
+            "additionalProperties": false,
+            "properties": {
+              "code": { "$ref": "#/$defs/FailureCode" },
+              "message": { "type": "string", "minLength": 1, "maxLength": 500 },
+              "fact_id": { "$ref": "#/$defs/FactRef" },
+              "expected": { "$ref": "#/$defs/Claim" },
+              "observed": { "$ref": "#/$defs/ObservedClaim" },
+              "span_id": { "type": "string", "pattern": "^[a-f0-9]{16}$" },
+              "remediation_question_id": { "$ref": "#/$defs/QuestionId" }
+            }
+          }
+        }
+      },
+      "if": { "properties": { "result": { "const": "fail" } } },
+      "then": { "required": ["failures"], "properties": { "failures": { "minItems": 1 } } }
+    },
+    "CertificationRun": {
+      "type": "object",
+      "required": ["run_id", "trigger", "profile_revision", "profile_sha256", "certifier_version", "suite_id", "suite_version", "started_at", "finished_at", "result", "summary", "cases"],
+      "additionalProperties": false,
+      "properties": {
+        "run_id": { "$ref": "#/$defs/RunId" },
+        "trigger": { "type": "string", "enum": ["initial", "owner_fix_rerun", "profile_edit", "scheduled", "manual"] },
+        "profile_revision": { "type": "integer", "minimum": 1 },
+        "profile_sha256": { "$ref": "#/$defs/Sha256", "description": "sha256(JCS(profile without certification and publication)) at run time." },
+        "certifier_version": { "$ref": "#/$defs/Semver" },
+        "suite_id": { "$ref": "#/$defs/Slug" },
+        "suite_version": { "$ref": "#/$defs/Semver" },
+        "started_at": { "$ref": "#/$defs/Timestamp" },
+        "finished_at": { "$ref": "#/$defs/Timestamp" },
+        "result": { "type": "string", "enum": ["pass", "fail", "error"] },
+        "summary": {
+          "type": "object",
+          "required": ["total", "passed", "failed", "errored", "skipped"],
+          "additionalProperties": false,
+          "properties": {
+            "total": { "type": "integer", "minimum": 0 },
+            "passed": { "type": "integer", "minimum": 0 },
+            "failed": { "type": "integer", "minimum": 0 },
+            "errored": { "type": "integer", "minimum": 0 },
+            "skipped": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "cases": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/CaseResult" } }
+      },
+      "allOf": [
+        {
+          "$comment": "A passing run contains no failed or errored case.",
+          "if": { "properties": { "result": { "const": "pass" } } },
+          "then": {
+            "properties": {
+              "summary": { "properties": { "failed": { "const": 0 }, "errored": { "const": 0 } } },
+              "cases": { "not": { "contains": { "properties": { "result": { "enum": ["fail", "error"] } } } } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "result": { "const": "fail" } } },
+          "then": { "properties": { "cases": { "contains": { "properties": { "result": { "const": "fail" } } } } } }
+        }
+      ]
+    },
+    "Certification": {
+      "type": "object",
+      "required": ["status", "suite_id", "suite_version", "runs"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["uncertified", "running", "failed", "certified", "stale", "revoked"],
+          "description": "stale = the profile changed after the last pass (INV-07)."
+        },
+        "suite_id": { "$ref": "#/$defs/Slug", "description": "The vertical's certification case set (comes with the template)." },
+        "suite_version": { "$ref": "#/$defs/Semver" },
+        "certified_revision": { "type": "integer", "minimum": 1 },
+        "certified_profile_sha256": { "$ref": "#/$defs/Sha256" },
+        "certified_at": { "$ref": "#/$defs/Timestamp" },
+        "certified_run_id": { "$ref": "#/$defs/RunId" },
+        "revoked_reason": { "type": "string", "maxLength": 300 },
+        "runs": { "type": "array", "items": { "$ref": "#/$defs/CertificationRun" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "certified" } } },
+          "then": {
+            "required": ["certified_revision", "certified_profile_sha256", "certified_at", "certified_run_id"],
+            "properties": { "runs": { "minItems": 1, "contains": { "properties": { "result": { "const": "pass" } } } } }
+          }
+        },
+        { "if": { "properties": { "status": { "const": "revoked" } } }, "then": { "required": ["revoked_reason"] } }
+      ]
+    },
+    "Publication": {
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "type": "string", "enum": ["draft", "awaiting_owner", "certifying", "live", "suspended"] },
+        "live_revision": { "type": "integer", "minimum": 1 },
+        "went_live_at": { "$ref": "#/$defs/Timestamp" },
+        "suspended_reason": { "type": "string", "maxLength": 300 }
+      },
+      "allOf": [
+        { "if": { "properties": { "state": { "const": "live" } } }, "then": { "required": ["live_revision", "went_live_at"] } },
+        { "if": { "properties": { "state": { "const": "suspended" } } }, "then": { "required": ["suspended_reason"] } }
+      ]
+    }
+  }
+}

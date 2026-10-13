@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "thimbleberry-bakehouse",
+  "template": { "id": "bakery", "version": "1.0" },
+  "status": "live",
+  "business": {
+    "name": "Thimbleberry Bakehouse",
+    "summary": "A neighborhood bakery making bread, pastries and custom celebration cakes, including gluten-free cakes.",
+    "categories": ["bakery"],
+    "keywords": ["custom cakes", "gluten-free cakes", "birthday cakes"],
+    "locale": "en-US",
+    "timezone": "America/Chicago",
+    "currency": "USD",
+    "website": "https://thimbleberry.example/",
+    "locations": [
+      {
+        "id": "main",
+        "kind": "storefront",
+        "name": "Elm Street shop",
+        "address": { "line1": "120 Elm Street", "locality": "Springfield", "region": "IL", "postal_code": "62701", "country": "US" },
+        "hours": {
+          "weekly": [{ "days": ["tue", "wed", "thu", "fri", "sat"], "start": "07:00", "end": "18:00" }],
+          "provenance": { "sources": ["web-about", "owner-q-hours"], "status": "owner_confirmed" }
+        },
+        "provenance": { "sources": ["web-contact"] }
+      }
+    ],
+    "provenance": { "sources": ["web-home"] }
+  },
+  "vocabulary": {
+    "attributes": {
+      "allergens": {
+        "label": "Contains",
+        "type": "multi_enum",
+        "enum": ["wheat", "dairy", "egg", "tree_nuts", "peanuts", "soy", "sesame"],
+        "applies_to": ["item", "option_choice", "offering"],
+        "claim_class": "safety",
+        "absent_means": "unknown"
+      },
+      "dietary": {
+        "label": "Dietary",
+        "type": "multi_enum",
+        "enum": ["gluten_free", "vegan", "dairy_free"],
+        "applies_to": ["item", "option_choice", "offering"],
+        "claim_class": "safety"
+      },
+      "serves": { "label": "Serves", "type": "integer", "unit": "person", "applies_to": ["item", "option_choice"], "claim_class": "spec" }
+    }
+  },
+  "modules": {
+    "menu": {
+      "type": "catalog",
+      "categories": [
+        { "id": "cakes", "name": "Cakes" },
+        { "id": "bread", "name": "Bread" }
+      ],
+      "items": [
+        {
+          "id": "gf-chocolate-cake",
+          "name": "Gluten-free chocolate cake",
+          "kind": "product",
+          "category_ids": ["cakes"],
+          "price": { "model": "from", "amount": 38 },
+          "options": [
+            {
+              "id": "size",
+              "name": "Size",
+              "required": true,
+              "choices": [
+                { "id": "6in", "name": "6 inch", "attributes": { "serves": 8 } },
+                { "id": "10in", "name": "10 inch", "price_delta": 30, "attributes": { "serves": 20 } }
+              ]
+            }
+          ],
+          "attributes": {
+            "dietary": ["gluten_free"],
+            "allergens": { "value": ["dairy", "egg"], "provenance": { "sources": ["web-allergens"], "quote": "GF chocolate cake contains dairy and egg." } }
+          },
+          "availability": { "status": "made_to_order" },
+          "handled_by": ["custom-cakes"],
+          "provenance": { "sources": ["web-menu"] }
+        },
+        {
+          "id": "sourdough",
+          "name": "Country sourdough loaf",
+          "kind": "product",
+          "category_ids": ["bread"],
+          "price": { "model": "fixed", "amount": 7.5 },
+          "attributes": { "allergens": ["wheat"] },
+          "availability": { "status": "available" },
+          "provenance": { "sources": ["web-menu"] }
+        }
+      ],
+      "fulfillment": [{ "id": "pickup", "kind": "pickup", "location_ids": ["main"], "provenance": { "sources": ["web-home"] } }]
+    },
+    "info": {
+      "type": "knowledge",
+      "entries": [
+        {
+          "id": "cross-contact",
+          "topic": "cross_contact",
+          "question": "Is the gluten-free cake safe for someone with celiac disease?",
+          "answer": "Gluten-free cakes are baked on separate days with cleaned equipment, but the kitchen also uses wheat, so cross-contact can't be ruled out.",
+          "applies_to": ["menu/gf-chocolate-cake"],
+          "provenance": { "sources": ["web-allergens"] }
+        },
+        {
+          "id": "deposit",
+          "topic": "deposit",
+          "question": "Do custom cakes need a deposit?",
+          "answer": "Custom cakes need a 50 percent deposit once Rosa confirms the order.",
+          "facts": { "deposit_percent": 50 },
+          "applies_to": ["custom-cakes"],
+          "provenance": { "sources": ["owner-q-deposit"], "status": "owner_provided" }
+        }
+      ],
+      "fallback": { "strategy": "offer_ask_owner", "approval_module": "owner" }
+    },
+    "custom-cakes": {
+      "type": "custom_order",
+      "title": "Custom celebration cakes",
+      "policy_refs": ["info/deposit", "info/cross-contact"],
+      "offerings": [
+        { "id": "celebration-cake", "category": "menu/cakes", "name": "Celebration cake", "starting_price": { "model": "from", "amount": 38 }, "provenance": { "sources": ["web-custom"] } }
+      ],
+      "intake_fields": [
+        { "key": "pickup_date", "label": "Pickup date", "type": "date", "required": true },
+        { "key": "servings", "label": "Number of people", "type": "integer", "required": true, "min": 4, "max": 120 },
+        { "key": "flavor", "label": "Flavor", "type": "choice", "required": true, "options": [{ "value": "chocolate", "label": "Chocolate" }, { "value": "vanilla", "label": "Vanilla" }, { "value": "lemon", "label": "Lemon" }] },
+        { "key": "dietary_needs", "label": "Dietary needs", "type": "multi_choice", "maps_to": "dietary", "options": [{ "value": "gluten_free", "label": "Gluten-free" }, { "value": "dairy_free", "label": "Dairy-free" }] },
+        { "key": "message", "label": "Message on the cake", "type": "text", "max_length": 40 },
+        { "key": "customer_name", "label": "Name for the order", "type": "text", "required": true, "pii": true }
+      ],
+      "confirmation": { "before_commit": true, "read_back": ["pickup_date", "servings", "flavor", "dietary_needs", "price"] },
+      "lead_time": { "min_notice": "P3D", "max_advance": "P8W", "provenance": { "sources": ["web-custom"] } },
+      "capacity_rules": [{ "per": "day", "max": 2, "counts": "orders", "provenance": { "sources": ["owner-q-capacity"], "status": "owner_provided" } }],
+      "pricing": { "model": "owner_quotes", "note": "Rosa confirms the final price based on size and decoration." },
+      "fulfillment": [{ "id": "pickup", "kind": "pickup", "location_ids": ["main"], "provenance": { "sources": ["web-custom"] } }],
+      "approval": {
+        "module": "owner",
+        "response_sla": "PT4H",
+        "decisions": ["approve", "decline", "counter_offer"],
+        "response_fields": [
+          { "key": "final_price", "label": "Final price", "type": "money", "required": true },
+          { "key": "note", "label": "Note to customer", "type": "text", "max_length": 200 }
+        ]
+      }
+    },
+    "owner": {
+      "type": "owner_approval",
+      "approver": { "display_name": "Rosa", "role": "Owner" },
+      "channels": [{ "kind": "web_inbox" }],
+      "response_sla": "PT4H",
+      "on_timeout": { "after": "PT24H", "action": "notify_customer" }
+    }
+  },
+  "sources": {
+    "web-home": { "kind": "web_page", "url": "https://thimbleberry.example/", "retrieved_at": "2026-10-12T15:00:00Z" },
+    "web-about": { "kind": "web_page", "url": "https://thimbleberry.example/about", "retrieved_at": "2026-10-12T15:00:02Z" },
+    "web-contact": { "kind": "web_page", "url": "https://thimbleberry.example/contact", "retrieved_at": "2026-10-12T15:00:03Z" },
+    "web-menu": { "kind": "web_page", "url": "https://thimbleberry.example/menu", "retrieved_at": "2026-10-12T15:00:05Z" },
+    "web-allergens": { "kind": "web_page", "url": "https://thimbleberry.example/allergens", "retrieved_at": "2026-10-12T15:00:06Z" },
+    "web-custom": { "kind": "web_page", "url": "https://thimbleberry.example/custom-cakes", "retrieved_at": "2026-10-12T15:00:08Z" },
+    "owner-q-hours": { "kind": "owner_answer", "question_id": "q-hours" },
+    "owner-q-deposit": { "kind": "owner_answer", "question_id": "q-deposit" },
+    "owner-q-capacity": { "kind": "owner_answer", "question_id": "q-capacity" }
+  },
+  "open_questions": [
+    {
+      "id": "q-hours",
+      "kind": "contradiction",
+      "targets": ["/business/locations/0/hours"],
+      "prompt": "Your About page says you close at 6, but your Contact page says 7. Which is right?",
+      "why": "Customers will ask when you close, and the two pages disagree.",
+      "candidates": [
+        { "value": "18:00", "label": "6 PM", "provenance": { "sources": ["web-about"] } },
+        { "value": "19:00", "label": "7 PM", "provenance": { "sources": ["web-contact"] } }
+      ],
+      "answer_field": { "key": "closing_time", "label": "Closing time", "type": "choice", "required": true, "options": [{ "value": "18:00", "label": "6 PM" }, { "value": "19:00", "label": "7 PM" }] },
+      "blocking": true,
+      "status": "answered",
+      "answer": "18:00",
+      "answered_at": "2026-10-12T15:03:10Z"
+    },
+    {
+      "id": "q-capacity",
+      "kind": "missing",
+      "targets": ["/modules/custom-cakes/capacity_rules"],
+      "prompt": "How many custom cakes can you make per day?",
+      "answer_field": { "key": "cakes_per_day", "label": "Cakes per day", "type": "integer", "required": true, "min": 1 },
+      "blocking": true,
+      "status": "answered",
+      "answer": 2,
+      "answered_at": "2026-10-12T15:03:40Z"
+    },
+    {
+      "id": "q-deposit",
+      "kind": "missing",
+      "targets": ["/modules/info/entries/1"],
+      "prompt": "Do you take a deposit on custom cakes? If so, how much?",
+      "answer_field": { "key": "deposit_percent", "label": "Deposit (percent)", "type": "integer", "min": 0, "max": 100 },
+      "blocking": false,
+      "status": "answered",
+      "answer": 50,
+      "answered_at": "2026-10-12T15:04:05Z"
+    }
+  ],
+  "certification": {
+    "result": "passed",
+    "suite": { "id": "bakery", "version": "1.0" },
+    "ran_at": "2026-10-12T15:06:30Z",
+    "cases_total": 18,
+    "cases_passed": 18
+  },
+  "created_at": "2026-10-12T15:00:00Z",
+  "updated_at": "2026-10-12T15:06:30Z"
+}
