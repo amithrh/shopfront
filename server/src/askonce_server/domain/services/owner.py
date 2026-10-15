@@ -43,7 +43,8 @@ Field rules for decisions:
 
 from __future__ import annotations
 
-from collections.abc import Collection, Mapping, Sequence
+import logging
+from collections.abc import Awaitable, Callable, Collection, Mapping, Sequence
 from datetime import datetime
 from typing import Any
 
@@ -88,6 +89,8 @@ from askonce_server.observability import id_digest
 from askonce_server.profile.factref import FACT_REF_PATTERN
 from askonce_server.profile.model import JsonObj, Profile
 from askonce_server.profile.store import ProfileStore
+
+logger = logging.getLogger(__name__)
 
 MAX_QUESTION_LENGTH = 300
 MAX_ANSWER_LENGTH = 1000
@@ -218,12 +221,21 @@ def with_customer_answers(commitment: Commitment, task: TaskRecord | None, now: 
 
 class OwnerService(CommitmentServiceBase):
     def __init__(
-        self, ctx: DomainContext, *, tasks: TaskManager, renderer: DecisionRenderer, profiles: ProfileStore
+        self,
+        ctx: DomainContext,
+        *,
+        tasks: TaskManager,
+        renderer: DecisionRenderer,
+        profiles: ProfileStore,
+        on_answered: Callable[[Commitment], Awaitable[None]] | None = None,
     ) -> None:
         super().__init__(ctx)
         self.tasks = tasks
         self.renderer = renderer
         self.profiles = profiles
+        self.on_answered = on_answered
+        """Ask once: called after the owner answers an owner question (the app publishes the answer
+        as a cited fact for later customers). Its failures never fail the owner's decision."""
 
     # ---- ask the owner ----------------------------------------------------------------------
 
@@ -445,6 +457,11 @@ class OwnerService(CommitmentServiceBase):
         )
         if updated.task_id is not None and task is not None:
             await self._drive_task(profile, updated, task, relay)
+        if self.on_answered is not None and updated.kind == "owner_question" and decision.decision == "answer":
+            try:
+                await self.on_answered(updated)
+            except Exception:  # noqa: BLE001 - learning is best effort; the customer already has the answer
+                logger.exception("ask-once learning failed for %s", business_id)
         return updated
 
     # ---- expiry -------------------------------------------------------------------------------

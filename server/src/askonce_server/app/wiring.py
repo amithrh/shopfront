@@ -23,12 +23,14 @@ from typing import Any
 from mcp_tasks import InMemoryTaskStore, TaskManager, TasksExtension
 from mcp_tasks.dynamodb import DynamoTaskStore
 from mcp_tasks.store import TaskStore
+from askonce_server.app.learning import KnowledgeLearner
 from askonce_server.app.links import OwnerLinkSigner, signer_from_settings
 from askonce_server.app.notifier import OwnerWebNotifier
 from askonce_server.clock import Clock, SystemClock
 from askonce_server.config import Settings
 from askonce_server.deps import AskOnceDeps
 from askonce_server.domain.availability import AvailabilityEngine
+from askonce_server.domain.models import Commitment
 from askonce_server.domain.ports import CapacityStore, CommitmentStore, IdempotencyStore
 from askonce_server.domain.services import (
     BookingService,
@@ -187,7 +189,19 @@ def _assemble(
         idempotency_ttl=timedelta(seconds=settings.idempotency_ttl_s),
         keep_waiting_max=timedelta(days=settings.keep_waiting_max_days),
     )
-    owner = OwnerService(domain, tasks=task_manager, renderer=CommitmentRenderer(), profiles=stores.profiles)
+    learner = KnowledgeLearner(stores.profiles, schema_path=settings.profile_schema_path, clock=clock)
+
+    async def learn_answer(commitment: Commitment) -> None:
+        """Ask once: an owner's answer to an open-ended question becomes a cited fact for everyone."""
+        if commitment.fact_ref is not None or commitment.decision is None:
+            return  # answers about a specific (disputed or missing) fact go through the owner questions flow
+        answer = commitment.decision.values.get("answer") or commitment.decision.note
+        await learner.learn(commitment.business_id, commitment_id=commitment.commitment_id,
+                            question=commitment.question, answer=str(answer) if answer else None)
+
+    owner = OwnerService(
+        domain, tasks=task_manager, renderer=CommitmentRenderer(), profiles=stores.profiles, on_answered=learn_answer
+    )
     # No MCP auth yet: every caller is the 'anonymous' principal, so tasks/list would hand any client
     # every customer's task ids (the only capability guarding a task). It stays off. A customer's
     # tasks/cancel withdraws the request at once (holds released) through the owner service, and a
