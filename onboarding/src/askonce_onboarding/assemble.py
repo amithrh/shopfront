@@ -9,6 +9,7 @@ becomes a blocking `contradiction` question instead of a guess.
 
 from __future__ import annotations
 
+import datetime as dt
 import re
 import unicodedata
 from collections import OrderedDict
@@ -134,9 +135,13 @@ def as_int(value: Any, minimum: int = 0) -> int | None:
 
 
 def as_date(value: Any) -> str | None:
-    if isinstance(value, str) and re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])", value.strip()):
-        return value.strip()
-    return None
+    if not isinstance(value, str):
+        return None
+    try:
+        day = dt.date.fromisoformat(value.strip())
+    except ValueError:
+        return None
+    return day.isoformat() if 2000 <= day.year <= 2100 else None
 
 
 def e164(value: Any, country: str = "US") -> str | None:
@@ -188,6 +193,85 @@ def human(value: Any, key: str = "") -> str:
     if isinstance(value, str) and (t := as_time(value)):
         return clock12(t)
     return str(value)
+
+
+_CLOCK = re.compile(r"(?<![\d:])(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?(?![\d%$])", re.I)
+
+
+def quote_times(quote: str) -> set[str]:
+    """Every clock time a quote could mean ("3:00 pm" -> 15:00; a bare "3:00" -> 03:00 or 15:00)."""
+    out: set[str] = set()
+    lowered = quote.lower()
+    if "noon" in lowered:
+        out.add("12:00")
+    if "midnight" in lowered:
+        out |= {"24:00", "00:00"}
+    for m in _CLOCK.finditer(quote):
+        h, mi, ampm = int(m.group(1)), int(m.group(2) or 0), (m.group(3) or "").lower()
+        if not m.group(2) and not ampm:
+            continue  # a bare number is not a time
+        if h > 24 or mi > 59:
+            continue
+        if ampm.startswith("p") and h < 12:
+            h += 12
+        elif ampm.startswith("a") and h == 12:
+            h = 0
+        out.add(f"{h:02d}:{mi:02d}")
+        if not ampm and h < 12:
+            out.add(f"{h + 12:02d}:{mi:02d}")
+    return out
+
+
+def quote_has_amount(quote: str, cents: int) -> bool:
+    """The quote prints this amount ($9, $9.00, $1,050.00)."""
+    for m in re.finditer(r"\$\s?(\d[\d,]*)(?:\.(\d{2}))?", quote):
+        if int(m.group(1).replace(",", "")) * 100 + int(m.group(2) or 0) == cents:
+            return True
+    return False
+
+
+_NUMBER_WORDS = {
+    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+    "eleven": 11, "twelve": 12, "fifteen": 15, "twenty": 20, "thirty": 30, "forty-eight": 48, "seventy-two": 72,
+    "twenty-four": 24, "half": 50,
+}
+_UNIT_FACTORS = (1, 60, 1440, 10080, 43200, 100)
+
+
+def quote_supports_number(quote: str, value: int) -> bool:
+    """Some number printed in the quote, in some unit (minutes, hours, days, weeks, months, cents), is `value`.
+
+    Catches the model's invented numbers (a 24-hour reply time read off a page that names none)."""
+    lowered = quote.lower()
+    numbers = {int(n.replace(",", "")) for n in re.findall(r"\d[\d,]*", lowered)}
+    numbers |= {v for w, v in _NUMBER_WORDS.items() if re.search(rf"\b{w}\b", lowered)}
+    if re.search(r"\b(a|an|one|per)\s+(hour|day|business day|week|month|year)\b", lowered):
+        numbers.add(1)
+    return any(n * f == value for n in numbers for f in _UNIT_FACTORS)
+
+
+_DAY_WORDS = {
+    "mon": r"mon(day)?s?", "tue": r"tue(s|sday)?s?", "wed": r"wed(nesday)?s?", "thu": r"thu(r|rs|rsday)?s?",
+    "fri": r"fri(day)?s?", "sat": r"sat(urday)?s?", "sun": r"sun(day)?s?",
+}
+_NOT_OPENING_HOURS = re.compile(r"\b(pick ?-?ups?|picked up|deliver(y|ies|ed)?|phones?|call(s|ing)? us|we answer|office line)\b", re.I)
+
+
+def quote_days(quote: str) -> set[str]:
+    """Weekdays a timetable line names, ranges ("Tuesday to Friday", "Tue-Fri") expanded."""
+    found: list[tuple[int, str]] = []
+    for day, pattern in _DAY_WORDS.items():
+        for m in re.finditer(rf"(?<![a-z]){pattern}(?![a-z])", quote, re.I):
+            found.append((m.start(), day))
+    found.sort()
+    days = {d for _, d in found}
+    for (a_pos, a), (b_pos, b) in zip(found, found[1:]):
+        between = quote[a_pos:b_pos]
+        if re.search(r"(\bto\b|through|thru|[-–—])", between[3:], re.I):
+            i, j = DAYS.index(a), DAYS.index(b)
+            if i < j:
+                days |= set(DAYS[i : j + 1])
+    return days
 
 
 def clock12(t: str) -> str:
@@ -347,7 +431,6 @@ class Assembler:
             business["contact"] = contact
         evidence = [ev for key in ("name", "summary", "phone", "email") for _, _, ev in fields.get(key, [])[:2]]
         business["provenance"] = self.provenance(evidence) or self.provenance([self.registry_anchor()])
-        self.business_conflicts(fields)
 
         modules: JsonObj = {}
         catalog_id = "menu" if self.template == "bakery" else "services"
@@ -456,6 +539,16 @@ class Assembler:
             ev = self.evidence(page, rec, "hours")
             if ev is None:
                 continue
+            if not {opens, closes} <= quote_times(ev["quote"]) or _NOT_OPENING_HOURS.search(ev["quote"]):
+                self.dropped.append({"page": page.url, "what": "hours (not opening hours in quote)", "quote": ev["quote"][:200]})
+                continue
+            named = quote_days(ev["quote"])
+            if not named or not set(days) <= named:
+                # A quote must name the days the model gave it ("Tuesday 10-7" is not Tue-Thu).
+                days = [d for d in days if d in named]
+                if not days:
+                    self.dropped.append({"page": page.url, "what": "hours (days not in quote)", "quote": ev["quote"][:200]})
+                    continue
             evidence.append(ev)
             table = per_source.setdefault(page.url, {})
             for day in days:
@@ -565,14 +658,24 @@ class Assembler:
                 continue
             item_id = slug(name)
             price = self.price(rec)
+            if price is not None and "amount_cents" in price and not (
+                quote_has_amount(ev["quote"], price["amount_cents"])
+                and ("max_cents" not in price or quote_has_amount(ev["quote"], price["max_cents"]))
+            ):
+                self.dropped.append({"page": page.url, "what": f"price of {name} (amount not in quote)", "quote": ev["quote"][:200]})
+                price = None
+            if price is not None and price["kind"] == "fixed" and re.search(
+                rf"\b(from|starting at|starts at)\s+\${price['amount_cents'] // 100}\b", ev["quote"], re.I
+            ):
+                price["kind"] = "from"  # a "From $4.50" teaser is a floor, not this item's price
             ref = f"{module_id}/{item_id}"
-            if price is not None:
+            if price is not None and price["kind"] in ("fixed", "range"):
                 self.add_fact(page, f"price:{item_id}", "price", price_label(price), ev["quote"], [f"{ref}#price"], f"price of {name}")
             if item_id in items:
                 prov = items[item_id]["provenance"]
                 if ev not in prov["evidence"] and len(prov["evidence"]) < 10:
                     prov["evidence"].append(ev)
-                if price is not None and "price" not in items[item_id]:
+                if price is not None and ("price" not in items[item_id] or items[item_id]["price"]["kind"] == "from" and price["kind"] == "fixed"):
                     items[item_id]["price"] = price
             else:
                 item: JsonObj = {"id": item_id, "name": name, "spoken_name": spoken_name(name) or item_id}
@@ -650,8 +753,12 @@ class Assembler:
             for f in rec.get("facts") or []:
                 if isinstance(f, dict) and (key := snake(f.get("key"), "")):
                     value = fact_value(f.get("value"))
-                    if value is not None and value != "":
-                        facts[key] = value
+                    if value is None or value == "":
+                        continue
+                    if isinstance(value, int) and not isinstance(value, bool) and not quote_supports_number(ev["quote"], value):
+                        self.dropped.append({"page": page.url, "what": f"policy fact {key}={value} (number not in quote)", "quote": ev["quote"][:200]})
+                        continue
+                    facts[key] = value
             ref = f"{module_id}/{entry_id}"
             for key, value in facts.items():
                 self.add_fact(page, f"policy:{topic}:{key}", key, value, ev["quote"],
@@ -684,6 +791,7 @@ class Assembler:
                 self.safety_entries.append((ref, ev))
         if not entries:
             return None
+        unify_fact_types(entries.values())
         for entry in entries.values():
             for key, value in (entry.get("facts") or {}).items():
                 self.declare(key, value)
@@ -857,7 +965,7 @@ class Assembler:
         refs = set(refs)
         return any(refs & set(q["targets"]) for q in self.questions if q["kind"] == "contradiction")
 
-    def contradiction(self, facts: list[Fact], prompt: str, why: str, qid: str, value_key: str) -> bool:
+    def contradiction(self, facts: list[Fact], prompt: str, why: str, qid: str, value_key: str, shared_target: bool = False) -> bool:
         """One blocking question from facts on different pages with different values (invariant L10)."""
         chosen: list[Fact] = []
         for fact in facts:
@@ -866,7 +974,7 @@ class Assembler:
         if len(chosen) < 2:
             return False
         targets = list(OrderedDict.fromkeys(t for f in chosen for t in f.targets))
-        if not targets or self.targeted(targets):
+        if not targets or (self.targeted(targets) and not shared_target):
             return False
         candidates = [
             {
@@ -916,12 +1024,12 @@ class Assembler:
                 )
                 self.contradiction(close_facts, f"What time do you close on {day}s?",
                                    f"For {day} closing time, {described}. Until you answer, the assistant won't tell customers a {day} closing time.",
-                                   f"q-{day.lower()}-close", "close_time")
+                                   f"q-{day.lower()}-close", "close_time", shared_target=True)
             else:
                 described = " but ".join(f"your {self.page_label(f.source_url)} page says {f.value}" for f in self.distinct(facts))
                 self.contradiction(facts, f"What are your hours on {day}s?",
                                    f"For {day} hours, {described}. Until you answer, the assistant won't give customers {day} hours.",
-                                   f"q-{day.lower()}-hours", "hours")
+                                   f"q-{day.lower()}-hours", "hours", shared_target=True)
 
     @staticmethod
     def distinct(facts: list[Fact]) -> list[Fact]:
@@ -954,7 +1062,7 @@ class Assembler:
                                f"q-zone-{slug(place)}", "zone")
 
     def deterministic_policy_conflicts(self) -> None:
-        for prefix in ("policy:", "price:", "business:"):
+        for prefix in ("policy:", "price:"):
             for subject, facts in self.by_subject(prefix).items():
                 facts_d = self.distinct(facts)
                 if len(facts_d) < 2:
@@ -980,6 +1088,8 @@ class Assembler:
             facts = [by_id[i] for i in ids]
             if len(facts) < 2:
                 continue
+            if any(f.subject.startswith("price:") for f in facts) and len({f.subject for f in facts}) > 1:
+                continue  # two different items, not one price read two ways
             prompt = clean_text(item.get("prompt"), 300) or f"Which is right for {facts[0].describe}?"
             why = clean_text(item.get("why"), 260) or "Two pages of your website disagree."
             if not why.endswith("."):
@@ -1032,11 +1142,14 @@ class Assembler:
             "owner_reply_minutes": "owner#expected_response_minutes",
             "quote_response_minutes": "owner#expected_response_minutes",
         }
+        generic = 0
         for page, rec in self.records("gaps"):
-            key = snake(rec.get("key"), "")
+            key = canonical_gap_key(snake(rec.get("key"), ""))
             question = clean_text(rec.get("question"), 300)
-            if not key or not question:
+            if not key or not question or key in getattr(self, "policy_facts", {}):
                 continue
+            if (key in targets and targets[key] is None) or (key not in targets and (key not in GAP_KEYS or generic >= 3)):
+                continue  # the model's free-form "gaps" are mostly noise; keep the known kinds
             ev = self.evidence(page, rec, f"gap {key}")
             if ev is None:
                 continue
@@ -1047,6 +1160,7 @@ class Assembler:
                 if "info" not in modules:
                     continue
                 target = "info#entries"
+                generic += 1
             why = clean_text(rec.get("why"), 200) or "Your website hints at this but never says it."
             why = f'{why.rstrip(".")}. Your {self.page_label(page.url)} page says: "{ev["quote"][:80]}"'[:300]
             existing = next((q for q in self.questions if target in q["targets"] and q["kind"] == "missing"), None)
@@ -1113,6 +1227,46 @@ class Assembler:
                 source["injection_canaries"] = [{"quote": c.quote, "reason": c.reason} for c in canaries]
             out[key] = source
         return out
+
+
+GAP_KEYS = frozenset({
+    "notice_minutes", "lead_time_minutes", "refund_notice_minutes", "change_notice_minutes", "deposit_percent",
+    "deposit_cents", "late_cancel_fee_percent", "no_show_fee_percent", "walk_ins_accepted", "travel_fee_cents",
+    "min_project_cents", "warranty_days", "arrival_window_minutes",
+})
+"""Gap keys worth a non-blocking owner question when the model flags them."""
+
+
+def canonical_gap_key(key: str) -> str:
+    if re.search(r"per_day|daily|_limit|capacity", key):
+        return "capacity_per_day"
+    if re.search(r"response|reply|turnaround", key):
+        return "owner_reply_minutes"
+    return key
+
+
+TIME_KEY = re.compile(r"(_start|_end|_time|_opens?|_closes?)$")
+
+
+def unify_fact_types(entries: Iterable[JsonObj]) -> None:
+    """One vocabulary type per fact key (invariant L9): clock-time keys become HH:MM, and a key the
+    model filled with mixed types is stored as text everywhere."""
+    entries = list(entries)
+    kinds: dict[str, set[type]] = {}
+    for entry in entries:
+        facts = entry.get("facts") or {}
+        for key, value in list(facts.items()):
+            if TIME_KEY.search(key) and isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 2400:
+                facts[key] = value = f"{value // 100:02d}:{value % 100:02d}" if value >= 100 else f"{value:02d}:00"
+            kinds.setdefault(key, set()).add(bool if isinstance(value, bool) else int if isinstance(value, int) else float if isinstance(value, float) else str)
+    for entry in entries:
+        facts = entry.get("facts") or {}
+        for key, value in list(facts.items()):
+            seen = kinds[key]
+            if seen == {int, float}:
+                facts[key] = float(value)
+            elif len(seen) > 1:
+                facts[key] = str(value).lower() if isinstance(value, bool) else str(value)
 
 
 def price_label(price: JsonObj) -> str:

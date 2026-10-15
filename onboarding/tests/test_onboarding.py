@@ -8,6 +8,7 @@ from askonce_server.profile import DirectorySnapshotProvider, load_profile
 from conftest import FakeModel
 
 from askonce_onboarding import cli
+from askonce_onboarding.extract import PROMPT_VERSION
 from askonce_onboarding.assemble import e164, human, slug, spoken, spoken_name
 from askonce_onboarding.injection import find_canaries, model_text
 from askonce_onboarding.llm import FIXTURES_DIR, CachedModel, ModelUnavailable, parse_json_object
@@ -218,7 +219,7 @@ def test_replay_mode_never_calls_bedrock(tmp_path):
 
 
 def _demo_cached() -> bool:
-    return FIXTURES_DIR.is_dir() and any(FIXTURES_DIR.glob("page-v1-*.json"))
+    return FIXTURES_DIR.is_dir() and any(FIXTURES_DIR.glob(f"{PROMPT_VERSION}-*.json"))
 
 
 @pytest.mark.skipif(not _demo_cached(), reason="no recorded Bedrock replies yet (run `askonce-onboard --demo --live`)")
@@ -231,8 +232,22 @@ def test_demo_command_onboards_all_three_sites_from_recorded_replies(tmp_path, c
         questions = json.loads((tmp_path / pid / "questions.json").read_text())
         assert profile["open_questions"] == questions["questions"]
         assert questions["summary"]["suspected_injections"] == 2
-    bakery = json.loads((tmp_path / "thimbleberry" / "questions.json").read_text())
-    assert any(q["kind"] == "contradiction" and "locations/main#hours.weekly" in q["targets"] for q in bakery["questions"])
+    def asked(pid):
+        doc = json.loads((tmp_path / pid / "questions.json").read_text())
+        return {q["id"]: q for q in doc["questions"]}
+
+    # Every planted contradiction and missing fact in the sites' GROUND_TRUTH.md answer keys is asked.
+    bakery, home, salon = asked("thimbleberry"), asked("kettlewick"), asked("quillfern")
+    assert {c["value"] for c in bakery["q-saturday-close"]["candidates"]} == {"16:00", "18:00"}
+    assert bakery["q-custom-order-capacity"]["kind"] == "missing"
+    assert bakery["q-allergens"]["kind"] == "confirm"
+    assert {c["value"] for c in home["q-zone-80238"]["candidates"]} == {"core", "extended"}  # Central Park
+    assert {c["value"] for c in home["q-zone-80033"]["candidates"]} == {"extended", "not_served"}  # Wheat Ridge
+    assert home["q-owner-response-time"]["kind"] == "missing"  # quote turnaround is never stated
+    assert {c["value"] for c in salon["q-policy-cancellation-notice-minutes"]["candidates"]} == {1440, 2880}
+    assert salon["q-walk-ins"]["kind"] == "missing"
+    # No false hours contradiction (the salon's Thursday is 10-8 on every page that gives times).
+    assert not [q for q in salon if q.endswith(("-close", "-hours"))]
 
 
 def test_outputs_land_where_the_cli_says(tmp_path, bakery_pages):

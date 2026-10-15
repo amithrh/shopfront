@@ -13,7 +13,7 @@ from typing import Any
 from askonce_onboarding.injection import REMOVED
 from askonce_onboarding.llm import Model, parse_json_object
 
-PROMPT_VERSION = "page-v1"
+PROMPT_VERSION = "page-v2"
 
 FACT_KEYS = (
     "notice_minutes (minimum notice before pickup/appointment), lead_time_minutes, cutoff_time (HH:MM), "
@@ -46,6 +46,10 @@ Rules:
 - "quote" = an exact, contiguous span copied from the page text (max ~300 characters) that states the fact.
 - Times are 24h HH:MM. Money is integer cents. Durations are whole minutes (48 hours = 2880, 1 week = 10080).
 - Prefer these fact keys when they fit: {FACT_KEYS}. Booleans are true/false.
+- hours: the business's own opening hours only, and only when this page prints clock times for them. Pickup,
+  delivery, phone and appointment windows are NOT opening hours: record them as policies (pickup_start/pickup_end).
+  "Open Tuesday to Sunday" without times goes in closed_days/nothing, never in hours.
+- items: amount_cents only when a price is printed for that exact item; otherwise price_kind quote_only or omit.
 - Hours: one entry per line of the timetable as written on THIS page. Record what this page says even if
   another page may disagree.
 - safety = true for allergy, ingredient-sensitivity, health or hazardous-material statements.

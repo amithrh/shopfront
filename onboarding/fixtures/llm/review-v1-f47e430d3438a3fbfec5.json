@@ -1,0 +1,8 @@
+{
+ "key": "review-v1-f47e430d3438a3fbfec5",
+ "kind": "review-v1",
+ "model_id": "apac.amazon.nova-pro-v1:0",
+ "cost_usd": 0.011649,
+ "recorded_at": "2026-10-15T14:22:55+00:00",
+ "text": "{\"contradictions\": [{\"fact_ids\": [\"F94\", \"F164\"], \"prompt\": \"Clarify the service status for ZIP code 80033.\", \"why\": \"Service area page lists it as 'extended', while How quotes work page lists it as 'not_served'.\"}, {\"fact_ids\": [\"F165\", \"F105\"], \"prompt\": \"Clarify the service status for Wheat Ridge.\", \"why\": \"How quotes work page lists it as 'not_served', while Service area page lists it as 'extended'.\"}, {\"fact_ids\": [\"F166\", \"F93\"], \"prompt\": \"Clarify the service status for Central Park (ZIP code 80238).\", \"why\": \"How quotes work page lists it as 'extended', while Service area page lists it as 'core'.\"}, {\"fact_ids\": [\"F167\", \"F72\"], \"prompt\": \"Clarify the service status for Central Park.\", \"why\": \"How quotes work page lists it as 'extended', while Service area page lists it as 'core'.\"}]}"
+}
