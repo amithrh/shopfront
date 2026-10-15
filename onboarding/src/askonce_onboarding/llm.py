@@ -19,7 +19,15 @@ from pathlib import Path
 from typing import Any, Literal, Protocol
 
 FIXTURES_DIR = Path(__file__).resolve().parents[2] / "fixtures" / "llm"
-ROLE = "extract"
+ROLE = "onboard"
+DEFAULT_MODELS = (
+    "au.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "global.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "apac.amazon.nova-pro-v1:0",
+)
+"""Haiku first: a whole demo run (17 pages) costs about a third of Sonnet's, inside the $5 cap.
+Nova Pro is the fallback while Claude is unavailable on the account. `ASKONCE_BEDROCK_ROLE_ONBOARD`
+(comma-separated model ids) replaces the list."""
 
 
 class ModelUnavailable(RuntimeError):
@@ -102,6 +110,10 @@ class CachedModel:
         from botocore.exceptions import MissingDependencyException
 
         config = RouterConfig.from_env()
+        if not os.environ.get("ASKONCE_BEDROCK_ROLE_ONBOARD"):
+            config.roles[ROLE] = DEFAULT_MODELS
+        if not os.environ.get("ASKONCE_BEDROCK_BURST"):
+            config.burst = 3.0  # one site's pages go out together; keep them on one model
         session = boto3.Session(profile_name=self._profile, region_name=self._region)
         try:
             if session.get_credentials() is None:
