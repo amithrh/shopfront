@@ -1,0 +1,32 @@
+{
+  "sites_attempted": 23,
+  "sites_onboarded": 19,
+  "sites_skipped": {
+    "model_unavailable": 1,
+    "robots_or_fetch": 3
+  },
+  "verticals": {
+    "bakery": 7,
+    "generic": 3,
+    "salon": 4,
+    "home_services": 5
+  },
+  "profiles_valid": 1.0,
+  "verdicts": {
+    "CONDITIONAL": 19
+  },
+  "share_with_contradiction": 0.0,
+  "share_with_injection_text": 0.0,
+  "share_missing_hours": 0.421,
+  "share_needing_owner_answers": 1.0,
+  "median_pages": 8,
+  "median_items": 36,
+  "median_policies": 10,
+  "median_owner_questions": 3,
+  "median_unquoted_facts_dropped": 9,
+  "unquoted_facts_dropped_total": 278,
+  "priced_items_total": 617,
+  "share_prices_cited_by_name_and_amount": 1.0,
+  "certifier_failed_checks": {},
+  "model_spend_usd_this_run": 0.0
+}

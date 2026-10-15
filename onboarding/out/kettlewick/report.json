@@ -104,6 +104,16 @@
     },
     {
       "page": "https://kettlewick.example.com/services.html",
+      "what": "price of Water heater replacement (quote does not name it)",
+      "quote": "Replace a 40 or 50 gallon gas tank, installed $1,650–$2,400"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "price of Water heater replacement (quote does not name it)",
+      "quote": "Replace a 40 or 50 gallon electric tank, installed $1,450–$2,100"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
       "what": "policy fact price_cents=0 (number not in quote)",
       "quote": "Written quote Free By text or email, from your description and photos."
     },
@@ -178,8 +188,8 @@
     }
   ],
   "model": {
-    "calls": 0,
-    "cache_hits": 14,
-    "cost_usd": 0.0
+    "calls": 1,
+    "cache_hits": 13,
+    "cost_usd": 0.011785
   }
 }

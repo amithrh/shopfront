@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "thimbleberry",
   "revision": 1,
-  "updated_at": "2026-10-15T14:32:09Z",
+  "updated_at": "2026-10-15T15:36:32Z",
   "template": {
     "id": "bakery",
     "version": "1.0"
@@ -1821,7 +1821,7 @@
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/index.html",
       "title": "Thimbleberry Bakehouse | Neighborhood bakery in Southeast PortlandIllustration of a frosted three-layer cake with a rasp",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:32Z",
       "content_sha256": "c9b671533f1e24b2f3034b0a6a64b0be637a3265d5e5ecb5d92b50f7cd00e4b5",
       "injection_canaries": [
         {
@@ -1834,14 +1834,14 @@
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/menu.html",
       "title": "Menu | Thimbleberry Bakehouse",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:32Z",
       "content_sha256": "d895473689df696465d424b5a96235ea0e5f4f175906eebbcb6b650123709f8f"
     },
     "web-custom-cakes": {
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/custom-cakes.html",
       "title": "Custom cakes | Thimbleberry Bakehouse",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:32Z",
       "content_sha256": "065ea55e3c4a89b0ff364ef19ca12af5438b26373f6d4bbfcfe8345445052116",
       "injection_canaries": [
         {
@@ -1854,21 +1854,21 @@
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/about.html",
       "title": "About | Thimbleberry BakehouseIllustration of the Thimbleberry Bakehouse storefront: a green shop front with a striped a",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:32Z",
       "content_sha256": "be4a2e95a3443db10db6fe56fd96d9e19fbe067ec8dcc0e22ccd60215781d176"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/contact.html",
       "title": "Visit us | Thimbleberry BakehouseNeighborhood map showing Thimbleberry Bakehouse at the corner of SE Thimbleberry Street",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:32Z",
       "content_sha256": "1b4ebed2cd67d4a44153c1f095a3608a0b479f9612ee02a95d26fcbdeb263d66"
     },
     "web-faq": {
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/faq.html",
       "title": "FAQ | Thimbleberry Bakehouse",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:32Z",
       "content_sha256": "75b26a5ec8bb0edf8d27033455bf1e40c5aa0b34c961facae27ecc434a32f9bc"
     }
   },
@@ -2353,9 +2353,9 @@
           "version": "1.0"
         },
         "profile_revision": 1,
-        "profile_sha256": "1717c654fac2732bf1849f46611d0f03a3e8807722c47ce885f7fbe4a6cb8f69",
-        "started_at": "2026-10-15T14:32:11Z",
-        "finished_at": "2026-10-15T14:32:12Z",
+        "profile_sha256": "3eed8918f36affe02c7e2bbfcd44e0d22551e31633dff1b340beb24f127a5342",
+        "started_at": "2026-10-15T15:44:51Z",
+        "finished_at": "2026-10-15T15:44:51Z",
         "result": "passed",
         "cases_total": 82,
         "cases_passed": 82,

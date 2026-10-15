@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "quillfern",
   "revision": 1,
-  "updated_at": "2026-10-15T14:32:09Z",
+  "updated_at": "2026-10-15T15:36:41Z",
   "template": {
     "id": "salon",
     "version": "1.0"
@@ -1344,21 +1344,21 @@
       "kind": "web_page",
       "url": "https://quillfern.example/index.html",
       "title": "Quillfern Hair Studio | Hair salon in East Austin, Texas",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:41Z",
       "content_sha256": "dd5323b69bdcbaf2f2d76b6f023ee58c4c4237854c2d60f5b3fc85155a9f248d"
     },
     "web-services": {
       "kind": "web_page",
       "url": "https://quillfern.example/services.html",
       "title": "Services & prices | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:41Z",
       "content_sha256": "075d5ff08168309b8d8f29712dcc615706338788f5c968e17e081b2dd1744064"
     },
     "web-team": {
       "kind": "web_page",
       "url": "https://quillfern.example/team.html",
       "title": "Our stylists | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:41Z",
       "content_sha256": "25976432365d14a1669a2235fd63a4502e3a21a05cba901d3dfd6eb99f40bca3",
       "injection_canaries": [
         {
@@ -1375,14 +1375,14 @@
       "kind": "web_page",
       "url": "https://quillfern.example/policies.html",
       "title": "Studio policies | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:41Z",
       "content_sha256": "7ebd3b8414485a7c57d0ce9e53d6cf8d1ff37b1837e93497b630fb06553da61c"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://quillfern.example/contact.html",
       "title": "Contact & hours | Quillfern Hair StudioMap showing Quillfern Hair Studio at 1906 East Marigold Street, Suite B, between",
-      "retrieved_at": "2026-10-15T14:32:09Z",
+      "retrieved_at": "2026-10-15T15:36:41Z",
       "content_sha256": "37f69adbb2ee5ccf3186e997447ce6f2448b198719d3c50e8e11f79dd188aebb"
     }
   },
@@ -1507,9 +1507,9 @@
           "version": "1.0"
         },
         "profile_revision": 1,
-        "profile_sha256": "73d32be7f57bd7f8225ee61a323384898068dd50e18bb02084a6bd84db5812b9",
-        "started_at": "2026-10-15T14:32:11Z",
-        "finished_at": "2026-10-15T14:32:11Z",
+        "profile_sha256": "2f474988874117d8ac2e1ad6486b35bddb13d6d2d2b9efb0878d3ef7d14027a2",
+        "started_at": "2026-10-15T15:44:50Z",
+        "finished_at": "2026-10-15T15:44:51Z",
         "result": "passed",
         "cases_total": 47,
         "cases_passed": 47,

@@ -241,6 +241,11 @@ def quote_times(quote: str) -> set[str]:
     return out
 
 
+def _names_item(quote: str, name: str) -> bool:
+    words = re.findall(r"[a-z]{4,}", name.lower()) or re.findall(r"[a-z0-9]{2,}", name.lower())
+    return any(w in quote.lower() for w in words[:4])
+
+
 def quote_has_amount(quote: str, cents: int) -> bool:
     """The quote prints this amount ($9, $9.00, $1,050.00)."""
     for m in re.finditer(r"(?:\$|₹|\brs\.?|\binr)\s?(\d[\d,]*)(?:\.(\d{2}))?", quote, re.I):
@@ -644,8 +649,8 @@ class Assembler:
             ev = self.evidence(page, rec, "service_area")
             if ev is None:
                 continue
-            postal = [str(p).strip()[:16] for p in rec.get("postal_codes") or [] if str(p).strip()]
-            places = [n for n in (spoken_name(x) for x in rec.get("localities") or []) if n]
+            postal = list(OrderedDict.fromkeys(str(p).strip()[:16] for p in rec.get("postal_codes") or [] if str(p).strip()))
+            places = list(OrderedDict.fromkeys(n for n in (spoken_name(x) for x in rec.get("localities") or []) if n))
             for code in postal:
                 self.add_fact(page, f"zone:{code}", "zone", zone, ev["quote"], [], f"service zone of {code}")
             for place in places:
@@ -696,8 +701,16 @@ class Assembler:
             ):
                 self.dropped.append({"page": page.url, "what": f"price of {name} (amount not in quote)", "quote": ev["quote"][:200]})
                 price = None
+            if price is not None and not _names_item(ev["quote"], name):
+                widened = self.indexes[page.url].widen_to_name(ev["quote"], name)
+                if widened and quote_has_amount(widened, price.get("amount_cents", -1)):
+                    ev = {"url": page.url, "quote": widened}
+                else:
+                    # An amount whose quote does not say what it is the price of is not grounded.
+                    self.dropped.append({"page": page.url, "what": f"price of {name} (quote does not name it)", "quote": ev["quote"][:200]})
+                    price = None
             if price is not None and price["kind"] == "fixed" and re.search(
-                rf"\b(from|starting at|starts at)\s+\${price['amount_cents'] // 100}\b", ev["quote"], re.I
+                rf"\b(from|starting at|starts at)\s+(\$|₹\s?|rs\.?\s?)?{price['amount_cents'] // 100:,}\b".replace(",", ",?"), ev["quote"], re.I
             ):
                 price["kind"] = "from"  # a "From $4.50" teaser is a floor, not this item's price
             ref = f"{module_id}/{item_id}"
@@ -1109,6 +1122,9 @@ class Assembler:
     def deterministic_policy_conflicts(self) -> None:
         for prefix in ("policy:", "price:"):
             for subject, facts in self.by_subject(prefix).items():
+                # Free text read two ways is usually one fact worded twice; only numbers, yes/no and
+                # times are compared mechanically (the model review handles the rest).
+                facts = [f for f in facts if isinstance(f.value, int | float | bool) or as_time(f.value) or prefix == "price:"]
                 facts_d = self.distinct(facts)
                 if len(facts_d) < 2:
                     continue
@@ -1135,6 +1151,8 @@ class Assembler:
                 continue
             if any(f.subject.startswith("price:") for f in facts) and len({f.subject for f in facts}) > 1:
                 continue  # two different items, not one price read two ways
+            if len({f.key for f in facts}) > 1:
+                continue  # different kinds of fact (a cutoff time vs a notice period) cannot contradict
             prompt = clean_text(item.get("prompt"), 300) or f"Which is right for {facts[0].describe}?"
             why = clean_text(item.get("why"), 260) or "Two pages of your website disagree."
             if not why.endswith("."):

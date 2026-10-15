@@ -2,10 +2,10 @@
   "verdict": "CONDITIONAL",
   "profile_id": "kettlewick",
   "profile_revision": 1,
-  "profile_sha256": "2f6778c0fc96ce89dfed44feb5ef0c4c1531c129aed5dcde4e8e5d93b0fd4d52",
+  "profile_sha256": "56d1814d928c73724e0464b430bed9188b9a262393e7832569b841ee70784659",
   "run_id": "run-1-1",
-  "started_at": "2026-10-15T14:32:10Z",
-  "finished_at": "2026-10-15T14:32:11Z",
+  "started_at": "2026-10-15T15:44:50Z",
+  "finished_at": "2026-10-15T15:44:50Z",
   "summary": {
     "cases_total": 89,
     "passed": 84,
@@ -107,8 +107,8 @@
   ],
   "latency": {
     "calls": 87,
-    "p50_ms": 4.9,
-    "p95_ms": 15.7,
+    "p50_ms": 4.8,
+    "p95_ms": 16.9,
     "threshold_ms": 500.0,
     "status": "passed"
   },

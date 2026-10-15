@@ -81,6 +81,27 @@ class QuoteIndex:
         quarantined = list(quarantined)
         self._renderings = [_Rendering(text, quarantined) for text in html_renderings(html)]
 
+    def widen_to_name(self, quote: str, name: str, window: int = 200) -> str | None:
+        """`quote` extended backwards to start at `name`, if the name appears just before it.
+
+        A price grid often reads "Minion Cake ... From ₹ 2,490": the model quotes only the price, which
+        does not say what it is the price of. The widened quote ties the amount to the item."""
+        if not name:
+            return None
+        for rendering in self._renderings:
+            found = rendering.find(quote)
+            if not found:
+                continue
+            end = rendering.text.find(found)
+            if end < 0:
+                continue
+            before = rendering.text[max(0, end - window) : end]
+            pos = before.lower().rfind(name.lower())
+            if pos >= 0:
+                start = max(0, end - window) + pos
+                return _clip(rendering.text[start : end + len(found)])
+        return None
+
     def opening(self, limit: int = 100) -> str:
         """The first words of the page body: always quotable, for facts that only need an anchor."""
         text = self._renderings[-1].text[:limit]

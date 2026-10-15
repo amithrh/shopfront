@@ -2,10 +2,10 @@
   "verdict": "CONDITIONAL",
   "profile_id": "quillfern",
   "profile_revision": 1,
-  "profile_sha256": "73d32be7f57bd7f8225ee61a323384898068dd50e18bb02084a6bd84db5812b9",
+  "profile_sha256": "2f474988874117d8ac2e1ad6486b35bddb13d6d2d2b9efb0878d3ef7d14027a2",
   "run_id": "run-1-1",
-  "started_at": "2026-10-15T14:32:11Z",
-  "finished_at": "2026-10-15T14:32:11Z",
+  "started_at": "2026-10-15T15:44:50Z",
+  "finished_at": "2026-10-15T15:44:51Z",
   "summary": {
     "cases_total": 51,
     "passed": 48,
@@ -107,8 +107,8 @@
   ],
   "latency": {
     "calls": 52,
-    "p50_ms": 1.5,
-    "p95_ms": 22.3,
+    "p50_ms": 1.4,
+    "p95_ms": 19.3,
     "threshold_ms": 500.0,
     "status": "passed"
   },

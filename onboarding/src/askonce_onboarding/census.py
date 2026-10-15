@@ -19,15 +19,47 @@ import traceback
 from pathlib import Path
 from typing import Any
 
+from askonce_onboarding.assemble import _names_item
 from askonce_onboarding.certify import Certifier
 from askonce_onboarding.llm import CachedModel, ModelUnavailable
 from askonce_onboarding.pipeline import onboard
-from askonce_onboarding.site import FetchError, PoliteFetcher
+import hashlib
+
+from askonce_onboarding.site import Fetched, FetchError, PoliteFetcher
 
 REPO = Path(__file__).resolve().parents[3]
 WORK = REPO / ".local" / "census"
 SUMMARY = REPO / "onboarding" / "census" / "census-summary.json"
 MAX_PAGES = 8
+
+
+class PageCache:
+    """Fetch each URL once and keep the bytes, so re-running the census never re-hits a site and
+    reads exactly the same pages (live pages change between requests; recorded replies then miss)."""
+
+    def __init__(self, inner: object, directory: Path, offline: bool = False) -> None:
+        self.inner, self.dir, self.offline = inner, directory, offline
+
+    def fetch(self, url: str) -> Fetched:
+        key = hashlib.sha256(url.encode()).hexdigest()[:32]
+        body, meta = self.dir / f"{key}.bin", self.dir / f"{key}.json"
+        if body.is_file() and meta.is_file():
+            info = json.loads(meta.read_text())
+            if info.get("error"):
+                raise FetchError(info["error"])
+            return Fetched(info["url"], info["content_type"], body.read_bytes())
+        if self.offline:
+            raise FetchError(f"{url}: not in the page cache")
+        self.dir.mkdir(parents=True, exist_ok=True)
+        try:
+            fetched = self.inner.fetch(url)  # type: ignore[attr-defined]
+        except FetchError as exc:
+            meta.write_text(json.dumps({"error": str(exc)}))
+            body.write_bytes(b"")
+            raise
+        body.write_bytes(fetched.body)
+        meta.write_text(json.dumps({"url": fetched.url, "content_type": fetched.content_type}))
+        return fetched
 
 
 def read_sites(path: Path) -> list[str]:
@@ -45,8 +77,13 @@ def site_metrics(outcome: Any, verdict: Any | None) -> dict[str, Any]:
     modules = outcome.profile.get("modules", {})
     items = sum(len(m.get("items", [])) for m in modules.values() if m.get("type") == "catalog")
     entries = sum(len(m.get("entries", [])) for m in modules.values() if m.get("type") == "knowledge")
+    priced = [i for m in modules.values() if m.get("type") == "catalog" for i in m.get("items", [])
+              if (i.get("price") or {}).get("amount_cents")]
+    named = [i for i in priced if _names_item(i["provenance"]["evidence"][0]["quote"], i["name"])]
     return {
         "valid": outcome.valid,
+        "priced_items": len(priced),
+        "priced_items_cited_by_name": len(named),
         "template": outcome.profile.get("template", {}).get("id"),
         "pages": len(report["pages"]),
         "items": items,
@@ -100,6 +137,9 @@ def aggregate(rows: list[dict[str, Any]], skipped: list[dict[str, str]]) -> dict
         "median_policies": med("policies"),
         "median_owner_questions": statistics.median([r["contradictions"] + r["missing"] + r["confirm"] for r in ok]) if n else 0,
         "median_unquoted_facts_dropped": med("dropped_facts"),
+        "unquoted_facts_dropped_total": sum(r["dropped_facts"] for r in ok),
+        "priced_items_total": sum(r["priced_items"] for r in ok),
+        "share_prices_cited_by_name_and_amount": round(sum(r["priced_items_cited_by_name"] for r in ok) / max(1, sum(r["priced_items"] for r in ok)), 3),
         "certifier_failed_checks": failed_checks,
     }
 
@@ -112,7 +152,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     model = CachedModel("replay" if args.offline else "live", cache_dir=WORK / "llm")
-    fetcher = PoliteFetcher()
+    fetcher = PageCache(PoliteFetcher(), WORK / "pages", offline=args.offline)
     rows: list[dict[str, Any]] = []
     skipped: list[dict[str, str]] = []
     per_site_path = WORK / "per-site.json"  # local only: names businesses
