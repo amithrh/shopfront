@@ -144,12 +144,31 @@ def as_date(value: Any) -> str | None:
     return day.isoformat() if 2000 <= day.year <= 2100 else None
 
 
+COUNTRY_NAMES = {"australia": "AU", "india": "IN", "united states": "US", "usa": "US", "us": "US",
+                 "new zealand": "NZ", "united kingdom": "GB", "uk": "GB", "canada": "CA"}
+COUNTRY_BY_TLD = {"au": "AU", "in": "IN", "nz": "NZ", "uk": "GB", "ca": "CA", "us": "US"}
+CURRENCY_BY_COUNTRY = {"AU": "AUD", "IN": "INR", "NZ": "NZD", "GB": "GBP", "CA": "CAD", "US": "USD"}
+AU_STATE_TZ = {"NSW": "Australia/Sydney", "ACT": "Australia/Sydney", "VIC": "Australia/Melbourne", "TAS": "Australia/Hobart",
+               "QLD": "Australia/Brisbane", "SA": "Australia/Adelaide", "WA": "Australia/Perth", "NT": "Australia/Darwin"}
+COUNTRY_TZ = {"IN": "Asia/Kolkata", "NZ": "Pacific/Auckland", "GB": "Europe/London", "AU": "Australia/Sydney"}
+_DIAL = {"US": "1", "CA": "1", "AU": "61", "IN": "91", "NZ": "64", "GB": "44"}
+
+
 def e164(value: Any, country: str = "US") -> str | None:
     if not isinstance(value, str):
         return None
     digits = re.sub(r"\D", "", value)
     if value.strip().startswith("+") and 7 <= len(digits) <= 15:
         return "+" + digits
+    dial = _DIAL.get(country)
+    if country in ("AU", "NZ", "GB", "IN") and dial:
+        if digits.startswith(dial) and len(digits) >= len(dial) + 8:
+            return "+" + digits
+        if digits.startswith("0") and 9 <= len(digits) <= 11:
+            return f"+{dial}{digits[1:]}"
+        if country == "IN" and len(digits) == 10:
+            return f"+91{digits}"
+        return None
     if country == "US" and len(digits) == 10:
         return "+1" + digits
     if country == "US" and len(digits) == 11 and digits.startswith("1"):
@@ -224,7 +243,7 @@ def quote_times(quote: str) -> set[str]:
 
 def quote_has_amount(quote: str, cents: int) -> bool:
     """The quote prints this amount ($9, $9.00, $1,050.00)."""
-    for m in re.finditer(r"\$\s?(\d[\d,]*)(?:\.(\d{2}))?", quote):
+    for m in re.finditer(r"(?:\$|₹|\brs\.?|\binr)\s?(\d[\d,]*)(?:\.(\d{2}))?", quote, re.I):
         if int(m.group(1).replace(",", "")) * 100 + int(m.group(2) or 0) == cents:
             return True
     return False
@@ -394,13 +413,25 @@ class Assembler:
         region = (first("region") or "").strip()
         country = (first("country") or "").strip().upper()
         postal = first("postal_code")
+        country = COUNTRY_NAMES.get(country.lower(), country)
         if len(country) != 2:
-            country = "US" if (region.upper() in US_STATE_TZ or (postal and re.fullmatch(r"\d{5}", postal))) else ""
+            tld = (urlsplit(self.home).hostname or "").rsplit(".", 1)[-1].lower()
+            if tld in COUNTRY_BY_TLD:
+                country = COUNTRY_BY_TLD[tld]
+            elif region.upper() in AU_STATE_TZ:
+                country = "AU"
+            elif region.upper() in US_STATE_TZ or (postal and re.fullmatch(r"\d{5}", postal)):
+                country = "US"
+            elif postal and re.fullmatch(r"\d{6}", postal):
+                country = "IN"
+            else:
+                country = ""
         currency = (first("currency") or "").strip().upper()
-        if not re.fullmatch(r"[A-Z]{3}", currency):
-            currency = "USD"
+        local = CURRENCY_BY_COUNTRY.get(country)
+        if not re.fullmatch(r"[A-Z]{3}", currency) or (local and currency == "USD" and local != "USD"):
+            currency = local or "USD"  # "$" on an Australian site is AUD
         self.currency = currency
-        timezone = self.timezone(first("timezone"), region)
+        timezone = self.timezone(first("timezone"), region, country)
         categories = list(OrderedDict.fromkeys(snake(v) for _, v, _ in fields.get("category", []) if snake(v, "")))
         self.template = choose_template(categories, name, self.offer_kinds())
         if not categories:
@@ -411,7 +442,7 @@ class Assembler:
             "name": clean_text(name) or "Business",
             "spoken_name": spoken_name(name) or "the business",
             "categories": categories[:8],
-            "locale": "en-US" if (country or "US") == "US" else "en",
+            "locale": f"en-{country}" if country else "en-US",
             "timezone": timezone,
             "currency": currency,
             "website": self.website,
@@ -456,7 +487,7 @@ class Assembler:
         sources = self.sources()
         profile: JsonObj = {
             "schema_version": "1.0",
-            "profile_id": slug(urlsplit(self.home).hostname.split(".")[0] if urlsplit(self.home).hostname else name),
+            "profile_id": slug(re.sub(r"^www\d?\.", "", urlsplit(self.home).hostname or "").split(".")[0] or name),
             "revision": 1,
             "updated_at": self.updated_at,
             "template": {"id": self.template, "version": "1.0"},
@@ -470,8 +501,9 @@ class Assembler:
             profile["vocabulary"] = {"attributes": self.vocab}
         return Result(profile=profile, questions=self.questions, report={"dropped_facts": self.dropped})
 
-    def timezone(self, given: str | None, region: str) -> str:
-        for candidate in (given, US_STATE_TZ.get(region.upper())):
+    def timezone(self, given: str | None, region: str, country: str = "US") -> str:
+        local = AU_STATE_TZ.get(region.upper()) if country == "AU" else US_STATE_TZ.get(region.upper()) if country == "US" else None
+        for candidate in (given, local, COUNTRY_TZ.get(country)):
             if candidate and re.fullmatch(r"[A-Z][A-Za-z_]+(/[A-Za-z0-9_+-]+){1,2}", candidate):
                 try:
                     ZoneInfo(candidate)
@@ -713,6 +745,13 @@ class Assembler:
                 bucket.append((f"{ref}#dietary", {"tags": dietary}, ev))
         if not items:
             return None
+        # Categories and items share one id space per module (invariant L2).
+        for cat_id in [c for c in categories if c in items]:
+            new_id = f"{cat_id}-category"[:64]
+            categories[new_id] = {**categories.pop(cat_id), "id": new_id}
+            for it in items.values():
+                if cat_id in it.get("category_ids", []):
+                    it["category_ids"] = [new_id if c == cat_id else c for c in it["category_ids"]]
         module: JsonObj = {"type": "catalog", "title": "Menu" if module_id == "menu" else "Services"}
         if categories:
             module["categories"] = list(categories.values())
@@ -862,7 +901,7 @@ class Assembler:
         approval = {"module": "owner", "mode": "always", "decisions": ["approve", "decline", "counter_offer", "request_info"]}
         base_ev = [ev for k in ("custom_orders", "appointments", "quote_requests") for ev in self.offer_evidence(k)]
 
-        if "custom_orders" in kinds or (self.template == "bakery" and self.made_to_order):
+        if ("custom_orders" in kinds and self.template not in ("salon", "home_services")) or (self.template == "bakery" and self.made_to_order):
             refs = self.made_to_order or [r for r in item_refs if re.search(r"cake|custom|order", r)] or item_refs[:1]
             if refs:
                 availability: JsonObj = {}
@@ -1226,6 +1265,10 @@ class Assembler:
         out: JsonObj = {}
         for page in self.pages:
             key = f"web-{page.path_key}"[:64]
+            n = 2
+            while key in out:
+                key = f"web-{page.path_key}"[:60] + f"-{n}"
+                n += 1
             source: JsonObj = {"kind": "web_page", "url": page.url, "title": clean_text(page.title) or page.url[:120],
                                "retrieved_at": page.retrieved_at, "content_sha256": page.sha256}
             canaries = self.canaries.get(page.url) or []

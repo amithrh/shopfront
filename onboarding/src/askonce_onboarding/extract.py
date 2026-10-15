@@ -67,7 +67,13 @@ class PageFacts:
     error: str | None = None
 
 
+MAX_PAGE_CHARS = 14_000
+"""Real pages can be long; the model reads the first ~4k tokens (where business facts usually are)."""
+
+
 def page_prompt(url: str, title: str, text: str) -> str:
+    if len(text) > MAX_PAGE_CHARS:
+        text = text[:MAX_PAGE_CHARS] + " [page truncated]"
     return f"PAGE URL: {url}\nPAGE TITLE: {title}\n\nPAGE TEXT:\n{text}"
 
 

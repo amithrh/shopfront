@@ -24,6 +24,7 @@ from typing import Protocol
 from urllib.parse import urldefrag, urljoin, urlsplit, urlunsplit
 
 MAX_PAGES = 15
+USER_AGENT = "AskOnce-Onboarding/0.1 (read-only; hackathon research)"
 MAX_PAGE_BYTES = 2_000_000
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -84,7 +85,7 @@ class HttpFetcher:
         import httpx
 
         self._client = httpx.Client(
-            timeout=timeout_s, follow_redirects=True, headers={"User-Agent": "AskOnce-Onboarding/0.1"}
+            timeout=timeout_s, follow_redirects=True, headers={"User-Agent": USER_AGENT}
         )
 
     def fetch(self, url: str) -> Fetched:
@@ -92,6 +93,35 @@ class HttpFetcher:
         if response.status_code != 200:
             raise FetchError(f"{url}: HTTP {response.status_code}")
         return Fetched(str(response.url), response.headers.get("content-type", ""), response.content[:MAX_PAGE_BYTES])
+
+
+class PoliteFetcher:
+    """Honours robots.txt for our user agent (and `*`) before fetching a page from a real site."""
+
+    def __init__(self, inner: Fetcher | None = None) -> None:
+        self._inner = inner or HttpFetcher()
+        self._robots: dict[str, object] = {}
+
+    def allowed(self, url: str) -> bool:
+        from urllib.robotparser import RobotFileParser
+
+        parts = urlsplit(url)
+        origin = f"{parts.scheme}://{parts.netloc}"
+        parser = self._robots.get(origin)
+        if parser is None:
+            parser = RobotFileParser()
+            try:
+                body = self._inner.fetch(origin + "/robots.txt").body.decode("utf-8", errors="replace")
+                parser.parse(body.splitlines())
+            except Exception:  # noqa: BLE001 - no robots.txt: everything is allowed
+                parser.parse([])
+            self._robots[origin] = parser
+        return bool(parser.can_fetch(USER_AGENT, url))  # type: ignore[attr-defined]
+
+    def fetch(self, url: str) -> Fetched:
+        if not self.allowed(url):
+            raise FetchError(f"{url}: disallowed by robots.txt")
+        return self._inner.fetch(url)
 
 
 class DirectoryFetcher:
@@ -162,6 +192,11 @@ class _LinkParser(HTMLParser):
             self.title += data
 
 
+def _bare(netloc: str) -> str:
+    """`www.example.com` and `example.com` are one site."""
+    return re.sub(r"^www\.", "", netloc.lower())
+
+
 def _canonical(url: str) -> str:
     url, _ = urldefrag(url)
     parts = urlsplit(url)
@@ -171,7 +206,9 @@ def _canonical(url: str) -> str:
 
 def _same_page(a: str, b: str) -> bool:
     def norm(u: str) -> str:
-        return re.sub(r"/index\.html?$", "/", _canonical(u))
+        parts = urlsplit(_canonical(u))
+        path = re.sub(r"/index\.html?$", "/", parts.path).rstrip("/") or "/"
+        return f"{_bare(parts.netloc)}{path}?{parts.query}"
 
     return norm(a) == norm(b)
 
@@ -180,8 +217,43 @@ def _now() -> str:
     return dt.datetime.now(dt.UTC).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+_ASSET = re.compile(r"\.(jpe?g|png|gif|webp|svg|ico|pdf|zip|mp4|mp3|css|js|json|xml|txt|docx?|xlsx?)$", re.I)
+_SKIP_PATH = re.compile(
+    r"/(cart|checkout|basket|login|log-in|signin|sign-in|register|account|my-account|wp-admin|wp-login|feed|tag|"
+    r"category|author|search|cdn-cgi|privacy|privacy-policy|terms|cookie|sitemap)(/|$|\.)|/blog/.+|/news/.+|"
+    r"/product/.+|/products/.+|/shop/.+",
+    re.I,
+)
+_USEFUL = re.compile(
+    r"contact|visit|find-us|location|hour|about|menu|price|pricing|rates|service|treatment|faq|question|"
+    r"polic|book|appoint|order|cake|deliver|area|team|staff|how-it-works",
+    re.I,
+)
+
+
+def _page_like(path: str) -> bool:
+    last = path.rsplit("/", 1)[-1]
+    return not _ASSET.search(path) and ("." not in last or bool(re.search(r"\.(html?|php|aspx?)$", last, re.I)))
+
+
+def _priority(url: str) -> tuple[int, int]:
+    path = urlsplit(url).path
+    return (0 if _USEFUL.search(path) else 1, path.count("/"))
+
+
+def sleep(seconds: float) -> None:
+    import time
+
+    time.sleep(seconds)
+
+
 def crawl(
-    start_url: str, fetcher: Fetcher, *, max_pages: int = MAX_PAGES, clock: Callable[[], str] = _now
+    start_url: str,
+    fetcher: Fetcher,
+    *,
+    max_pages: int = MAX_PAGES,
+    clock: Callable[[], str] = _now,
+    delay_s: float = 0.0,
 ) -> list[Page]:
     """Breadth-first crawl of HTML pages on the start URL's origin. The home page comes first.
 
@@ -205,6 +277,13 @@ def crawl(
             continue
         if "html" not in fetched.content_type:
             continue
+        final = _canonical(fetched.url)
+        if final != url:
+            # Redirected (http -> https, bare -> www): record the page under the URL that served it.
+            if any(_same_page(final, p.url) for p in pages):
+                continue
+            url = final
+            seen.append(url)
         html = fetched.body.decode("utf-8", errors="replace")
         parser = _LinkParser()
         parser.feed(html)
@@ -213,9 +292,9 @@ def crawl(
         for href in parser.links:
             absolute = _canonical(urljoin(url, href))
             parts = urlsplit(absolute)
-            if parts.scheme not in ("http", "https") or parts.netloc.lower() != origin.netloc.lower():
+            if parts.scheme not in ("http", "https") or _bare(parts.netloc) != _bare(origin.netloc):
                 continue
-            if not re.search(r"(/|\.html?)$", parts.path):
+            if not _page_like(parts.path) or _SKIP_PATH.search(parts.path):
                 continue
             links.append(absolute)
         if not pages:
@@ -228,4 +307,8 @@ def crawl(
         for link in links:
             if not any(_same_page(link, s) for s in seen + queue):
                 queue.append(link)
+        # Pages a customer-service profile needs come first (contact, hours, menu, prices, FAQ...).
+        queue.sort(key=_priority)
+        if delay_s:
+            sleep(delay_s)
     return pages

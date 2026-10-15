@@ -52,8 +52,10 @@ def onboard(
     clock: Callable[[], str] = _now,
     progress: Progress = lambda _msg: None,
     parallel: int = 3,
+    max_pages: int | None = None,
+    delay_s: float = 0.0,
 ) -> Outcome:
-    pages = crawl(url, fetcher, clock=clock)
+    pages = crawl(url, fetcher, clock=clock, delay_s=delay_s, **({"max_pages": max_pages} if max_pages else {}))
     progress(f"fetched {len(pages)} page(s): {', '.join(p.path_key for p in pages)}")
     canaries = {p.url: find_canaries(p.html) for p in pages}
     for page in pages:
