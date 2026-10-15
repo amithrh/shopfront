@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "kettlewick",
   "revision": 1,
-  "updated_at": "2026-10-15T14:22:52Z",
+  "updated_at": "2026-10-15T14:32:09Z",
   "template": {
     "id": "home_services",
     "version": "1.0"
@@ -2079,7 +2079,7 @@
       "kind": "web_page",
       "url": "https://kettlewick.example.com/index.html",
       "title": "Kettlewick Home Repair | Denver plumbing and handyman repairsCutaway drawing of a Denver house and the jobs we handle in",
-      "retrieved_at": "2026-10-15T14:22:52Z",
+      "retrieved_at": "2026-10-15T14:32:09Z",
       "content_sha256": "5d28ede9b67a76fc61c2270e7815457ed2beb3b60c72237f112d3169cba24824",
       "injection_canaries": [
         {
@@ -2092,7 +2092,7 @@
       "kind": "web_page",
       "url": "https://kettlewick.example.com/services.html",
       "title": "Services and prices | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-15T14:22:52Z",
+      "retrieved_at": "2026-10-15T14:32:09Z",
       "content_sha256": "85df4ef96a71c58a1da4d19e99946cb4f889647e8b4c0548a7a3a2b1ea353336",
       "injection_canaries": [
         {
@@ -2105,28 +2105,28 @@
       "kind": "web_page",
       "url": "https://kettlewick.example.com/service-area.html",
       "title": "Service area | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-15T14:22:52Z",
+      "retrieved_at": "2026-10-15T14:32:09Z",
       "content_sha256": "bc34ded07bbce6d5914fd93d0021aedd5a4cf5dff1b05fba334033bf8eaa188a"
     },
     "web-how-it-works": {
       "kind": "web_page",
       "url": "https://kettlewick.example.com/how-it-works.html",
       "title": "How quotes work | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-15T14:22:52Z",
+      "retrieved_at": "2026-10-15T14:32:09Z",
       "content_sha256": "9a05d89b1d02e14deb81f655a77eb8d8ac0c0d8de49c5ce597cfd9d48d22708e"
     },
     "web-about": {
       "kind": "web_page",
       "url": "https://kettlewick.example.com/about.html",
       "title": "About us | Kettlewick Home RepairA white Kettlewick service van with a yellow stripe and a ladder on the roof",
-      "retrieved_at": "2026-10-15T14:22:52Z",
+      "retrieved_at": "2026-10-15T14:32:09Z",
       "content_sha256": "ff5404b5454de31cbb481f5bd3510b558ba03c7ac1391da3c34d5612a6ad9a42"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://kettlewick.example.com/contact.html",
       "title": "Contact and quote requests | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-15T14:22:52Z",
+      "retrieved_at": "2026-10-15T14:32:09Z",
       "content_sha256": "4ba653f0142fa309e54e452c8f5660bd9b03e4924e4f29c9530f19011b46318b"
     }
   },
@@ -2377,7 +2377,23 @@
   ],
   "certification": {
     "status": "draft",
-    "runs": []
+    "runs": [
+      {
+        "id": "run-1-1",
+        "suite": {
+          "id": "askonce_core",
+          "version": "1.0"
+        },
+        "profile_revision": 1,
+        "profile_sha256": "2f6778c0fc96ce89dfed44feb5ef0c4c1531c129aed5dcde4e8e5d93b0fd4d52",
+        "started_at": "2026-10-15T14:32:10Z",
+        "finished_at": "2026-10-15T14:32:11Z",
+        "result": "passed",
+        "cases_total": 83,
+        "cases_passed": 83,
+        "failures": []
+      }
+    ]
   },
   "vocabulary": {
     "attributes": {

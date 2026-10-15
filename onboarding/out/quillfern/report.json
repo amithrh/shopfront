@@ -143,8 +143,8 @@
     }
   ],
   "model": {
-    "calls": 3,
-    "cache_hits": 17,
-    "cost_usd": 0.020686000000000003
+    "calls": 0,
+    "cache_hits": 20,
+    "cost_usd": 0.0
   }
 }

@@ -677,6 +677,12 @@ class Assembler:
                     prov["evidence"].append(ev)
                 if price is not None and ("price" not in items[item_id] or items[item_id]["price"]["kind"] == "from" and price["kind"] == "fixed"):
                     items[item_id]["price"] = price
+                    # The server cites the first evidence: it must be the quote that prints this price.
+                    evidence = prov["evidence"]
+                    if ev in evidence:
+                        evidence.remove(ev)
+                    evidence.insert(0, ev)
+                    del evidence[10:]
             else:
                 item: JsonObj = {"id": item_id, "name": name, "spoken_name": spoken_name(name) or item_id}
                 desc = spoken(rec.get("description"))

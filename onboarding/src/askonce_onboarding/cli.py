@@ -57,3 +57,28 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def certify_main(argv: list[str] | None = None) -> int:
+    """`askonce-certify PROFILE.json...` (or --demo): writes certification-verdict.json next to each."""
+    from askonce_onboarding.certify import certify
+
+    parser = argparse.ArgumentParser(prog="askonce-certify", description="Deterministic certification of AskOnce profiles.")
+    parser.add_argument("profiles", nargs="*", type=Path)
+    parser.add_argument("--demo", action="store_true", help="certify the 3 onboarded demo profiles in onboarding/out/")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    args = parser.parse_args(argv)
+    paths = list(args.profiles) + (sorted(args.out.glob("*/profile.json")) if args.demo else [])
+    if not paths:
+        parser.error("give a profile.json or --demo")
+    worst = 0
+    for path in paths:
+        v = certify(path)
+        s = v.summary
+        print(f"{v.profile_id}: {v.verdict}  ({s['passed']} passed, {s['failed']} failed, {s['skipped']} skipped; "
+              f"{s['open_blocking_questions']} open owner question(s); p95 {v.latency['p95_ms']} ms)")
+        for rule in v.rules:
+            for f in rule["failures"][:5]:
+                print(f"   FAIL {f['case']}: {f['detail']}")
+        worst = max(worst, {"CERTIFIED": 0, "CONDITIONAL": 0, "NOT_CERTIFIED": 1}[v.verdict])
+    return worst
