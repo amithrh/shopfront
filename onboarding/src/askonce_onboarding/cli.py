@@ -82,3 +82,24 @@ def certify_main(argv: list[str] | None = None) -> int:
                 print(f"   FAIL {f['case']}: {f['detail']}")
         worst = max(worst, {"CERTIFIED": 0, "CONDITIONAL": 0, "NOT_CERTIFIED": 1}[v.verdict])
     return worst
+
+
+def answer_main(argv: list[str] | None = None) -> int:
+    """`askonce-answer PROFILE.json ANSWERS.json`: apply the owner's answers, then re-certify."""
+    import datetime as dt
+    import json
+
+    from askonce_onboarding.answers import apply_answers
+    from askonce_onboarding.certify import certify
+
+    parser = argparse.ArgumentParser(prog="askonce-answer", description="Apply owner answers to a profile and re-certify it.")
+    parser.add_argument("profile", type=Path)
+    parser.add_argument("answers", type=Path)
+    args = parser.parse_args(argv)
+    doc = json.loads(args.profile.read_text(encoding="utf-8"))
+    answers = {k: v for k, v in json.loads(args.answers.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+    now = dt.datetime.now(dt.UTC).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
+    updated = apply_answers(doc, answers, answered_at=now)
+    args.profile.write_text(json.dumps(updated, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"{updated['profile_id']}: applied {len(answers)} answer(s); revision {updated['revision']}")
+    return certify_main([str(args.profile)])

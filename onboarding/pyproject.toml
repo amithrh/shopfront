@@ -30,6 +30,7 @@ dev = [
 [project.scripts]
 askonce-onboard = "askonce_onboarding.cli:main"
 askonce-certify = "askonce_onboarding.cli:certify_main"
+askonce-answer = "askonce_onboarding.cli:answer_main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

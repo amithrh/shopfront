@@ -1,0 +1,10 @@
+{
+  "_comment": "Scripted owner answers for the fictional demo home-repair business (Jo). Wording follows the gold profile's owner answers where the questions match.",
+  "q-zone-80238": {"value": "core", "raw_text": "Central Park is core: no travel fee. The FAQ answer is from before we moved it into the core area."},
+  "q-zone-central-park": {"value": "core", "raw_text": "Central Park is core: no travel fee. The FAQ answer is from before we moved it into the core area."},
+  "q-zone-80033": {"value": "not_served", "raw_text": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page."},
+  "q-zone-wheat-ridge": {"value": "not_served", "raw_text": "No. We stopped going out to Wheat Ridge this year, so take 80033 off the service area page."},
+  "q-owner-response-time": {"value": 1440, "raw_text": "Within 24 hours, weekends included."},
+  "q-arrival-window-minutes": {"value": 120, "raw_text": "We give a 2-hour arrival window once you approve the quote."},
+  "q-safety-policies": {"value": true, "raw_text": "Yes, that's correct."}
+}

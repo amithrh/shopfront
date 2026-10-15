@@ -1,0 +1,7 @@
+{
+  "_comment": "Scripted owner answers for the fictional demo salon (Ines). Wording follows the gold profile's owner answers where the questions match.",
+  "q-policy-cancellation-notice-minutes": {"value": 1440, "raw_text": "It's 24 hours. The 48-hour footnote on the services page is old, I'll take it down."},
+  "q-owner-response-time": {"value": 120, "raw_text": "I check requests between clients and usually answer within two hours."},
+  "q-walk-ins": {"value": "no", "raw_text": "No walk-ins, sorry. We're appointment only, so people need to call or email to book."},
+  "q-safety-policies": {"value": true, "raw_text": "Yes, that's all correct."}
+}

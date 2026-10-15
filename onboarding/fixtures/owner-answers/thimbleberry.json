@@ -1,0 +1,9 @@
+{
+  "_comment": "Scripted owner answers for the fictional demo bakery (Rosa). Wording follows the gold profile's owner answers where the questions match.",
+  "q-saturday-close": {"value": "18:00", "raw_text": "We close at 6:00 pm on Saturdays. The Visit us page is right; the About page is out of date."},
+  "q-owner-response-time": {"value": 1440, "raw_text": "I reply within 24 hours."},
+  "q-custom-order-capacity": {"value": 2, "raw_text": "Two custom cakes a day. That's all our decorating bench can handle."},
+  "q-custom-order-notice": {"value": 72, "raw_text": "At least 72 hours before pickup."},
+  "q-notice-minutes": {"value": "by 2 pm the day before", "raw_text": "Call or email by 2:00 pm the day before and we'll hold a loaf for you."},
+  "q-allergens": {"value": true, "raw_text": "Yes, everything on the menu is correct."}
+}

@@ -9,8 +9,15 @@ and suspected prompt injections).
 uv run askonce-onboard --demo            # the 3 demo sites, from recorded model replies ($0)
 uv run askonce-onboard --demo --live     # call Bedrock for pages not recorded yet (spend-capped ledger)
 uv run askonce-onboard https://example.com/ --live
+uv run askonce-certify --demo            # certification-verdict.json per profile (no model, $0)
+uv run askonce-answer out/thimbleberry/profile.json fixtures/owner-answers/thimbleberry.json   # owner answers, then re-certify
 uv run pytest
 ```
+
+Certification runs each profile through the real MCP server in process and checks the trace in code.
+The verdict is CERTIFIED, CONDITIONAL (owner questions still open; disputed facts withheld) or
+NOT_CERTIFIED. A freshly onboarded demo profile is CONDITIONAL. After the scripted owner answers in
+`fixtures/owner-answers/` are applied, it is CERTIFIED.
 
 Outputs go to `onboarding/out/<profile_id>/` (`profile.json`, `questions.json`, `report.json`, `snapshots/`).
 
