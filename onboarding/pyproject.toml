@@ -1,15 +1,15 @@
 [project]
 name = "askonce-onboarding"
 version = "0.1.0"
-description = "Add your description here"
+description = "AskOnce onboarding: a small-business website URL -> a validated business profile plus owner questions."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "askonce-bedrock",
+    "askonce-server",
     "bedrock-agentcore==1.24.0",
     "httpx==0.28.1",
     "jsonschema>=4.26.0",
-    "strands-agents==1.57.1",
 ]
 
 [build-system]
@@ -18,9 +18,18 @@ build-backend = "uv_build"
 
 [tool.uv.sources]
 askonce-bedrock = { path = "../packages/askonce-bedrock", editable = true }
+askonce-server = { path = "../server", editable = true }
+mcp-tasks = { path = "../packages/mcp-tasks", editable = true }
 
 [dependency-groups]
 dev = [
     "pytest==9.1.1",
     "pytest-asyncio==1.4.0",
 ]
+
+[project.scripts]
+askonce-onboard = "askonce_onboarding.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

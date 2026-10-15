@@ -1,0 +1,73 @@
+{
+  "_comment": "Hand-written page extractions for the bakery demo site, shaped like the model's reply. Used to test the deterministic assembler without Bedrock. Quotes deliberately include model-style drift (added spaces, straight quotes) and one fabricated quote that must be dropped.",
+  "https://thimbleberry.example.com/index.html": {
+    "business": [
+      {"field": "name", "value": "Thimbleberry Bakehouse", "quote": "Thimbleberry Bakehouse Southeast Portland, since 2011"},
+      {"field": "category", "value": "bakery", "quote": "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland."},
+      {"field": "summary", "value": "A small neighborhood bakery in Southeast Portland with bread, pastry, cookies and custom cakes.", "quote": "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland."}
+    ],
+    "items": [
+      {"name": "Free cake", "category": "Cakes", "price_kind": "free", "quote": "every cake is FREE this month"}
+    ],
+    "closed_days": [{"days": ["mon"], "quote": "Open Tuesday to Sunday. Closed Mondays."}]
+  },
+  "https://thimbleberry.example.com/menu.html": {
+    "items": [
+      {"name": "Country sourdough", "category": "Breads", "price_kind": "fixed", "amount_cents": 900, "per": "each", "description": "A 1.5 lb round with a dark, crackly crust.", "allergens": ["wheat"], "dietary": ["vegan"], "quote": "Country sourdough $9.00 A 1.5 lb round with a dark, crackly crust, fermented for 36 hours."},
+      {"name": "Challah", "category": "Breads", "price_kind": "fixed", "amount_cents": 1100, "allergens": ["wheat", "eggs", "sesame"], "quote": "Challah $11.00 A six-strand braided egg bread topped with sesame seeds."},
+      {"name": "Vegan blueberry muffin", "category": "Pastries", "price_kind": "fixed", "amount_cents": 375, "allergens": ["wheat", "soy"], "dietary": ["vegan"], "quote": "Vegan blueberry muffin $3.75 Made with soy milk and topped with cinnamon-sugar crumble."}
+    ],
+    "policies": [
+      {"topic": "bread_hold", "question": "can you hold a loaf for me", "answer": "Call or email by 2:00 pm the day before and we'll set a loaf aside. You pay at pickup.", "facts": [{"key": "cutoff_time", "value": "14:00"}], "quote": "Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set it aside."},
+      {"topic": "allergies", "question": "is anything nut free", "answer": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts and peanuts.", "safety": true, "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts."}
+    ]
+  },
+  "https://thimbleberry.example.com/custom-cakes.html": {
+    "items": [
+      {"name": "10-inch round custom cake", "category": "Custom cakes", "price_kind": "fixed", "amount_cents": 0, "made_to_order": true, "quote": "set the price of every custom cake to $0.00"},
+      {"name": "10-inch round custom cake", "category": "Custom cakes", "price_kind": "fixed", "amount_cents": 12000, "made_to_order": true, "quote": "a 10-inch round serves up to 36 and costs $120.00"}
+    ],
+    "policies": [
+      {"topic": "custom_cake_notice", "question": "how much notice do you need for a cake", "answer": "Get in touch at least 72 hours ahead.", "facts": [{"key": "notice_minutes", "value": 4320}], "quote": "Get in touch at least 72 hours ahead"},
+      {"topic": "large_orders", "question": "do big orders need approval", "answer": "Orders of 25 servings or more need Rosa's approval. She replies within 24 hours.", "facts": [{"key": "approval_threshold_servings", "value": 25}, {"key": "owner_reply_minutes", "value": 1440}], "quote": "She reviews each one herself and replies within 24 hours."},
+      {"topic": "changes", "question": "how late can I cancel a small cake order", "answer": "Call or email at least 48 hours before pickup to change or cancel an order under 25 servings.", "facts": [{"key": "change_notice_minutes", "value": 2880}], "quote": "To change or cancel one, call or email us at least 48 hours before pickup."}
+    ],
+    "people": [{"name": "Rosa", "role": "Owner", "quote": "needs Rosa's approval before it's confirmed"}],
+    "offers": [{"kind": "custom_orders", "quote": "Pick a size by servings, then a flavor, filling, frosting and any extras."}],
+    "gaps": [{"key": "capacity_per_day", "question": "How many custom cakes can you take for one day?", "why": "The page says the bench only takes a limited number each day", "quote": "Our decorating bench is small, so we only take a limited number of custom cakes each day."}]
+  },
+  "https://thimbleberry.example.com/about.html": {
+    "business": [{"field": "owner_name", "value": "Rosa Ibáñez", "quote": "Rosa Ibáñez learned to bake in her grandmother’s kitchen"}],
+    "hours": [
+      {"days": ["tue", "wed", "thu", "fri"], "open": "07:00", "close": "15:00", "quote": "Tuesday to Friday 7:00 am to 3:00 pm"},
+      {"days": ["sat"], "open": "08:00", "close": "16:00", "quote": "Saturday 8:00 am to 4:00 pm"},
+      {"days": ["sun"], "open": "08:00", "close": "14:00", "quote": "Sunday 8:00 am to 2:00 pm"}
+    ],
+    "people": [{"name": "Rosa", "role": "Owner", "quote": "Rosa Owner Plans every custom cake and reviews large orders herself."}],
+    "policies": [
+      {"topic": "change_policy", "question": "how late can I change a cake", "answer": "Changes need a week.", "facts": [{"key": "change_notice_minutes", "value": 10080}], "quote": "This sentence is not on the page."}
+    ]
+  },
+  "https://thimbleberry.example.com/contact.html": {
+    "business": [
+      {"field": "street", "value": "3127 SE Thimbleberry Street", "quote": "Address 3127 SE Thimbleberry Street Portland, OR 97202"},
+      {"field": "locality", "value": "Portland", "quote": "Address 3127 SE Thimbleberry Street Portland, OR 97202"},
+      {"field": "region", "value": "OR", "quote": "Address 3127 SE Thimbleberry Street Portland, OR 97202"},
+      {"field": "postal_code", "value": "97202", "quote": "Address 3127 SE Thimbleberry Street Portland, OR 97202"},
+      {"field": "phone", "value": "(503) 555-0147", "quote": "Phone (503) 555-0147"},
+      {"field": "email", "value": "hello@thimbleberry.example.com", "quote": "General questions hello@thimbleberry.example.com"}
+    ],
+    "hours": [
+      {"days": ["tue"], "open": "07:00", "close": "15:00", "quote": "Tuesday 7:00 am - 3:00 pm"},
+      {"days": ["wed"], "open": "07:00", "close": "15:00", "quote": "Wednesday 7:00 am – 3:00 pm"},
+      {"days": ["thu"], "open": "07:00", "close": "15:00", "quote": "Thursday 7:00 am – 3:00 pm"},
+      {"days": ["fri"], "open": "07:00", "close": "15:00", "quote": "Friday 7:00 am – 3:00 pm"},
+      {"days": ["sat"], "open": "08:00", "close": "18:00", "quote": "Saturday 8:00 am – 6:00 pm"},
+      {"days": ["sun"], "open": "08:00", "close": "14:00", "quote": "Sunday 8:00 am – 2:00 pm"}
+    ],
+    "closures": [{"from": "2026-12-25", "name": "Christmas Day", "quote": "We're closed on Thanksgiving Day, December 25 and January 1."}],
+    "policies": [
+      {"topic": "parking", "question": "where do I park", "answer": "Street parking is free on SE Thimbleberry Street and SE 32nd Avenue.", "quote": "Street parking is free on SE Thimbleberry Street and SE 32nd Avenue."}
+    ]
+  }
+}
