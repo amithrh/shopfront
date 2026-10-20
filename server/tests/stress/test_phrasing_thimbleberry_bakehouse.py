@@ -858,3 +858,19 @@ async def test_head_count_in_the_item_phrase_fills_the_servings_field(plain_clie
     )
     # pending_owner: the 25-servings approval rule saw the 30 (no "Number of servings?" question)
     assert data["status"] == "pending_owner", data["speak"]
+
+
+async def test_details_under_the_hosts_own_names_reach_the_business_fields(plain_client: Any, elicitation: ElicitationScript) -> None:
+    # What Nova Pro actually sent: its own key names and a local phone number.
+    data = await call(
+        plain_client,
+        "place_custom_order",
+        {
+            "item": "ten inch round vanilla bean cake with lemon curd and vanilla buttercream",
+            "date": "2026-10-18",
+            "details": {"name": "Priya", "phone_number": "217 555 0177", "number_of_people": 30},
+        },
+    )
+    assert data["status"] == "pending_owner", data["speak"]
+    # The only question was the read-back: no intake form asking for servings, name or phone again.
+    assert [props for _message, props in elicitation.seen] == [["confirm"]], elicitation.seen

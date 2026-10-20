@@ -72,8 +72,6 @@ DIET_FIELD_HINTS = ("diet", "allerg")
 HEAD_COUNT_FIELD = re.compile(r"serving|guest|people|person|party|head ?count|attendee", re.IGNORECASE)
 """A business's integer intake field that counts people ("servings", "guests", "party size")."""
 
-HEAD_COUNT_ALIASES = ("party_size", "guests", "people", "persons", "headcount", "head_count", "servings", "attendees")
-"""Keys a host uses for the head count, whatever the business called its field."""
 
 
 
@@ -84,8 +82,8 @@ class ItemRequest:
     item: str
     choices: dict[str, Any]
     intake: dict[str, Any] = field(default_factory=dict)
-    """The caller's details, plus the head count in the business's own field when it was given under
-    another name (`party_size`) or only in the item phrase ("a cake for 30 people")."""
+    """The caller's details under the business's own field names ("phone_number" -> "customer_phone",
+    "party_size" -> "servings"), plus a head count said only in the item phrase ("for 30 people")."""
     focus: tuple[ChoiceFocus, ...] = ()
     notes: tuple[str, ...] = ()
     note_refs: tuple[str, ...] = ()
@@ -104,18 +102,67 @@ def _needs_from_intake(intake: Mapping[str, Any]) -> list[str]:
     return tags
 
 
-def _with_head_count(
-    profile: Profile, module_id: str | None, intake: Mapping[str, Any], phrase_count: int | None
+_WORD_SPLIT = re.compile(r"[^a-z0-9]+")
+_PHONE_WORDS = frozenset({"phone", "mobile", "cell", "tel", "telephone", "contact"})
+_EMAIL_WORDS = frozenset({"email", "mail"})
+_NAME_WORDS = frozenset({"name", "names"})
+
+
+def _key_words(text: str) -> frozenset[str]:
+    spaced = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", text).lower()
+    return frozenset(w.rstrip("s") if len(w) > 3 else w for w in _WORD_SPLIT.split(spaced) if w)
+
+
+def _field_for(key: str, value: Any, fields: Sequence[JsonObj]) -> str | None:
+    """The business's intake field a host meant by `key` ("phone_number" -> "customer_phone",
+    "party_size" -> "servings"), when exactly one field fits; None otherwise."""
+    words = _key_words(key)
+
+    def unique(found: list[JsonObj]) -> str | None:
+        return str(found[0]["key"]) if len(found) == 1 else None
+
+    if words & _EMAIL_WORDS:
+        return unique([f for f in fields if f.get("type") == "email"])
+    if words & _PHONE_WORDS:
+        return unique([f for f in fields if f.get("type") == "phone"])
+    if HEAD_COUNT_FIELD.search(key.replace("_", " ")) or words & {"count", "size"} and words & {"party", "group"}:
+        return unique(
+            [
+                f
+                for f in fields
+                if f.get("type") == "integer" and HEAD_COUNT_FIELD.search(f"{f.get('key', '')} {f.get('label', '')}")
+            ]
+        )
+    if words & _NAME_WORDS:
+        return unique([f for f in fields if f.get("type") == "text" and "name" in _key_words(f"{f.get('key', '')} {f.get('label', '')}")])
+    scored = [
+        (len(words & _key_words(f"{f.get('key', '')} {f.get('label', '')}")), f) for f in fields
+    ]
+    best = max((n for n, _f in scored), default=0)
+    return unique([f for n, f in scored if n == best]) if best else None
+
+
+def _with_field_names(
+    profile: Profile, module_id: str | None, intake: Mapping[str, Any], phrase_count: int | None, group_ids: set[str]
 ) -> dict[str, Any]:
-    """`intake` with the module's head-count field filled from an alias key or the phrase's count."""
+    """`intake` with each detail a host sent under its own name moved to the business's field, and the
+    head-count field filled from the item phrase ("a cake for 30 people") when nothing else gave it.
+    A field the caller already filled is never overwritten; option-group keys are left alone."""
     out = dict(intake)
     if module_id is None:
         return out
     try:
-        fields = profile.intake_fields(module_id)
-    except Exception:  # noqa: BLE001 - unknown module: nothing to fill
+        fields = list(profile.intake_fields(module_id))
+    except Exception:  # noqa: BLE001 - unknown module: nothing to map
         return out
-    target = next(
+    known = {str(f["key"]) for f in fields}
+    for key in list(out):
+        if key in known or key in group_ids or out[key] in (None, ""):
+            continue
+        target = _field_for(key, out[key], fields)
+        if target is not None and out.get(target) in (None, ""):
+            out[target] = out.pop(key)
+    head = next(
         (
             str(f["key"])
             for f in fields
@@ -123,14 +170,8 @@ def _with_head_count(
         ),
         None,
     )
-    if target is None or out.get(target) not in (None, ""):
-        return out
-    for alias in HEAD_COUNT_ALIASES:
-        if alias != target and out.get(alias) not in (None, ""):
-            out[target] = out.pop(alias)
-            return out
-    if phrase_count is not None:
-        out[target] = phrase_count
+    if head is not None and out.get(head) in (None, "") and phrase_count is not None:
+        out[head] = phrase_count
     return out
 
 
@@ -212,7 +253,8 @@ def request_for(
         return ItemRequest(item=text, choices=given, intake=dict(intake or {}), lookup=lookup)
     modules = profile.transactional_modules_for(entry.ref)
     typed = [m for m in modules if profile.module_type(m) == module_type]
-    details = _with_head_count(profile, typed[0] if typed else None, intake or {}, lookup.servings)
+    group_ids = {str(g["id"]) for g in _groups(entry.item)}
+    details = _with_field_names(profile, typed[0] if typed else None, intake or {}, lookup.servings, group_ids)
     ref, item = entry.ref, entry.item
     needs = list(dict.fromkeys([*lookup.dietary, *_needs_from_intake(details)]))
     item_tags = {str(t) for t in (_state(profile, f"{ref}#dietary.tags") or ())}
