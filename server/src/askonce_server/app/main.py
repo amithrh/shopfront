@@ -11,9 +11,11 @@ Assembly (verified patterns, docs/research/mcp-http-transport.md):
      -> serves exactly /mcp (no 307 trailing-slash redirect, which breaks behind TLS-terminating LBs).
   3. FastAPI lifespan: `async with server.session_manager.run():` (mounted/route apps' lifespans are
      not run by FastAPI) + start `run_sweeper` in a task group; cancel it on shutdown.
-  4. Routes: GET /health and GET /ping -> {"status": "ok", "version", "storage"} (no MCP, no auth;
+  4. A browser opening an owner link gets the owner phone page (`owner_page.OwnerPageMiddleware`); the
+     page calls the same URLs as JSON.
+  5. Routes: GET /health and GET /ping -> {"status": "ok", "version", "storage"} (no MCP, no auth;
      AgentCore/ALB health checks), the owner router, and nothing else (no OpenAPI/docs routes).
-  5. CORSMiddleware outermost (`cors_options(settings)`), then `BodySizeLimitMiddleware` (413 for an
+  6. CORSMiddleware outermost (`cors_options(settings)`), then `BodySizeLimitMiddleware` (413 for an
      owner API request declaring a body over `owner_api.MAX_BODY_BYTES`).
 `json_response=False` keeps SSE (progress + 15 s keep-alive pings behind proxies);
 `stateless_http=False` keeps legacy (2025-11-25) clients' sessions working; 2026-07-28 is sessionless.
@@ -40,6 +42,7 @@ from askonce_server import __version__
 from askonce_server.app.background import run_sweeper
 from askonce_server.app.links import OwnerLinkSigner, signer_from_settings
 from askonce_server.app.owner_api import MAX_BODY_BYTES, build_owner_router, install_error_handlers
+from askonce_server.app.owner_page import OwnerPageMiddleware
 from askonce_server.app.security import (
     BodySizeLimitMiddleware,
     cors_options,
@@ -138,6 +141,7 @@ def create_app(
     app.include_router(build_owner_router(deps, signer))
     install_error_handlers(app)
     app.router.routes.append(Route(MCP_PATH, endpoint=StreamableHTTPASGIApp(session_manager)))
+    app.add_middleware(OwnerPageMiddleware)
     app.add_middleware(BodySizeLimitMiddleware, max_bytes=MAX_BODY_BYTES, path_prefix="/owner/")
     app.add_middleware(CORSMiddleware, **cors_options(settings))
     return app

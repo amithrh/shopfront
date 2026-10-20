@@ -84,6 +84,39 @@ chat falls back to `aws configure export-credentials` (AWS CLI v2) by itself.
 To be the owner while chatting (approve the cake, answer a question), use the owner API below, then ask the assistant
 "any news on my cake?".
 
+## 3d. The voice host: a device with a screen (Bedrock)
+
+`host/voice_host.py` is the same loop as the terminal chat, in a browser that looks and behaves like a
+smart display: you talk (push the mic button or hold Space; Chrome's Web Speech API) or type, the reply is
+spoken (browser text-to-speech), and the tools' cards show on the screen with their website citations.
+When a tool needs the customer (a read-back to confirm, a name and phone), its question appears on the screen
+and is spoken; answer with Yes/No, by voice, or in the fields.
+
+```bash
+# server running as in step 2, then from the repo root:
+AWS_PROFILE=shopfront server/.venv/bin/python host/voice_host.py        # http://localhost:8100
+```
+
+Owner approvals come back as task ids. The host watches them with `check_request_status` (a plain MCP call,
+no model and no Bedrock cost) and **announces the owner's reply the moment it lands**: a chime, a purple
+light bar, "Good news: Rosa confirmed your custom cake...". Click **Open owner's phone** in the side panel to
+open that business's owner page in a phone-sized window next to the device (the host mints the link with the
+dev admin token).
+
+The side panel ("Behind the scenes") shows each tool call with its arguments, status, task id and latency,
+the model used, and the turn's and the total Bedrock spend (same $5 ledger as the terminal chat). Without
+AWS credentials the host still starts and says so; typing `/tool <name> {json}` calls a tool directly with no
+model, which is enough to rehearse confirmations, the owner page and announcements at $0.
+
+## The owner's phone page
+
+Every owner link opens a phone page when a browser follows it: the requests waiting for the owner, each with
+its details and one-tap decisions (Approve, Decline, Send quote, Suggest another time, Ask the customer), and,
+for a customer question the website couldn't answer, an **Answer** box. The page polls every 3 seconds, so a
+new request shows up on its own. It uses the same signed link as the JSON API (a `fetch` with the token gets
+JSON, a browser navigation gets the page), keeps the token out of the address bar, and inserts all text with
+`textContent`.
+
 ## Acting as the owner by hand
 
 In dev, the admin token is `DEV-ONLY-admin-token`; a prod server refuses to start with it. To mint an owner inbox link:
@@ -92,7 +125,7 @@ In dev, the admin token is `DEV-ONLY-admin-token`; a prod server refuses to star
 curl -s -X POST -H "Authorization: Bearer DEV-ONLY-admin-token" http://localhost:8000/owner/thimbleberry-bakehouse/links
 ```
 
-Then `GET /owner/<business>/inbox?status=open` with the link's token, and `POST .../requests/<id>/decision`.
+Open the printed `inbox_url` in a browser for the phone page, or `GET /owner/<business>/inbox?status=open` with the link's token, and `POST .../requests/<id>/decision`.
 
 ## Automated tests
 
