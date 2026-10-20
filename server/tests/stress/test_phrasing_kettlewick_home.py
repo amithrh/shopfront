@@ -193,13 +193,6 @@ ITEMS = [
     pytest.param(
         Item("burst pipe", "services/leak-repair", suggest_ok=True),
         id="burst-pipe",
-        marks=xfail(
-            "DENIAL: 'I don't see that at Kettlewick Home Repair.' A burst pipe is the profile's first-named plumbing "
-            "emergency (policies/emergencies) and leak repair covers visible pipe leaks, but no item term or option "
-            "names 'burst'. Structurally it is 'pumpkin pie' at the bakery (a known head noun, 'pipe', with an unknown "
-            "modifier), which must stay 'I don't see that'; telling them apart needs word meanings the profile does "
-            "not publish (a 'burst pipe' synonym on leak-repair would fix it in the data)."
-        ),
     ),
 ]
 

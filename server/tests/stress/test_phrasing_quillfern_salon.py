@@ -219,35 +219,6 @@ def xfail(reason: str) -> Any:
 
 # ---------------------------------------------------------------------------- known gaps (root causes)
 
-UNEXPLAINED_WORD_STILL_RESOLVES = (
-    "matching.resolve returns `found` for a lone best match even when it leaves content words unexplained "
-    "(Match.unexplained > 0), so an extra word that changes the service is silently dropped"
-)
-BLOW_OUT_SPLIT = (
-    "'blow out' (two words) never meets the one-word synonym 'blowout with curls'; plain Blowout matches its "
-    "own 'blow out' synonym and wins with 'curl' unexplained -> 'The blowout is $55' instead of the $70 "
-    "Blowout with hot-tool styling. " + UNEXPLAINED_WORD_STILL_RESOLVES
-)
-FAMILY_WORDS = (
-    "Family/age words ('son', 'daughter', '8 year old') are neither FILLER nor in any item vocabulary, so every "
-    "haircut item fails evaluate() (kind 1/2 need every leftover word explained) and the reply is 'I don't "
-    "see that at Quillfern Hair Studio' although the Kids cut (and Men's/Women's cuts) are offered"
-)
-NO_FUZZY_SPELLING = (
-    "Misspellings only resolve when listed as synonyms ('bayalage', 'balyage'): an unlisted one-letter "
-    "misspelling of a catalog word is now a 'Did you mean ...?' (matching never silently picks a corrected "
-    "item), and search.normalize does not fold 'colour'->'color'; this case expects the item itself"
-)
-LENGTH_CHOICE_HIJACKS = (
-    "'long hair' names a Balayage length choice (kind 3/1), while Partial/Full highlights and All-over color "
-    "have no 'long'/'hair' vocabulary and drop out, so the reply silently quotes balayage past the shoulder "
-    "blades ($285) instead of asking which service"
-)
-OPTION_DURATION = (
-    "find_item(aspects=['duration']) reads only the item-level duration_minutes; Balayage publishes its "
-    "durations on the length choices (210 / 240 min), so the reply is 'I don't know how long the balayage "
-    "takes' although the profile states both"
-)
 POLICY_COVERAGE = (
     "knowledge.best_entry: no variant covers >= MIN_COVERAGE (0.5) of the question's content words, or the "
     "only shared word is not 'decisive' (used by another entry and not the topic), so a question the "
@@ -266,11 +237,6 @@ FIND_ITEM: list[Any] = [
         "a ladies cut and blow dry", None,
         AnyOf((Item("services/womens-cut"), Asks(("services/womens-cut",)))),
         id="cut-ladies-cut-and-blow-dry",
-        marks=xfail(
-            "Asks 'Did you mean curly and coily cut or blowout?': only 'ladies haircut' is a Women's cut synonym, "
-            "while 'cut and blow dry' contains Curly cut's 'dry cut' and Blowout's 'blow dry' (two kind-0 ties), "
-            "so the question offers two wrong services and never the women's cut & style (which includes a finish)"
-        ),
     ),
     pytest.param("mens haircut", None, Item("services/mens-cut", says=("$42",)), id="cut-mens"),
     pytest.param("how much is a mens haircut", ["price"], Item("services/mens-cut", says=("$42",)), id="cut-mens-price-question"),
@@ -279,11 +245,6 @@ FIND_ITEM: list[Any] = [
         "a men's trim", None,
         AnyOf((Item("services/mens-cut"), Asks(("services/mens-cut",)))),
         id="cut-mens-trim",
-        marks=xfail(
-            "'mens trim' sits inside only the term 'men's cut & beard trim' (kind 1); Men's cut has no 'trim' so it "
-            "drops out and the reply silently quotes the $55 cut-and-beard combo instead of the $42 men's cut or "
-            "a question"
-        ),
     ),
     pytest.param("haircut and beard", None, Item("services/mens-cut-beard", says=("$55",)), id="cut-haircut-and-beard"),
     pytest.param("beard trim", None, Item("services/mens-cut-beard", says=("men's cut and beard trim", "$55")), id="cut-beard-trim-names-combo"),
@@ -293,23 +254,16 @@ FIND_ITEM: list[Any] = [
         "kids cut for my 14 year old", None,
         AnyOf((Item("services/kids-cut", says=("12 and under",)), HANDOFF)),
         id="cut-kids-over-age",
-        marks=xfail(
-            "Quotes 'The kids cut is $30.' for a 14-year-old with no age caveat; the kids cut is for ages 12 and "
-            "under (attributes.max_age_years 12). The stated age is dropped ('year' is in matching._UNITS, so it "
-            "is not a head count) and description_spoken is only spoken when the 'description' aspect is asked"
-        ),
     ),
     pytest.param(
         "a haircut for my son", None,
         AnyOf((Item("services/kids-cut"), Item("services/mens-cut"), Asks(("services/kids-cut",)))),
         id="cut-for-my-son",
-        marks=xfail(FAMILY_WORDS),
     ),
     pytest.param(
         "haircut for my 8 year old daughter", None,
         AnyOf((Item("services/kids-cut"), Asks(("services/kids-cut",)))),
         id="cut-for-8-year-old-daughter",
-        marks=xfail(FAMILY_WORDS),
     ),
     pytest.param("cut for curly hair", None, Item("services/curly-cut", says=("$95",)), id="cut-curly"),
     pytest.param("fringe", None, Item("services/bang-trim", says=("$15",)), id="cut-fringe-british"),
@@ -324,24 +278,19 @@ FIND_ITEM: list[Any] = [
     pytest.param("blowout with beach waves", None, Item("services/blowout-hot-tool", says=("$70",)), id="style-blowout-beach-waves"),
     pytest.param(
         "a blow out with curls", None, Item("services/blowout-hot-tool", says=("$70",), never=("$55",)),
-        id="style-blow-out-with-curls", marks=xfail(BLOW_OUT_SPLIT),
+        id="style-blow-out-with-curls",
     ),
     pytest.param(
         "brazilian blowout", None,
         AnyOf((Item("services/smoothing"), Asks(("services/smoothing",)), HANDOFF)),
         id="style-brazilian-blowout",
-        marks=xfail(
-            "A Brazilian blowout is a keratin/smoothing service, but 'brazilian' is unexplained and the styling "
-            "Blowout is the only kind-0 match, so the reply is 'The blowout is $55.' for the wrong service. "
-            + UNEXPLAINED_WORD_STILL_RESOLVES
-        ),
     ),
     pytest.param("updo for a wedding", None, Item("services/updo", says=("$110",)), id="style-updo-wedding"),
     # -- color
     pytest.param("balayages", None, Item("services/balayage", says=("$245", "$285")), id="color-balayage-plural"),
     pytest.param("bayalage", None, Item("services/balayage", says=("$245",)), id="color-balayage-listed-misspelling"),
     pytest.param(
-        "balayge", None, Item("services/balayage"), id="color-balayage-unlisted-misspelling", marks=xfail(NO_FUZZY_SPELLING)
+        "balayge", None, Item("services/balayage"), id="color-balayage-unlisted-misspelling",
     ),
     pytest.param(
         "balayage for shoulder length hair", None,
@@ -364,12 +313,12 @@ FIND_ITEM: list[Any] = [
     pytest.param(
         "highlights for long hair", None,
         Asks(("services/partial-highlights", "services/full-highlights")),
-        id="color-highlights-long-hair", marks=xfail(LENGTH_CHOICE_HIJACKS),
+        id="color-highlights-long-hair",
     ),
     pytest.param(
         "color for long hair", None,
         AnyOf((Item("services/all-over-color"), Asks(("services/all-over-color",)))),
-        id="color-color-long-hair", marks=xfail(LENGTH_CHOICE_HIJACKS),
+        id="color-color-long-hair",
     ),
     pytest.param(
         "hair color", None,
@@ -380,14 +329,10 @@ FIND_ITEM: list[Any] = [
         "dye my hair", None,
         AnyOf((Item("services/all-over-color", says=("$120",)), Asks(("services/all-over-color",)))),
         id="color-dye-my-hair",
-        marks=xfail(
-            "Colloquial 'dye' is not in All-over color's vocabulary (only 'color my hair'), so a core service is "
-            "answered 'I don't see that at Quillfern Hair Studio'"
-        ),
     ),
     pytest.param(
         "single process colour", None, Item("services/all-over-color", says=("$120",)),
-        id="color-single-process-colour", marks=xfail(NO_FUZZY_SPELLING),
+        id="color-single-process-colour",
     ),
     pytest.param(
         "my color is orange, can you fix it", None, Item("services/color-correction", says=("$90 per hour",)),
@@ -449,12 +394,11 @@ ASPECTS: list[Any] = [
     pytest.param("men's cut", ["duration"], Item("services/mens-cut", says=("30 minutes",)), id="duration-mens-cut"),
     pytest.param(
         "how long does balayage take", ["duration"], Item("services/balayage", says=("hours",)),
-        id="duration-balayage", marks=xfail(OPTION_DURATION),
+        id="duration-balayage",
     ),
     pytest.param(
         "balayage for long hair", ["duration"], Item("services/balayage", says=("4 hours",)),
         id="duration-balayage-long-hair",
-        marks=xfail(OPTION_DURATION + "; even with the 'past the shoulder blades' choice matched (240 min)"),
     ),
     pytest.param(
         "when can I get a curly cut", ["availability"],
@@ -471,10 +415,6 @@ ASPECTS: list[Any] = [
         "is there anything in the women's cut I could be allergic to", ["allergens"],
         HandsOff(("unknown",), item="services/womens-cut", never=("kitchen",)),
         id="allergens-womens-cut-no-kitchen",
-        marks=xfail(
-            "The allergen hand-off is worded for a bakery: catalog._allergens always adds the facility_may_contain "
-            "sentence 'I don't know what else the kitchen handles', so a hair salon is said to have a kitchen"
-        ),
     ),
 ]
 
@@ -779,7 +719,6 @@ async def test_book_blowout_with_curls_books_the_hot_tool_blowout(plain_client: 
     assert "$70" in data["speak"]
 
 
-@pytest.mark.xfail(strict=True, reason=BLOW_OUT_SPLIT + "; the booking is then confirmed as a plain $55 Blowout")
 async def test_book_a_blow_out_with_curls_books_the_hot_tool_blowout(plain_client: Any) -> None:
     data = await call(plain_client, "book", {"item": "a blow out with curls", "start": f"{SAT}T10:00"})
     committed = (data.get("commitment") or {}).get("item_ref")
@@ -849,26 +788,13 @@ CATALOG: list[Any] = [
         {"query": "cheap haircut"},
         {"services/womens-cut", "services/mens-cut", "services/mens-cut-beard", "services/curly-cut", "services/kids-cut"},
         (), (), id="cheap-haircut",
-        marks=xfail(
-            "A price adjective ('cheap') is unexplained by every haircut item, and matching.matching only keeps "
-            "evaluate() hits (kind 1/2 need every leftover word explained), so the catalog says 'I couldn't find "
-            "that at Quillfern Hair Studio' to someone asking for haircuts"
-        ),
     ),
     pytest.param(
         {"category": "color"}, set(COLOR_ITEMS), ("$95", "$120"), ("8 color.",), id="what-color-services-grammar",
-        marks=xfail(
-            "Speech reads 'Quillfern Hair Studio has 8 color.': catalog._category_name returns the category's "
-            "spoken_name ('color', 'styling') and _list_sentence uses it as a plural count noun"
-        ),
     ),
     pytest.param(
         {"category": "styling"}, {"services/blowout", "services/blowout-hot-tool", "services/updo"}, ("$55",),
         ("3 styling.",), id="what-styling-grammar",
-        marks=xfail(
-            "Speech reads 'Quillfern Hair Studio has 3 styling.' (same cause as the color listing: the category's "
-            "spoken_name is used as a plural count noun)"
-        ),
     ),
 ]
 
@@ -902,10 +828,6 @@ FIND_BUSINESS: list[Any] = [
     pytest.param({"need": "somewhere to get my nails done"}, False, id="nails-done-none"),
     pytest.param(
         {"need": "nail salon"}, False, id="nail-salon",
-        marks=xfail(
-            "search.CATEGORY_SYNONYMS maps bare 'salon' to hair_salon, so 'nail salon' scores the category signal "
-            "and the reply is 'Quillfern Hair Studio can help' although the studio does no nails"
-        ),
     ),
 ]
 

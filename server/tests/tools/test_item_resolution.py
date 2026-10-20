@@ -26,6 +26,9 @@ pytestmark = pytest.mark.anyio
 
 KITCHEN = "The kitchen also handles wheat, milk, eggs, soy, sesame, tree nuts and peanuts."
 GF_FLAVORS = ("vanilla-bean-gf", "dark-chocolate-gf", "lemon-poppyseed-gf")
+NUT_FREE_ANSWER = (
+    "No, our kitchen isn't nut-free. We use tree nuts and peanuts every day, so we can't promise anything is free of nut traces."
+)
 
 
 async def call(client: Any, name: str, args: dict[str, Any]) -> dict[str, Any]:
@@ -366,19 +369,22 @@ async def test_find_item_asks_when_ambiguous(client: Any, business: str, item: s
 
 
 async def test_a_nut_free_cake_is_a_handoff_not_the_plain_cake(client: Any, deps: Any) -> None:
+    # The bakery published that its kitchen isn't nut-free (info/nut-free): that is the answer, verbatim.
     data = await call(client, "find_item", {"business_id": BAKERY, "item": "nut-free cake", "aspects": ["allergens"]})
-    assert data["speak"] == (
-        "I don't know whether the slice of cake, six inch case cake or custom cake comes nut-free. Want me to ask Rosa?"
-    )
-    assert data["handoff"]["reason"] == "unknown" and data["item"] is None
-    assert [f["fact_ref"] for f in data["facts"]] == [
-        "menu/slice-of-cake#spoken_name", "menu/case-cake-6in#spoken_name", "menu/custom-cake#spoken_name"
-    ]
+    assert data["speak"] == NUT_FREE_ANSWER
+    assert data["handoff"] is None and data["item"] is None
+    assert [f["fact_ref"] for f in data["facts"]][0] == "info/nut-free#answer_spoken"
     await assert_grounded(deps, data)
+    # The profile says nothing about vegan croissants, but every croissant's owner-confirmed allergens rule it out.
     single = await call(client, "find_item", {"business_id": BAKERY, "item": "vegan croissant"})
-    assert single["speak"] == "I don't know whether the butter croissant comes vegan. Want me to ask Rosa?"
-    assert single["item"]["item_ref"] == "menu/butter-croissant"
-    assert single["handoff"]["fact_ref"] == "menu/butter-croissant#dietary.tags"
+    assert single["speak"] == "The butter croissant contains milk and eggs, so it isn't vegan."
+    assert single["item"]["item_ref"] == "menu/butter-croissant" and single["handoff"] is None
+    assert "menu/butter-croissant#allergens.contains" in [f["fact_ref"] for f in single["facts"]]
+    await assert_grounded(deps, single)
+    # With nothing published and nothing ruled out, it stays an honest hand-off.
+    unknown = await call(client, "find_item", {"business_id": BAKERY, "item": "vegetarian scone"})
+    assert unknown["speak"] == "I don't know whether the cheddar chive scone comes vegetarian. Want me to ask Rosa?"
+    assert unknown["handoff"]["fact_ref"] == "menu/cheddar-chive-scone#dietary.tags"
 
 
 async def test_unknown_items_still_say_so(client: Any) -> None:
@@ -432,8 +438,8 @@ async def test_an_unmet_dietary_need_is_never_ordered_as_the_plain_item(stack: S
                 "details": {"servings": 10, "customer_name": "Sam Lee", "customer_phone": "+12175550100"},
             },
         )
-    expected = "I don't know whether the custom cake comes nut-free. Want me to ask Rosa?"
-    assert days["speak"] == expected and days["slots"] == [] and days["handoff"]["reason"] == "unknown"
+    expected = NUT_FREE_ANSWER  # the bakery's own "our kitchen isn't nut-free" (info/nut-free)
+    assert days["speak"] == expected and days["slots"] == [] and days["handoff"] is None
     assert order["speak"] == expected and order["status"] == "not_offered"
     assert order["reference"] is None and order["commitment"] is None
     assert elicit.seen == []  # no read-back was ever offered for confirmation

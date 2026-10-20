@@ -240,25 +240,18 @@ ITEM_XFAILS: list[Any] = [
     # ---- misspellings / ASR splits / colloquial words: the item exists, yet "I don't see that"
     pytest.param(
         "croisant", None, Item(ref="menu/butter-croissant"),
-        marks=xfail("'croisant' is now 'Did you mean butter croissant?' (a corrected misspelling is confirmed, never silently picked); this case expects the item itself"),
         id="misspelled-croisant",
     ),
     pytest.param(
         "sour dough bread", None, Item(ref="menu/country-sourdough"),
-        marks=xfail("ASR word split 'sour dough' is not joined: -> 'I don't see that' although sourdough is on the menu"),
         id="asr-split-sour-dough",
     ),
     pytest.param(
         "chalah", None, Item(ref="menu/challah"),
-        marks=xfail("'chalah' is now 'Did you mean challah?' (a corrected misspelling is confirmed, never silently picked); this case expects the item itself"),
         id="misspelled-chalah",
     ),
     pytest.param(
         "choc chip cookies", None, Item(ref="menu/brown-butter-chocolate-chip"),
-        marks=xfail(
-            "colloquial 'choc chip' not understood: -> 'I don't see that' (false 'not offered'). 'choc' is no form "
-            "of 'chocolate', and a word is only left over beside an option choice the phrase names (the cookie has none)"
-        ),
         id="colloquial-choc-chip",
     ),
     pytest.param(
@@ -267,82 +260,47 @@ ITEM_XFAILS: list[Any] = [
     ),
     pytest.param(
         "wheat free cookie", None, Item(ref="menu/flourless-chocolate-crinkle"),
-        marks=xfail(
-            "'wheat free' is not a dietary phrase: -> 'I don't see that' although the flourless chocolate crinkle "
-            "is gluten-free and its confirmed allergens are only eggs and soy"
-        ),
         id="wheat-free-cookie",
     ),
     # ---- head counts nobody (or only the custom cake) can serve
     pytest.param(
         "a cake for 100 people", ["price"],
         Item(ref="menu/custom-cake", says=("three tier cake, which serves up to 72",), never=("slice of cake",)),
-        marks=xfail(
-            "no item serves 100, so every cake ties and it asks 'Did you mean slice of cake, six inch case cake or "
-            "custom cake?' (a slice for 100 people); 'wedding cake for 150 guests' correctly says the biggest serves 72"
-        ),
         id="cake-for-100-people",
     ),
     pytest.param(
         "a big cake for a party of 60", ["price"], Item(ref="menu/custom-cake", never=("I don't see that",)),
-        marks=xfail("'party of 60' is not read as a head count and 'big'/'party' are unexplained: -> 'I don't see that' (false)"),
         id="party-of-60",
     ),
     # ---- dietary needs the profile DOES answer (or must caveat), handled as unknown or unsafe
     pytest.param(
         "celiac safe bread", None, Item(ref="menu/gluten-free-sandwich-loaf", says=("celiac",)),
-        marks=xfail(
-            "SAFETY: 'celiac' maps to gluten_free and the answer is 'The gluten-free sandwich loaf is gluten-free. ... $12.' "
-            "without the profile's 'we don't recommend them for people with celiac disease' (recommended_for_celiac=false)"
-        ),
         id="celiac-safe-bread",
     ),
     pytest.param(
         "dairy free cookie", None, Item(never=MILK_COOKIES),
-        marks=xfail(
-            "offers cookies whose owner-confirmed allergens include milk as maybe dairy-free ('I don't know whether the "
-            "brown butter chocolate chip cookie, oatmeal raisin cookie or peanut butter cookie comes dairy-free'); the "
-            "vegan ginger molasses cookie is never mentioned"
-        ),
         id="dairy-free-cookie",
     ),
     pytest.param(
         "egg free cookie", None, Item(never=MILK_COOKIES),
-        marks=xfail(
-            "offers cookies whose owner-confirmed allergens include eggs as maybe egg-free ('I don't know whether the "
-            "brown butter chocolate chip cookie, oatmeal raisin cookie or peanut butter cookie comes egg-free')"
-        ),
         id="egg-free-cookie",
     ),
     pytest.param(
         "sugar free cake", None, Item(says=("don't make sugar-free cakes",), never=("I don't know",)),
-        marks=xfail("profile says 'We don't make sugar-free cakes' (info/not-offered) but find_item says 'I don't know whether ... comes sugar-free'"),
         id="sugar-free-cake",
     ),
     pytest.param(
         "gluten free vegan cake", None, Item(says=("both gluten-free and vegan",), never=("I don't know",)),
-        marks=xfail(
-            "profile says 'No, we can't make a cake that is both gluten-free and vegan' (info/gluten-free-and-vegan) but "
-            "find_item says 'I don't know whether the slice of cake, six inch case cake or custom cake comes gluten-free and vegan'"
-        ),
         id="gluten-free-vegan-cake",
     ),
     pytest.param(
         "nut free cookies", None, Item(says=("isn't nut-free",), never=("cookie dozen",)),
-        marks=xfail(
-            "profile says the kitchen isn't nut-free (info/nut-free) but find_item says 'I don't know whether the cookie "
-            "dozen comes nut-free' (and narrows 'cookies' to the cookie dozen only)"
-        ),
         id="nut-free-cookies",
     ),
     # ---- speech coherence
     pytest.param(
         "gluten free 8 inch cake", ["price"],
         Item(ref="menu/custom-cake", says=("gluten-free cake flavors for $12 more per tier. They are gluten-free vanilla bean",)),
-        marks=xfail(
-            "the flavor list is detached from its sentence: 'The custom cake has gluten-free cake flavors ... For the custom "
-            "cake, the size can be eight inch round for $84. They are gluten-free vanilla bean, ...' ('They' = sizes?)"
-        ),
         id="gluten-free-8-inch-they-are",
     ),
 ]
