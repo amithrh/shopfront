@@ -39,6 +39,7 @@ different topics that explain as much of the question and score within `AMBIGUIT
 the topic the question names.
 """
 
+import re
 import unicodedata
 from collections.abc import Iterable, Sequence
 from typing import Annotated, Any
@@ -184,6 +185,22 @@ def place_units(profile: Profile) -> tuple[tuple[str, ...], ...]:
             names += [str(place) for place in area.get("localities") or ()]
     units = {tuple(normalize(name).split()) for name in names}
     return tuple(sorted((u for u in units if len(u) >= 2), key=lambda u: (-len(u), u)))
+
+
+_PLACE_AFTER = re.compile(
+    r"\b(?:to|in|near|around|into|out to|over to|up to|down to)\s+"
+    r"((?:[A-Z][\w'.-]*(?:\s+[A-Z][\w'.-]*){0,3})|\d{5}(?:-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d)"
+)
+"""A place the customer names after a place preposition: a capitalised name ("to Lake Oswego"), a ZIP code
+or a Canadian postal code. Capitalisation is what tells "to Beaverton" from "to cancel"."""
+
+
+def named_places(question: str, units: Sequence[tuple[str, ...]] = ()) -> frozenset[str]:
+    """The content words of the places `question` names (see `_PLACE_AFTER`)."""
+    words: set[str] = set()
+    for match in _PLACE_AFTER.finditer(question):
+        words |= tokens(match.group(1), units)
+    return frozenset(words)
 
 
 def tokens(text: str, units: Sequence[tuple[str, ...]] = ()) -> frozenset[str]:
@@ -391,6 +408,11 @@ def best_entry(profile: Profile, question: str, topic: str | None) -> tuple[str,
     entries = profile.knowledge_entries()
     frequency = document_frequency([entry for _module_id, entry in entries], units)
     in_answers = answer_frequency([entry for _module_id, entry in entries], units)
+    # "Do you deliver to Beaverton?": a place the customer names is where, not what, they ask about. A
+    # place the business never mentions is left out of the match (one it does mention still counts).
+    unknown_places = {w for w in named_places(question, units) if not frequency.get(w) and not in_answers.get(w)}
+    if wanted - unknown_places:
+        wanted = wanted - unknown_places
     kinds = catalog_kinds(profile)
     scored: list[tuple[tuple[int, int], float, int, str, JsonObj]] = []
     for index, (module_id, entry) in enumerate(entries):

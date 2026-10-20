@@ -108,3 +108,19 @@ def test_a_lone_rare_word_needs_the_rest_of_the_question_explained() -> None:
     frequency = {"cake": 3, "tomorrow": 1}
     assert not knowledge.decisive(knowledge.tokens("what's the weather like tomorrow"), entry, frequency)
     assert knowledge.decisive(knowledge.tokens("a case cake for tomorrow"), entry, frequency)
+
+
+@pytest.mark.parametrize(
+    "question",
+    ["Do you deliver to Beaverton?", "Can you deliver to Lake Oswego?", "Do you deliver in 97225?", "Do you deliver?"],
+)
+def test_a_place_the_business_never_mentions_does_not_hide_the_policy(live_raw_profiles: dict[str, dict[str, Any]], question: str) -> None:
+    profile = loaded(live_raw_profiles["thimbleberry-bakehouse"])
+    match = knowledge.best_entry(profile, question, None)
+    assert match is not None and match[1]["id"] == "delivery", question
+
+
+def test_named_places_are_capitalised_names_or_postal_codes_after_a_place_word() -> None:
+    assert knowledge.named_places("Do you deliver to Beaverton?") == {"beaverton"}
+    assert knowledge.named_places("Do you come out to 80211?") == {"80211"}
+    assert knowledge.named_places("Can I go to cancel it?") == frozenset()
