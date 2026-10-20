@@ -58,7 +58,16 @@ from askonce_server.tools.context import anonymous_nonce, finish, get_deps, live
 from askonce_server.tools.discovery import BusinessId
 from askonce_server.tools.schemas import AvailabilityResult, Card, CardAction, CardLine, CommitmentResult, SlotView
 
-ItemArg = Annotated[str, Field(description="Service or item as the customer said it, or an item ref.", max_length=120)]
+ItemArg = Annotated[
+    str,
+    Field(
+        description=(
+            "The service or item as the customer said it, with every option, size, flavor, diet and head count "
+            "they mentioned (e.g. 'half sheet gluten-free chocolate cake for 30 people'), or an item ref."
+        ),
+        max_length=160,
+    ),
+]
 StartArg = Annotated[
     str,
     Field(description="Requested start, local ISO-8601 like 2026-10-17T10:00 (business timezone).", max_length=40),
@@ -71,8 +80,9 @@ DetailsArg = Annotated[
     dict[str, DetailValue] | None,
     Field(
         description=(
-            "Answers to the business's questions keyed by field key (e.g. customer_name). After a "
-            "needs_info result, answer with the keys listed in missing_fields."
+            "Everything the customer already said that the request needs, so they are never asked twice: name, "
+            "phone, email, number of people or servings, message, dietary needs, notes. Plain key names work "
+            "(name, phone, people); after a needs_info result, use the keys listed in missing_fields."
         )
     ),
 ]
