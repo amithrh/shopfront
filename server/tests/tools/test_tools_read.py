@@ -273,6 +273,23 @@ async def test_service_area(client: Any, deps: Any, args: dict[str, Any], served
     await assert_grounded(deps, data)
 
 
+async def test_service_area_at_a_shop_answers_from_its_delivery_policy(client: Any, deps: Any) -> None:
+    # "Do you deliver to Beaverton?" routed to check_service_area at a bakery: the website answers it
+    # (pickup only), so the reply is that policy, cited, not a hand-off to the owner.
+    data = await call(client, "check_service_area", {"business_id": BAKERY, "locality": "Beaverton"})
+    policy = await call(client, "ask_policy", {"business_id": BAKERY, "question": "Do you deliver to Beaverton?"})
+    assert data["handoff"] is None and data["served"] is None
+    assert data["speak"] == policy["speak"] and data["facts"] == policy["facts"]
+    assert data["card"]["citations"]
+    await assert_grounded(deps, data)
+
+
+async def test_service_area_at_a_salon_without_a_matching_policy_still_hands_off(client: Any, deps: Any) -> None:
+    data = await call(client, "check_service_area", {"business_id": SALON, "locality": "Round Rock"})
+    assert data["handoff"]["reason"] == "not_offered" and data["handoff"]["tool"] == "ask_owner"
+    await assert_grounded(deps, data)
+
+
 # ---------------------------------------------------------------------------- tenant gate & grounding sweep
 
 

@@ -29,6 +29,7 @@ from askonce_server.tools.confirm import (
 )
 from askonce_server.tools.context import anonymous_nonce, finish, get_deps, live_profile, principal, tool_span
 from askonce_server.tools.discovery import BusinessId
+from askonce_server.tools.knowledge import stated_policy_answer
 from askonce_server.tools.schemas import Card, CardLine, CommitmentResult, ServiceAreaResult
 
 _POSTAL_CODE = re.compile(r"^[A-Za-z0-9]{2,5}[ -]?[A-Za-z0-9]{2,5}$|^[A-Za-z0-9]{3,10}$")
@@ -55,7 +56,9 @@ async def check_service_area(
     locality: Annotated[str | None, Field(description="Town or neighbourhood of the job.", max_length=60)] = None,
     module_id: AnyModuleArg = None,
 ) -> ServiceAreaResult:
-    """Whether the business serves a location (never asks for a full address)."""
+    """Whether a business that comes to the customer (home services: repairs, cleaning, installs) works
+    at a location (never asks for a full address). Not for delivery, shipping or pickup questions about
+    a shop, bakery or salon: use ask_policy for those."""
     deps = get_deps(ctx)
     with tool_span("check_service_area", business_id):
         profile = await live_profile(deps, business_id)
@@ -71,7 +74,15 @@ async def check_service_area(
         try:
             check = deps.quotes.check_service_area(profile, postal_code=postal, locality=town, module_id=module_id)
         except UnknownModule:
-            # A shop with no on-site jobs (a bakery, a salon) has no service area to check.
+            # A shop with no on-site jobs (a bakery, a salon) has no service area to check. Customers
+            # (and models) still ask it "do you deliver to X?": answer from the published delivery or
+            # pickup policy when there is one, so it never hands off a question the website answers.
+            stated = stated_policy_answer(profile, f"Do you deliver to {postal or town}?", "delivery")
+            if stated is not None:
+                result = ServiceAreaResult(
+                    speak=stated.speak, facts=stated.facts, card=stated.card, served=None
+                )
+                return finish(result, profile, outcome="policy")
             result = grounding.unknown_answer(
                 profile,
                 question=f"Do you come to customers in {postal or town}?",

@@ -33,7 +33,8 @@ body { min-height: 100vh; padding: 24px 16px 40px; }
 .topbar b { color: var(--text); font-weight: 700; }
 .body { display: grid; grid-template-columns: 1fr minmax(0, .92fr); gap: 3cqw; padding: 2cqw 3cqw; min-height: 0; }
 .body.solo { grid-template-columns: 1fr; }
-.talk { align-self: center; min-width: 0; }
+.talk { align-self: center; min-width: 0; transition: opacity .2s; }
+.screen.asking .talk, .screen.asking .cardslot { opacity: .12; }
 .heard { color: var(--muted); font-size: max(13px, 1.9cqw); margin: 0 0 1.4cqw; min-height: 1.3em; }
 .heard.live { font-style: italic; }
 .reply { font-size: max(18px, 3.5cqw); line-height: 1.22; margin: 0; letter-spacing: -0.005em; text-wrap: pretty; }
@@ -270,7 +271,8 @@ body { min-height: 100vh; padding: 24px 16px 40px; }
       card.citations.slice(0, 3).forEach((ct) => {
         const row = el("div", "cite"); const icon = el("span"); icon.innerHTML = CHECK; // static markup only
         const txt = el("div"); if (ct.quote) txt.append(el("q", null, ct.quote));
-        txt.append(el("small", null, ct.title ? ct.title + ", " + host(ct.url) : host(ct.url)));
+        const where = /^https?:/.test(ct.url) ? host(ct.url) : "";
+        txt.append(el("small", null, [ct.title, where].filter(Boolean).join(", ") || "Source"));
         row.append(icon, txt); box.append(row);
       });
       c.append(box);
@@ -305,7 +307,7 @@ body { min-height: 100vh; padding: 24px 16px 40px; }
   const YES = /^(yes|yeah|yep|sure|ok|okay|go ahead|please do|do it|confirm|correct|that's right|sounds good)\b/i;
   function answerAsk(action, content) {
     if (!currentAsk) return;
-    const id = currentAsk.id; currentAsk = null; $("ask").hidden = true;
+    const id = currentAsk.id; currentAsk = null; $("ask").hidden = true; screen.classList.remove("asking");
     post("answer", { ask_id: id, action, content: content || {} });
   }
   function answerByVoice(text) {
@@ -323,7 +325,7 @@ body { min-height: 100vh; padding: 24px 16px 40px; }
     if (target) { target.value = text; const next = [...form.elements].find((f) => f.name && !f.value); if (next) next.focus(); }
   }
   function showAsk(ev) {
-    currentAsk = ev; const box = $("ask"); box.replaceChildren(); box.hidden = false;
+    currentAsk = ev; const box = $("ask"); box.replaceChildren(); box.hidden = false; screen.classList.add("asking");
     box.append(el("p", null, ev.message));
     const props = (ev.schema && ev.schema.properties) || {};
     const required = new Set((ev.schema && ev.schema.required) || []);
@@ -385,7 +387,7 @@ body { min-height: 100vh; padding: 24px 16px 40px; }
         break;
       case "card": showCard(ev.card); break;
       case "ask": showAsk(ev); break;
-      case "ask_done": if (currentAsk && currentAsk.id === ev.id) { currentAsk = null; $("ask").hidden = true; } break;
+      case "ask_done": if (currentAsk && currentAsk.id === ev.id) { currentAsk = null; $("ask").hidden = true; screen.classList.remove("asking"); } break;
       case "reply":
         $("reply").textContent = ev.text; $("reply").classList.remove("idle"); logLine("bot", ev.text);
         speak(ev.text).then(() => { if (lastInputWasVoice && /\?\s*$/.test(ev.text) && !currentAsk) listen(); });

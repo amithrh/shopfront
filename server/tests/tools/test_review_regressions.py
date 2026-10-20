@@ -516,10 +516,15 @@ async def test_locality_is_matched_loosely_and_never_dropped(client: Any, need: 
 # ---------------------------------------------------------------------------- VUX-6
 
 
-@pytest.mark.parametrize("business", [BAKERY, SALON])
-async def test_service_area_for_a_shop_without_on_site_jobs(client: Any, business: str) -> None:
-    data = await call(client, "check_service_area", {"business_id": business, "postal_code": "97202"})
+async def test_service_area_for_a_shop_without_on_site_jobs(client: Any) -> None:
+    data = await call(client, "check_service_area", {"business_id": SALON, "postal_code": "97202"})
     assert data["served"] is None and "doesn't take on-site job requests" in data["speak"]
+
+
+async def test_service_area_for_a_shop_with_a_delivery_policy_states_it(client: Any) -> None:
+    # The bakery's website says it doesn't deliver: that is the answer, not a hand-off to Rosa.
+    data = await call(client, "check_service_area", {"business_id": BAKERY, "postal_code": "97202"})
+    assert data["served"] is None and data["handoff"] is None and "picked up at the bakery" in data["speak"]
 
 
 # ---------------------------------------------------------------------------- VUX-7

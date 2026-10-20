@@ -309,8 +309,10 @@ async def ask_policy(
         str | None, Field(description="Optional topic: deposit, cancellation, parking, payment...", max_length=40)
     ] = None,
 ) -> PolicyResult:
-    """Answer a policy or FAQ question from the business's published policies (returned verbatim, with
-    the source on the card). If no entry matches, the reply offers to ask the owner instead of guessing."""
+    """Answer a policy or FAQ question from the business's published policies and the owner's earlier
+    answers (returned verbatim, with the source on the card): delivery, payment, deposits, cancellation,
+    parking, gift cards, "do you..." questions. If no entry matches, the reply offers to ask the owner
+    instead of guessing."""
     deps = get_deps(ctx)
     with tool_span("ask_policy", business_id):
         profile = await live_profile(deps, business_id)
@@ -337,20 +339,38 @@ async def ask_policy(
                 profile, question=question, fact_ref=answer.text, result_type=PolicyResult, topic=topic
             )
             return finish(result, profile, outcome="handoff")
-        facts: list[Fact] = [answer.fact]  # type: ignore[list-item]
-        facts += [s.fact for s in fact_states if s.fact is not None]
-        card_text: Any = entry.get("answer_card")
-        result = PolicyResult(
-            speak=verbatim(str(answer.value)),
-            facts=facts,
-            card=Card(
-                kind="policy",
-                title=speech.capitalize(str(entry.get("topic") or "Policy").replace("_", " ")),
-                subtitle=profile.name,
-                lines=[CardLine(label="Answer", value=str(card_text or answer.value))],
-                citations=grounding.citations_for(profile, facts),
-            ),
-            entry_ref=entry_ref,
-            topic=str(entry.get("topic") or "") or None,
-        )
-        return finish(result, profile, outcome="ok")
+        return finish(_stated_policy(profile, entry_ref, entry, answer, fact_states), profile, outcome="ok")
+
+
+def _stated_policy(profile: Profile, entry_ref: str, entry: JsonObj, answer: Any, fact_states: Any) -> PolicyResult:
+    """The result for a policy entry whose answer is statable (`answer.ok`): verbatim, with its sources."""
+    facts: list[Fact] = [answer.fact]
+    facts += [s.fact for s in fact_states if s.fact is not None]
+    card_text: Any = entry.get("answer_card")
+    return PolicyResult(
+        speak=verbatim(str(answer.value)),
+        facts=facts,
+        card=Card(
+            kind="policy",
+            title=speech.capitalize(str(entry.get("topic") or "Policy").replace("_", " ")),
+            subtitle=profile.name,
+            lines=[CardLine(label="Answer", value=str(card_text or answer.value))],
+            citations=grounding.citations_for(profile, facts),
+        ),
+        entry_ref=entry_ref,
+        topic=str(entry.get("topic") or "") or None,
+    )
+
+
+def stated_policy_answer(profile: Profile, question: str, topic: str | None = None) -> PolicyResult | None:
+    """The published (or owner-answered) policy that answers `question`, when one matches and is
+    statable; None otherwise (unknown or disputed: the caller keeps its own hand-off)."""
+    match = best_entry(profile, question, topic)
+    if match is None:
+        return None
+    module_id, entry, _score = match
+    entry_ref = f"{module_id}/{entry['id']}"
+    answer, fact_states = grounding.knowledge_answer(profile, entry_ref, entry)
+    if not answer.ok:
+        return None
+    return _stated_policy(profile, entry_ref, entry, answer, fact_states)
