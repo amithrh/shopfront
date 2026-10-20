@@ -11,7 +11,7 @@ from typing import Any
 
 import pytest
 
-from askonce_server.app.learning import KnowledgeLearner, learned_document
+from askonce_server.app.learning import KnowledgeLearner, learned_document, polarity
 from askonce_server.canonical import profile_sha256
 from askonce_server.domain.services.owner import OwnerDecisionInput
 from askonce_server.tools.render import OWNER_ANSWER_URN
@@ -86,3 +86,54 @@ def test_learned_document_shape(raw_profiles: dict[str, Any]) -> None:
     assert entry["provenance"] == {"owner_confirmed": True, "evidence": [{"url": f"{OWNER_ANSWER_URN}h_abc123", "quote": "Yes, from $25."}]}
     assert doc["revision"] == raw_profiles[BAKERY]["revision"] + 1
     assert any(s["url"] == f"{OWNER_ANSWER_URN}h_abc123" and s["kind"] == "owner_answer" for s in doc["sources"].values())
+
+
+DELIVERY_QUESTION = "Do you come to customers in Beaverton?"
+DELIVERY_ANSWER = "Yes, we deliver cakes to Beaverton for a $15 fee"
+
+
+async def test_an_answer_that_contradicts_the_website_disputes_the_fact_instead_of_publishing(
+    plain_client: Any, deps: Any
+) -> None:
+    before_policy = (await plain_client.call_tool(
+        "ask_policy", {"business_id": BAKERY, "question": "Do you deliver cakes to Beaverton?"})).structured_content
+    assert "don't deliver" in before_policy["speak"]
+
+    await plain_client.call_tool("ask_owner", {"business_id": BAKERY, "question": DELIVERY_QUESTION})
+    before = await deps.profiles.get(BAKERY)
+    commitment = await _pending_question(deps)
+    await deps.owner.decide(BAKERY, commitment.commitment_id,
+                            OwnerDecisionInput(decision="answer", values={"answer": DELIVERY_ANSWER}))
+
+    after = await deps.profiles.get(BAKERY)
+    assert after.revision == before.revision + 1 and after.is_live
+    # No second, opposite cited answer was published ...
+    owner_entries = [e for _m, e in after.knowledge_entries() if e.get("topic") == "owner_answer"]
+    assert owner_entries == []
+    # ... the website fact is disputed instead, with both readings for the owner to settle.
+    disputes = [q for q in after.open_questions() if q["kind"] == "contradiction"]
+    assert len(disputes) == 1
+    assert disputes[0]["targets"] == ["info/delivery#answer_spoken", "info/delivery#facts.delivery_available"]
+    assert [c["evidence"]["url"] for c in disputes[0]["candidates"]][1] == f"{OWNER_ANSWER_URN}{commitment.commitment_id}"
+    runs = after.raw["certification"]["runs"]
+    assert runs[-1]["profile_sha256"] == profile_sha256(after.to_dict())  # L7
+
+    for question in ("Do you deliver cakes to Beaverton?", "Can you deliver to Beaverton?"):
+        got = (await plain_client.call_tool("ask_policy", {"business_id": BAKERY, "question": question})).structured_content
+        assert "don't deliver" not in got["speak"] and "$15" not in got["speak"], question
+        assert got["facts"] == [] and got["handoff"] is not None  # withheld until the owner settles it
+
+
+async def test_a_non_conflicting_answer_still_publishes(deps: Any, clock: Any, settings: Any) -> None:
+    learner = KnowledgeLearner(deps.profiles, schema_path=settings.profile_schema_path, clock=clock)
+    result = await learner.learn(BAKERY, commitment_id="h_gift", question=QUESTION,
+                                 answer="Yes, gift cards from $25 at the counter.")
+    assert result.status == "learned"
+    assert not [q for q in result.profile.open_questions() if q["kind"] == "contradiction"]
+
+
+def test_polarity() -> None:
+    assert polarity("Yes, we deliver cakes to Beaverton for a $15 fee") is True
+    assert polarity("No, we don't deliver. Every cake is picked up at the bakery.") is False
+    assert polarity("We don’t take checks.") is False
+    assert polarity("We take cash and cards. We don't take checks.") is True
