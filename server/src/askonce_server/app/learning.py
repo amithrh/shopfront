@@ -12,6 +12,14 @@ said "I don't know, want me to ask Rosa?"), `KnowledgeLearner.learn` writes a ne
     rule (the new answer is statable). If any check fails, nothing is published and the customer who
     asked still gets the owner's answer through their task as before.
 
+An answer that contradicts a fact the profile already states is never published beside it (two
+opposite cited answers to the same question would break "never guesses"). When the new answer
+overlaps a statable knowledge entry (the question matches it, or question and answer share at least
+`OVERLAP_WORDS` content words with it) and the two take opposite yes/no stands, the learner instead
+publishes a revision with an open, non-blocking `contradiction` question targeting that entry: both
+readings are its candidates, each with its own evidence, so the old fact is withheld (L6, "Rosa is
+double-checking") until the owner resolves it through the owner questions flow.
+
 The store write is a compare-and-swap on the revision the answer was learned from, so a concurrent
 edit is never overwritten (the learner simply skips; the answer is still on the request).
 """
@@ -29,9 +37,9 @@ from askonce_server import errors
 from askonce_server.canonical import profile_sha256
 from askonce_server.clock import Clock
 from askonce_server.profile.loader import load_profile
-from askonce_server.profile.model import Profile
+from askonce_server.profile.model import JsonObj, Profile
 from askonce_server.profile.store import ProfileStore
-from askonce_server.tools import grounding
+from askonce_server.tools import grounding, knowledge
 from askonce_server.tools.guard import sanitize_speak
 from askonce_server.tools.render import OWNER_ANSWER_URN
 
@@ -47,10 +55,54 @@ _ADDRESSES_AI = re.compile(
 
 @dataclass(frozen=True)
 class Learned:
-    status: str  # learned | skipped | rejected
+    status: str  # learned | disputed | skipped | rejected
     detail: str
     profile: Profile | None = None
     entry_ref: str | None = None
+
+
+OVERLAP_WORDS = 2
+"""Content words the new question + answer must share with an entry for the two to be about one thing."""
+_POLARITY_WORDS = frozenset({"yes", "yeah", "yep", "yup", "no", "nope", "not", "never", "dont", "doesnt", "cant", "cannot",
+                             "wont", "isnt", "arent", "sorry", "sure"})
+_LEADING_YES = re.compile(r"^\W*(yes|yeah|yep|yup|sure|of course|absolutely|definitely|certainly)\b", re.IGNORECASE)
+_LEADING_NO = re.compile(r"^\W*(no|nope|sorry)\b", re.IGNORECASE)
+_NEGATION = re.compile(
+    r"\b(not|never|unable|(do|does|did|ca|can|wo|is|are|was|were)n['’]?t|cannot)\b", re.IGNORECASE
+)
+
+
+def polarity(text: str) -> bool:
+    """The yes/no stand of an answer: a leading yes/no decides, else a negation in its first sentence."""
+    if _LEADING_YES.search(text):
+        return True
+    if _LEADING_NO.search(text):
+        return False
+    first = re.split(r"[.!?;]", text, maxsplit=1)[0]
+    return not _NEGATION.search(first)
+
+
+def conflicting_entry(profile: Profile, question: str, answer: str) -> tuple[str, JsonObj] | None:
+    """`(entry ref, entry)` of a statable knowledge entry the answer overlaps and contradicts, else None."""
+    units = knowledge.place_units(profile)
+    asked = (knowledge.tokens(question, units) | knowledge.tokens(answer, units)) - _POLARITY_WORDS
+    matched = knowledge.best_entry(profile, question, None)
+    stand = polarity(answer)
+    best: tuple[int, str, JsonObj] | None = None
+    for module_id, entry in profile.knowledge_entries():
+        ref = f"{module_id}/{entry['id']}"
+        shared = len(asked & (knowledge.entry_tokens(entry, units) | knowledge.answer_tokens(entry, units)))
+        is_match = matched is not None and matched[1] is entry
+        if not is_match and shared < OVERLAP_WORDS:
+            continue
+        if polarity(str(entry.get("answer_spoken") or "")) == stand:
+            continue
+        if not grounding.knowledge_answer(profile, ref, entry)[0].ok:
+            continue  # already withheld (disputed, unconfirmed safety): nothing is being said
+        rank = shared + (100 if is_match else 0)
+        if best is None or rank > best[0]:
+            best = (rank, ref, entry)
+    return None if best is None else (best[1], best[2])
 
 
 def _slug(text: str) -> str:
@@ -113,6 +165,45 @@ def learned_document(
     return out, f"{module_id}/{entry_id}"
 
 
+def disputed_document(
+    doc: dict[str, Any], *, commitment_id: str, question: str, answer: str, answered_at: str,
+    entry_ref: str, entry: JsonObj,
+) -> tuple[dict[str, Any], str]:
+    """The next revision of `doc` with an open contradiction between `entry` and the owner's answer.
+    Returns (doc, question id). The entry's answer and facts are withheld while the question is open."""
+    out = dict(doc)
+    urn = f"{OWNER_ANSWER_URN}{commitment_id}"
+    question_id = f"conflict-{_slug(commitment_id)}"[:64]
+    stated = str(entry.get("answer_spoken") or "")
+    evidence = (entry.get("provenance") or {}).get("evidence") or []
+    targets = [f"{entry_ref}#answer_spoken", *(f"{entry_ref}#facts.{key}" for key in sorted((entry.get("facts") or {}).keys()))]
+    sources = dict(out["sources"])
+    sources[f"owner-answer-{_slug(commitment_id)}"[:64]] = {
+        "kind": "owner_answer",
+        "url": urn,
+        "title": "Owner's answer"[:120],
+        "retrieved_at": answered_at,
+        "question_id": question_id,
+    }
+    out["sources"] = sources
+    out["open_questions"] = [*doc.get("open_questions", []), {
+        "id": question_id,
+        "kind": "contradiction",
+        "targets": targets,
+        "prompt": f'Customers are told "{stated}" You answered "{answer}" Which is right?'[:300],
+        "why": f'A customer asked "{question}" and your answer disagrees with what the profile says.'[:300],
+        "candidates": [
+            {"value": stated, "label": "What customers are told now"[:120], "evidence": dict(evidence[0])},
+            {"value": answer[:1000], "label": "Your answer"[:120], "evidence": {"url": urn, "quote": answer[:500]}},
+        ],
+        "blocking": False,  # the profile stays live; only the disputed fact is withheld (L6)
+        "status": "open",
+    }]
+    out["revision"] = int(doc["revision"]) + 1
+    out["updated_at"] = answered_at
+    return out, question_id
+
+
 class KnowledgeLearner:
     def __init__(self, profiles: ProfileStore, *, schema_path: Path, clock: Clock) -> None:
         self.profiles = profiles
@@ -128,10 +219,35 @@ class KnowledgeLearner:
         if current is None or not current.is_live:
             return Learned("skipped", "business is not live")
         now = self.clock.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+        answer = answer.strip()
+        conflict = conflicting_entry(current, question, answer)
+        if conflict is not None:
+            old_ref, old_entry = conflict
+            doc, question_id = disputed_document(current.to_dict(), commitment_id=commitment_id, question=question,
+                                                 answer=answer, answered_at=now, entry_ref=old_ref, entry=old_entry)
+            published = await self._certify_and_publish(business_id, current, doc, now)
+            if isinstance(published, Learned):
+                return published
+            logger.warning("ask-once: %s answer contradicts %s; opened %s instead of publishing",
+                           business_id, old_ref, question_id)
+            return Learned("disputed", f"the answer contradicts {old_ref}; open question {question_id}",
+                           published, old_ref)
         doc, entry_ref = learned_document(
-            current.to_dict(), commitment_id=commitment_id, question=question, answer=answer.strip(), answered_at=now
+            current.to_dict(), commitment_id=commitment_id, question=question, answer=answer, answered_at=now
         )
-        # Incremental certification of the new revision.
+        published = await self._certify_and_publish(
+            business_id, current, doc, now, statable_ref=f"{entry_ref}#answer_spoken"
+        )
+        if isinstance(published, Learned):
+            return published
+        logger.info("ask-once: %s revision %s learned %s", business_id, doc["revision"], entry_ref)
+        return Learned("learned", "published", published, entry_ref)
+
+    async def _certify_and_publish(
+        self, business_id: str, current: Profile, doc: dict[str, Any], now: str, *, statable_ref: str | None = None
+    ) -> Profile | Learned:
+        """Incremental certification of the new revision, then a compare-and-swap write. Returns the
+        published profile, or the `Learned` outcome that explains why nothing was published."""
         certification = dict(doc.get("certification") or {})
         doc["certification"] = {"status": "draft", "runs": list(certification.get("runs", []))}
         sha = profile_sha256(doc)
@@ -144,11 +260,10 @@ class KnowledgeLearner:
         except errors.ProfileInvalid as exc:
             logger.warning("ask-once: answer for %s not learned: %s", business_id, exc)
             return Learned("rejected", f"the new revision does not validate: {exc}"[:300])
-        if not grounding.state(loaded.profile, f"{entry_ref}#answer_spoken").ok:
+        if statable_ref is not None and not grounding.state(loaded.profile, statable_ref).ok:
             return Learned("rejected", "the learned answer is not statable")
         try:
             await self.profiles.put(loaded.profile, expected_revision=current.revision)
         except errors.ConcurrencyConflict:
             return Learned("skipped", "the profile changed meanwhile")
-        logger.info("ask-once: %s revision %s learned %s", business_id, doc["revision"], entry_ref)
-        return Learned("learned", "published", loaded.profile, entry_ref)
+        return loaded.profile
