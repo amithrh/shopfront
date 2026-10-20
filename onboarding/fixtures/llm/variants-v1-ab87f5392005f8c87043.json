@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-ab87f5392005f8c87043",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:28:35+00:00",
+ "answer": "We work across central Denver and a ring of nearby neighborhoods and suburbs. Our prices are the same everywhere we go.",
+ "questions": [
+  "Where do you provide your services in Denver?",
+  "Are there specific neighborhoods you don't service?",
+  "Is there a difference in pricing across different areas?",
+  "Do you service suburbs around Denver?",
+  "Are your rates consistent throughout your service area?",
+  "What regions in Denver are included in your service area?"
+ ]
+}

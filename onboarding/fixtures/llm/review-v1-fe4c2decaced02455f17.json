@@ -1,8 +1,0 @@
-{
- "key": "review-v1-fe4c2decaced02455f17",
- "kind": "review-v1",
- "model_id": "apac.amazon.nova-pro-v1:0",
- "cost_usd": 0.011785,
- "recorded_at": "2026-10-15T15:36:41+00:00",
- "text": "{\"contradictions\": [{\"fact_ids\": [\"F94\", \"F164\"], \"prompt\": \"Is the 80033 area served or not?\", \"why\": \"Service area page says 'extended', but How quotes work page says 'not_served'.\"}, {\"fact_ids\": [\"F165\", \"F105\"], \"prompt\": \"Is Wheat Ridge served or not?\", \"why\": \"How quotes work page says 'not_served', but Service area page says 'extended'.\"}, {\"fact_ids\": [\"F166\", \"F117\"], \"prompt\": \"Is Central Park in the extended area or not?\", \"why\": \"How quotes work page says 'extended', but Service area page says 'core'.\"}, {\"fact_ids\": [\"F168\", \"F65\"], \"prompt\": \"Is the 80211 area in the core or not?\", \"why\": \"About us page says 'core', but Service area page says 'extended'.\"}, {\"fact_ids\": [\"F169\", \"F65\"], \"prompt\": \"Is Denver in the core or not?\", \"why\": \"About us page says 'core', but Service area page says 'extended'.\"}, {\"fact_ids\": [\"F170\", \"F65\"], \"prompt\": \"Is Denver in the core or not?\", \"why\": \"Contact and quote requests page says 'core', but Service area page says 'extended'.\"}]}"
-}

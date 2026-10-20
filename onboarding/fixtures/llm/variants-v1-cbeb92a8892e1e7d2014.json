@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-cbeb92a8892e1e7d2014",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:28:35+00:00",
+ "answer": "A $79 diagnostic visit when we need to find the problem before we can price the fix.",
+ "questions": [
+  "When is a diagnostic visit charged at $79?",
+  "What situations require a diagnostic visit before pricing?",
+  "Is there a fee for identifying the problem before a repair?",
+  "How are complex issues handled in terms of pricing?",
+  "What does the $79 diagnostic visit cover?",
+  "In what cases is a diagnostic visit necessary before giving a quote?"
+ ]
+}

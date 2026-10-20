@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "quillfern",
   "revision": 1,
-  "updated_at": "2026-10-15T15:36:41Z",
+  "updated_at": "2026-10-20T07:51:36Z",
   "template": {
     "id": "salon",
     "version": "1.0"
@@ -72,6 +72,15 @@
             {
               "from": "2026-11-26",
               "reason_spoken": "Thanksgiving Day"
+            },
+            {
+              "from": "2026-12-24",
+              "to": "2026-12-25",
+              "reason_spoken": "Christmas Eve"
+            },
+            {
+              "from": "2027-01-01",
+              "reason_spoken": "New Year's Day"
             }
           ],
           "provenance": {
@@ -141,35 +150,6 @@
             }
           ]
         }
-      },
-      {
-        "id": "core-area",
-        "kind": "service_area",
-        "area": {
-          "postal_codes": [
-            "78702"
-          ],
-          "localities": [
-            "Austin"
-          ]
-        },
-        "provenance": {
-          "owner_confirmed": false,
-          "evidence": [
-            {
-              "url": "https://quillfern.example/index.html",
-              "quote": "1906 East Marigold Street, Suite B Austin, TX 78702"
-            },
-            {
-              "url": "https://quillfern.example/team.html",
-              "quote": "1906 East Marigold Street, Suite B Austin, TX 78702"
-            },
-            {
-              "url": "https://quillfern.example/contact.html",
-              "quote": "Quillfern Hair Studio 1906 East Marigold Street, Suite B Austin, TX 78702"
-            }
-          ]
-        }
       }
     ],
     "summary_spoken": "Quillfern is a three-chair hair studio in East Austin for cuts, color and blowouts.",
@@ -221,9 +201,9 @@
       "title": "Services",
       "categories": [
         {
-          "id": "hair",
-          "name": "hair",
-          "spoken_name": "hair"
+          "id": "color",
+          "name": "Color",
+          "spoken_name": "Color"
         },
         {
           "id": "cuts",
@@ -236,11 +216,6 @@
           "spoken_name": "Styling"
         },
         {
-          "id": "color-treatments",
-          "name": "Color Treatments",
-          "spoken_name": "Color Treatments"
-        },
-        {
           "id": "treatments",
           "name": "Treatments",
           "spoken_name": "Treatments"
@@ -248,149 +223,135 @@
       ],
       "items": [
         {
-          "id": "women-s-cut-and-style",
-          "name": "Women's cut & style",
-          "spoken_name": "Women's cut & style",
-          "description_spoken": "1 hr",
-          "category_ids": [
-            "hair"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 7800,
-            "currency": "USD",
-            "per": "each"
-          },
-          "duration_minutes": 60,
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Women's cut & style1 hr$78"
-              },
-              {
-                "url": "https://quillfern.example/services.html",
-                "quote": "Women's cut & style 1 hr Inés, Wren, June $78"
-              }
-            ]
-          }
-        },
-        {
-          "id": "men-s-cut",
-          "name": "Men's cut",
-          "spoken_name": "Men's cut",
-          "description_spoken": "30 min",
-          "category_ids": [
-            "hair"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 4200,
-            "currency": "USD",
-            "per": "each"
-          },
-          "duration_minutes": 30,
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Men's cut30 min$42"
-              },
-              {
-                "url": "https://quillfern.example/services.html",
-                "quote": "Men's cut 30 min Wren, June $42"
-              }
-            ]
-          }
-        },
-        {
-          "id": "blowout",
-          "name": "Blowout",
-          "spoken_name": "Blowout",
-          "description_spoken": "45 min",
-          "category_ids": [
-            "hair"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 5500,
-            "currency": "USD",
-            "per": "each"
-          },
-          "duration_minutes": 45,
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Blowout45 min$55"
-              },
-              {
-                "url": "https://quillfern.example/services.html",
-                "quote": "Blowout 45 min Wren, June $55"
-              }
-            ]
-          }
-        },
-        {
           "id": "balayage",
           "name": "Balayage",
           "spoken_name": "Balayage",
-          "description_spoken": "3 hrs 30 min to 4 hrs, depending on length",
+          "description_spoken": "Includes toner and a blowout.",
           "category_ids": [
-            "hair"
+            "color"
           ],
-          "duration_minutes": 210,
+          "price": {
+            "kind": "from",
+            "amount_cents": 24500,
+            "currency": "USD"
+          },
+          "options": [
+            {
+              "id": "length",
+              "name": "Length",
+              "required": true,
+              "choices": [
+                {
+                  "id": "balayage-shoulder-length-or-shorter",
+                  "name": "Balayage, shoulder length or shorter",
+                  "spoken_name": "shoulder length or shorter",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 24500,
+                    "currency": "USD"
+                  },
+                  "duration_minutes": 210
+                },
+                {
+                  "id": "balayage-past-the-shoulder-blades",
+                  "name": "Balayage, past the shoulder blades",
+                  "spoken_name": "past the shoulder blades",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 28500,
+                    "currency": "USD"
+                  },
+                  "duration_minutes": 240
+                }
+              ]
+            }
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/index.html",
                 "quote": "Balayage3 hrs 30 min to 4 hrs, depending on lengthfrom $245"
+              },
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Balayage, shoulder length or shorter*Includes toner and a blowout 3 hrs 30 min Inés $245"
+              },
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Balayage, past the shoulder blades*Includes toner and a blowout 4 hrs Inés $285"
+              }
+            ]
+          },
+          "attributes": {
+            "requires_deposit": true
+          }
+        },
+        {
+          "id": "womens-cut-and-style",
+          "name": "Women's cut & style",
+          "spoken_name": "Women's cut & style",
+          "category_ids": [
+            "cuts"
+          ],
+          "price": {
+            "kind": "fixed",
+            "amount_cents": 7800,
+            "currency": "USD"
+          },
+          "duration_minutes": 60,
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Women's cut & style 1 hr Inés, Wren, June $78"
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Women's cut & style1 hr$78"
               }
             ]
           }
         },
         {
-          "id": "kids-cut-ages-12-and-under",
-          "name": "Kids cut, ages 12 and under",
-          "spoken_name": "Kids cut, ages 12 and under",
-          "description_spoken": "30 min",
+          "id": "mens-cut",
+          "name": "Men's cut",
+          "spoken_name": "Men's cut",
           "category_ids": [
-            "hair"
+            "cuts"
           ],
           "price": {
             "kind": "fixed",
-            "amount_cents": 3000,
-            "currency": "USD",
-            "per": "each"
+            "amount_cents": 4200,
+            "currency": "USD"
           },
           "duration_minutes": 30,
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Men's cut 30 min Wren, June $42"
+              },
+              {
                 "url": "https://quillfern.example/index.html",
-                "quote": "Kids cut, ages 12 and under30 min$30"
+                "quote": "Men's cut30 min$42"
               }
             ]
           }
         },
         {
-          "id": "men-s-cut-and-beard-trim",
+          "id": "mens-cut-and-beard-trim",
           "name": "Men's cut & beard trim",
           "spoken_name": "Men's cut & beard trim",
-          "description_spoken": "Every cut includes a shampoo and a finish, except bang trims.",
           "category_ids": [
             "cuts"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 5500,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 45,
           "provenance": {
@@ -414,8 +375,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 9500,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 75,
           "provenance": {
@@ -432,15 +392,14 @@
           "id": "kids-cut",
           "name": "Kids cut",
           "spoken_name": "Kids cut",
-          "description_spoken": "Ages 12 and under",
+          "description_spoken": "Ages 12 and under.",
           "category_ids": [
             "cuts"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 3000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 30,
           "provenance": {
@@ -449,6 +408,10 @@
               {
                 "url": "https://quillfern.example/services.html",
                 "quote": "Kids cutAges 12 and under 30 min Wren, June $30"
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Kids cut, ages 12 and under30 min$30"
               },
               {
                 "url": "https://quillfern.example/policies.html",
@@ -461,15 +424,13 @@
           "id": "bang-trim",
           "name": "Bang trim",
           "spoken_name": "Bang trim",
-          "description_spoken": "Every cut includes a shampoo and a finish, except bang trims.",
           "category_ids": [
             "cuts"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 1500,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 15,
           "provenance": {
@@ -483,18 +444,44 @@
           }
         },
         {
+          "id": "blowout",
+          "name": "Blowout",
+          "spoken_name": "Blowout",
+          "category_ids": [
+            "styling"
+          ],
+          "price": {
+            "kind": "fixed",
+            "amount_cents": 5500,
+            "currency": "USD"
+          },
+          "duration_minutes": 45,
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Blowout 45 min Wren, June $55"
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Blowout45 min$55"
+              }
+            ]
+          }
+        },
+        {
           "id": "blowout-with-hot-tool-styling",
           "name": "Blowout with hot-tool styling",
           "spoken_name": "Blowout with hot-tool styling",
-          "description_spoken": "Curls or waves set with an iron or wand",
+          "description_spoken": "Curls or waves set with an iron or wand.",
           "category_ids": [
             "styling"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 7000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 60,
           "provenance": {
@@ -511,15 +498,13 @@
           "id": "special-occasion-updo",
           "name": "Special-occasion updo",
           "spoken_name": "Special-occasion updo",
-          "description_spoken": "Wedding parties of 3 or more: email us at least 4 weeks ahead so we can block out the chairs. We style in the studio only.",
           "category_ids": [
             "styling"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 11000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 75,
           "provenance": {
@@ -536,10 +521,12 @@
           "id": "color-consultation",
           "name": "Color consultation",
           "spoken_name": "Color consultation",
-          "description_spoken": "Services marked  need a $50 deposit when you book. We don't do color on Sundays.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
+          "price": {
+            "kind": "free"
+          },
           "duration_minutes": 15,
           "provenance": {
             "owner_confirmed": false,
@@ -549,6 +536,9 @@
                 "quote": "Color consultation 15 min Inés, Wren Free"
               }
             ]
+          },
+          "attributes": {
+            "requires_deposit": false
           }
         },
         {
@@ -557,8 +547,11 @@
           "spoken_name": "Patch test",
           "description_spoken": "For first-time color clients. Book it at least 72 hours before your color.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
+          "price": {
+            "kind": "free"
+          },
           "duration_minutes": 15,
           "provenance": {
             "owner_confirmed": false,
@@ -568,21 +561,23 @@
                 "quote": "Patch testFor first-time color clients. Book it at least 72 hours before your color. 15 min Inés, Wren Free"
               }
             ]
+          },
+          "attributes": {
+            "requires_deposit": false
           }
         },
         {
           "id": "root-touch-up",
           "name": "Root touch-up",
           "spoken_name": "Root touch-up",
-          "description_spoken": "Up to 1 inch of regrowth",
+          "description_spoken": "Up to 1 inch of regrowth.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 9500,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 90,
           "provenance": {
@@ -593,21 +588,22 @@
                 "quote": "Root touch-up*Up to 1 inch of regrowth 1 hr 30 min Inés, Wren $95"
               }
             ]
+          },
+          "attributes": {
+            "requires_deposit": true
           }
         },
         {
           "id": "all-over-color",
           "name": "All-over color",
           "spoken_name": "All-over color",
-          "description_spoken": "Services marked  need a $50 deposit when you book. We don't do color on Sundays.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 12000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 120,
           "provenance": {
@@ -618,21 +614,23 @@
                 "quote": "All-over color* 2 hrs Inés, Wren $120"
               }
             ]
+          },
+          "attributes": {
+            "requires_deposit": true
           }
         },
         {
           "id": "partial-highlights",
           "name": "Partial highlights",
           "spoken_name": "Partial highlights",
-          "description_spoken": "Includes toner and a blowout",
+          "description_spoken": "Includes toner and a blowout.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 15000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 150,
           "provenance": {
@@ -643,21 +641,23 @@
                 "quote": "Partial highlights*Includes toner and a blowout 2 hrs 30 min Inés $150"
               }
             ]
+          },
+          "attributes": {
+            "requires_deposit": true
           }
         },
         {
           "id": "full-highlights",
           "name": "Full highlights",
           "spoken_name": "Full highlights",
-          "description_spoken": "Includes toner and a blowout",
+          "description_spoken": "Includes toner and a blowout.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 19500,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 180,
           "provenance": {
@@ -668,66 +668,25 @@
                 "quote": "Full highlights*Includes toner and a blowout 3 hrs Inés $195"
               }
             ]
-          }
-        },
-        {
-          "id": "balayage-shoulder-length-or-shorter",
-          "name": "Balayage, shoulder length or shorter",
-          "spoken_name": "Balayage, shoulder length or shorter",
-          "description_spoken": "Includes toner and a blowout",
-          "category_ids": [
-            "color-treatments"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 24500,
-            "currency": "USD",
-            "per": "each"
           },
-          "duration_minutes": 210,
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/services.html",
-                "quote": "Balayage, shoulder length or shorter*Includes toner and a blowout 3 hrs 30 min Inés $245"
-              }
-            ]
-          }
-        },
-        {
-          "id": "balayage-past-the-shoulder-blades",
-          "name": "Balayage, past the shoulder blades",
-          "spoken_name": "Balayage, past the shoulder blades",
-          "description_spoken": "Includes toner and a blowout",
-          "category_ids": [
-            "color-treatments"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 28500,
-            "currency": "USD",
-            "per": "each"
-          },
-          "duration_minutes": 240,
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/services.html",
-                "quote": "Balayage, past the shoulder blades*Includes toner and a blowout 4 hrs Inés $285"
-              }
-            ]
+          "attributes": {
+            "requires_deposit": true
           }
         },
         {
           "id": "color-correction",
           "name": "Color correction",
           "spoken_name": "Color correction",
-          "description_spoken": "Color consultation required first",
+          "description_spoken": "Color consultation required first.",
           "category_ids": [
-            "color-treatments"
+            "color"
           ],
+          "price": {
+            "kind": "fixed",
+            "amount_cents": 9000,
+            "currency": "USD",
+            "per": "hour"
+          },
           "duration_minutes": 120,
           "provenance": {
             "owner_confirmed": false,
@@ -737,21 +696,23 @@
                 "quote": "Color correction*Color consultation required first 2 hrs minimum Inés $90 per hour"
               }
             ]
+          },
+          "attributes": {
+            "duration_is_minimum": true,
+            "requires_deposit": true
           }
         },
         {
           "id": "deep-conditioning",
           "name": "Deep conditioning",
           "spoken_name": "Deep conditioning",
-          "description_spoken": "Book them on their own or add them to any service.",
           "category_ids": [
             "treatments"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 3000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 15,
           "provenance": {
@@ -768,15 +729,13 @@
           "id": "scalp-treatment",
           "name": "Scalp treatment",
           "spoken_name": "Scalp treatment",
-          "description_spoken": "Book them on their own or add them to any service.",
           "category_ids": [
             "treatments"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 4000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 30,
           "provenance": {
@@ -800,8 +759,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 26000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "duration_minutes": 150,
           "provenance": {
@@ -821,12 +779,217 @@
       "title": "Policies and FAQ",
       "entries": [
         {
-          "id": "appointments",
+          "id": "about-us",
+          "topic": "about",
+          "question_variants": [
+            "Quillfern is a three-chair hair studio in East Austin for cuts, color and blowouts.",
+            "About us",
+            "How many chairs are there?",
+            "Where is located in Austin?",
+            "What type of lighting is used in the mirrors?",
+            "Does match the color seen in-studio outdoors?",
+            "Is a good place for cuts and color?"
+          ],
+          "answer_spoken": "Quillfern is a three-chair hair studio in East Austin for cuts, color and blowouts. Every mirror is lit with daylight-balanced bulbs, so the color you see in the chair is the color you see outside.",
+          "applies_to": [
+            "services/blowout"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Quillfern is a three-chair hair studio in East Austin for cuts, color and blowouts. Every mirror is lit with daylight-balanced bulbs, so the color you see in the chair is the color you see outside."
+              }
+            ]
+          }
+        },
+        {
+          "id": "about-us-open-tuesday",
+          "topic": "about",
+          "question_variants": [
+            "Open Tuesday through Sunday.",
+            "What are the opening days?",
+            "Is open on Mondays?",
+            "When does close during the week?",
+            "Can I visit on a Monday?",
+            "What day of the week is closed?",
+            "Are there any days doesn't operate?"
+          ],
+          "answer_spoken": "Open Tuesday through Sunday. Closed Mondays.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Open Tuesday through Sunday. Closed Mondays. 1906 East Marigold Street, Suite B, Austin, TX 78702"
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "1906 East Marigold Street, Suite B Austin, TX 78702"
+              }
+            ]
+          }
+        },
+        {
+          "id": "about-us-east-marigold",
+          "topic": "about",
+          "question_variants": [
+            "1906 East Marigold Street, Suite B, Austin, TX 78702",
+            "Where can I find in Austin?",
+            "What street is located on?",
+            "Can you provide the full address?",
+            "Is on East Marigold Street?",
+            "What suite number is in?"
+          ],
+          "answer_spoken": "1906 East Marigold Street, Suite B, Austin, TX 78702",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Open Tuesday through Sunday. Closed Mondays. 1906 East Marigold Street, Suite B, Austin, TX 78702"
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "1906 East Marigold Street, Suite B Austin, TX 78702"
+              }
+            ]
+          }
+        },
+        {
+          "id": "services-and-price",
+          "topic": "services_and_price",
+          "question_variants": [
+            "Services & price",
+            "What we do, how long it takes, who does it and what it costs.",
+            "How much time does each appointment take?",
+            "Who performs the services?",
+            "What is the cost of services?",
+            "Do appointments have a cancellation policy?"
+          ],
+          "answer_spoken": "What we do, how long it takes, who does it and what it costs. Appointments start every 15 minutes, and every appointment is covered by our cancellation policy.†",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "What we do, how long it takes, who does it and what it costs. Appointments start every 15 minutes, and every appointment is covered by our cancellation policy.†"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-team",
+          "topic": "the_team",
+          "question_variants": [
+            "The team",
+            "Three stylists, each with their own lane.",
+            "How many stylists work?",
+            "Does match clients with stylists?",
+            "Who are the stylists?",
+            "Can I choose my stylist?",
+            "How does assign stylists to clients?"
+          ],
+          "answer_spoken": "Three stylists, each with their own lane. Ask for anyone by name, or tell us what you're after and we'll match you with the right chair.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Three stylists, each with their own lane. Ask for anyone by name, or tell us what you're after and we'll match you with the right chair. If you don't have a preference, we book the first available stylist who offers your service."
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Ask for anyone by name. If you don't have a preference, we'll book the first available stylist who offers your service."
+              }
+            ]
+          }
+        },
+        {
+          "id": "studio-policy",
+          "topic": "studio_policy",
+          "question_variants": [
+            "Studio policy",
+            "The fine print, kept short.",
+            "What is policy?",
+            "Where can I find terms and conditions?",
+            "Is there a contact number policy inquiries?",
+            "What should I do if policy is unclear?",
+            "How can I get more information about policy?",
+            "Does have a detailed policy document?"
+          ],
+          "answer_spoken": "The fine print, kept short. If anything here is unclear, call us at (512) 555-0147.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "The fine print, kept short. If anything here is unclear, call us at (512) 555-0147."
+              }
+            ]
+          }
+        },
+        {
+          "id": "contact-and-hour",
+          "topic": "contact_and_hour",
+          "question_variants": [
+            "Contact & hour",
+            "Call, email, or find us on East Marigold Street.",
+            "How can I contact Hair Studio?",
+            "Where is located?",
+            "Can I email Hair Studio?",
+            "What are the operating hours?",
+            "Is there a specific entrance?"
+          ],
+          "answer_spoken": "Call, email, or find us on East Marigold Street. The door is around back, under the yellow light.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Call, email, or find us on East Marigold Street. The door is around back, under the yellow light."
+              }
+            ]
+          }
+        },
+        {
+          "id": "most-booked",
+          "topic": "most_booked",
+          "question_variants": [
+            "Most booked",
+            "The services people come back for.",
+            "What are the popular services?",
+            "How can I see the prices for services?",
+            "Where can I find the duration of services?",
+            "Does list all service details online?",
+            "Can I see who the stylists are for each service?",
+            "Are service times available on services page?"
+          ],
+          "answer_spoken": "The services people come back for. Every price, time and stylist is on the services page.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "The services people come back for. Every price, time and stylist is on the services page."
+              }
+            ]
+          }
+        },
+        {
+          "id": "before-you-book",
           "topic": "appointments",
           "question_variants": [
-            "how often are appointments scheduled?"
+            "how often are appointments scheduled?",
+            "Before you book",
+            "Appointments start every 15 minutes: 10:00, 10:15, 10:30, 10:45 and so on.",
+            "Can I book an appointment at 10:20?",
+            "Does offer appointments every 15 minutes?",
+            "Is it possible to schedule an appointment at 10:50?",
+            "What time slots are available for booking?"
           ],
-          "answer_spoken": "appointments start every 15 minutes",
+          "answer_spoken": "Appointments start every 15 minutes: 10:00, 10:15, 10:30, 10:45 and so on.",
           "facts": {
             "step_minutes": 15
           },
@@ -841,15 +1004,19 @@
           }
         },
         {
-          "id": "deposit",
+          "id": "footnotes",
           "topic": "deposit",
           "question_variants": [
-            "is a deposit required for color services?",
             "What is the deposit policy for color services?",
-            "do i need to pay a deposit for color services?",
-            "what is the deposit for color services"
+            "is a deposit required for color services?",
+            "Footnotes",
+            "Color services need a $50 deposit, taken by card when we confirm your appointment.",
+            "What is the deposit amount for color services?",
+            "How is the deposit for color services collected?",
+            "When is the deposit for color services applied to the bill?",
+            "Is the deposit for color services refundable?"
           ],
-          "answer_spoken": "a $50 deposit is required for color services",
+          "answer_spoken": "Color services need a $50 deposit, taken by card when we confirm your appointment. It comes off your bill at checkout.",
           "facts": {
             "deposit_cents": 5000
           },
@@ -857,90 +1024,570 @@
             "owner_confirmed": false,
             "evidence": [
               {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Color services need a $50 deposit when you book."
+                "url": "https://quillfern.example/services.html",
+                "quote": "Color services need a $50 deposit, taken by card when we confirm your appointment. It comes off your bill at checkout."
               },
               {
-                "url": "https://quillfern.example/services.html",
-                "quote": "*Color services need a $50 deposit, taken by card when we confirm your appointment. It comes off your bill at checkout."
+                "url": "https://quillfern.example/index.html",
+                "quote": "Color services need a $50 deposit when you book. It comes off your bill at checkout."
               },
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "Every color service (root touch-up, all-over color, partial or full highlights, balayage and color correction) needs a $50 deposit."
-              },
-              {
-                "url": "https://quillfern.example/contact.html",
-                "quote": "For color services, we take the $50 deposit by card at that point."
+                "quote": "We take the deposit by card when we confirm your appointment, and it comes off your bill at checkout."
               }
             ]
-          },
-          "answer_card": "a $50 deposit is required for color services Color services need a $50 deposit when you book. It comes off your bill at checkout. a $50 deposit is required for every color service A $50 deposit is required for color services"
+          }
         },
         {
-          "id": "patch-test",
-          "topic": "patch_test",
+          "id": "before-you-book-first-time",
+          "topic": "appointments",
           "question_variants": [
             "is a patch test required for first-time color clients or those with a history of reactions?",
-            "do i need a patch test for color services?"
+            "First time getting color with us, or reacted to hair dye before?",
+            "Do I need a patch test before my first color appointment?",
+            "How far in advance should I book a patch test?",
+            "Is there a charge for the patch test?",
+            "What should I do if I've reacted to hair dye before visiting Quillfern?",
+            "Can I book a patch test less than 72 hours before my appointment?",
+            "Are patch tests required for all clients?"
           ],
-          "answer_spoken": "a free patch test is required at least 72 hours before the color appointment",
+          "answer_spoken": "First time getting color with us, or reacted to hair dye before? Book a free patch test at least 72 hours before your color appointment.",
           "facts": {
             "notice_minutes": 4320
           },
+          "applies_to": [
+            "services/patch-test"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/index.html",
                 "quote": "First time getting color with us, or reacted to hair dye before? Book a free patch test at least 72 hours before your color appointment."
-              },
-              {
-                "url": "https://quillfern.example/policies.html",
-                "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye."
               }
             ]
-          },
-          "answer_card": "a free patch test is required at least 72 hours before the color appointment a patch test is required if you are new to color or have reacted to hair dye before"
+          }
         },
         {
-          "id": "cancellation",
-          "topic": "cancellation",
+          "id": "before-you-book-sundays-cuts",
+          "topic": "appointments",
           "question_variants": [
-            "what is the cancellation policy?",
-            "What is the cancellation policy?"
+            "Sundays are for cuts, styling and treatments.",
+            "Can I book a color appointment for Sunday?",
+            "Is Sunday a day for cuts and styling?",
+            "What days of the week does offer color services?",
+            "Are there any restrictions on services offered on Sundays?"
           ],
-          "answer_spoken": "please read the cancellation policy before booking",
+          "answer_spoken": "Sundays are for cuts, styling and treatments. We don't do color on Sundays.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/index.html",
-                "quote": "Plans change. Please read our cancellation policy before you book."
+                "quote": "Sundays are for cuts, styling and treatments. We don't do color on Sundays."
+              }
+            ]
+          }
+        },
+        {
+          "id": "ines-calderon",
+          "topic": "ines_calderon",
+          "question_variants": [
+            "Inés Calderón",
+            "Who is the owner?",
+            "How many years has Inés Calderón been a hair colorist?",
+            "When did Inés Calderón open Hair Studio?",
+            "What is Inés Calderón's background before opening Quillfern?",
+            "How long has Inés Calderón been coloring hair in San Antonio and Austin?",
+            "Is Inés Calderón still involved in haircuts?"
+          ],
+          "answer_spoken": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin.",
+          "applies_to": [
+            "services/balayage",
+            "services/color-correction"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin. She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week."
               },
               {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Owner and color director Balayage, highlights, gray blending and color correction."
+              }
+            ]
+          }
+        },
+        {
+          "id": "ines-calderon-person-balayage",
+          "topic": "ines_calderon",
+          "question_variants": [
+            "What services does Inés Calderón specialize in?",
+            "Inés Calderón",
+            "Can Inés Calderón help with color correction?",
+            "Does Inés Calderón offer balayage services?",
+            "Is Inés Calderón available for haircuts?",
+            "What should I book with Inés Calderón for highlights?",
+            "Does Inés Calderón have slots for haircuts each week?"
+          ],
+          "answer_spoken": "She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week.",
+          "applies_to": [
+            "services/balayage",
+            "services/color-correction"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin. She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week."
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Owner and color director Balayage, highlights, gray blending and color correction."
+              }
+            ]
+          }
+        },
+        {
+          "id": "wren-abernathy",
+          "topic": "wren_abernathy",
+          "question_variants": [
+            "Wren Abernathy",
+            "Senior stylist Precision cuts, bobs and pixies, men's cuts and clipper work.",
+            "What type of cuts does Wren Abernathy specialize in?",
+            "Does Wren Abernathy do men's haircuts?",
+            "Can Wren Abernathy cut pixies and bobs?",
+            "Is Wren Abernathy skilled in clipper work?",
+            "What are the senior stylist's expertise?",
+            "Does Wren Abernathy offer precision cuts?"
+          ],
+          "answer_spoken": "Senior stylist Precision cuts, bobs and pixies, men's cuts and clipper work.",
+          "applies_to": [
+            "services/mens-cut"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Senior stylist Precision cuts, bobs and pixies, men's cuts and clipper work."
+              }
+            ]
+          }
+        },
+        {
+          "id": "june-okafor",
+          "topic": "june_okafor",
+          "question_variants": [
+            "June Okafor",
+            "What hair types does June Okafor specialize in?",
+            "Does June Okafor do kids' cuts?",
+            "Can June Okafor style hair for events?",
+            "Is June Okafor the go-to for curly hair?",
+            "What services does June Okafor offer for curly and coily hair?",
+            "Does June Okafor do blowouts?"
+          ],
+          "answer_spoken": "Stylist, 6 years behind the chair June specializes in curly and coily hair, cut dry and curl by curl so you can see the shape as it happens. She also does blowouts, event styling and updos, and she's our go-to for kids cuts.",
+          "applies_to": [
+            "services/kids-cut",
+            "services/blowout"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Stylist, 6 years behind the chair June specializes in curly and coily hair, cut dry and curl by curl so you can see the shape as it happens. She also does blowouts, event styling and updos, and she's our go-to for kids cuts."
+              },
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Stylist Curly and coily cuts, blowouts, updos and kids cuts."
+              }
+            ]
+          }
+        },
+        {
+          "id": "parking",
+          "topic": "parking",
+          "question_variants": [
+            "Parking",
+            "Free parking for 6 cars in the lot behind the building, entered from the alley off Marigold Street.",
+            "Is there parking available?",
+            "How many cars can park lot?",
+            "Where is the parking entrance?",
+            "Does have accessible entrance from the parking lot?",
+            "Is parking free?",
+            "Can I park behind the building?"
+          ],
+          "answer_spoken": "Free parking for 6 cars in the lot behind the building, entered from the alley off Marigold Street. Our step-free entrance faces the lot.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Free parking for 6 cars in the lot behind the building, entered from the alley off Marigold Street. Our step-free entrance faces the lot."
+              }
+            ]
+          }
+        },
+        {
+          "id": "get-in-touch",
+          "topic": "get_in_touch",
+          "question_variants": [
+            "Get in touch",
+            "how to book an appointment",
+            "Call (512) 555-0147 during studio hours, or email quillfernhairstudio@example.com.",
+            "What is the phone number?",
+            "How can I contact via email?",
+            "What are the studio hours?",
+            "How quickly does respond to emails?",
+            "Can I call outside of their studio hours?"
+          ],
+          "answer_spoken": "Call (512) 555-0147 during studio hours, or email quillfernhairstudio@example.com. We reply to email within one business day.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/index.html",
+                "quote": "Call (512) 555-0147 during studio hours, or email quillfernhairstudio@example.com. We reply to email within one business day."
+              },
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Call (512) 555-0147 during studio hours or email quillfernhairstudio@example.com"
+              }
+            ]
+          }
+        },
+        {
+          "id": "cuts",
+          "topic": "cuts",
+          "question_variants": [
+            "Cuts",
+            "Every cut includes a shampoo and a finish, except bang trims.",
+            "Does every cut include a shampoo?",
+            "Is a finish included with every cut?",
+            "Are bang trims the only exception to cut inclusions?",
+            "What does a standard cut appointment include?",
+            "Do I need to pay extra for a shampoo with my cut?",
+            "Is a finish service part of the cut price?"
+          ],
+          "answer_spoken": "Every cut includes a shampoo and a finish, except bang trims.",
+          "applies_to": [
+            "services/womens-cut-and-style",
+            "services/mens-cut",
+            "services/mens-cut-and-beard-trim",
+            "services/curly-and-coily-cut",
+            "services/kids-cut",
+            "services/bang-trim"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
                 "url": "https://quillfern.example/services.html",
-                "quote": "†Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule. Cancellations with less than 48 hours' notice are charged 50% of the service price."
+                "quote": "Every cut includes a shampoo and a finish, except bang trims."
+              }
+            ]
+          }
+        },
+        {
+          "id": "styling",
+          "topic": "styling",
+          "question_variants": [
+            "Styling",
+            "Blowouts and event hair, done in the studio.",
+            "Does offer blowouts?",
+            "Can I get my hair styled for an event?",
+            "Are styling services done in-studio?",
+            "What types of styling does provide?",
+            "Is event hair styling available?",
+            "Do I need to book styling services in advance?"
+          ],
+          "answer_spoken": "Blowouts and event hair, done in the studio.",
+          "applies_to": [
+            "services/blowout",
+            "services/blowout-with-hot-tool-styling",
+            "services/special-occasion-updo"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Blowouts and event hair, done in the studio."
+              }
+            ]
+          }
+        },
+        {
+          "id": "styling-wedding-parties",
+          "topic": "styling",
+          "question_variants": [
+            "Wedding parties of 3 or more: email us at least 4 weeks ahead so we can block out the chairs.",
+            "How should I book styling for a wedding party?",
+            "What is the minimum number of people for a wedding party styling?",
+            "How far in advance should I email for wedding party styling?",
+            "Does style wedding parties outside of the studio?",
+            "What is the process for booking a wedding party?",
+            "Can accommodate large wedding parties for styling?"
+          ],
+          "answer_spoken": "Wedding parties of 3 or more: email us at least 4 weeks ahead so we can block out the chairs. We style in the studio only.",
+          "applies_to": [
+            "services/blowout",
+            "services/blowout-with-hot-tool-styling",
+            "services/special-occasion-updo"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Wedding parties of 3 or more: email us at least 4 weeks ahead so we can block out the chairs. We style in the studio only."
+              }
+            ]
+          }
+        },
+        {
+          "id": "color",
+          "topic": "color",
+          "question_variants": [
+            "Color",
+            "Services marked * need a $50 deposit when you book.",
+            "Which color services require a deposit?",
+            "How much is the deposit for certain color services?",
+            "Are there any color services available on Sundays?",
+            "What should I do if I want a color service on Sunday?",
+            "Is there a special procedure for booking color services?",
+            "Can I get color services on a Sunday?"
+          ],
+          "answer_spoken": "Services marked with an asterisk need a $50 deposit when you book. We don't do color on Sundays.",
+          "applies_to": [
+            "services/balayage",
+            "services/color-consultation",
+            "services/patch-test",
+            "services/root-touch-up",
+            "services/all-over-color",
+            "services/partial-highlights",
+            "services/full-highlights",
+            "services/color-correction"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Services marked * need a $50 deposit when you book. We don't do color on Sundays."
               },
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "we ask for at least 24 hours' notice if you need to cancel or reschedule."
+                "quote": "We don't do color services on Sundays."
               }
             ]
-          },
+          }
+        },
+        {
+          "id": "color-carry-free",
+          "topic": "color",
+          "question_variants": [
+            "We carry a PPD-free color line for all-over color and root touch-ups.",
+            "Does offer PPD-free color options?",
+            "What types of color services use PPD-free products?",
+            "Can I get an all-over color with PPD-free products?",
+            "What should I read before my first color appointment?",
+            "Are there specific ingredients I should know about color services?",
+            "Is there a patch test requirement for PPD-free color?"
+          ],
+          "answer_spoken": "We carry a PPD-free color line for all-over color and root touch-ups. Read about patch tests and ingredients before your first color appointment.",
+          "applies_to": [
+            "services/balayage",
+            "services/color-consultation",
+            "services/patch-test",
+            "services/root-touch-up",
+            "services/all-over-color",
+            "services/partial-highlights",
+            "services/full-highlights",
+            "services/color-correction"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "We carry a PPD-free color line for all-over color and root touch-ups. Read about patch tests and ingredients before your first color appointment."
+              }
+            ]
+          }
+        },
+        {
+          "id": "treatments",
+          "topic": "treatments",
+          "question_variants": [
+            "Treatments",
+            "Book them on their own or add them to any service.",
+            "Can I book a treatment alone?",
+            "Is it possible to add a treatment to any service?",
+            "How do I book a treatment?",
+            "Are treatments available as standalone services?",
+            "Can I combine a treatment with another service?",
+            "What is the process for booking a treatment?"
+          ],
+          "answer_spoken": "Book them on their own or add them to any service.",
+          "applies_to": [
+            "services/deep-conditioning",
+            "services/scalp-treatment",
+            "services/smoothing-treatment"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Book them on their own or add them to any service."
+              }
+            ]
+          }
+        },
+        {
+          "id": "footnotes-cancellation-policy",
+          "topic": "cancellation",
+          "question_variants": [
+            "What is the cancellation policy?",
+            "Footnotes",
+            "Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule.",
+            "What is cancellation policy?",
+            "How much notice do I need to give to cancel an appointment?",
+            "What happens if I cancel my appointment with less than 48 hours' notice?",
+            "Is there a fee for last-minute cancellations?",
+            "How can I reschedule an appointment?"
+          ],
+          "answer_spoken": "Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule. Cancellations with less than 48 hours' notice are charged 50% of the service price.",
           "facts": {
             "notice_minutes": 2880,
             "late_cancel_fee_percent": 50
           },
-          "answer_card": "please read the cancellation policy before booking Please give us at least 48 hours' notice to cancel or reschedule. Cancellations with less than 48 hours' notice are charged 50% of the service price. at least 24 hours' notice is required to cancel or reschedule without charge"
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule. Cancellations with less than 48 hours' notice are charged 50% of the service price."
+              }
+            ]
+          }
+        },
+        {
+          "id": "footnotes-sundays-cuts",
+          "topic": "footnotes",
+          "question_variants": [
+            "Footnotes",
+            "Sundays are for cuts, styling and treatments only.",
+            "On which days can I book color services?",
+            "Are there any restrictions on service bookings on Sundays?",
+            "What types of services are reserved for Sundays?",
+            "Can I get a cut or styling service on Sunday?"
+          ],
+          "answer_spoken": "Sundays are for cuts, styling and treatments only. Color services are booked Tuesday through Saturday.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/services.html",
+                "quote": "Sundays are for cuts, styling and treatments only. Color services are booked Tuesday through Saturday."
+              }
+            ]
+          }
+        },
+        {
+          "id": "wren-abernathy-senior-stylist",
+          "topic": "wren_abernathy",
+          "question_variants": [
+            "How many years has Wren Abernathy been a stylist?",
+            "Wren Abernathy",
+            "What tools does Wren Abernathy use for cutting hair?",
+            "What types of haircuts does Wren Abernathy specialize in?",
+            "Does Wren Abernathy offer both shear and clipper cuts?",
+            "What are some examples of haircuts Wren Abernathy is known for?",
+            "Is Wren Abernathy experienced in cutting various hair lengths and styles?"
+          ],
+          "answer_spoken": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades.",
+          "applies_to": [
+            "services/smoothing-treatment"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades. Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair."
+              }
+            ]
+          }
+        },
+        {
+          "id": "wren-abernathy-wren-also",
+          "topic": "wren_abernathy",
+          "question_variants": [
+            "What services does Wren Abernathy offer?",
+            "Wren Abernathy",
+            "Can Wren Abernathy do single-process color?",
+            "Does Wren Abernathy perform smoothing treatments?",
+            "Can Wren Abernathy trim beards?",
+            "Is Wren available for hair services?",
+            "What treatments can Wren Abernathy provide?"
+          ],
+          "answer_spoken": "Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair.",
+          "applies_to": [
+            "services/smoothing-treatment"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades. Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair."
+              }
+            ]
+          }
+        },
+        {
+          "id": "whos-in-when",
+          "topic": "whos_in_when",
+          "question_variants": [
+            "Studio hours for each day are on the contact page.",
+            "Who's in when",
+            "What are the studio's opening hours?",
+            "Where can I find the studio's schedule?",
+            "What time is the studio open each day?",
+            "How can I check the studio's hours?",
+            "Are the studio hours listed online?",
+            "Where are the contact page studio hours located?"
+          ],
+          "answer_spoken": "Studio hours for each day are on the contact page.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Studio hours for each day are on the contact page."
+              }
+            ]
+          }
         },
         {
           "id": "booking",
           "topic": "booking",
           "question_variants": [
             "how do i book an appointment?",
-            "how to book an appointment"
+            "Booking",
+            "Appointments start every 15 minutes (on the hour, at :15, :30 and :45) and are booked in 15-minute blocks.",
+            "How are appointment times arranged?",
+            "What is the appointment booking pattern?",
+            "Are appointments booked in specific time blocks?"
           ],
-          "answer_spoken": "appointments start every 15 minutes and are booked in 15-minute blocks",
+          "answer_spoken": "Appointments start every 15 minutes (on the hour, at :15, :30 and :45) and are booked in 15-minute blocks.",
           "facts": {
             "step_minutes": 15
           },
@@ -950,22 +1597,341 @@
               {
                 "url": "https://quillfern.example/policies.html",
                 "quote": "Appointments start every 15 minutes (on the hour, at :15, :30 and :45) and are booked in 15-minute blocks."
-              },
-              {
-                "url": "https://quillfern.example/contact.html",
-                "quote": "Call (512) 555-0147 during studio hours or email quillfernhairstudio@example.com"
               }
             ]
-          },
-          "answer_card": "appointments start every 15 minutes and are booked in 15-minute blocks Call (512) 555-0147 during studio hours or email quillfernhairstudio@example.com"
+          }
         },
         {
-          "id": "late-arrival",
+          "id": "booking-book-weeks",
+          "topic": "booking",
+          "question_variants": [
+            "You can book up to 8 weeks ahead.",
+            "How far in advance can I book?",
+            "What is the maximum booking window?",
+            "How many weeks ahead can appointments be made?",
+            "What is the booking lead time?",
+            "Can I schedule appointments months in advance?",
+            "What is the earliest I can book an appointment?"
+          ],
+          "answer_spoken": "You can book up to 8 weeks ahead.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "You can book up to 8 weeks ahead."
+              }
+            ]
+          }
+        },
+        {
+          "id": "booking-every-appointment",
+          "topic": "booking",
+          "question_variants": [
+            "Every appointment has to finish by closing time, so longer services need an earlier start.",
+            "What is the latest time for appointments?",
+            "How early must longer services start?",
+            "What is the duration of balayage service?",
+            "When should balayage appointments start on Saturdays?",
+            "Are there time restrictions for appointments?",
+            "How does schedule longer services?"
+          ],
+          "answer_spoken": "Every appointment has to finish by closing time, so longer services need an earlier start. For example, balayage past the shoulder blades takes 4 hours, so on a Saturday it has to start by 1:00 pm.",
+          "applies_to": [
+            "services/balayage"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Every appointment has to finish by closing time, so longer services need an earlier start. For example, balayage past the shoulder blades takes 4 hours, so on a Saturday it has to start by 1:00 pm."
+              }
+            ]
+          }
+        },
+        {
+          "id": "booking-request-stylist",
+          "topic": "booking",
+          "question_variants": [
+            "You can request any stylist.",
+            "Can I choose a specific stylist for my appointment?",
+            "What happens if I don't specify a stylist preference?",
+            "How are stylists assigned for appointments?",
+            "Can I request a particular stylist?",
+            "What if I have no stylist preference?",
+            "How does the studio handle stylist requests?"
+          ],
+          "answer_spoken": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service."
+              }
+            ]
+          }
+        },
+        {
+          "id": "booking-confirm-every",
+          "topic": "booking",
+          "question_variants": [
+            "We confirm every appointment by email within one business day of your request.",
+            "Do you confirm appointments via email?",
+            "How soon will I receive an appointment confirmation?",
+            "What is the confirmation process for appointments?",
+            "Will I get an email after booking an appointment?",
+            "How quickly are appointments confirmed?",
+            "Is there a confirmation step after booking?"
+          ],
+          "answer_spoken": "We confirm every appointment by email within one business day of your request.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "We confirm every appointment by email within one business day of your request."
+              }
+            ]
+          }
+        },
+        {
+          "id": "deposits-for-color",
+          "topic": "deposit",
+          "question_variants": [
+            "do i need to pay a deposit for color services?",
+            "Deposits for color",
+            "Is there a deposit required for color services?",
+            "How much is the deposit for color treatments?",
+            "What is the cost of the color service deposit?",
+            "Do color services need a upfront payment?",
+            "Is a deposit necessary for hair coloring?",
+            "What is the deposit amount for color services?"
+          ],
+          "answer_spoken": "Every color service (root touch-up, all-over color, partial or full highlights, balayage and color correction) needs a $50 deposit.",
+          "facts": {
+            "deposit_cents": 5000
+          },
+          "applies_to": [
+            "services/balayage",
+            "services/root-touch-up",
+            "services/all-over-color",
+            "services/full-highlights",
+            "services/color-correction"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Every color service (root touch-up, all-over color, partial or full highlights, balayage and color correction) needs a $50 deposit."
+              }
+            ]
+          }
+        },
+        {
+          "id": "deposits-for-color-color-consultations",
+          "topic": "deposit",
+          "question_variants": [
+            "Color consultations and patch tests are free and don't need a deposit.",
+            "Are color consultations free of charge?",
+            "Do patch tests require a deposit?",
+            "Is there a cost for color consultations?",
+            "Are patch tests included in the service?",
+            "Do I need to pay for a color consultation?",
+            "Are there any fees for patch tests?"
+          ],
+          "answer_spoken": "Color consultations and patch tests are free and don't need a deposit.",
+          "applies_to": [
+            "services/color-consultation",
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Color consultations and patch tests are free and don't need a deposit."
+              }
+            ]
+          }
+        },
+        {
+          "id": "deposits-for-color-whether-deposit",
+          "topic": "deposit",
+          "question_variants": [
+            "Whether a deposit is refunded depends on how much notice you give if you cancel.",
+            "Can color service deposits be refunded?",
+            "What affects the refund of a color deposit?",
+            "Is a color deposit refundable under certain conditions?",
+            "How is the refund of a color deposit determined?",
+            "What happens to the deposit if I cancel?",
+            "Are there circumstances where a color deposit is refunded?"
+          ],
+          "answer_spoken": "Whether a deposit is refunded depends on how much notice you give if you cancel.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Whether a deposit is refunded depends on how much notice you give if you cancel."
+              }
+            ]
+          }
+        },
+        {
+          "id": "cancellations-and-no-shows",
+          "topic": "cancellation",
+          "question_variants": [
+            "Cancellations and no-shows",
+            "what is the cancellation policy?",
+            "Your appointment time is held just for you, so we ask for at least 24 hours' notice if you need to cancel or reschedule.",
+            "How much notice is needed to cancel an appointment?",
+            "What is the required notice for appointment changes?",
+            "How far in advance must I cancel to avoid charges?",
+            "What is the cancellation policy for appointments?",
+            "How soon should I inform if I need to reschedule?"
+          ],
+          "answer_spoken": "Your appointment time is held just for you, so we ask for at least 24 hours' notice if you need to cancel or reschedule. Moving an appointment counts the same as cancelling it.",
+          "facts": {
+            "notice_minutes": 1440
+          },
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Your appointment time is held just for you, so we ask for at least 24 hours' notice if you need to cancel or reschedule. Moving an appointment counts the same as cancelling it."
+              }
+            ]
+          }
+        },
+        {
+          "id": "cancellations-and-no-shows-hours-more",
+          "topic": "cancellation",
+          "question_variants": [
+            "24 hours or more before your appointment: No charge.",
+            "What happens if I cancel 24 hours or more before my appointment?",
+            "Is there a fee for canceling with 24 hours' notice?",
+            "What is the policy for cancellations made 24 hours in advance?",
+            "Can I get a full refund if I cancel early?",
+            "What are the terms for early cancellation of an appointment?",
+            "Are there any charges for canceling with adequate notice?"
+          ],
+          "answer_spoken": "24 hours or more before your appointment: No charge. A color deposit is refunded in full, or moved to your new appointment.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "24 hours or more before your appointment"
+              },
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "No charge"
+              },
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "A color deposit is refunded in full, or moved to your new appointment"
+              }
+            ]
+          }
+        },
+        {
+          "id": "cancellations-and-no-shows-less-than",
+          "topic": "cancellation",
+          "question_variants": [
+            "Less than 24 hours before: We charge 50% of the booked service price.",
+            "What is the charge for canceling less than 24 hours before an appointment?",
+            "How much will I be charged for a last-minute cancellation?",
+            "What fee applies for late cancellations?",
+            "Is there a penalty for canceling close to the appointment time?",
+            "What is the cost of a cancellation made at the last minute?",
+            "How is the charge calculated for a late cancellation?"
+          ],
+          "answer_spoken": "Less than 24 hours before: We charge 50% of the booked service price. A color deposit is kept and counts toward that charge.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Less than 24 hours before"
+              },
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "We charge 50% of the booked service price"
+              },
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "A color deposit is kept and counts toward that charge"
+              }
+            ]
+          }
+        },
+        {
+          "id": "cancellations-and-no-shows-show-charge",
+          "topic": "cancellation",
+          "question_variants": [
+            "No-show: We charge 100% of the booked service price.",
+            "What is the policy for no-shows?",
+            "How are no-shows handled by the studio?",
+            "What is the charge for not showing up to an appointment?",
+            "Is there a fee for missing an appointment without notice?",
+            "What happens if I don't show up for my appointment?",
+            "How does the studio deal with clients who don't arrive?"
+          ],
+          "answer_spoken": "No-show: We charge 100% of the booked service price.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "no-show"
+              },
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "We charge 100% of the booked service price"
+              }
+            ]
+          }
+        },
+        {
+          "id": "cancellations-and-no-shows-cancel-reschedule",
+          "topic": "cancellation",
+          "question_variants": [
+            "To cancel or reschedule, call (512) 555-0147 or email quillfernhairstudio@example.com.",
+            "How can I cancel or reschedule an appointment?",
+            "What is the contact information for appointment changes?",
+            "Can I change my appointment by phone or email?",
+            "What are the methods for canceling an appointment?",
+            "How do I notify the studio of a schedule change?",
+            "What is the procedure for rescheduling an appointment?"
+          ],
+          "answer_spoken": "To cancel or reschedule, call (512) 555-0147 or email quillfernhairstudio@example.com. The time on your voicemail or email counts as your notice.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "To cancel or reschedule, call (512) 555-0147 or email quillfernhairstudio@example.com. The time on your voicemail or email counts as your notice."
+              }
+            ]
+          }
+        },
+        {
+          "id": "running-late",
           "topic": "late_arrival",
           "question_variants": [
-            "what happens if i am late for my appointment?"
+            "what happens if i am late for my appointment?",
+            "Running late",
+            "How does being late affect my service?",
+            "What should I do if I am running late?",
+            "Can my service be shortened if I am late?",
+            "How does the studio handle late arrivals?",
+            "What is the policy for clients arriving late?"
           ],
-          "answer_spoken": "if you are more than 15 minutes late, your service may be shortened or rescheduled",
+          "answer_spoken": "If you're more than 15 minutes late, we may need to shorten your service or move your appointment to another time so the next client isn't kept waiting. If you're running behind, call us and we'll tell you what we can do.",
           "facts": {
             "late_arrival_grace_minutes": 15
           },
@@ -974,7 +1940,247 @@
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "If you're more than 15 minutes late, we may need to shorten your service or move your appointment to another time so the next client isn't kept waiting."
+                "quote": "If you're more than 15 minutes late, we may need to shorten your service or move your appointment to another time so the next client isn't kept waiting. If you're running behind, call us and we'll tell you what we can do."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies",
+          "topic": "patch_test",
+          "question_variants": [
+            "do i need a patch test for color services?",
+            "Patch tests and allergies",
+            "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye.",
+            "Is a patch test required before coloring?",
+            "When should a patch test be done?",
+            "What are the requirements for a patch test?",
+            "Do I need a patch test for hair coloring?",
+            "How long before coloring must a patch test be done?"
+          ],
+          "answer_spoken": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-free-takes",
+          "topic": "patch_test",
+          "question_variants": [
+            "It's free and takes 15 minutes.",
+            "do i need a patch test for color services?",
+            "Patch tests and allergies",
+            "How long does a patch test take?",
+            "What is the duration of a patch test?",
+            "How much time is needed for a patch test?",
+            "Is a patch test a quick process?",
+            "What is the time requirement for a patch test?"
+          ],
+          "answer_spoken": "It's free and takes 15 minutes.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-standard-permanent",
+          "topic": "patch_test",
+          "question_variants": [
+            "Our standard permanent hair color contains PPD (para-phenylenediamine).",
+            "What types of hair color does the studio offer?",
+            "Does the studio provide PPD-free hair color?",
+            "What are the options for hair coloring?",
+            "Are there PPD-free alternatives for all-over color?",
+            "What color options are available for root touch-ups?",
+            "Does the studio offer different types of permanent hair color?"
+          ],
+          "answer_spoken": "Our standard permanent hair color contains PPD (para-phenylenediamine). For all-over color and root touch-ups, we also carry a PPD-free color line.",
+          "applies_to": [
+            "services/patch-test",
+            "services/root-touch-up",
+            "services/all-over-color"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Our standard permanent hair color contains PPD (para-phenylenediamine). For all-over color and root touch-ups, we also carry a PPD-free color line."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-highlights-balayage",
+          "topic": "patch_test",
+          "question_variants": [
+            "Highlights and balayage use lightener, which contains persulfates.",
+            "Are there persulfate-free options for highlights?",
+            "What is used in highlights and balayage?",
+            "Does the studio offer persulfate-free lightener?",
+            "Are there alternatives to persulfates in hair treatments?",
+            "What ingredients are in the lightener used for highlights?",
+            "Does the studio provide persulfate-free hair services?"
+          ],
+          "answer_spoken": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative.",
+          "applies_to": [
+            "services/balayage",
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-smoothing-treatment",
+          "topic": "patch_test",
+          "question_variants": [
+            "Our smoothing treatment is formaldehyde-free.",
+            "Is the smoothing treatment free of formaldehyde?",
+            "What is the studio's policy on formaldehyde in treatments?",
+            "Are there formaldehyde-free options for smoothing treatments?",
+            "Does the smoothing treatment contain formaldehyde?",
+            "What ingredients are avoided in the smoothing treatment?",
+            "Is the smoothing treatment safe for formaldehyde-sensitive clients?"
+          ],
+          "answer_spoken": "Our smoothing treatment is formaldehyde-free.",
+          "applies_to": [
+            "services/patch-test",
+            "services/smoothing-treatment"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Our smoothing treatment is formaldehyde-free."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-finishing-contains",
+          "topic": "patch_test",
+          "question_variants": [
+            "Our finishing oil contains argan oil.",
+            "Does the finishing oil contain any allergens?",
+            "Can the finishing oil be modified for nut allergies?",
+            "What should I inform the studio about regarding allergies?",
+            "Are there any nut-based ingredients in the finishing oil?",
+            "How does the studio accommodate clients with nut allergies?",
+            "Can the finishing oil be adjusted for allergy concerns?"
+          ],
+          "answer_spoken": "Our finishing oil contains argan oil. If you have a nut allergy, tell us and we'll leave it out.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Our finishing oil contains argan oil. If you have a nut allergy, tell us and we'll leave it out."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-nitrile-latex",
+          "topic": "patch_test",
+          "question_variants": [
+            "We use nitrile (latex-free) gloves for every service.",
+            "What type of gloves are used during services?",
+            "Are latex gloves used in the salon?",
+            "How does the studio ensure safety during services?",
+            "What kind of gloves are standard for all services?",
+            "Are there latex-free options available for services?",
+            "What safety measures are in place regarding gloves?"
+          ],
+          "answer_spoken": "We use nitrile (latex-free) gloves for every service.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "We use nitrile (latex-free) gloves for every service."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-fragrance-free",
+          "topic": "patch_test",
+          "question_variants": [
+            "Fragrance-free shampoo and conditioner are available on request.",
+            "Can I request fragrance-free products?",
+            "Are there fragrance-free options available at the studio?",
+            "How can I get fragrance-free shampoo and conditioner?",
+            "Does the studio offer fragrance-free hair care products?",
+            "Can I specify no-fragrance products for my service?",
+            "Are there any fragrance-free options for hair treatments?"
+          ],
+          "answer_spoken": "Fragrance-free shampoo and conditioner are available on request.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Fragrance-free shampoo and conditioner are available on request."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-please-tell",
+          "topic": "patch_test",
+          "question_variants": [
+            "Please tell us about any allergies or sensitivities when you book.",
+            "Should I inform the studio about any allergies?",
+            "What information should I provide regarding allergies?",
+            "How can I communicate my allergies to the studio?",
+            "Is it important to disclose allergies when booking?",
+            "What should I tell the studio about my sensitivities?",
+            "How does the studio handle clients with allergies?"
+          ],
+          "answer_spoken": "Please tell us about any allergies or sensitivities when you book.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Please tell us about any allergies or sensitivities when you book."
               }
             ]
           }
@@ -983,9 +2189,43 @@
           "id": "kids-and-teens",
           "topic": "kids_and_teens",
           "question_variants": [
-            "what are the policies for kids and teens?"
+            "Kids and teens",
+            "The kids cut price ($30) is for ages 12 and under.",
+            "What is the price for a kids cut?",
+            "How much does a children's haircut cost?",
+            "What is the cost of a cut for ages 12 and under?",
+            "Is there a special rate for kids' haircuts?",
+            "What is the charge for a child's haircut?",
+            "How much should I expect to pay for a kids cut?"
           ],
-          "answer_spoken": "clients under 16 need a parent or guardian for any color service",
+          "answer_spoken": "The kids cut price ($30) is for ages 12 and under.",
+          "applies_to": [
+            "services/kids-cut"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "The kids cut price ($30) is for ages 12 and under."
+              }
+            ]
+          }
+        },
+        {
+          "id": "kids-and-teens-clients-under",
+          "topic": "kids_and_teens",
+          "question_variants": [
+            "what are the policies for kids and teens?",
+            "Clients under 16 need a parent or guardian with them for any color service.",
+            "Do kids need a parent for color services?",
+            "Can teens get color services alone?",
+            "Is a guardian needed for under 16 clients?",
+            "Can a minor get a color service alone?",
+            "Do you require parental presence for young clients?",
+            "Is a parent needed for teen color services?"
+          ],
+          "answer_spoken": "Clients under 16 need a parent or guardian with them for any color service.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
@@ -997,18 +2237,48 @@
           }
         },
         {
-          "id": "payment",
+          "id": "payment-and-tips",
           "topic": "payment",
           "question_variants": [
-            "what payment methods are accepted?"
+            "what payment methods are accepted?",
+            "Payment and tips",
+            "We accept credit and debit cards, tap-to-pay and cash.",
+            "Do you accept checks for payment?",
+            "Can I pay with a credit card?",
+            "Do you take debit cards?",
+            "Can I use tap-to-pay at your studio?",
+            "Do you accept cash payments?"
           ],
-          "answer_spoken": "credit and debit cards, tap-to-pay, and cash are accepted",
+          "answer_spoken": "We accept credit and debit cards, tap-to-pay and cash. We don't accept checks.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "We accept credit and debit cards, tap-to-pay and cash."
+                "quote": "We accept credit and debit cards, tap-to-pay and cash. We don't accept checks."
+              }
+            ]
+          }
+        },
+        {
+          "id": "payment-and-tips-tips-added",
+          "topic": "payment",
+          "question_variants": [
+            "Tips can be added to your card payment or left in cash.",
+            "Can I tip with my card payment?",
+            "Do you accept cash tips?",
+            "Can tips be added electronically?",
+            "Is tipping mandatory at your studio?",
+            "How should I leave a tip?",
+            "Are digital tips accepted?"
+          ],
+          "answer_spoken": "Tips can be added to your card payment or left in cash.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Tips can be added to your card payment or left in cash."
               }
             ]
           }
@@ -1017,15 +2287,70 @@
           "id": "gift-cards",
           "topic": "gift_cards",
           "question_variants": [
-            "what are the policies for gift cards?"
+            "what are the policies for gift cards?",
+            "Gift cards",
+            "Gift cards come in any amount from $25 and can be bought in the studio or by phone.",
+            "Can I buy a gift card for $50?",
+            "Do you sell gift cards in-studio?",
+            "Can I purchase a gift card by phone?",
+            "What's the minimum amount for a gift card?",
+            "Do gift cards have an expiration date?"
           ],
-          "answer_spoken": "gift cards come in any amount from $25 and never expire",
+          "answer_spoken": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service."
+                "quote": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service. They can't be exchanged for cash."
+              }
+            ]
+          }
+        },
+        {
+          "id": "gift-cards-they-exchanged",
+          "topic": "gift_cards",
+          "question_variants": [
+            "They can't be exchanged for cash.",
+            "what are the policies for gift cards?",
+            "Gift cards",
+            "Can I get cash for a gift card?",
+            "Are gift cards refundable?",
+            "Can I exchange a gift card for cash?",
+            "Is there a cash-back option for gift cards?",
+            "Can unused gift card balances be refunded?"
+          ],
+          "answer_spoken": "They can't be exchanged for cash.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service. They can't be exchanged for cash."
+              }
+            ]
+          }
+        },
+        {
+          "id": "if-something-isnt-right",
+          "topic": "if_something_isnt_right",
+          "question_variants": [
+            "If something isn't right",
+            "Tell us within 7 days of your appointment and we'll adjust your cut or color at no charge.",
+            "Can I get a free adjustment for my cut?",
+            "What if I'm not happy with my color?",
+            "How long do I have to report a problem?",
+            "Can I switch stylists for a free adjustment?",
+            "What's the time frame for service adjustments?",
+            "Do I need to pay for a service adjustment?"
+          ],
+          "answer_spoken": "Tell us within 7 days of your appointment and we'll adjust your cut or color at no charge. You can come back to the same stylist or switch to another one.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Tell us within 7 days of your appointment and we'll adjust your cut or color at no charge. You can come back to the same stylist or switch to another one."
               }
             ]
           }
@@ -1035,37 +2360,197 @@
           "topic": "accessibility",
           "question_variants": [
             "what accessibility features are available?",
-            "is the entrance step-free"
+            "Accessibility",
+            "Is your studio accessible for wheelchairs?",
+            "Do you have an accessible restroom?",
+            "Are service animals allowed in the studio?",
+            "Is your entrance step-free?",
+            "Do you have adjustable salon chairs?",
+            "Is there parking for disabled clients?"
           ],
-          "answer_spoken": "the entrance is step-free, there is an accessible restroom, and every station has an adjustable hydraulic chair",
+          "answer_spoken": "Our entrance is step-free, from the parking lot behind the building; We have an accessible restroom, and every station has an adjustable hydraulic chair; Service animals are welcome.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "Our entrance is step-free, from the parking lot behind the building. We have an accessible restroom, and every station has an adjustable hydraulic chair."
+                "quote": "Our entrance is step-free, from the parking lot behind the building"
               },
               {
-                "url": "https://quillfern.example/contact.html",
-                "quote": "Our entrance faces the back lot and is step-free."
+                "url": "https://quillfern.example/policies.html",
+                "quote": "We have an accessible restroom, and every station has an adjustable hydraulic chair"
+              },
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "Service animals are welcome"
               }
             ]
-          },
-          "answer_card": "the entrance is step-free, there is an accessible restroom, and every station has an adjustable hydraulic chair The entrance is step-free"
+          }
         },
         {
-          "id": "parking",
-          "topic": "parking",
+          "id": "hours",
+          "topic": "hours",
           "question_variants": [
-            "is parking available"
+            "Hours",
+            "Sundays are for cuts, styling and treatments only, with no color services.",
+            "Do you offer color services on Sundays?",
+            "Are you open on Thanksgiving Day?",
+            "Are you closed on December 24?",
+            "Do you work on New Year's Day?",
+            "What are your holiday closing dates?"
           ],
-          "answer_spoken": "Free parking is available in the back lot and on the street",
+          "answer_spoken": "Sundays are for cuts, styling and treatments only, with no color services. We're closed on Thanksgiving Day (November 26, 2026), December 24 and 25, and January 1.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/contact.html",
-                "quote": "Free parking in our back lot (6 spaces), entered from the alley off Marigold Street. Street parking is also available on Marigold Street."
+                "quote": "Sundays are for cuts, styling and treatments only, with no color services. We're closed on Thanksgiving Day (November 26, 2026), December 24 and 25, and January 1."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-to-book",
+          "topic": "booking",
+          "question_variants": [
+            "what is the deposit for color services",
+            "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind.",
+            "How do I choose a service and stylist?",
+            "What information do I need to book?",
+            "How many time options should I provide?",
+            "Do I need to list alternative dates?",
+            "Can I book without a preferred stylist?"
+          ],
+          "answer_spoken": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you.",
+          "facts": {
+            "deposit_cents": 5000
+          },
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you. We confirm by email within one business day. For color services, we take the $50 deposit by card at that point."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-to-book-confirm-email",
+          "topic": "booking",
+          "question_variants": [
+            "We confirm by email within one business day.",
+            "what is the deposit for color services",
+            "How will I know my appointment is confirmed?",
+            "Do you send confirmations by email?",
+            "Is there a deposit for color services?",
+            "How much is the deposit for color services?",
+            "When is the deposit taken for color services?",
+            "Do you confirm bookings within a day?"
+          ],
+          "answer_spoken": "We confirm by email within one business day. For color services, we take the $50 deposit by card at that point.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you. We confirm by email within one business day. For color services, we take the $50 deposit by card at that point."
+              }
+            ]
+          }
+        },
+        {
+          "id": "find-us",
+          "topic": "parking",
+          "question_variants": [
+            "is parking available",
+            "Find us",
+            "Is parking free at your studio?",
+            "How many parking spaces do you have?",
+            "Where is the parking lot located?",
+            "Can I park behind the building?",
+            "Is there designated parking for clients?",
+            "Do I need to pay for parking?"
+          ],
+          "answer_spoken": "Parking. Free parking in our back lot (6 spaces), entered from the alley off Marigold Street.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Parking. Free parking in our back lot (6 spaces), entered from the alley off Marigold Street. Street parking is also available on Marigold Street."
+              }
+            ]
+          }
+        },
+        {
+          "id": "find-us-street-parking",
+          "topic": "parking",
+          "question_variants": [
+            "Street parking is also available on Marigold Street.",
+            "is parking available",
+            "Find us",
+            "Can I park on the street near your studio?",
+            "Is street parking available on Marigold Street?",
+            "Are there parking meters on Marigold Street?",
+            "Is street parking free or paid?",
+            "How close is street parking to your studio?"
+          ],
+          "answer_spoken": "Street parking is also available on Marigold Street.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Parking. Free parking in our back lot (6 spaces), entered from the alley off Marigold Street. Street parking is also available on Marigold Street."
+              }
+            ]
+          }
+        },
+        {
+          "id": "find-us-getting-entrance",
+          "topic": "parking",
+          "question_variants": [
+            "is the entrance step-free",
+            "Is your studio's entrance accessible from the parking lot?",
+            "Do you have a step-free entrance?",
+            "Where is your studio's entrance located?",
+            "Is the entrance facing the back lot?",
+            "Do you have an accessible entrance?",
+            "Is there a ramp at your studio's entrance?"
+          ],
+          "answer_spoken": "Getting in. Our entrance faces the back lot and is step-free.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Getting in. Our entrance faces the back lot and is step-free. Look for Suite B and the yellow light over the door."
+              }
+            ]
+          }
+        },
+        {
+          "id": "find-us-look-suite",
+          "topic": "parking",
+          "question_variants": [
+            "Look for Suite B and the yellow light over the door.",
+            "is the entrance step-free",
+            "How can I identify your studio's entrance?",
+            "Is there a specific light over your door?",
+            "What color is the light over your door?",
+            "Should I look for Suite B?",
+            "Is there a yellow light at your entrance?",
+            "How is your studio marked for visitors?"
+          ],
+          "answer_spoken": "Look for Suite B and the yellow light over the door.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Getting in. Our entrance faces the back lot and is step-free. Look for Suite B and the yellow light over the door."
               }
             ]
           }
@@ -1111,64 +2596,107 @@
       "title": "Appointments",
       "services": [
         {
-          "item": "services/women-s-cut-and-style"
+          "item": "services/balayage",
+          "resource_ids": [
+            "ines"
+          ]
         },
         {
-          "item": "services/men-s-cut"
+          "item": "services/womens-cut-and-style"
         },
         {
-          "item": "services/blowout"
+          "item": "services/mens-cut",
+          "resource_ids": [
+            "wren",
+            "june"
+          ]
         },
         {
-          "item": "services/balayage"
+          "item": "services/mens-cut-and-beard-trim",
+          "resource_ids": [
+            "wren"
+          ]
         },
         {
-          "item": "services/kids-cut-ages-12-and-under"
+          "item": "services/curly-and-coily-cut",
+          "resource_ids": [
+            "june"
+          ]
         },
         {
-          "item": "services/men-s-cut-and-beard-trim"
-        },
-        {
-          "item": "services/curly-and-coily-cut"
-        },
-        {
-          "item": "services/kids-cut"
+          "item": "services/kids-cut",
+          "resource_ids": [
+            "wren",
+            "june"
+          ]
         },
         {
           "item": "services/bang-trim"
         },
         {
-          "item": "services/blowout-with-hot-tool-styling"
+          "item": "services/blowout",
+          "resource_ids": [
+            "wren",
+            "june"
+          ]
         },
         {
-          "item": "services/special-occasion-updo"
+          "item": "services/blowout-with-hot-tool-styling",
+          "resource_ids": [
+            "june"
+          ]
         },
         {
-          "item": "services/color-consultation"
+          "item": "services/special-occasion-updo",
+          "resource_ids": [
+            "june"
+          ]
         },
         {
-          "item": "services/patch-test"
+          "item": "services/color-consultation",
+          "resource_ids": [
+            "ines",
+            "wren"
+          ]
         },
         {
-          "item": "services/root-touch-up"
+          "item": "services/patch-test",
+          "resource_ids": [
+            "ines",
+            "wren"
+          ]
         },
         {
-          "item": "services/all-over-color"
+          "item": "services/root-touch-up",
+          "resource_ids": [
+            "ines",
+            "wren"
+          ]
         },
         {
-          "item": "services/partial-highlights"
+          "item": "services/all-over-color",
+          "resource_ids": [
+            "ines",
+            "wren"
+          ]
         },
         {
-          "item": "services/full-highlights"
+          "item": "services/partial-highlights",
+          "resource_ids": [
+            "ines"
+          ]
         },
         {
-          "item": "services/balayage-shoulder-length-or-shorter"
+          "item": "services/full-highlights",
+          "resource_ids": [
+            "ines"
+          ]
         },
         {
-          "item": "services/balayage-past-the-shoulder-blades"
-        },
-        {
-          "item": "services/color-correction"
+          "item": "services/color-correction",
+          "resource_ids": [
+            "ines"
+          ]
         },
         {
           "item": "services/deep-conditioning"
@@ -1177,7 +2705,10 @@
           "item": "services/scalp-treatment"
         },
         {
-          "item": "services/smoothing-treatment"
+          "item": "services/smoothing-treatment",
+          "resource_ids": [
+            "wren"
+          ]
         }
       ],
       "slotting": {
@@ -1185,6 +2716,31 @@
         "step_minutes": 15
       },
       "intake_fields": [
+        {
+          "key": "stylist",
+          "label": "Stylist",
+          "spoken_prompt": "Would you like a particular stylist, or the first one available?",
+          "type": "choice",
+          "required": true,
+          "options": [
+            {
+              "value": "ines",
+              "label": "Inés Calderón"
+            },
+            {
+              "value": "wren",
+              "label": "Wren Abernathy"
+            },
+            {
+              "value": "june",
+              "label": "June Okafor"
+            },
+            {
+              "value": "any",
+              "label": "No preference"
+            }
+          ]
+        },
         {
           "key": "customer_name",
           "label": "Name",
@@ -1204,7 +2760,22 @@
           "key": "customer_email",
           "label": "Email",
           "type": "email",
+          "required": true,
+          "pii": true
+        },
+        {
+          "key": "new_to_color_with",
+          "label": "New to color with us, or ever reacted to hair dye?",
+          "spoken_prompt": "Is this you: New to color with us, or ever reacted to hair dye?",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "key": "allergies_or_sensitivities",
+          "label": "Allergies or sensitivities",
+          "type": "long_text",
           "required": false,
+          "max_length": 300,
           "pii": true
         }
       ],
@@ -1213,8 +2784,13 @@
         "idempotency": "required",
         "read_back": [
           "item",
+          "choices",
           "when",
           "customer_name"
+        ],
+        "say_before_confirm": [
+          "info/footnotes-cancellation-policy",
+          "info/how-to-book-confirm-email"
         ]
       },
       "availability": {
@@ -1236,14 +2812,19 @@
             {
               "url": "https://quillfern.example/contact.html",
               "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you."
+            },
+            {
+              "url": "https://quillfern.example/policies.html",
+              "quote": "You can book up to 8 weeks ahead."
             }
           ]
-        }
+        },
+        "max_advance_minutes": 80640
       },
       "resources": [
         {
           "id": "ines",
-          "kind": "staff",
+          "kind": "stylist",
           "spoken_name": "Inés",
           "provenance": {
             "owner_confirmed": false,
@@ -1251,6 +2832,10 @@
               {
                 "url": "https://quillfern.example/index.html",
                 "quote": "Inés Calderón Owner and color director"
+              },
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Works Tuesday, Wednesday, Friday, Saturday"
               },
               {
                 "url": "https://quillfern.example/services.html",
@@ -1261,11 +2846,20 @@
                 "quote": "Owner and color director"
               }
             ]
+          },
+          "attributes": {
+            "full_name": "Inés Calderón",
+            "works_days": [
+              "tue",
+              "wed",
+              "fri",
+              "sat"
+            ]
           }
         },
         {
           "id": "wren",
-          "kind": "staff",
+          "kind": "stylist",
           "spoken_name": "Wren",
           "provenance": {
             "owner_confirmed": false,
@@ -1273,6 +2867,10 @@
               {
                 "url": "https://quillfern.example/index.html",
                 "quote": "Wren Abernathy Senior stylist"
+              },
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Works Tuesday, Thursday, Friday, Saturday"
               },
               {
                 "url": "https://quillfern.example/services.html",
@@ -1283,11 +2881,20 @@
                 "quote": "Senior stylist"
               }
             ]
+          },
+          "attributes": {
+            "full_name": "Wren Abernathy",
+            "works_days": [
+              "tue",
+              "thu",
+              "fri",
+              "sat"
+            ]
           }
         },
         {
           "id": "june",
-          "kind": "staff",
+          "kind": "stylist",
           "spoken_name": "June",
           "provenance": {
             "owner_confirmed": false,
@@ -1295,6 +2902,10 @@
               {
                 "url": "https://quillfern.example/index.html",
                 "quote": "June Okafor Stylist"
+              },
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Works Wednesday, Thursday, Saturday, Sunday"
               },
               {
                 "url": "https://quillfern.example/services.html",
@@ -1305,9 +2916,52 @@
                 "quote": "stylist"
               }
             ]
+          },
+          "attributes": {
+            "full_name": "June Okafor",
+            "works_days": [
+              "wed",
+              "thu",
+              "sat",
+              "sun"
+            ]
           }
         }
       ],
+      "approval": {
+        "module": "owner",
+        "mode": "when_any_rule_matches",
+        "rules": [
+          {
+            "when": "item",
+            "op": "in",
+            "value": [
+              "services/balayage",
+              "services/root-touch-up",
+              "services/all-over-color",
+              "services/partial-highlights",
+              "services/full-highlights",
+              "services/color-correction"
+            ],
+            "reason_spoken": "Color Services marked with an asterisk need a $50 deposit when you book. I'll send your request to Inés.",
+            "provenance": {
+              "owner_confirmed": false,
+              "evidence": [
+                {
+                  "url": "https://quillfern.example/services.html",
+                  "quote": "Color Services marked * need a $50 deposit when you book."
+                }
+              ]
+            }
+          }
+        ],
+        "decisions": [
+          "approve",
+          "decline",
+          "suggest_time",
+          "request_info"
+        ]
+      },
       "fulfillment": {
         "modes": [
           "on_site"
@@ -1333,6 +2987,10 @@
             {
               "url": "https://quillfern.example/contact.html",
               "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you."
+            },
+            {
+              "url": "https://quillfern.example/policies.html",
+              "quote": "You can book up to 8 weeks ahead."
             }
           ]
         }
@@ -1344,21 +3002,21 @@
       "kind": "web_page",
       "url": "https://quillfern.example/index.html",
       "title": "Quillfern Hair Studio | Hair salon in East Austin, Texas",
-      "retrieved_at": "2026-10-15T15:36:41Z",
+      "retrieved_at": "2026-10-20T07:51:36Z",
       "content_sha256": "dd5323b69bdcbaf2f2d76b6f023ee58c4c4237854c2d60f5b3fc85155a9f248d"
     },
     "web-services": {
       "kind": "web_page",
       "url": "https://quillfern.example/services.html",
       "title": "Services & prices | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-15T15:36:41Z",
+      "retrieved_at": "2026-10-20T07:51:36Z",
       "content_sha256": "075d5ff08168309b8d8f29712dcc615706338788f5c968e17e081b2dd1744064"
     },
     "web-team": {
       "kind": "web_page",
       "url": "https://quillfern.example/team.html",
       "title": "Our stylists | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-15T15:36:41Z",
+      "retrieved_at": "2026-10-20T07:51:36Z",
       "content_sha256": "25976432365d14a1669a2235fd63a4502e3a21a05cba901d3dfd6eb99f40bca3",
       "injection_canaries": [
         {
@@ -1375,14 +3033,14 @@
       "kind": "web_page",
       "url": "https://quillfern.example/policies.html",
       "title": "Studio policies | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-15T15:36:41Z",
+      "retrieved_at": "2026-10-20T07:51:36Z",
       "content_sha256": "7ebd3b8414485a7c57d0ce9e53d6cf8d1ff37b1837e93497b630fb06553da61c"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://quillfern.example/contact.html",
       "title": "Contact & hours | Quillfern Hair StudioMap showing Quillfern Hair Studio at 1906 East Marigold Street, Suite B, between",
-      "retrieved_at": "2026-10-15T15:36:41Z",
+      "retrieved_at": "2026-10-20T07:51:36Z",
       "content_sha256": "37f69adbb2ee5ccf3186e997447ce6f2448b198719d3c50e8e11f79dd188aebb"
     }
   },
@@ -1391,8 +3049,12 @@
       "id": "q-policy-cancellation-notice-minutes",
       "kind": "contradiction",
       "targets": [
-        "info/cancellation#facts.notice_minutes",
-        "info/cancellation#answer_spoken"
+        "info/footnotes-cancellation-policy#facts.notice_minutes",
+        "info/footnotes-cancellation-policy#answer_spoken",
+        "info/cancellations-and-no-shows#facts.notice_minutes",
+        "info/cancellations-and-no-shows#answer_spoken",
+        "info/cancellations-and-no-shows-hours-more#answer_spoken",
+        "info/cancellations-and-no-shows-less-than#answer_spoken"
       ],
       "prompt": "Which is right for cancellation: notice minutes?",
       "why": "For cancellation: notice minutes, your Services & prices page says 48 hours but your Studio policies page says 24 hours. Until you answer, the assistant won't state it.",
@@ -1473,17 +3135,67 @@
       "id": "q-safety-policies",
       "kind": "confirm",
       "targets": [
-        "info/patch-test#answer_spoken"
+        "info/before-you-book-first-time#answer_spoken",
+        "info/color-carry-free#answer_spoken",
+        "info/patch-tests-and-allergies-free-takes#answer_spoken",
+        "info/patch-tests-and-allergies#answer_spoken",
+        "info/patch-tests-and-allergies-standard-permanent#answer_spoken",
+        "info/patch-tests-and-allergies-highlights-balayage#answer_spoken",
+        "info/patch-tests-and-allergies-smoothing-treatment#answer_spoken",
+        "info/patch-tests-and-allergies-finishing-contains#answer_spoken",
+        "info/patch-tests-and-allergies-nitrile-latex#answer_spoken",
+        "info/patch-tests-and-allergies-fragrance-free#answer_spoken",
+        "info/patch-tests-and-allergies-please-tell#answer_spoken"
       ],
       "prompt": "Your website makes some health and safety statements. Are they all correct?",
       "why": "Safety statements are only repeated to customers after you confirm them.",
       "candidates": [
         {
-          "value": "info/patch-test",
+          "value": "info/before-you-book-first-time",
           "label": "As your Quillfern Hair Studio page says",
           "evidence": {
             "url": "https://quillfern.example/index.html",
             "quote": "First time getting color with us, or reacted to hair dye before? Book a free patch test at least 72 hours before your color appointment."
+          }
+        },
+        {
+          "value": "info/color-carry-free",
+          "label": "As your Services & prices page says",
+          "evidence": {
+            "url": "https://quillfern.example/services.html",
+            "quote": "We carry a PPD-free color line for all-over color and root touch-ups. Read about patch tests and ingredients before your first color appointment."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-free-takes",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-standard-permanent",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "Our standard permanent hair color contains PPD (para-phenylenediamine). For all-over color and root touch-ups, we also carry a PPD-free color line."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-highlights-balayage",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative."
           }
         }
       ],
@@ -1507,18 +3219,28 @@
           "version": "1.0"
         },
         "profile_revision": 1,
-        "profile_sha256": "2f474988874117d8ac2e1ad6486b35bddb13d6d2d2b9efb0878d3ef7d14027a2",
-        "started_at": "2026-10-15T15:44:50Z",
-        "finished_at": "2026-10-15T15:44:51Z",
+        "profile_sha256": "5d50c4f04b8e725c8044f68e3795c93465cdc51225246efaffbded8c84155af4",
+        "started_at": "2026-10-20T07:51:44Z",
+        "finished_at": "2026-10-20T07:51:46Z",
         "result": "passed",
-        "cases_total": 47,
-        "cases_passed": 47,
+        "cases_total": 95,
+        "cases_passed": 95,
         "failures": []
       }
     ]
   },
   "vocabulary": {
     "attributes": {
+      "requires_deposit": {
+        "label": "requires deposit",
+        "type": "boolean",
+        "claim_class": "policy"
+      },
+      "duration_is_minimum": {
+        "label": "duration is minimum",
+        "type": "boolean",
+        "claim_class": "policy"
+      },
       "step_minutes": {
         "label": "step minutes",
         "type": "integer",
@@ -1543,6 +3265,25 @@
         "label": "late arrival grace minutes",
         "type": "integer",
         "claim_class": "policy"
+      },
+      "full_name": {
+        "label": "full name",
+        "type": "text",
+        "claim_class": "policy"
+      },
+      "works_days": {
+        "label": "works days",
+        "type": "multi_enum",
+        "enum": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "claim_class": "availability"
       }
     }
   }

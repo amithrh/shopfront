@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-7bfcd7e112b68d2b4e55",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:18+00:00",
+ "answer": "The remaining balance is due at pickup.",
+ "questions": [
+  "When is the remaining balance due for large orders?",
+  "Do I pay the rest when I pick up my order?",
+  "Is full payment required at pickup for large orders?",
+  "What's the payment schedule for large cake orders?",
+  "Can I pay the balance over the phone?",
+  "Is there a specific time to pay the remaining balance?"
+ ]
+}

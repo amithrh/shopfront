@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-10bfab5275066f312bb8",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:06+00:00",
+ "answer": "Collect your cake at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm. Any balance is paid at pickup.",
+ "questions": [
+  "How far in advance should I order a cake?",
+  "What is the minimum notice required for cake orders?",
+  "Can I order a cake with short notice?",
+  "Is there a deadline for placing cake orders?",
+  "How early should I place my cake order?",
+  "What is the cutoff time for cake orders?"
+ ]
+}

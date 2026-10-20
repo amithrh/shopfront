@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-42495ed79b411b672e41",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:36+00:00",
+ "answer": "No-show: We charge 100% of the booked service price.",
+ "questions": [
+  "What is the policy for no-shows?",
+  "How are no-shows handled by the studio?",
+  "What is the charge for not showing up to an appointment?",
+  "Is there a fee for missing an appointment without notice?",
+  "What happens if I don't show up for my appointment?",
+  "How does the studio deal with clients who don't arrive?"
+ ]
+}

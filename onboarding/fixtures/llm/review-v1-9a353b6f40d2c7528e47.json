@@ -1,0 +1,8 @@
+{
+ "key": "review-v1-9a353b6f40d2c7528e47",
+ "kind": "review-v1",
+ "model_id": "apac.amazon.nova-pro-v1:0",
+ "cost_usd": 0.008069,
+ "recorded_at": "2026-10-20T07:37:08+00:00",
+ "text": "{\"contradictions\": [{\"fact_ids\": [\"F94\", \"F164\"], \"prompt\": \"Is 80033 in the service area?\", \"why\": \"Service area says 'extended' but How quotes work says 'not_served'\"}, {\"fact_ids\": [\"F105\", \"F165\"], \"prompt\": \"Is Wheat Ridge in the service area?\", \"why\": \"Service area says 'extended' but How quotes work says 'not_served'\"}]}"
+}

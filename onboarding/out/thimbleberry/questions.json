@@ -3,8 +3,8 @@
   "business": "Thimbleberry Bakehouse",
   "summary": {
     "contradiction": 1,
-    "missing": 4,
-    "confirm": 1,
+    "missing": 2,
+    "confirm": 2,
     "suspected_injections": 2
   },
   "questions": [
@@ -90,45 +90,33 @@
       "status": "open"
     },
     {
-      "id": "q-custom-order-notice",
-      "kind": "missing",
-      "targets": [
-        "custom-orders#availability.lead_time_minutes"
-      ],
-      "prompt": "How much notice do you need for a custom order?",
-      "why": "Your website does not say how far ahead customers must order.",
-      "answer_field": {
-        "key": "notice_hours",
-        "label": "Notice needed, in hours",
-        "type": "integer",
-        "required": true,
-        "min": 0
-      },
-      "blocking": true,
-      "status": "open"
-    },
-    {
-      "id": "q-notice-minutes",
-      "kind": "missing",
-      "targets": [
-        "info#entries"
-      ],
-      "prompt": "How much notice is required for a loaf reservation?",
-      "why": "The page mentions calling or emailing by 2:00 pm the day before, but does not specify the exact notice required. Your Menu page says: \"Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set \"",
-      "answer_field": {
-        "key": "notice_minutes",
-        "label": "Notice minutes",
-        "type": "integer",
-        "required": true,
-        "min": 0
-      },
-      "blocking": false,
-      "status": "open"
-    },
-    {
       "id": "q-allergens",
       "kind": "confirm",
       "targets": [
+        "menu/custom-cake/cake-flavor/vanilla-bean#allergens",
+        "menu/custom-cake/cake-flavor/dark-chocolate#allergens",
+        "menu/custom-cake/cake-flavor/lemon-poppyseed#allergens",
+        "menu/custom-cake/cake-flavor/carrot-with-walnuts#allergens",
+        "menu/custom-cake/cake-flavor/hazelnut-praline#allergens",
+        "menu/custom-cake/cake-flavor/birthday-sprinkle#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#dietary",
+        "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#dietary",
+        "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#dietary",
+        "menu/custom-cake/cake-flavor/vegan-vanilla-bean#allergens",
+        "menu/custom-cake/cake-flavor/vegan-vanilla-bean#dietary",
+        "menu/custom-cake/cake-flavor/vegan-dark-chocolate#allergens",
+        "menu/custom-cake/cake-flavor/vegan-dark-chocolate#dietary",
+        "menu/custom-cake/filling/marionberry-jam#allergens",
+        "menu/custom-cake/filling/lemon-curd#allergens",
+        "menu/custom-cake/filling/salted-caramel#allergens",
+        "menu/custom-cake/filling/chocolate-ganache#allergens",
+        "menu/custom-cake/frosting/vanilla-buttercream#allergens",
+        "menu/custom-cake/frosting/chocolate-buttercream#allergens",
+        "menu/custom-cake/frosting/cream-cheese-frosting#allergens",
+        "menu/custom-cake/frosting/vegan-vanilla-buttercream#allergens",
         "menu/country-sourdough#allergens",
         "menu/country-sourdough#dietary",
         "menu/seeded-rye#allergens",
@@ -156,25 +144,164 @@
         "menu/ginger-molasses#dietary",
         "menu/flourless-chocolate-crinkle#allergens",
         "menu/flourless-chocolate-crinkle#dietary",
-        "menu/6-inch-case-cake#allergens",
-        "menu/6-inch-round-3-layers#allergens",
-        "menu/8-inch-round-3-layers#allergens",
-        "menu/10-inch-round-3-layers#allergens",
-        "menu/quarter-sheet-9-13-in-2-layers#allergens",
-        "menu/half-sheet-12-18-in-2-layers#allergens",
-        "menu/two-tier-6-inch-on-a-10-inch#allergens",
-        "menu/three-tier-6-8-and-10-inch#allergens",
-        "menu/hand-piped-buttercream-flowers#allergens",
-        "menu/gluten-free#allergens",
-        "menu/gluten-free#dietary",
-        "menu/vegan#allergens",
-        "menu/vegan#dietary",
-        "menu/flourless-chocolate-crinkle-cookie#allergens",
-        "menu/flourless-chocolate-crinkle-cookie#dietary"
+        "menu/6-inch-case-cake/flavor/vanilla-bean-with-vanilla-buttercream#allergens",
+        "menu/6-inch-case-cake/flavor/dark-chocolate-with-chocolate-buttercream#allergens"
       ],
       "prompt": "Your website lists what items contain and which are vegan, gluten-free and so on. Is all of it correct?",
       "why": "Allergen and diet answers are safety facts, so the assistant only says them after you confirm them.",
       "candidates": [
+        {
+          "value": {
+            "menu/custom-cake/cake-flavor/vanilla-bean#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/dark-chocolate#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/lemon-poppyseed#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/carrot-with-walnuts#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "tree_nuts",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/hazelnut-praline#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "tree_nuts",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/birthday-sprinkle#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#allergens": {
+              "contains": [
+                "eggs",
+                "milk"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#dietary": {
+              "tags": [
+                "gluten_free"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "soybeans"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#dietary": {
+              "tags": [
+                "gluten_free"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#allergens": {
+              "contains": [
+                "eggs",
+                "milk"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#dietary": {
+              "tags": [
+                "gluten_free"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-vanilla-bean#allergens": {
+              "contains": [
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-vanilla-bean#dietary": {
+              "tags": [
+                "vegan"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-dark-chocolate#allergens": {
+              "contains": [
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-dark-chocolate#dietary": {
+              "tags": [
+                "vegan"
+              ]
+            },
+            "menu/custom-cake/filling/marionberry-jam#allergens": {
+              "contains": []
+            },
+            "menu/custom-cake/filling/lemon-curd#allergens": {
+              "contains": [
+                "eggs",
+                "milk"
+              ]
+            },
+            "menu/custom-cake/filling/salted-caramel#allergens": {
+              "contains": [
+                "milk"
+              ]
+            },
+            "menu/custom-cake/filling/chocolate-ganache#allergens": {
+              "contains": [
+                "milk",
+                "soybeans"
+              ]
+            },
+            "menu/custom-cake/frosting/vanilla-buttercream#allergens": {
+              "contains": [
+                "milk"
+              ]
+            },
+            "menu/custom-cake/frosting/chocolate-buttercream#allergens": {
+              "contains": [
+                "milk",
+                "soybeans"
+              ]
+            },
+            "menu/custom-cake/frosting/cream-cheese-frosting#allergens": {
+              "contains": [
+                "milk"
+              ]
+            },
+            "menu/custom-cake/frosting/vegan-vanilla-buttercream#allergens": {
+              "contains": [
+                "soybeans"
+              ]
+            }
+          },
+          "label": "As listed on your Custom cakes page",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Vanilla bean wheat, milk, eggs Available Available"
+          }
+        },
         {
           "value": {
             "menu/country-sourdough#allergens": {
@@ -254,6 +381,7 @@
               "contains": [
                 "eggs",
                 "milk",
+                "tree_nuts",
                 "wheat"
               ]
             },
@@ -306,6 +434,7 @@
             "menu/hazelnut-shortbread#allergens": {
               "contains": [
                 "milk",
+                "tree_nuts",
                 "wheat"
               ]
             },
@@ -338,7 +467,14 @@
                 "gluten_free"
               ]
             },
-            "menu/6-inch-case-cake#allergens": {
+            "menu/6-inch-case-cake/flavor/vanilla-bean-with-vanilla-buttercream#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "wheat"
+              ]
+            },
+            "menu/6-inch-case-cake/flavor/dark-chocolate-with-chocolate-buttercream#allergens": {
               "contains": [
                 "eggs",
                 "milk",
@@ -352,125 +488,91 @@
             "url": "https://thimbleberry.example.com/menu.html",
             "quote": "Country sourdough $9.00 A 1.5 lb round with a dark, crackly crust, fermented for 36 hours. Vegan Contains: wheat"
           }
-        },
-        {
-          "value": {
-            "menu/6-inch-round-3-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/8-inch-round-3-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/10-inch-round-3-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/quarter-sheet-9-13-in-2-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/half-sheet-12-18-in-2-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/two-tier-6-inch-on-a-10-inch#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/three-tier-6-8-and-10-inch#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/hand-piped-buttercream-flowers#allergens": {
-              "contains": [
-                "milk"
-              ]
-            },
-            "menu/gluten-free#allergens": {
-              "contains": [
-                "eggs",
-                "milk"
-              ]
-            },
-            "menu/gluten-free#dietary": {
-              "tags": [
-                "gluten_free"
-              ]
-            },
-            "menu/vegan#allergens": {
-              "contains": [
-                "soybeans",
-                "wheat"
-              ]
-            },
-            "menu/vegan#dietary": {
-              "tags": [
-                "vegan"
-              ]
-            }
-          },
-          "label": "As listed on your Custom cakes page",
-          "evidence": {
-            "url": "https://thimbleberry.example.com/custom-cakes.html",
-            "quote": "6-inch round, 3 layers 12 $56.00"
-          }
-        },
-        {
-          "value": {
-            "menu/gluten-free-sandwich-loaf#allergens": {
-              "contains": [
-                "wheat"
-              ]
-            },
-            "menu/gluten-free-sandwich-loaf#dietary": {
-              "tags": [
-                "gluten_free"
-              ]
-            },
-            "menu/flourless-chocolate-crinkle-cookie#allergens": {
-              "contains": [
-                "wheat"
-              ]
-            },
-            "menu/flourless-chocolate-crinkle-cookie#dietary": {
-              "tags": [
-                "gluten_free"
-              ]
-            }
-          },
-          "label": "As listed on your FAQ page",
-          "evidence": {
-            "url": "https://thimbleberry.example.com/faq.html",
-            "quote": "Do you have gluten-free options? Yes: the gluten-free sandwich loaf ($12.00)"
-          }
         }
       ],
       "answer_field": {
         "key": "allergens_correct",
         "label": "Allergen and diet information is correct",
+        "type": "boolean",
+        "required": true
+      },
+      "blocking": true,
+      "status": "open"
+    },
+    {
+      "id": "q-safety-policies",
+      "kind": "confirm",
+      "targets": [
+        "info/cakes-made-for-your-table-order-least#answer_spoken",
+        "info/about-allergens-items-marked#answer_spoken",
+        "info/about-allergens#answer_spoken",
+        "info/flavors-fillings-and-frostings#answer_spoken",
+        "info/gluten-free-cakes-gluten-free#answer_spoken",
+        "info/gluten-free-cakes-they-made#answer_spoken",
+        "info/gluten-free-cakes#answer_spoken",
+        "info/vegan-cakes-vegan-cakes#answer_spoken",
+        "info/vegan-cakes#answer_spoken",
+        "info/vegan-cakes-make-cake#answer_spoken",
+        "info/nuts#answer_spoken",
+        "info/refunds#answer_spoken",
+        "info/is-your-kitchen-nut-free-even-when#answer_spoken",
+        "info/is-your-kitchen-nut-free#answer_spoken"
+      ],
+      "prompt": "Your website makes some health and safety statements. Are they all correct?",
+      "why": "Safety statements are only repeated to customers after you confirm them.",
+      "candidates": [
+        {
+          "value": "info/cakes-made-for-your-table-order-least",
+          "label": "As your Thimbleberry Bakehouse page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/index.html",
+            "quote": "Order at least 72 hours before pickup"
+          }
+        },
+        {
+          "value": "info/about-allergens-items-marked",
+          "label": "As your Menu page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/menu.html",
+            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+          }
+        },
+        {
+          "value": "info/about-allergens",
+          "label": "As your Menu page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/menu.html",
+            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+          }
+        },
+        {
+          "value": "info/flavors-fillings-and-frostings",
+          "label": "As your Custom cakes page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Choose one cake flavor, one filling and one frosting. Allergens are listed for our regular recipes; gluten-free and vegan versions are described below."
+          }
+        },
+        {
+          "value": "info/gluten-free-cakes-gluten-free",
+          "label": "As your Custom cakes page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+          }
+        },
+        {
+          "value": "info/gluten-free-cakes-they-made",
+          "label": "As your Custom cakes page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+          }
+        }
+      ],
+      "answer_field": {
+        "key": "safety_correct",
+        "label": "Safety statements are correct",
         "type": "boolean",
         "required": true
       },

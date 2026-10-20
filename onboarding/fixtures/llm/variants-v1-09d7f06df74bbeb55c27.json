@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-09d7f06df74bbeb55c27",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:28:35+00:00",
+ "answer": "After-hours surcharge applies; Text photos: (720) 555-0147 Include your name and ZIP code; Email: quotes@kettlewick.example.com; Office and warehouse: 1880 W. Quill Ave, Unit B, Denver, CO 80211 No walk-in service.",
+ "questions": [
+  "What is the address of Kettlewick's office and warehouse?",
+  "Can I visit Kettlewick's location for walk-in service?",
+  "What's the email address for quote requests at Kettlewick?",
+  "How can I send photos via text to Kettlewick?",
+  "Is there an after-hours surcharge for contacting Kettlewick?",
+  "What information should I include when texting photos to Kettlewick?"
+ ]
+}

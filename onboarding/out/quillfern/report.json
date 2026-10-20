@@ -123,6 +123,11 @@
       "quote": "Patch testFor first-time color clients. Book it at least 72 hours before your color. 15 min Inés, Wren Free"
     },
     {
+      "page": "https://quillfern.example/services.html",
+      "what": "item Balayage, past the shoulder blades (not in the page's own price list)",
+      "quote": "Balayage, past the shoulder blades*Includes toner and a blowout 4 hrs Inés $285"
+    },
+    {
       "page": "https://quillfern.example/contact.html",
       "what": "policy fact quote_response_minutes=1440 (number not in quote)",
       "quote": "Call (512) 555-0147 during studio hours or email quillfernhairstudio@example.com"
@@ -143,8 +148,8 @@
     }
   ],
   "model": {
-    "calls": 1,
-    "cache_hits": 19,
-    "cost_usd": 0.011785
+    "calls": 0,
+    "cache_hits": 20,
+    "cost_usd": 0.0
   }
 }

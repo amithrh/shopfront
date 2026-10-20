@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-baacd2e1cd0069293a69",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:36+00:00",
+ "answer": "If you're more than 15 minutes late, we may need to shorten your service or move your appointment to another time so the next client isn't kept waiting. If you're running behind, call us and we'll tell you what we can do.",
+ "questions": [
+  "What happens if I am late for my appointment?",
+  "How does being late affect my service?",
+  "What should I do if I am running late?",
+  "Can my service be shortened if I am late?",
+  "How does the studio handle late arrivals?",
+  "What is the policy for clients arriving late?"
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-fe01c38d485ae3f08bc0",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:18+00:00",
+ "answer": "Call (503) 555-0147 during opening hours or email cakes@thimbleberry.example.com. Read cake questions See opening hours",
+ "questions": [
+  "How can I contact you to place an order?",
+  "What's the phone number for cake orders?",
+  "Can I email you to order a cake?",
+  "Where can I find your opening hours?",
+  "What information should I have ready when ordering?",
+  "Is there a specific time to call for orders?"
+ ]
+}

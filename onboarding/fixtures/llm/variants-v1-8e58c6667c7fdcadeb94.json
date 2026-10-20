@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-8e58c6667c7fdcadeb94",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:36+00:00",
+ "answer": "You can book up to 8 weeks ahead.",
+ "questions": [
+  "How far in advance can I book?",
+  "What is the maximum booking window?",
+  "How many weeks ahead can appointments be made?",
+  "What is the booking lead time?",
+  "Can I schedule appointments months in advance?",
+  "What is the earliest I can book an appointment?"
+ ]
+}

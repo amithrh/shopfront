@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-e8114105fa6dbfe7b7b5",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:52+00:00",
+ "answer": "Due when the job is done. We take credit and debit cards, bank transfer (ACH) and checks.",
+ "questions": [
+  "What payment methods do you accept upon job completion?",
+  "Can I pay with a credit or debit card?",
+  "Do you accept bank transfers for payment?",
+  "Can I write a check to pay for your services?",
+  "What are the accepted forms of payment after the job is done?",
+  "Is there an option to pay electronically for your services?"
+ ]
+}

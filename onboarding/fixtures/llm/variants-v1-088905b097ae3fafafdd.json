@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-088905b097ae3fafafdd",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:06+00:00",
+ "answer": "Choose one cake flavor, one filling and one frosting. Allergens are listed for our regular recipes; gluten-free and vegan versions are described below.",
+ "questions": [
+  "How many cake flavors can I choose from?",
+  "Are there options for fillings and frostings?",
+  "Can I select different allergens for my cake order?",
+  "What are the available choices for cake customization?",
+  "Are there specific allergens listed for regular recipes?",
+  "Can I choose gluten-free or vegan options for my cake?"
+ ]
+}

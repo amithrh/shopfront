@@ -22,6 +22,7 @@ from askonce_onboarding.extract import PageFacts, extract_page, review_contradic
 from askonce_onboarding.injection import find_canaries, model_text
 from askonce_onboarding.llm import Model, ModelUnavailable
 from askonce_onboarding.site import Fetcher, crawl
+from askonce_onboarding.variants import generate as question_variants
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCHEMA_PATH = REPO_ROOT / "schema" / "business-profile.schema.json"
@@ -76,7 +77,8 @@ def onboard(
         progress(f"extracted {pf.page_url}" + (f" (error: {pf.error})" if pf.error else ""))
 
     assembler = Assembler(pages, page_facts, canaries, updated_at=clock())
-    result = assembler.build(review=lambda facts: review_contradictions(model, facts))
+    result = assembler.build(review=lambda facts: review_contradictions(model, facts),
+                             variants=lambda business, entries: question_variants(model, business, entries))
     profile = result.profile
     profile_id = profile["profile_id"]
     out_dir = out_root / profile_id
@@ -93,6 +95,9 @@ def onboard(
         loaded = load_profile(profile, schema_path=SCHEMA_PATH, snapshots=DirectorySnapshotProvider(snap_dir), strict=True)
         warnings = [v.model_dump() if hasattr(v, "model_dump") else vars(v) for v in loaded.report.violations]
         valid = True
+        unreachable = reachable_first(profile, loaded.profile)
+        if unreachable:
+            progress(f"{len(unreachable)} policy entr{'y' if len(unreachable) == 1 else 'ies'} no question reaches: {', '.join(unreachable[:5])}")
     except errors.ProfileInvalid as exc:
         valid = False
         violations = [v.model_dump() if hasattr(v, "model_dump") else vars(v) for v in exc.report.violations]
@@ -131,6 +136,25 @@ def onboard(
     _write(out_dir / "questions.json", questions_doc)
     _write(out_dir / "report.json", report)
     return Outcome(profile_id, out_dir, valid, profile, result.questions, report)
+
+
+def reachable_first(profile: dict[str, Any], served: Any) -> list[str]:
+    """Each policy entry leads with a question that the server's own matcher answers with that entry (the
+    certifier and a host ask an entry's first question). Returns the entries no question of theirs reaches."""
+    from askonce_server.tools.knowledge import best_entry
+
+    unreachable = []
+    for module_id, module in profile["modules"].items():
+        if module.get("type") != "knowledge":
+            continue
+        for entry in module["entries"]:
+            variants = entry["question_variants"]
+            hit = next((v for v in variants if (m := best_entry(served, v, None)) and m[0] == module_id and m[1]["id"] == entry["id"]), None)
+            if hit is None:
+                unreachable.append(entry["id"])
+            elif hit != variants[0]:
+                entry["question_variants"] = [hit, *[v for v in variants if v != hit]]
+    return unreachable
 
 
 def _write(path: Path, data: Any) -> None:

@@ -3,7 +3,7 @@
   "business": "Kettlewick Home Repair",
   "summary": {
     "contradiction": 4,
-    "missing": 2,
+    "missing": 1,
     "confirm": 1,
     "suspected_injections": 2
   },
@@ -12,7 +12,8 @@
       "id": "q-zone-80238",
       "kind": "contradiction",
       "targets": [
-        "locations/core-area#area.postal_codes"
+        "locations/core-area#area.postal_codes",
+        "info/is-central-park-in-your-service-area#answer_spoken"
       ],
       "prompt": "Is 80238 in your core area, your extended area, or not served?",
       "why": "For 80238, your Service area page says core but your How quotes work page says extended. Until you answer, the assistant won't tell customers whether you serve it.",
@@ -57,7 +58,8 @@
       "id": "q-zone-central-park",
       "kind": "contradiction",
       "targets": [
-        "locations/core-area#area.localities"
+        "locations/core-area#area.localities",
+        "info/is-central-park-in-your-service-area#answer_spoken"
       ],
       "prompt": "Is central park in your core area, your extended area, or not served?",
       "why": "For central park, your Service area page says core but your How quotes work page says extended. Until you answer, the assistant won't tell customers whether you serve it.",
@@ -102,7 +104,11 @@
       "id": "q-zone-80033",
       "kind": "contradiction",
       "targets": [
-        "locations/extended-area#area.postal_codes"
+        "locations/extended-area#area.postal_codes",
+        "info/where-we-work-extended-area#answer_spoken",
+        "info/outside-our-area-take-jobs#answer_spoken",
+        "info/do-you-work-in-wheat-ridge#answer_spoken",
+        "info/do-you-work-in-wheat-ridge-call-office#answer_spoken"
       ],
       "prompt": "Is 80033 in your core area, your extended area, or not served?",
       "why": "For 80033, your Service area page says extended but your How quotes work page says not served. Until you answer, the assistant won't tell customers whether you serve it.",
@@ -147,7 +153,11 @@
       "id": "q-zone-wheat-ridge",
       "kind": "contradiction",
       "targets": [
-        "locations/extended-area#area.localities"
+        "locations/extended-area#area.localities",
+        "info/where-we-work-extended-area#answer_spoken",
+        "info/outside-our-area-take-jobs#answer_spoken",
+        "info/do-you-work-in-wheat-ridge#answer_spoken",
+        "info/do-you-work-in-wheat-ridge-call-office#answer_spoken"
       ],
       "prompt": "Is wheat ridge in your core area, your extended area, or not served?",
       "why": "For wheat ridge, your Service area page says extended but your How quotes work page says not served. Until you answer, the assistant won't tell customers whether you serve it.",
@@ -207,38 +217,65 @@
       "status": "open"
     },
     {
-      "id": "q-arrival-window-minutes",
-      "kind": "missing",
-      "targets": [
-        "info#entries"
-      ],
-      "prompt": "what is the duration of the arrival window?",
-      "why": "the page mentions 2-hour arrival windows but does not specify the exact duration in minutes. Your How quotes work page says: \"we'll offer 2-hour arrival windows\"",
-      "answer_field": {
-        "key": "arrival_window_minutes",
-        "label": "Arrival window minutes",
-        "type": "integer",
-        "required": true,
-        "min": 0
-      },
-      "blocking": false,
-      "status": "open"
-    },
-    {
       "id": "q-safety-policies",
       "kind": "confirm",
       "targets": [
-        "info/background-checks#answer_spoken"
+        "info/drywall-patching-homes-built#answer_spoken",
+        "info/drywall-patching-suspect-asbestos#answer_spoken",
+        "info/what-we-dont-do-irrigation-systems#answer_spoken",
+        "info/what-we-dont-do-sewer-line#answer_spoken",
+        "info/credentials-homes-built#answer_spoken",
+        "info/credentials#answer_spoken"
       ],
       "prompt": "Your website makes some health and safety statements. Are they all correct?",
       "why": "Safety statements are only repeated to customers after you confirm them.",
       "candidates": [
         {
-          "value": "info/background-checks",
+          "value": "info/drywall-patching-homes-built",
+          "label": "As your Services and prices page says",
+          "evidence": {
+            "url": "https://kettlewick.example.com/services.html",
+            "quote": "Homes built before 1978: we follow lead-safe work practices as an RRP-certified firm."
+          }
+        },
+        {
+          "value": "info/drywall-patching-suspect-asbestos",
+          "label": "As your Services and prices page says",
+          "evidence": {
+            "url": "https://kettlewick.example.com/services.html",
+            "quote": "If we suspect asbestos, for example in a popcorn ceiling, we stop and refer you to a licensed abatement contractor."
+          }
+        },
+        {
+          "value": "info/what-we-dont-do-irrigation-systems",
+          "label": "As your Services and prices page says",
+          "evidence": {
+            "url": "https://kettlewick.example.com/services.html",
+            "quote": "Sewer line excavation or replacement"
+          }
+        },
+        {
+          "value": "info/what-we-dont-do-sewer-line",
+          "label": "As your Services and prices page says",
+          "evidence": {
+            "url": "https://kettlewick.example.com/services.html",
+            "quote": "Sewer line excavation or replacement"
+          }
+        },
+        {
+          "value": "info/credentials-homes-built",
           "label": "As your About us page says",
           "evidence": {
             "url": "https://kettlewick.example.com/about.html",
-            "quote": "Background checks for everyone who comes to your home"
+            "quote": "Colorado Master Plumber License MP.0048213, held by Jo Lindqvist"
+          }
+        },
+        {
+          "value": "info/credentials",
+          "label": "As your About us page says",
+          "evidence": {
+            "url": "https://kettlewick.example.com/about.html",
+            "quote": "Colorado Master Plumber License MP.0048213, held by Jo Lindqvist"
           }
         }
       ],

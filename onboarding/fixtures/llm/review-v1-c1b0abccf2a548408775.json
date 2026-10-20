@@ -1,0 +1,8 @@
+{
+ "key": "review-v1-c1b0abccf2a548408775",
+ "kind": "review-v1",
+ "model_id": "apac.amazon.nova-pro-v1:0",
+ "cost_usd": 0.001682,
+ "recorded_at": "2026-10-20T07:37:02+00:00",
+ "text": "{\n  \"contradictions\": [\n    {\n      \"fact_ids\": [\n        \"F5\",\n        \"F8\"\n      ],\n      \"prompt\": \"Please confirm the Saturday hours for the bakery.\",\n      \"why\": \"The 'About' page lists Saturday hours as 08:00-16:00, while the 'Visit us' page lists them as 08:00-18:00.\"\n    }\n  ]\n}"
+}
