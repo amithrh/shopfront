@@ -59,7 +59,10 @@ IGNORED_LOCALITIES: frozenset[str] = frozenset(
 _ZIP = re.compile(r"^(\d{5})(?:-?\d{4})?$")
 
 DIETARY_PHRASES: dict[str, tuple[str, ...]] = {
-    "gluten_free": ("gluten free", "glutenfree", "gf", "without gluten", "no gluten", "celiac"),
+    "gluten_free": (
+        "gluten free", "glutenfree", "gf", "without gluten", "no gluten", "celiac", "coeliac", "wheat free", "no wheat",
+        "without wheat",
+    ),
     "vegan": ("vegan", "plant based"),
     "vegetarian": ("vegetarian", "veggie"),
     "dairy_free": ("dairy free", "no dairy", "lactose free"),
@@ -71,7 +74,8 @@ DIETARY_PHRASES: dict[str, tuple[str, ...]] = {
     "halal": ("halal",),
     "kosher": ("kosher",),
 }
-"""Customer phrases for each dietary tag of the profile schema's closed enum."""
+"""Customer phrases for each dietary tag of the profile schema's closed enum. "Wheat-free" asks for the
+stricter gluten-free (every gluten-free item is wheat-free; a wheat-free one may still have rye)."""
 
 NEED_FILLER: frozenset[str] = frozenset(
     """a an the some any my me i we our you your it its someone somebody anyone who that which can could
@@ -136,8 +140,30 @@ def _first_match(text: str, phrases: Iterable[str]) -> str | None:
     return None
 
 
+GENERIC_HEADS: frozenset[str] = frozenset({"salon", "shop", "studio", "bar", "parlor", "parlour", "store"})
+"""Category synonyms that name a kind of place, not a trade: "salon" is a hair salon only when nothing
+else qualifies it ("a salon near me", "hair salon"), never in "nail salon" or "tanning salon"."""
+
+
 def _category_phrases(token: str) -> list[str]:
     return [token.replace("_", " "), *CATEGORY_SYNONYMS.get(token, ())]
+
+
+def _category_match(text: str, token: str) -> str | None:
+    """The category phrase `text` contains, skipping a bare `GENERIC_HEADS` word that another word
+    qualifies (the word before it is neither filler nor part of one of this category's phrases)."""
+    phrases = _category_phrases(token)
+    known = {w for p in phrases for w in normalize(p).split()}
+    words = text.split()
+    for phrase in _phrases(phrases):
+        if not contains_phrase(text, phrase):
+            continue
+        if phrase in GENERIC_HEADS:
+            before = [words[i - 1] for i, w in enumerate(words) if w == phrase and i > 0]
+            if before and all(b not in NEED_FILLER and b not in known for b in before):
+                continue
+        return phrase
+    return None
 
 
 def _postal(text: str) -> str:
@@ -177,7 +203,7 @@ def score_entry(entry: DirectoryEntry, *, need: str, category: str | None) -> tu
     score = 0.0
     matched: list[str] = []
     for token in entry.categories:
-        if _first_match(text, _category_phrases(token)):
+        if _category_match(text, token):
             score += SCORE_CATEGORY
             matched.append("category")
             break

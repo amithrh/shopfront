@@ -20,6 +20,21 @@ explaining, and a size ("75 inch", "2 by 2 foot") picks the option choice whose 
 it ("up to 2 by 2 feet", "56 to 85 inches"). Inside an item, a choice term's words that repeat the
 item's own names are implied: the drain cleaning's "sink drain" is named by "sink".
 
+Spoken phrases are also read the way people say them: an ASR split is joined back ("sour dough" ->
+"sourdough") and a run-together word split ("flatpack"); British spellings fold ("colour"); an age
+("my 8 year old") is a modifier checked against `attributes.max_age_years`; who it is for ("my son",
+`FAMILY_WORDS`) stands for the catalog's words for such a person ("boys haircut") or needs no
+explaining; "a party of 60" is a head count. Abbreviations ("choc") and everyday words (`COLLOQUIAL`:
+"dye", "trim") are loose: they explain a word but never complete an item term, and a literal match
+ranks first.
+
+Content words after a preposition or verb ("highlights *for* long hair", "updo for a wedding") are
+detail: an item may leave them unexplained, and one that names them in its own terms ranks first,
+but an option choice naming them (the balayage's long-hair price) does not make one service the
+answer over others. A lone match whose unexplained word stands before the head it matched ("brazilian
+blowout", "chocolate muffin") is no answer: the word may name another thing. Two services joined by
+"and" ("a ladies cut and blow dry") that the whole phrase cannot explain are read part by part.
+
 Each catalog item is then scored on how it explains the content words:
 
   kind 0  an item term (name, spoken name, synonym) is contained in the phrase, word order free
@@ -40,7 +55,13 @@ the item terms are tried. Modifiers are constraints, checked against owner-stata
 every wanted tag (that choice becomes the answer's focus), or the item's own matched name says it; a
 head count holds when the item, or some option choice, serves at least that many.
 
-Ranking: unmet dietary tags, then an unmet head count, then unexplained words, then whether the head
+A dietary tag an item's owner-confirmed allergens rule out (milk for dairy-free, `EXCLUDED_ALLERGENS`)
+is contradicted: such items rank below unknown ones, and when every candidate is ruled out the lookup
+says so (`ItemLookup.contradicted`, a hard "no"). An item's vegan tag implies dairy- and egg-free.
+
+Ranking: contradicted, then unmet dietary tags, then an unmet head count (the item known to serve the
+most first, so "a cake for 100" is the custom cake), then a stated age over the item's limit, then
+unexplained words, then detail words its own terms do not name, then whether the head
 of the phrase, where a preposition or verb marks it, is explained ("my water heater is leaking" is
 about the water heater, not a leak; "faucet leak" stays a question), then kind. Among
 equals, the longest match wins only when nothing was left unexplained; otherwise (and for any tie that
@@ -51,6 +72,7 @@ candidates cannot meet a dietary tag, `ItemLookup.unmet_dietary` says so and not
 
 from __future__ import annotations
 
+import dataclasses
 import re
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -74,11 +96,43 @@ FILLER: frozenset[str] = frozenset(
         "is", "are", "be", "was", "do", "doe", "did", "can", "could", "would", "will", "should", "may",
         "might", "need", "want", "wanted", "like", "looking", "look", "get", "got", "getting", "have",
         "ha", "had", "order", "buy", "help", "fix", "repair", "install", "done",
+        # vague size and price words ("a big cake for 60", "a cheap haircut")
+        "big", "large", "huge", "cheap", "cheapest", "cheaper", "affordable", "inexpensive",
+        # question words ("who does balayage", "when can I get a curly cut")
+        "what", "whats", "when", "who", "whos", "where", "which", "how", "much",
+        # vague amounts ("a couple of croissants")
+        "couple", "few", "several", "pair", "bunch",
     }
 )  # fmt: skip
 """Phrase words that never need explaining. Normalised forms (`search.normalize` strips a plural `s`,
 so "does" and "has" arrive as "doe" and "ha"). Item terms that contain them still match them.
 "replace" is not filler: replacing a sewer line is not cleaning one."""
+
+FAMILY_WORDS: dict[str, tuple[str, ...]] = {
+    "son": ("boy", "kid", "child"), "daughter": ("girl", "kid", "child"), "boy": ("kid", "child"),
+    "girl": ("kid", "child"), "child": ("kid",), "kid": ("child",), "toddler": ("kid", "child"),
+    "baby": ("kid", "child"), "grandson": ("boy", "kid", "child"), "granddaughter": ("girl", "kid", "child"),
+    "nephew": ("boy", "kid", "child"), "niece": ("girl", "kid", "child"), "grandkid": ("kid", "child"),
+    "grandchild": ("kid", "child"), "husband": ("men", "man"), "dad": ("men", "man"), "father": ("men", "man"),
+    "boyfriend": ("men", "man"), "wife": ("women", "woman", "lady"), "mom": ("women", "woman", "lady"),
+    "mum": ("women", "woman", "lady"), "mother": ("women", "woman", "lady"), "girlfriend": ("women", "woman", "lady"),
+    "teen": (), "teenager": (), "friend": (), "partner": (), "brother": (), "sister": (), "family": (),
+}  # fmt: skip
+"""Who it is for ("a haircut for my son"): the catalog words such a person is named by ("boys haircut",
+"men's haircut"), or, when the catalog has none of them, a word that needs no explaining ("a vanilla
+cake for my son's birthday")."""
+
+COLLOQUIAL: dict[str, tuple[str, ...]] = {"dye": ("color", "colour"), "trim": ("cut",), "tint": ("color", "colour")}
+"""Everyday words for catalog words ("dye my hair", "a men's trim"). Like abbreviations ("choc chip"),
+they are loose: they explain a word inside an item's terms or vocabulary (kinds 1 and 2) but never
+complete an item term on their own (kind 0), so "vegan hair dye" stays a question, not the all-over
+color."""
+
+AGE_WORDS: frozenset[str] = frozenset({"year", "yr", "yo"})
+""""8 year old", "14 yrs", "6yo" (after a number) state an age, checked against `attributes.max_age_years`."""
+
+CONJUNCTIONS: frozenset[str] = frozenset({"and", "plus"})
+"""Words that may join two services in one phrase ("a ladies cut and blow dry")."""
 
 OPTIONAL_IN_TERMS: frozenset[str] = frozenset({"a", "an", "the", "my", "your", "our", "his", "her", "their"})
 """Words of an item or choice term the phrase may leave out ("mount a tv" matches "mount my tv").
@@ -96,6 +150,11 @@ HEAD_ENDS: frozenset[str] = PREPOSITIONS | frozenset(
 """Words that end the noun phrase naming the job: prepositions and the verb that follows a subject
 ("my water heater is leaking", "toilets keep clogging")."""
 
+DETAIL_ENDS: frozenset[str] = HEAD_ENDS - {"with"}
+"""Words after which the phrase only adds detail an item may leave unexplained ("updo for a wedding")."""
+
+POSSESSIVES: frozenset[str] = frozenset({"my", "our", "his", "her", "their", "your"})
+
 _NUMBER_WORDS: dict[str, int] = {
     "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
     "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16,
@@ -104,6 +163,8 @@ _NUMBER_WORDS: dict[str, int] = {
 _TENS: dict[str, int] = {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90}
 _SERVING_NOUNS = frozenset({"people", "person", "guest", "serving", "portion", "kid", "adult", "child", "children", "head"})
 _SERVING_VERBS = frozenset({"serve", "feed", "feeding", "serving"})
+_SERVING_GROUPS = frozenset({"party", "group", "crowd", "gathering"})
+"""'a party of 60', 'a group of 12': the number after "of" is a head count."""
 _UNITS = frozenset(
     {"inch", "in", "foot", "feet", "ft", "minute", "min", "hour", "hr", "day", "week", "month", "year", "dollar",
      "buck", "cent", "percent", "pound", "lb", "layer", "tier", "am", "pm", "oclock", "piece", "slice", "loaf",
@@ -183,7 +244,19 @@ class ItemLookup:
     not to, None if the profile does not say."""
     unexplained: tuple[str, ...] = ()
     corrected: bool = False
-    """True when a misspelt word had to be corrected (the candidates are then a suggestion)."""
+    """True when a misspelt word had to be corrected: the candidates are then a suggestion, or (only with
+    `resolve(..., confirm_corrections=False)`) `found` is the one item a single unambiguous correction
+    of a long word names."""
+    contradicted: tuple[str, ...] = ()
+    """With `unmet_dietary`: the dietary needs every candidate is known NOT to meet (its owner-confirmed
+    allergens contain what the need excludes: milk for dairy-free). A hard "no", never "I don't know"."""
+    age: int | None = None
+    """An age the phrase states ("for my 8 year old")."""
+    age_met: bool | None = None
+    """For `found` with `age`: False when the item's `attributes.max_age_years` is lower, True when it is
+    not, None when the item states no age limit."""
+    for_person: bool = False
+    """The phrase says who it is for ("for my son", `FAMILY_WORDS`)."""
 
 
 @dataclass(frozen=True)
@@ -212,10 +285,53 @@ class Phrase:
     quantity_positions: frozenset[int] = frozenset()
     """Numbers that count something ("two dressers", "3 chairs")."""
     measure: Measure | None = None
+    loose: Mapping[str, frozenset[str]] = field(default_factory=dict)
+    """Content word -> catalog words it may stand for loosely (abbreviations, `COLLOQUIAL`): they explain
+    words (kinds 1 and 2) but never complete an item or choice term."""
+    age: int | None = None
+    """An age the phrase states ("my 8 year old")."""
+    for_person: bool = False
+    """A `FAMILY_WORDS` word names who it is for."""
 
     @property
     def words(self) -> frozenset[str]:
         return frozenset(self.tokens).union(*self.aliases.values()) if self.aliases else frozenset(self.tokens)
+
+    @property
+    def detail_start(self) -> int | None:
+        """Position of the word that ends the noun phrase naming the job ("highlights *for* long hair",
+        "my water heater *is* leaking"): words after it only add detail. None when nothing marks it.
+        "with" adds a feature, not a detail ("almond croissant with chocolate"), and "for my ..." names
+        who it is for, which must be explained ("a haircut for my dog")."""
+        seen = False
+        skip = self.modifier_positions | self.quantity_positions | (self.measure.positions if self.measure else frozenset())
+        for i, token in enumerate(self.tokens):
+            if token in DETAIL_ENDS and seen:
+                following = self.tokens[i + 1] if i + 1 < len(self.tokens) else None
+                return None if token == "for" and following in POSSESSIVES else i
+            if i not in skip and token not in FILLER:
+                seen = True
+        return None
+
+    @property
+    def core(self) -> tuple[str, ...]:
+        """Content words before `detail_start` (all of them when nothing marks it)."""
+        start = self.detail_start
+        if start is None:
+            return self.content
+        return tuple(
+            t for i, t in enumerate(self.tokens) if i < start and i not in self.modifier_positions and t not in FILLER
+        )
+
+    @property
+    def detail(self) -> tuple[str, ...]:
+        """Content words after `detail_start` ("long", "hair" in "highlights for long hair")."""
+        start = self.detail_start
+        if start is None:
+            return ()
+        return tuple(
+            t for i, t in enumerate(self.tokens) if i > start and i not in self.modifier_positions and t not in FILLER
+        )
 
     @property
     def content(self) -> tuple[str, ...]:
@@ -252,8 +368,8 @@ class Phrase:
         return head if marked else None
 
     def forms(self, word: str) -> frozenset[str]:
-        """`word` and the catalog words it stands for."""
-        return frozenset({word}) | self.aliases.get(word, frozenset())
+        """`word` and the catalog words it stands for (loosely too)."""
+        return frozenset({word}) | self.aliases.get(word, frozenset()) | self.loose.get(word, frozenset())
 
 
 @dataclass(frozen=True)
@@ -271,10 +387,39 @@ class Match:
     head_rank: int = 0
     """0 when the marked head of the phrase is explained by this item (or there is none), else 1."""
     left: tuple[str, ...] = ()
-    """The content words this item leaves unexplained."""
+    """The content words this item leaves unexplained (detail words included)."""
+    contradicted: tuple[str, ...] = ()
+    """Dietary needs the item's owner-confirmed allergens rule out ("dairy-free": it contains milk)."""
+    capacity_rank: int = 0
+    """For an unmet head count: minus the most this item (or a choice) is known to serve, so the item
+    that comes closest is the answer ("a cake for 100": the custom cake, whose biggest serves 72)."""
+    age_rank: int = 0
+    """1 when the phrase states an age above the item's `attributes.max_age_years`."""
+    age_met: bool | None = None
+    detail_rank: int = 0
+    """Detail words ("for long hair", "with beach waves") the item's own terms do not name. A detail an
+    option choice names (the balayage's long-hair price) does not make one service the answer over
+    others that the core words name as well."""
+    modified: bool = False
+    """A word the item does not explain stands before the head it matched ("brazilian blowout",
+    "chocolate muffin"): it may name a different thing altogether."""
+    loose_rank: int = 0
+    """Words only a loose reading explains ("trim" as a cut): a literal match ranks first ("a trim" is
+    the bang trim or the beard trim, not every cut)."""
 
-    def rank(self) -> tuple[int, int, int, int, int]:
-        return (len(self.missing_tags), self.servings_rank, self.unexplained, self.head_rank, self.kind)
+    def rank(self) -> tuple[int, ...]:
+        return (
+            len(self.contradicted),
+            len(self.missing_tags),
+            self.servings_rank,
+            self.capacity_rank,
+            self.age_rank,
+            self.unexplained,
+            self.detail_rank,
+            self.head_rank,
+            self.kind,
+            self.loose_rank,
+        )
 
 
 # ---------------------------------------------------------------------------- phrase parsing
@@ -319,9 +464,19 @@ def _number_at(words: Sequence[str], i: int) -> tuple[int, int] | None:
 
 
 def _servings(words: Sequence[str]) -> tuple[int | None, set[int]]:
-    """A head count ("for 30", "30 people", "serves 30", "feeds twenty five guests") and its positions."""
+    """A head count ("for 30", "30 people", "serves 30", "feeds twenty five guests", "a party of 60") and
+    its positions."""
     for i in range(len(words)):
         start = i
+        if words[i] in _SERVING_GROUPS and i + 1 < len(words) and words[i + 1] == "of":
+            number = _number_at(words, i + 2)
+            if number is not None:
+                end = i + 2 + number[1]
+                follower = words[end] if end < len(words) else None
+                if follower not in _UNITS:
+                    if follower in _SERVING_NOUNS:
+                        end += 1
+                    return number[0], set(range(start, end))
         if words[i] in _SERVING_VERBS or words[i] == "for":
             number = _number_at(words, i + 1)
             if number is None:
@@ -341,6 +496,58 @@ def _servings(words: Sequence[str]) -> tuple[int | None, set[int]]:
             if end < len(words) and words[end] in _SERVING_NOUNS:
                 return value, set(range(start, end + 1))
     return None, set()
+
+
+def _age(words: Sequence[str], taken: set[int]) -> tuple[int | None, set[int]]:
+    """An age: "8 year old", "14 years", "6 yo", "aged 10" (and its positions)."""
+    for i in range(len(words)):
+        if i in taken:
+            continue
+        if words[i] in ("aged", "age"):
+            number = _number_at(words, i + 1)
+            if number is not None:
+                return number[0], set(range(i, i + 1 + number[1]))
+        number = _number_at(words, i)
+        if number is None:
+            continue
+        end = i + number[1]
+        if end < len(words) and words[end] in AGE_WORDS:
+            end += 1
+            if end < len(words) and words[end] == "old":
+                end += 1
+            return number[0], set(range(i, end))
+    return None, set()
+
+
+def _without_questions(words: tuple[str, ...]) -> tuple[str, ...]:
+    """Without "how long" / "how much" / "how many" / "how big": "how long does balayage take" asks for a
+    duration and names no long-hair choice."""
+    out: list[str] = []
+    i = 0
+    while i < len(words):
+        if words[i] == "how" and i + 1 < len(words) and words[i + 1] in ("long", "much", "many", "big"):
+            i += 2
+            continue
+        out.append(words[i])
+        i += 1
+    return tuple(out)
+
+
+def _join_splits(words: tuple[str, ...], vocabulary: Vocabulary) -> tuple[str, ...]:
+    """Join an ASR word split back into the catalog word it is ("sour dough" -> "sourdough", "blow out"
+    -> "blowout")."""
+    out: list[str] = []
+    i = 0
+    while i < len(words):
+        if i + 1 < len(words) and not words[i].isdigit() and not words[i + 1].isdigit():
+            joined = words[i] + words[i + 1]
+            if joined in vocabulary.words:
+                out.append(joined)
+                i += 2
+                continue
+        out.append(words[i])
+        i += 1
+    return tuple(out)
 
 
 def _measure(words: Sequence[str], taken: set[int]) -> Measure | None:
@@ -458,8 +665,42 @@ class Vocabulary:
         if not word.isdigit():
             for base in _bases(word):
                 out |= self.by_base.get(base, frozenset())
+            # "cookies" is singularised to "cooky": the catalog's "cookie".
+            if word.endswith("y") and word[:-1] + "ie" in self.words:
+                out.add(word[:-1] + "ie")
+            if word.endswith("ie") and word[:-2] + "y" in self.words:
+                out.add(word[:-2] + "y")
+            # British and American spellings: "colour" / "color", "centre" / "center".
+            for british, american in (("our", "or"), ("re", "er")):
+                if len(word) > len(british) + 2:
+                    if word.endswith(british) and word[: -len(british)] + american in self.words:
+                        out.add(word[: -len(british)] + american)
+                    if word.endswith(american) and word[: -len(american)] + british in self.words:
+                        out.add(word[: -len(american)] + british)
         out.discard(word)
         return frozenset(out)
+
+    def split(self, word: str) -> frozenset[str]:
+        """The two catalog words a run-together word is ("flatpack" -> "flat", "pack"), or empty."""
+        if word.isdigit():
+            return frozenset()
+        fits = [
+            (word[:i], word[i:]) for i in range(3, len(word) - 2) if word[:i] in self.words and word[i:] in self.words
+        ]
+        return frozenset(fits[0]) if len(fits) == 1 else frozenset()
+
+    def abbreviated(self, word: str) -> frozenset[str]:
+        """The one catalog word `word` abbreviates ("choc" -> "chocolate", and its spelling "chocolat"): a
+        prefix of four or more letters, at least three letters short of it. Empty when it is no prefix or
+        several different words fit."""
+        if len(word) < _MIN_BASE or word.isdigit():
+            return frozenset()
+        fits = frozenset(v for v in self.words if len(v) >= len(word) + 3 and v.startswith(word) and not v.isdigit())
+        if not fits:
+            return fits
+        # One word in several spellings ("chocolat" in "pain au chocolat", "chocolate") is still one word.
+        shortest = min(fits, key=len)
+        return fits if all(v.startswith(shortest) for v in fits) else frozenset()
 
     def corrections(self, word: str) -> frozenset[str]:
         """Catalog words of `_MIN_TYPO_LENGTH` letters or more (one more for a changed or swapped letter)
@@ -477,7 +718,9 @@ def parse(text: str, vocabulary: Vocabulary | None = None, *, corrections: bool 
     """Read `text` (see module docstring). Without a `vocabulary` only modifiers, filler and content are
     told apart; with one, content words are also read as forms (or, with `corrections`, misspellings)
     of catalog words, and quantities and sizes are found."""
-    words = tokens(text)
+    words = _without_questions(tokens(text))
+    if vocabulary is not None:
+        words = _join_splits(words, vocabulary)
     positions: set[int] = set()
     dietary: dict[str, frozenset[str]] = {}
     for tag, phrases in search.DIETARY_PHRASES.items():
@@ -489,18 +732,43 @@ def parse(text: str, vocabulary: Vocabulary | None = None, *, corrections: bool 
                     positions.update(range(i, i + len(needle)))
     servings, used = _servings(words)
     positions |= used
+    age, aged = _age(words, positions)
+    positions |= aged
     if vocabulary is None:
-        return Phrase(text=text, tokens=words, dietary=dietary, servings=servings, modifier_positions=frozenset(positions))
+        return Phrase(
+            text=text, tokens=words, dietary=dietary, servings=servings, modifier_positions=frozenset(positions), age=age
+        )
     measure = _measure(words, positions)
     taken = positions | set(measure.positions if measure else ())
     quantities = _quantities(words, taken)
     aliases: dict[str, frozenset[str]] = {}
+    loose: dict[str, frozenset[str]] = {}
     typos: set[str] = set()
+    person = False
     for i, word in enumerate(words):
-        if i in positions or word in FILLER or word in aliases:
+        if i in positions or word in FILLER:
+            continue
+        if word in FAMILY_WORDS:
+            person = True
+        if word in FAMILY_WORDS and word not in vocabulary.words:
+            named = frozenset(FAMILY_WORDS[word]) & vocabulary.words
+            if named:
+                aliases[word] = named
+            else:
+                positions.add(i)  # "for my son's birthday" at a bakery: nothing to explain
+            continue
+        if word in aliases or word in loose:
             continue
         forms = vocabulary.forms(word)
-        if corrections and word not in vocabulary.words and not forms & vocabulary.words:
+        known = word in vocabulary.words or bool(forms & vocabulary.words)
+        colloquial = frozenset(COLLOQUIAL.get(word, ())) & vocabulary.words
+        if colloquial:
+            loose[word] = colloquial
+        elif not known and (parts := vocabulary.split(word)):
+            forms |= parts
+        elif not known and (short := vocabulary.abbreviated(word)):
+            loose[word] = short
+        elif corrections and not known:
             corrected = vocabulary.corrections(word)
             if corrected:
                 typos.add(word)
@@ -517,6 +785,9 @@ def parse(text: str, vocabulary: Vocabulary | None = None, *, corrections: bool 
         typos=frozenset(typos),
         quantity_positions=frozenset(quantities),
         measure=measure,
+        loose=loose,
+        age=age,
+        for_person=person,
     )
 
 
@@ -569,6 +840,49 @@ def catalog_vocabulary(profile: Profile, entries: Iterable[CatalogItem]) -> Voca
 def _statable_tags(profile: Profile, ref: str) -> set[str] | None:
     got = grounding.state(profile, f"{ref}#dietary.tags")
     return {str(t) for t in got.value or ()} if got.ok else None
+
+
+IMPLIED_TAGS: dict[str, frozenset[str]] = {"vegan": frozenset({"vegetarian", "dairy_free", "egg_free"})}
+"""Dietary tags another owner-confirmed tag implies by definition (a vegan item has no milk or eggs)."""
+
+EXCLUDED_ALLERGENS: dict[str, frozenset[str]] = {
+    "dairy_free": frozenset({"milk"}),
+    "egg_free": frozenset({"eggs"}),
+    "nut_free": frozenset({"tree_nuts", "peanuts"}),
+    "peanut_free": frozenset({"peanuts"}),
+    "soy_free": frozenset({"soybeans"}),
+    "gluten_free": frozenset({"wheat"}),
+    "vegan": frozenset({"milk", "eggs", "fish", "shellfish"}),
+    "vegetarian": frozenset({"fish", "shellfish"}),
+}
+"""What a dietary need rules out: an item whose owner-confirmed allergens contain one of these is known
+not to meet it (a hard "no"). The other direction never holds: no wheat listed is not "gluten-free"."""
+
+
+def with_implied(tags: Iterable[str]) -> set[str]:
+    """`tags` plus the tags they imply (`IMPLIED_TAGS`)."""
+    out = set(tags)
+    for tag in list(out):
+        out |= IMPLIED_TAGS.get(tag, frozenset())
+    return out
+
+
+def _statable_allergens(profile: Profile, ref: str) -> list[str] | None:
+    got = grounding.state(profile, f"{ref}#allergens.contains")
+    return [str(a) for a in got.value or ()] if got.ok else None
+
+
+def contradicting(profile: Profile, ref: str, tags: Iterable[str]) -> dict[str, list[str]]:
+    """{dietary need: the owner-confirmed allergens of `ref` that rule it out}, for the needs ruled out."""
+    contains = _statable_allergens(profile, ref)
+    if not contains:
+        return {}
+    out: dict[str, list[str]] = {}
+    for tag in tags:
+        hit = [a for a in contains if a in EXCLUDED_ALLERGENS.get(tag, frozenset())]
+        if hit:
+            out[tag] = hit
+    return out
 
 
 def _statable_serves(profile: Profile, ref: str) -> int | None:
@@ -677,10 +991,12 @@ def _named_choices(entry: CatalogItem, phrase: Phrase) -> tuple[dict[str, list[s
 def _dietary_focus(
     profile: Profile, entry: CatalogItem, wanted: dict[str, frozenset[str]], named_by_item: set[str]
 ) -> tuple[tuple[str, ...], dict[str, list[str]], tuple[str, ...]]:
-    """(missing tags, {group: choices that carry every remaining tag}, tags those choices carry)."""
+    """(missing tags, {group: choices that carry every remaining tag}, tags those choices carry). An
+    item's tag also holds when another owner-confirmed tag of the item implies it (`IMPLIED_TAGS`: the
+    vegan ginger cookie is dairy-free); a choice's must be stated (its other option groups may not be)."""
     if not wanted:
         return (), {}, ()
-    item_tags = _statable_tags(profile, entry.ref) or set()
+    item_tags = with_implied(_statable_tags(profile, entry.ref) or ())
     remaining = tuple(
         tag for tag, said in wanted.items() if tag not in item_tags and not said <= named_by_item
     )
@@ -719,6 +1035,22 @@ def _servings_focus(profile: Profile, entry: CatalogItem, count: int | None) -> 
     return (False if known else None), {}
 
 
+def _most_served(profile: Profile, entry: CatalogItem) -> int:
+    """The most the item, or one of its option choices, is known to serve (0 when nothing says)."""
+    known = [_statable_serves(profile, entry.ref)]
+    known += [
+        _statable_serves(profile, choice_ref(entry, group, choice))
+        for group in _groups(entry.item)
+        for choice in group.get("choices") or ()
+    ]
+    return max((n for n in known if n is not None), default=0)
+
+
+def _max_age(profile: Profile, entry: CatalogItem) -> int | None:
+    got = grounding.state(profile, f"{entry.ref}#attributes.max_age_years")
+    return got.value if got.ok and isinstance(got.value, int) and not isinstance(got.value, bool) else None
+
+
 def _merge_focus(
     entry: CatalogItem,
     named: dict[str, list[str]],
@@ -750,25 +1082,70 @@ def _merge_focus(
     return tuple(out)
 
 
+_STATE_SUFFIXES = ("y", "ing", "ed", "en")
+"""Endings of words that say what is wrong with a thing ("leaky", "dripping", "cracked", "broken"),
+not which thing it is."""
+
+
+def _names_a_kind(word: str) -> bool:
+    """True for a word before a head noun that may name another kind of thing ("brazilian" blowout,
+    "chocolate" muffin), not a number or the state the thing is in ("leaky" faucet)."""
+    return word.isalpha() and not word.endswith(_STATE_SUFFIXES)
+
+
+def _term_parts(term: str) -> list[frozenset[str]]:
+    """The keys of a term's conjuncts ("men's cut & beard trim" -> men's cut, beard trim): a few words
+    sit inside one term (kind 1) only when they sit inside one of its parts, so "men's trim" is not the
+    cut-and-beard-trim combination."""
+    parts: list[list[str]] = [[]]
+    for word in tokens(term.replace("&", " and ").replace("+", " and ")):
+        if word in CONJUNCTIONS:
+            parts.append([])
+        else:
+            parts[-1].append(word)
+    return [_key(p) for p in parts if p]
+
+
 def evaluate(profile: Profile, entry: CatalogItem, phrase: Phrase) -> Match | None:
-    """How well `entry` explains `phrase` (see module docstring), or None if it does not match at all."""
+    """How well `entry` explains `phrase` (see module docstring), or None if it does not match at all.
+    Kinds are read on the core words (before a preposition or verb marks the end of the job's noun
+    phrase); detail words after it may be left over ("updo for a wedding") and are ranked separately."""
     words = phrase.words
     named, choice_words, choice_score = _named_choices(entry, phrase)
     item_words: set[str] = set()
+    own: set[str] = set()
     full_score = 0
     for term in terms(entry.item):
         term_words = tokens(term)
+        own.update(term_words)
         if term_words and _key(term_words) <= words:
             item_words |= set(term_words)
             full_score = max(full_score, len(" ".join(term_words)))
     content = phrase.content
+    core = phrase.core
+    detail = phrase.detail
     matched = choice_words | item_words
-    # "3 chairs", "two dressers": the count needs no explaining (an item term may still name it).
-    rest = [w for w in content if not phrase.forms(w) & matched and w not in phrase.quantities]
     vocabulary = _vocabulary(profile, entry)
+
+    def unexplained(group: Sequence[str]) -> list[str]:
+        # "3 chairs", "two dressers": the count needs no explaining (an item term may still name it).
+        return [w for w in group if not phrase.forms(w) & matched and w not in phrase.quantities]
+
+    rest = unexplained(core)
+    left_detail = list(dict.fromkeys(w for w in unexplained(detail) if not phrase.forms(w) & vocabulary))
+    detail_rank = sum(1 for w in detail if not phrase.forms(w) & own and w not in phrase.quantities)
     head = phrase.head
     marked = phrase.marked_head
     head_rank = 0 if marked is None or phrase.forms(marked) & (matched | vocabulary) else 1
+
+    def strict(word: str) -> frozenset[str]:
+        return frozenset({word}) | phrase.aliases.get(word, frozenset())
+
+    def needs_loose(group: Iterable[str], within: frozenset[str] | set[str]) -> int:
+        """Words of `group` only their loose reading explains within `within`."""
+        return sum(1 for w in group if not strict(w) & within)
+
+    loose_rank = needs_loose((w for w in rest if phrase.forms(w) & (matched | vocabulary)), matched | vocabulary)
     kind: Kind
     left: list[str] = []
     if full_score:
@@ -776,15 +1153,17 @@ def evaluate(profile: Profile, entry: CatalogItem, phrase: Phrase) -> Match | No
         left = list(dict.fromkeys(w for w in rest if not phrase.forms(w) & vocabulary))
     else:
         if rest:
-            if any(all(phrase.forms(w) & _key(tokens(term)) for w in rest) for term in terms(entry.item)):
+            parts = [part for term in terms(entry.item) for part in _term_parts(term) if all(phrase.forms(w) & part for w in rest)]
+            if parts:
                 kind = 1
+                loose_rank = min(needs_loose(rest, part) for part in parts)
             elif all(phrase.forms(w) & vocabulary for w in rest):
                 kind = 2
             else:
                 # Words left over only beside an option choice the phrase names ("clogged kitchen sink":
-                # the sink drain), so loose vocabulary never borrows an item ("hair cut for my son").
+                # the sink drain), so loose vocabulary never borrows an item ("chocolate chip pancakes").
                 left = list(dict.fromkeys(w for w in rest if not phrase.forms(w) & vocabulary))
-                explained = [w for w in content if w not in left and w not in phrase.quantities]
+                explained = [w for w in content if w not in left and w not in left_detail and w not in phrase.quantities]
                 head_explained = head is not None and bool(phrase.forms(head) & (matched | vocabulary))
                 if not named or len(explained) < 2 or len(explained) <= len(left) or not head_explained:
                     return None
@@ -796,10 +1175,25 @@ def evaluate(profile: Profile, entry: CatalogItem, phrase: Phrase) -> Match | No
             kind, score = 4, choice_score
         else:
             return None
+    # "brazilian blowout", "chocolate muffin": an unexplained word before the head the term matched.
+    modified = kind == 0 and bool(left) and head is not None and phrase.forms(head) & matched and head not in left
+    if modified:
+        before = set(core[: core.index(head)]) if head in core else set()
+        modified = any(w in before and _names_a_kind(w) for w in left)
     missing, dietary_focus, tags = _dietary_focus(profile, entry, phrase.dietary, item_words)
+    contradicted = tuple(contradicting(profile, entry.ref, missing))
     servings_met, servings_focus = _servings_focus(profile, entry, phrase.servings)
     if kind == 4 and (missing or servings_met is not True and phrase.servings is not None):
         return None  # a bare "gluten-free" or "for 30" only lists items that meet it
+    age_met: bool | None = None
+    if phrase.age is not None and (limit := _max_age(profile, entry)) is not None:
+        age_met = phrase.age <= limit
+    if phrase.servings is None or servings_met:
+        servings_rank, capacity_rank = 0, 0
+    elif servings_met is False:
+        servings_rank, capacity_rank = 1, -_most_served(profile, entry)
+    else:
+        servings_rank, capacity_rank = 2, 0
     return Match(
         entry=entry,
         kind=kind,
@@ -807,10 +1201,17 @@ def evaluate(profile: Profile, entry: CatalogItem, phrase: Phrase) -> Match | No
         unexplained=len(left),
         missing_tags=missing,
         servings_met=servings_met,
-        servings_rank=0 if phrase.servings is None or servings_met else 1,
+        servings_rank=servings_rank,
         focus=_merge_focus(entry, named, dietary_focus, tags, servings_focus),
         head_rank=head_rank,
-        left=tuple(left),
+        left=tuple(dict.fromkeys([*left, *left_detail])),
+        contradicted=contradicted,
+        capacity_rank=capacity_rank,
+        age_rank=1 if age_met is False else 0,
+        age_met=age_met,
+        detail_rank=detail_rank,
+        modified=bool(modified),
+        loose_rank=loose_rank,
     )
 
 
@@ -840,15 +1241,23 @@ def best_matches(matches: Iterable[Match]) -> list[Match]:
         return []
     top = min(m.rank() for m in ranked)
     winners = [m for m in ranked if m.rank() == top]
-    if len(winners) > 1 and winners[0].unexplained == 0:
+    if len(winners) > 1 and not any(m.left for m in winners):
         longest = max(m.score for m in winners)
         winners = [m for m in winners if m.score == longest]
     return winners
 
 
-def resolve(profile: Profile, entries: Sequence[CatalogItem], text: str) -> ItemLookup:
+MIN_DIRECT_CORRECTION = 6
+"""A misspelt word this long whose corrections all belong to the one item they find may be answered
+directly (find_item), the corrected name spoken in the answer: "croisant" is the butter croissant.
+Shorter words, corrections that point at other items too, or several items stay a "Did you mean ...?"."""
+
+
+def resolve(profile: Profile, entries: Sequence[CatalogItem], text: str, *, confirm_corrections: bool = True) -> ItemLookup:
     """Resolve `text` among `entries` (ref or id, exact term, then the scored match). A misspelt word
-    is only corrected when the words as said find nothing, and what that finds is a suggestion."""
+    is only corrected when the words as said find nothing, and what that finds is a suggestion (or,
+    with `confirm_corrections=False`, the answer when the correction is unambiguous: see
+    `MIN_DIRECT_CORRECTION`)."""
     exact = _exact(entries, text)
     vocabulary = catalog_vocabulary(profile, entries)
     phrase = parse(text, vocabulary)
@@ -860,12 +1269,18 @@ def resolve(profile: Profile, entries: Sequence[CatalogItem], text: str) -> Item
             return ItemLookup(found=exact.found, focus=focus, dietary=tuple(phrase.dietary))
         return exact
     if not phrase.typos:
-        return _scored(profile, entries, phrase)
-    as_said = _scored(profile, entries, parse(text, vocabulary, corrections=False))
+        return _segmented(profile, entries, phrase, vocabulary)
+    as_said = _segmented(profile, entries, parse(text, vocabulary, corrections=False), vocabulary)
     if as_said.found is not None or as_said.candidates:
         return as_said
     corrected = _scored(profile, entries, phrase)
     if corrected.found is not None:
+        own = _vocabulary(profile, corrected.found)
+        direct = not confirm_corrections and all(
+            len(word) >= MIN_DIRECT_CORRECTION and vocabulary.corrections(word) <= own for word in phrase.typos
+        )
+        if direct:
+            return dataclasses.replace(corrected, corrected=True)
         return ItemLookup(found=None, candidates=[corrected.found], dietary=corrected.dietary, servings=corrected.servings, corrected=True)
     return ItemLookup(
         found=None,
@@ -874,7 +1289,40 @@ def resolve(profile: Profile, entries: Sequence[CatalogItem], text: str) -> Item
         unmet_dietary=corrected.unmet_dietary,
         servings=corrected.servings,
         corrected=bool(corrected.candidates),
+        contradicted=corrected.contradicted,
     )
+
+
+def _segmented(profile: Profile, entries: Sequence[CatalogItem], phrase: Phrase, vocabulary: Vocabulary) -> ItemLookup:
+    """The scored match, or, when the whole phrase leaves words unexplained or finds nothing and joins two
+    services ("a ladies cut and blow dry"), the items each part names: one item when every part names
+    the same one, else a "Did you mean ...?" over them."""
+    whole = _scored(profile, entries, phrase)
+    clean = whole.found is not None and not whole.unexplained
+    parts = _parts(phrase.tokens)
+    if clean or whole.unmet_dietary or len(parts) < 2:
+        return whole
+    found: list[CatalogItem] = []
+    for part in parts:
+        got = _scored(profile, entries, parse(" ".join(part), vocabulary, corrections=False))
+        if got.found is None or got.unexplained or got.unmet_dietary:
+            return whole
+        if got.found not in found:
+            found.append(got.found)
+    if len(found) == 1:
+        return _scored(profile, entries, parse(" ".join(parts[0]), vocabulary, corrections=False))
+    return ItemLookup(found=None, candidates=found[:MAX_CANDIDATES], dietary=whole.dietary, servings=whole.servings)
+
+
+def _parts(words: Sequence[str]) -> list[tuple[str, ...]]:
+    """The phrase split at `CONJUNCTIONS`, keeping only parts with a content word."""
+    parts: list[list[str]] = [[]]
+    for word in words:
+        if word in CONJUNCTIONS:
+            parts.append([])
+        else:
+            parts[-1].append(word)
+    return [tuple(p) for p in parts if any(w not in FILLER for w in p)]
 
 
 def _scored(profile: Profile, entries: Sequence[CatalogItem], phrase: Phrase) -> ItemLookup:
@@ -882,7 +1330,7 @@ def _scored(profile: Profile, entries: Sequence[CatalogItem], phrase: Phrase) ->
     matches = [m for m in (evaluate(profile, entry, phrase) for entry in entries) if m is not None]
     winners = best_matches(matches)
     if not winners:
-        return ItemLookup(found=None, dietary=dietary, servings=phrase.servings)
+        return ItemLookup(found=None, dietary=dietary, servings=phrase.servings, age=phrase.age)
     if winners[0].missing_tags:
         return ItemLookup(
             found=None,
@@ -890,6 +1338,8 @@ def _scored(profile: Profile, entries: Sequence[CatalogItem], phrase: Phrase) ->
             dietary=dietary,
             unmet_dietary=tuple(dict.fromkeys(tag for m in winners for tag in m.missing_tags)),
             servings=phrase.servings,
+            contradicted=tuple(t for t in dict.fromkeys(t for m in winners for t in m.contradicted) if all(t in m.contradicted for m in winners)),
+            age=phrase.age,
         )
     if len(winners) > 1:
         return ItemLookup(
@@ -898,8 +1348,12 @@ def _scored(profile: Profile, entries: Sequence[CatalogItem], phrase: Phrase) ->
             dietary=dietary,
             servings=phrase.servings,
             unexplained=tuple(dict.fromkeys(w for m in winners for w in m.left)),
+            age=phrase.age,
         )
     only = winners[0]
+    if only.modified:
+        # "brazilian blowout": the extra word may name another service altogether. Never the blowout.
+        return ItemLookup(found=None, dietary=dietary, servings=phrase.servings, unexplained=only.left, age=phrase.age)
     return ItemLookup(
         found=only.entry,
         focus=only.focus,
@@ -907,6 +1361,9 @@ def _scored(profile: Profile, entries: Sequence[CatalogItem], phrase: Phrase) ->
         servings=phrase.servings,
         servings_met=only.servings_met,
         unexplained=only.left,
+        age=phrase.age,
+        age_met=only.age_met,
+        for_person=phrase.for_person,
     )
 
 

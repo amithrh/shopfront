@@ -4,8 +4,11 @@ Item resolution (`resolve_item`, implemented in `tools.matching`) is shared with
 tools: an item ref or bare id, an exact name / spoken name / synonym, then a scored match that reads
 the customer's modifiers ("gluten-free cake", "a cake for 30", "a 10 inch cake", "a trim", "fix a
 leaky faucet"). Several equally good matches are an ambiguity (the reply lists them) rather than a
-guess, and a dietary need no candidate is confirmed to meet is a hand-off ("I don't know whether the
-custom cake comes nut-free"), never the plain item. Transactional tools pass `module_type`, so only
+guess, and a dietary need no candidate is confirmed to meet is never the plain item: the business's
+own published "we don't" when it has one ("No, our kitchen isn't nut-free. ..."), a hard "no" when
+the owner-confirmed allergens rule it out ("The butter croissant contains milk, so it isn't
+dairy-free"), else a hand-off ("I don't know whether the custom cake comes vegetarian"). A medical
+need ("celiac") also speaks the business's published caveat about it. Transactional tools pass `module_type`, so only
 items that can be booked / ordered / quoted that way compete ("cake" at the bakery is the custom cake
 for an order, not the slice of cake), falling back to the whole catalog.
 
@@ -25,6 +28,7 @@ Customer words are never spoken back as if the business said them: "I don't see 
 Bakehouse", not "I don't see <whatever was asked>". The words stay in the hand-off question only.
 """
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Annotated, Literal, TypeVar
 
@@ -84,26 +88,64 @@ def _accepted_by(profile: Profile, entry: CatalogItem, module_type: str) -> bool
     return bool(profile.transactional_modules_for(entry.ref, wanted))  # type: ignore[arg-type]
 
 
-def resolve_item(profile: Profile, text: str, *, module_type: str | None = None) -> ItemLookup:
+def resolve_item(
+    profile: Profile, text: str, *, module_type: str | None = None, confirm_corrections: bool = True
+) -> ItemLookup:
     """Resolve what the customer said to one catalog item (see `tools.matching`).
 
     With `module_type` (`booking`, `custom_order`, `quote_request` or `TRANSACTIONAL`), items that
     kind of module accepts are matched first; the whole catalog is the fallback, so an item that
-    exists but cannot be booked still resolves (and the caller says so).
+    exists but cannot be booked still resolves (and the caller says so). `confirm_corrections=False`
+    (find_item, which only informs) answers a single unambiguous spelling correction directly; anything
+    that commits keeps the "Did you mean ...?".
     """
     entries = catalog_entries(profile)
     lookup: ItemLookup | None = None
     if module_type is not None:
         accepted = [e for e in entries if _accepted_by(profile, e, module_type)]
-        lookup = matching.resolve(profile, accepted, text)
+        lookup = matching.resolve(profile, accepted, text, confirm_corrections=confirm_corrections)
         if lookup.found is None and not lookup.candidates:
             lookup = None
     if lookup is None:
-        lookup = matching.resolve(profile, entries, text)
+        lookup = matching.resolve(profile, entries, text, confirm_corrections=confirm_corrections)
     if lookup.unexplained and declined_by_business(profile, text, lookup.unexplained):
         # "replace my sewer line": the business says it doesn't do that, so it is not the drain cleaning.
         return ItemLookup(found=None, dietary=lookup.dietary, servings=lookup.servings)
+    if lookup.found is None and not lookup.candidates:
+        named = named_in_knowledge(profile, entries, text)
+        if named:
+            return ItemLookup(found=None, candidates=named, dietary=lookup.dietary, servings=lookup.servings)
     return lookup
+
+
+def named_in_knowledge(profile: Profile, entries: list[CatalogItem], text: str) -> list[CatalogItem]:
+    """Items to suggest for a job the catalog does not name but the business's own published answers
+    do ("burst pipe": the emergencies policy lists a burst pipe; leak repair is the item about pipes).
+    The phrase's core words, an unknown word before a head noun the catalog knows, must appear together
+    in an answer or question the business published (not its list of jobs it does not take), and the
+    suggestion is only the items whose own terms name that head. Never an answer: a "Did you mean ...?"."""
+    vocabulary = matching.catalog_vocabulary(profile, entries)
+    phrase = matching.parse(text, vocabulary)
+    core = phrase.core
+    head = phrase.head
+    if head is None or len(core) < 2 or core[-1] != head or not phrase.forms(head) & vocabulary.words:
+        return []
+    if any(phrase.forms(w) & vocabulary.words for w in core[:-1]):
+        return []  # every modifier unknown: a known one would have been matched
+    wanted = " ".join(core)
+    published = False
+    for _module_id, entry in profile.knowledge_entries():
+        if entry.get("topic") == NOT_OFFERED_TOPIC or entry.get("id") == "not-offered":
+            continue
+        said = [str(entry.get("answer_spoken") or ""), *(str(q) for q in entry.get("question_variants") or ())]
+        if any(search.contains_phrase(search.normalize(t), wanted) for t in said):
+            published = True
+            break
+    if not published:
+        return []
+    heads = phrase.forms(head)
+    named = [e for e in entries if any(heads & set(matching.tokens(t)) for t in matching.terms(e.item))]
+    return named[:MAX_CANDIDATES]
 
 
 NOT_OFFERED_TOPIC = "not_offered"
@@ -143,6 +185,123 @@ def unmet_dietary_answer(profile: Profile, lookup: ItemLookup) -> tuple[str, lis
     label = speech.join([speech.dietary(t) for t in lookup.unmet_dietary])
     sentence = f"I don't know whether the {speech.join(names, conjunction='or')} comes {label}"
     return sentence, grounding.facts_for(profile, [f"{c.ref}#spoken_name" for c in lookup.candidates])
+
+
+def contradicted_answer(profile: Profile, lookup: ItemLookup) -> tuple[str, list[Fact]] | None:
+    """'The butter croissant contains milk and eggs, so it isn't vegan.' when every candidate's
+    owner-confirmed allergens rule the need out (a known "no", never "I don't know")."""
+    if not lookup.contradicted:
+        return None
+    label = speech.join([speech.dietary(t) for t in lookup.contradicted])
+    sentences: list[str] = []
+    facts: list[Fact] = []
+    for candidate in lookup.candidates:
+        hits = matching.contradicting(profile, candidate.ref, lookup.contradicted)
+        allergens = list(dict.fromkeys(a for tag in lookup.contradicted for a in hits.get(tag, ())))
+        if not allergens:
+            return None
+        facts += grounding.facts_for(profile, [f"{candidate.ref}#spoken_name", f"{candidate.ref}#allergens.contains"])
+        listed = speech.join([speech.allergen(a) for a in allergens])
+        sentences.append(f"The {candidate.spoken_name} contains {listed}, so it isn't {label}")
+    return speech.sentences(*sentences), facts
+
+
+NEGATIONS: frozenset[str] = frozenset({"no", "not", "dont", "cant", "cannot", "isnt", "arent", "wont", "never", "doesnt"})
+"""Words that make a published sentence a "we don't" statement (normalised: apostrophes removed)."""
+
+
+def dietary_statement(profile: Profile, tags: tuple[str, ...], asked: str) -> tuple[str, list[Fact]] | None:
+    """The business's own published "we don't" about a dietary need no item is confirmed to meet: 'We
+    don't make sugar-free cakes, ...', 'No, our kitchen isn't nut-free. ...' (spoken verbatim, cited).
+
+    One sentence of the answer must name exactly the needed tags and say no ("we can't make a cake that
+    is both gluten-free and vegan" answers "gluten-free vegan cake", never "vegan cake"), and the entry
+    must share a word with what was asked ("cake"), unless it is about the whole kitchen (an allergen
+    topic). Of several, the one sharing most words wins. None when the profile says nothing (the caller
+    hands off) or the answer may not be said."""
+    asked_words = set(matching.parse(asked).content)
+    wanted = set(tags)
+    best: tuple[int, str, JsonObj] | None = None
+    for module_id, entry in profile.knowledge_entries():
+        answer_text = str(entry.get("answer_spoken") or "")
+        if not any(_says_no(sentence, wanted) for sentence in speech.split_sentences(answer_text)):
+            continue
+        said = search.normalize(" ".join([answer_text, *(str(q) for q in entry.get("question_variants") or ())]))
+        shared = len(asked_words & set(said.split()))
+        if not shared and str(entry.get("topic") or "") not in KITCHEN_TOPICS:
+            continue
+        if best is None or shared > best[0]:
+            best = (shared, module_id, entry)
+    if best is None:
+        return None
+    _shared, module_id, entry = best
+    answer, fact_states = grounding.knowledge_answer(profile, f"{module_id}/{entry['id']}", entry)
+    if not answer.ok or answer.fact is None:
+        return None
+    return knowledge.verbatim(str(answer.value)), [answer.fact, *(f.fact for f in fact_states if f.fact is not None)]
+
+
+def _says_no(sentence: str, tags: set[str]) -> bool:
+    """True when `sentence` names exactly `tags` (`search.DIETARY_PHRASES`) and contains a negation."""
+    text = search.normalize(sentence)
+    named = {
+        tag
+        for tag, phrases in search.DIETARY_PHRASES.items()
+        if any(search.contains_phrase(text, search.normalize(p)) for p in phrases if p not in MEDICAL_NEEDS)
+    }  # "we don't recommend them for people with celiac disease" is a caveat, not "we don't make gluten-free"
+    return named == tags and bool(NEGATIONS & set(text.split()))
+
+
+KITCHEN_TOPICS: frozenset[str] = frozenset({"allergens", "allergy"})
+"""Knowledge topics about the whole kitchen ("our kitchen isn't nut-free"): they answer a dietary need
+for any item."""
+
+
+MEDICAL_NEEDS: dict[str, str] = {"celiac": "celiac disease", "coeliac": "coeliac disease"}
+"""Words for a medical need stronger than its dietary tag ("celiac safe bread" asks more than
+gluten-free): the business's published caveat about it must be spoken, or it is a hand-off."""
+
+
+def medical_caveat(profile: Profile, entry: CatalogItem, asked: str, answer: "_Answer") -> None:
+    """'Our kitchen uses wheat flour every day, so we don't recommend them for people with celiac
+    disease.' when the customer named a medical need: the sentences that mention it of the business's
+    published answer (the one sharing most words with the item), verbatim, as safety sentences right
+    after the item's own dietary sentence; a safety hand-off when the profile says nothing about it."""
+    said = set(search.normalize(asked).split())
+    needs = [word for word in MEDICAL_NEEDS if word in said]
+    if not needs:
+        return
+    item_words = {w for term in matching.terms(entry.item) for w in matching.tokens(term)}
+    best: tuple[int, str, JsonObj] | None = None
+    for module_id, known in profile.knowledge_entries():
+        text = search.normalize(" ".join([str(known.get("answer_spoken") or ""), *(str(q) for q in known.get("question_variants") or ())]))
+        if not any(word in text.split() for word in MEDICAL_NEEDS):
+            continue
+        shared = len(item_words & set(text.split()))
+        if best is None or shared > best[0]:
+            best = (shared, module_id, known)
+    if best is not None:
+        _shared, module_id, known = best
+        stated, fact_states = grounding.knowledge_answer(profile, f"{module_id}/{known['id']}", known)
+        caveat = [
+            sentence
+            for sentence in speech.split_sentences(knowledge.verbatim(str(stated.value)) if stated.ok else "")
+            if set(search.normalize(sentence).split()) & set(MEDICAL_NEEDS)
+        ]
+        if stated.fact is not None and caveat:
+            # The published sentences about it, verbatim, right after what the item is.
+            if answer.dietary_sentence in answer.sentences:
+                answer.sentences.remove(answer.dietary_sentence)
+                answer.lead.append((answer.dietary_sentence,))
+            answer.safety.extend(caveat)
+            answer.facts += [stated.fact, *(f.fact for f in fact_states if f.fact is not None)]
+            return
+    need = MEDICAL_NEEDS[needs[0]]
+    answer.hand_off(
+        profile, reason="unknown", question=f"Is the {entry.spoken_name} safe for someone with {need}?",
+        fact_ref=f"{entry.ref}#dietary.tags", sentence=f"I don't know whether the {entry.spoken_name} is safe for people with {need}",
+        safety=True,
+    )
 
 
 def _category_ids(profile: Profile, module_id: str, wanted: str) -> set[str]:
@@ -216,7 +375,7 @@ async def get_catalog(
                 wanted |= _category_ids(profile, module_id, category)
             entries = [e for e in entries if wanted & set(e.item.get("category_ids") or ())]
             if len(wanted) == 1 and entries:
-                label = _category_name(profile, entries[0].module_id, next(iter(wanted)))
+                label = _count_noun(_category_name(profile, entries[0].module_id, next(iter(wanted))), generic)
         if query:
             entries = matching.matching(profile, entries, query)
             label = f"matching {generic}" if label == generic else label
@@ -254,6 +413,13 @@ async def get_catalog(
         )
         result = CatalogResult(speak=speak, facts=grounding.dedupe_facts(facts), card=card, items=items, total=total)
         return finish(result, profile, outcome="ok")
+
+
+def _count_noun(category: str, generic: str) -> str:
+    """A category name that can follow a number: 'breads', 'cakes from the case', but 'color services'
+    for a category named by a mass noun ('color', 'styling')."""
+    first = category.split()[0] if category.split() else category
+    return category if search.normalize(first) != first.casefold() else f"{category} {generic}"
 
 
 def _collective_noun(profile: Profile, entries: list[CatalogItem]) -> str:
@@ -314,6 +480,8 @@ class _Answer:
     facts: list[Fact] = field(default_factory=list)
     card_lines: list[CardLine] = field(default_factory=list)
     handoff: HandOff | None = None
+    dietary_sentence: str | None = None
+    """The item's own dietary sentence ('The gluten-free sandwich loaf is gluten-free'), if spoken."""
 
     def hand_off(
         self, profile: Profile, *, reason: str, question: str, fact_ref: str | None, sentence: str, safety: bool = False
@@ -610,6 +778,22 @@ def _servings_note(profile: Profile, entry: CatalogItem, lookup: ItemLookup, ans
         answer.lead.append((f"The biggest {entry.spoken_name} is the {name}, which serves up to {serves}",))
 
 
+def _age_note(profile: Profile, entry: CatalogItem, lookup: ItemLookup, answer: _Answer) -> None:
+    """'The kids cut is for ages 12 and under.' when the item has an age limit and the customer named
+    who it is for (an age, or a word like "son"): first when the stated age is over it."""
+    if lookup.age is None and not lookup.for_person:
+        return
+    got = grounding.state(profile, f"{entry.ref}#attributes.max_age_years")
+    if not (got.ok and isinstance(got.value, int) and got.fact is not None):
+        return
+    answer.facts.append(got.fact)
+    sentence = f"The {entry.spoken_name} is for ages {got.value} and under"
+    if lookup.age_met is False:
+        answer.lead.insert(0, (sentence,))
+    else:
+        answer.sentences.append(sentence)
+
+
 def _focus(
     profile: Profile, entry: CatalogItem, lookup: ItemLookup, answer: _Answer, *, with_price: bool
 ) -> tuple[list[OptionGroupView], bool]:
@@ -639,7 +823,11 @@ def _focus(
         else:
             named.append((group, picked))
     if named:
+        leads = len(answer.lead)
         stated_price = _named_lead(entry, named, answer, with_price=with_price) or stated_price
+        if any(f.tags for f in lookup.focus):
+            # The dietary lead stays last, right before its "They are ..." list (the first sentence).
+            answer.lead.insert(0, answer.lead.pop(leads))
     _servings_note(profile, entry, lookup, answer)
     return views, stated_price
 
@@ -673,9 +861,13 @@ def _dietary(profile: Profile, entry: CatalogItem, lookup: ItemLookup, answer: _
         tags = [str(t) for t in got.value or ()]
         fields["dietary"] = tags
         answer.facts.append(got.fact)  # type: ignore[arg-type]
-        answer.sentences.append(
-            f"The {spoken} is {speech.join([speech.dietary(t) for t in tags])}" if tags else f"The {spoken} has no dietary labels"
-        )
+        sentence = f"The {spoken} is {speech.join([speech.dietary(t) for t in tags])}" if tags else f"The {spoken} has no dietary labels"
+        implied = [t for t in lookup.dietary if t not in tags and t in matching.with_implied(tags)]
+        if implied:
+            # "dairy-free" asked, "vegan" confirmed: say why the answer is yes.
+            sentence += f", so it's {speech.join([speech.dietary(t) for t in implied])}"
+        answer.sentences.append(sentence)
+        answer.dietary_sentence = sentence
     else:
         _withheld_or_unknown(
             profile, answer, got, what=f"the dietary details of the {spoken}", question=f"Is the {spoken} vegan, vegetarian or gluten-free?"
@@ -689,6 +881,23 @@ def unmet_result(profile: Profile, lookup: ItemLookup, *, asked: str, result_typ
     """The hand-off for a dietary need no candidate is confirmed to meet: 'I don't know whether the
     custom cake comes nut-free. Want me to ask Rosa?' (shared by find_item, check_availability and the
     commit tools). The customer's words go into the hand-off question only."""
+    known = dietary_statement(profile, lookup.unmet_dietary, asked) or contradicted_answer(profile, lookup)
+    if known is not None:
+        # The business already said ("We don't make sugar-free cakes") or the allergens rule it out.
+        spoken, facts = known
+        card = Card(
+            kind="policy", title="Dietary needs", subtitle=profile.name, lines=[CardLine(label="Answer", value=spoken)],
+            citations=grounding.citations_for(profile, facts),
+        )
+        return result_type(
+            speak=speech.sentences(spoken),
+            facts=grounding.dedupe_facts(facts),
+            card=card,
+            handoff=None,
+            business_id=profile.profile_id,
+            profile_revision=profile.revision,
+            **fields,
+        )
     sentence, facts = unmet_dietary_answer(profile, lookup)
     askable = grounding.can_ask_owner(profile)
     single = lookup.candidates[0] if len(lookup.candidates) == 1 else None
@@ -723,7 +932,7 @@ async def find_item(
     deps = get_deps(ctx)
     with tool_span("find_item", business_id):
         profile = await live_profile(deps, business_id)
-        lookup = resolve_item(profile, item)
+        lookup = resolve_item(profile, item, confirm_corrections=False)
         if lookup.unmet_dietary:
             single = lookup.candidates[0] if len(lookup.candidates) == 1 else None
             result = unmet_result(
@@ -769,6 +978,7 @@ async def find_item(
             wanted.insert(0, "dietary")  # "a gluten-free cookie": say whether it is, whatever else was asked
         matched, stated_price = _focus(profile, entry, lookup, answer, with_price="price" in wanted)
         focused = frozenset(view.group_id for view in matched)
+        _age_note(profile, entry, lookup, answer)
         for aspect in wanted:
             if aspect == "price":
                 if not stated_price and not _price(profile, entry, answer) and "options" not in wanted:
@@ -785,7 +995,7 @@ async def find_item(
                     fields["duration_minutes"] = got.value
                     answer.facts.append(got.fact)  # type: ignore[arg-type]
                     answer.sentences.append(f"The {spoken} takes about {speech.duration(got.value)}")
-                else:
+                elif not (got.absent and not grounding.is_disputed(profile, got) and _choice_durations(profile, entry, lookup.focus, answer)):
                     _withheld_or_unknown(profile, answer, got, what=f"how long the {spoken} takes", question=f"How long does the {spoken} take?")
             elif aspect == "availability":
                 got = grounding.state(profile, f"{entry.ref}#availability")
@@ -804,6 +1014,7 @@ async def find_item(
                     answer.sentences.append(got.value)
                 else:
                     _withheld_or_unknown(profile, answer, got, what=f"more about the {spoken}", question=f"Can you tell me more about the {spoken}?")
+        medical_caveat(profile, entry, item, answer)
         offer = grounding.offer_sentence(profile) if answer.handoff is not None else None
         speak = answer.speak(offer) or speech.sentences(f"The {spoken} is on the menu at {profile.spoken_name}")
         facts = grounding.dedupe_facts(answer.facts)
@@ -863,6 +1074,27 @@ def _price(profile: Profile, entry: CatalogItem, answer: _Answer) -> bool:
     return True
 
 
+def _choice_durations(profile: Profile, entry: CatalogItem, focus: tuple[Focus, ...], answer: _Answer) -> bool:
+    """Durations published on option choices (the balayage's hair lengths): the matched choice's ('The
+    balayage takes about 4 hours when the hair length is past the shoulder blades'), else each choice's,
+    for the first group whose every choice states one. False (nothing said) when no group does."""
+    for group in entry.item.get("options") or ():
+        choices = list(group.get("choices") or ())
+        stated = [(c, grounding.state(profile, f"{entry.ref}/{group['id']}/{c['id']}#duration_minutes")) for c in choices]
+        if not stated or not all(got.ok and isinstance(got.value, int) for _c, got in stated):
+            continue
+        wanted = next((f.choice_ids for f in focus if f.group_id == str(group["id"])), ())
+        shown = [(c, got) for c, got in stated if str(c["id"]) in wanted] or stated
+        group_name = _group_name(group)
+        phrases = [
+            f"{speech.duration(got.value)} when the {group_name} is {c.get('spoken_name') or c['id']}" for c, got in shown[:MAX_SPOKEN_CHOICES]
+        ]
+        answer.facts += [got.fact for _c, got in shown[:MAX_SPOKEN_CHOICES] if got.fact is not None]
+        answer.sentences.append(f"The {entry.spoken_name} takes about {speech.join(phrases)}")
+        return True
+    return False
+
+
 def _choices_priced(profile: Profile, entry: CatalogItem) -> bool:
     """Every choice of the item's first option group has a statable price of its own."""
     groups = list(entry.item.get("options") or ())
@@ -915,6 +1147,10 @@ def _allergens(
             question=f"What allergens are in the {spoken}?", safety=True,
         )
     facility = grounding.state(profile, f"{entry.module_id}#facility_may_contain.allergens")
+    item_unknown = not contains.ok and "allergens" not in fields and not answer.card_lines
+    if not facility.ok and facility.absent and not grounding.is_disputed(profile, facility) and item_unknown and not _is_food(profile):
+        # A salon publishes no kitchen statement, and the item's allergens are already a hand-off.
+        return fields
     if facility.ok:
         kitchen = _allergen_list(facility.value)
         fields["facility_may_contain"] = kitchen
@@ -923,11 +1159,21 @@ def _allergens(
             answer.safety.append(f"The kitchen also handles {speech.join([speech.allergen(a) for a in kitchen])}")
     else:
         # Missing or withheld: an allergen answer is never complete without the cross-contact note.
+        place = "the kitchen" if _is_food(profile) else profile.spoken_name
         _withheld_or_unknown(
-            profile, answer, facility, what="what else the kitchen handles",
-            question="What allergens does your kitchen handle?", safety=True,
+            profile, answer, facility, what=f"what else {place} handles",
+            question=f"What allergens does {'your kitchen' if _is_food(profile) else 'your business'} handle?", safety=True,
         )
     return fields
+
+
+FOOD_TEMPLATES: frozenset[str] = frozenset({"bakery", "cafe", "restaurant", "caterer", "food_truck", "deli", "grocery"})
+"""Profile templates whose catalog comes out of a kitchen (the cross-contact statement is the kitchen's)."""
+
+
+def _is_food(profile: Profile) -> bool:
+    template = profile.raw.get("template")
+    return isinstance(template, Mapping) and str(template.get("id") or "") in FOOD_TEMPLATES
 
 
 def _allergen_groups(entry: CatalogItem) -> list[JsonObj]:
