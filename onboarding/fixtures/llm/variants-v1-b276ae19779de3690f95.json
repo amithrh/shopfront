@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-b276ae19779de3690f95",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:03+00:00",
+ "answer": "They're scheduled during regular hours.",
+ "questions": [
+  "Are non-emergency jobs done during regular hours?",
+  "Do you schedule non-urgent work normally?",
+  "Is routine work done during your regular business hours?",
+  "Are standard services scheduled like usual?",
+  "Do you handle non-emergency tasks during normal hours?",
+  "Is your regular schedule for non-urgent jobs?"
+ ]
+}

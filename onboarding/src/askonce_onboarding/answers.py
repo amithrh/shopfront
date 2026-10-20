@@ -24,6 +24,14 @@ OWNER_URN = "urn:askonce:owner-answer:"
 JsonObj = dict[str, Any]
 
 
+CHECKLIST_VARIANTS = {
+    "walk_ins": ["Do you take walk-ins?", "Can I just walk in?", "Do I need an appointment?", "Can I come in without booking?"],
+}
+"""How customers ask about the checklist questions AskOnce itself puts to every owner (not site-specific)."""
+YES_NO_FACTS = {"walk_ins": "walk_ins_accepted"}
+"""A yes/no checklist answer is also a fact the assistant can state."""
+
+
 class AnswerError(ValueError):
     pass
 
@@ -68,10 +76,16 @@ class Applier:
             if self.value is True:
                 self.confirm()
             return
+        applied = False
         for target in self.q["targets"]:
             if self.apply_target(target):
-                return
-        raise AnswerError(f"don't know how to apply an answer to {self.q['targets']}")
+                applied = True
+                if kind != "contradiction":
+                    return  # a missing fact has one home; a disputed one is corrected everywhere it is said
+        if not applied:
+            raise AnswerError(f"don't know how to apply an answer to {self.q['targets']}")
+        if kind == "contradiction":
+            self.read_out_winner()
 
     # ---------------------------------------------------------------- targets
 
@@ -94,6 +108,7 @@ class Applier:
             module["expected_response_minutes"] = minutes
             module["expires_after_minutes"] = max(module.get("expires_after_minutes", 0), minutes * 2)
             module["provenance"] = confirm(module.get("provenance"), self.ev)
+            self.reply_time_entry(module, minutes)
             return True
         if module["type"] in ("custom_order", "booking", "quote_request") and path.startswith("availability."):
             field = path.split(".", 1)[1]
@@ -112,9 +127,12 @@ class Applier:
                 return False
             if path.startswith("facts."):
                 entry.setdefault("facts", {})[path.split(".", 1)[1]] = self.value
-            said = spoken(self.raw)
-            if said:
-                entry["answer_spoken"] = said
+            if not self.states_winner(entry):
+                # The entry says the value the owner did not pick: their words replace it.
+                said = spoken(self.raw)
+                if said:
+                    entry["answer_spoken"] = said
+                    entry.pop("answer_card", None)
             entry["provenance"] = confirm(entry.get("provenance"), self.ev)
             return True
         if module["type"] == "catalog" and len(parts) == 2 and path == "price":
@@ -126,6 +144,60 @@ class Applier:
             item["provenance"] = confirm(item.get("provenance"), self.ev)
             return True
         return False
+
+    def read_out_winner(self) -> None:
+        """A flow that reads a policy before confirming reads the statement the owner confirmed, not the one
+        they overruled."""
+        entries = {f"{mid}/{e['id']}": e for mid, m in self.doc["modules"].items() if m["type"] == "knowledge" for e in m["entries"]}
+        targeted = [t.split("#")[0] for t in self.q["targets"] if t.split("#")[0] in entries]
+        winners = [r for r in targeted if self.states_winner(entries[r])]
+        if not winners:
+            return
+        for module in self.doc["modules"].values():
+            say = (module.get("confirmation") or {}).get("say_before_confirm")
+            if not say:
+                continue
+            fixed = [winners[0] if r in targeted and r not in winners else r for r in say]
+            module["confirmation"]["say_before_confirm"] = list(dict.fromkeys(fixed))
+
+    def reply_time_entry(self, owner: JsonObj, minutes: int) -> None:
+        """Customers ask how soon they will hear back: the owner's own answer becomes a policy entry, read out
+        before a quote request is sent."""
+        info_id, info = next(((k, m) for k, m in self.doc["modules"].items() if m["type"] == "knowledge"), (None, None))
+        said = spoken(self.raw)
+        if info is None or not said or len(info["entries"]) >= 100:
+            return
+        name = owner.get("approver", {}).get("spoken_name") or "the owner"
+        entry = {"id": "reply-time", "topic": "reply_time",
+                 "question_variants": ["How soon will I hear back?", f"When will {name} get back to me?", "How fast do you reply?"],
+                 "answer_spoken": said, "facts": {"owner_reply_minutes": minutes},
+                 "provenance": {"owner_confirmed": True, "evidence": [self.ev]}}
+        info["entries"] = [e for e in info["entries"] if e["id"] != "reply-time"] + [entry]
+        vocab = self.doc.setdefault("vocabulary", {}).setdefault("attributes", {})
+        vocab.setdefault("owner_reply_minutes", {"label": "owner reply minutes", "type": "integer", "claim_class": "policy"})
+        for module in self.doc["modules"].values():
+            if module["type"] == "quote_request":
+                say = module.setdefault("confirmation", {}).setdefault("say_before_confirm", [])
+                if f"{info_id}/reply-time" not in say:
+                    say.append(f"{info_id}/reply-time")
+
+    def states_winner(self, entry: JsonObj) -> bool:
+        """True if the entry's own evidence is the quote of the value the owner chose (it stays as written)."""
+        if self.q["kind"] != "contradiction":
+            return False
+        values = [c.get("value") for c in self.q.get("candidates", [])]
+        if all(isinstance(v, int) and not isinstance(v, bool) for v in values) and str(self.value).isdigit():
+            from askonce_onboarding.assemble import quote_supports_number
+
+            said = entry.get("answer_spoken", "")
+            won = quote_supports_number(said, int(self.value))
+            lost = any(quote_supports_number(said, v) for v in values if str(v) != str(self.value))
+            if won != lost:
+                return won  # the entry gives the chosen number (or only an overruled one)
+        win = [c for c in self.q.get("candidates", []) if str(c.get("value")) == str(self.value)]
+        quotes = [_words(c["evidence"]["quote"]) for c in win]
+        texts = [_words(ev.get("quote", "")) for ev in (entry.get("provenance") or {}).get("evidence", [])]
+        return any(q and t and (q in t or t in q) for q in quotes for t in texts)
 
     def hours(self, loc_id: str) -> bool:
         loc = next((l for l in self.doc["business"]["locations"] if l["id"] == loc_id), None)
@@ -193,8 +265,16 @@ class Applier:
         n = 2
         while any(e["id"] == entry_id for e in module["entries"]):
             entry_id, n = f"{slug(topic)}-{n}", n + 1
-        module["entries"].append({"id": entry_id, "topic": topic, "question_variants": [self.q["prompt"][:120]],
-                                  "answer_spoken": said, "provenance": {"owner_confirmed": True, "evidence": [self.ev]}})
+        variants = [self.q["prompt"][:120], *CHECKLIST_VARIANTS.get(topic, [])][:8]
+        entry = {"id": entry_id, "topic": topic, "question_variants": variants, "answer_spoken": said,
+                 "provenance": {"owner_confirmed": True, "evidence": [self.ev]}}
+        fact = YES_NO_FACTS.get(topic)
+        yes_no = {"yes": True, "no": False, True: True, False: False}.get(self.value if isinstance(self.value, bool) else str(self.value).strip().lower())
+        if fact and yes_no is not None:
+            entry["facts"] = {fact: yes_no}
+            vocab = self.doc.setdefault("vocabulary", {}).setdefault("attributes", {})
+            vocab.setdefault(fact, {"label": fact.replace("_", " "), "type": "boolean", "claim_class": "policy"})
+        module["entries"].append(entry)
         self.q["targets"] = [f"{_module_id(self.doc, module)}/{entry_id}#answer_spoken"]
         return True
 
@@ -203,12 +283,18 @@ class Applier:
             for cand in self.q.get("candidates", []):
                 for ref, value in (cand.get("value") or {}).items():
                     entity, _, field = ref.partition("#")
-                    module_id, _, item_id = entity.partition("/")
+                    module_id, item_id, *choice_path = entity.split("/")
                     item = next((i for i in self.doc["modules"][module_id]["items"] if i["id"] == item_id), None)
                     if item is None or field not in ("allergens", "dietary"):
                         continue
+                    target = item
+                    if len(choice_path) == 2:  # module/item/group/choice: a choice's own allergens
+                        group = next((g for g in item.get("options", []) if g["id"] == choice_path[0]), None)
+                        target = next((c for c in (group or {}).get("choices", []) if c["id"] == choice_path[1]), None)
+                        if target is None:
+                            continue
                     prov = {"owner_confirmed": True, "evidence": [cand["evidence"], self.ev]}
-                    item[field] = {**value, "provenance": prov}
+                    target[field] = {**value, "provenance": prov}
             return
         for target in self.q["targets"]:
             entity, _, _ = target.partition("#")
@@ -217,6 +303,10 @@ class Applier:
             for entry in module.get("entries", []):
                 if entry["id"] == entry_id:
                     entry["provenance"] = confirm(entry.get("provenance"), self.ev)
+
+
+def _words(text: str) -> str:
+    return " ".join(re.findall(r"[a-z0-9]+", str(text).lower()))
 
 
 def _module_id(doc: JsonObj, module: JsonObj) -> str:

@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-4c50b4517ddc6bdd097b",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:52+00:00",
+ "answer": "Sewer line excavation or replacement; Hydro-jetting; New gas lines (we connect gas water heaters only); Electrical panels, new circuits or new outlets; Furnaces, boilers and air conditioning; Roofing and gutters; Septic systems; Sprinkler",
+ "questions": [
+  "Do you handle sewer line replacement or excavation?",
+  "Can you install new gas lines in my home?",
+  "Do you work on electrical panels or new circuits?",
+  "Can you service my furnace, boiler, or air conditioning?",
+  "Do you offer roofing, gutter, or septic system services?",
+  "Can you repair or install sprinkler and irrigation systems?"
+ ]
+}

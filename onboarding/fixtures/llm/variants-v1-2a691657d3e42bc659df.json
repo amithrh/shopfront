@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-2a691657d3e42bc659df",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:18+00:00",
+ "answer": "Requests sent on a Monday, when we're closed, get an answer by Tuesday at noon.",
+ "questions": [
+  "When are orders sent on Mondays confirmed?",
+  "Does Rosa review orders even when you're closed?",
+  "What's the turnaround time for Monday order approvals?",
+  "Can I expect a reply by Tuesday noon for Monday orders?",
+  "How are orders handled when you're closed on Mondays?",
+  "When will I hear back about my order sent on Monday?"
+ ]
+}

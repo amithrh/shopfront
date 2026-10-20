@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-8555e14234e2524df728",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:28+00:00",
+ "answer": "The entrance is step-free, and there's room inside for strollers and wheelchairs.",
+ "questions": [
+  "Is your entrance step-free?",
+  "Can I bring a stroller inside?",
+  "Is there room for wheelchairs inside?",
+  "Are you accessible for people with disabilities?",
+  "Can I enter without steps?",
+  "Is your bakehouse wheelchair-friendly?"
+ ]
+}

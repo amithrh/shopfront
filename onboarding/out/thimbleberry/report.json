@@ -69,6 +69,96 @@
     },
     {
       "page": "https://thimbleberry.example.com/index.html",
+      "what": "item Country sourdough (not in the page's own price list)",
+      "quote": "Country sourdough, seeded rye, olive and rosemary, baguettes, and challah on Fridays and Saturdays. From $4.50"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "item Croissants (not in the page's own price list)",
+      "quote": "Croissants, morning buns, scones, seasonal hand pies and a vegan blueberry muffin. From $3.75"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "item 6-inch round cake (not in the page's own price list)",
+      "quote": "6-inch roundServes up to 12 $56.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "item 8-inch round cake (not in the page's own price list)",
+      "quote": "8-inch roundServes up to 24 $84.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "item 10-inch round cake (not in the page's own price list)",
+      "quote": "10-inch roundServes up to 36 $120.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item 6-inch round, 3 layers (not in the page's own price list)",
+      "quote": "6-inch round, 3 layers 12 $56.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item 8-inch round, 3 layers (not in the page's own price list)",
+      "quote": "8-inch round, 3 layers 24 $84.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item 10-inch round, 3 layers (not in the page's own price list)",
+      "quote": "10-inch round, 3 layers 36 $120.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Quarter sheet (9 × 13 in), 2 layers (not in the page's own price list)",
+      "quote": "Quarter sheet (9 × 13 in), 2 layers 24 $78.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Half sheet (12 × 18 in), 2 layers (not in the page's own price list)",
+      "quote": "Half sheet (12 × 18 in), 2 layers 48 $135.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Two-tier (6-inch on a 10-inch) (not in the page's own price list)",
+      "quote": "Two-tier (6-inch on a 10-inch) 48 $210.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Three-tier (6, 8 and 10-inch) (not in the page's own price list)",
+      "quote": "Three-tier (6, 8 and 10-inch) 72 $320.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Hand-piped buttercream flowers (not in the page's own price list)",
+      "quote": "Hand-piped buttercream flowers +$15.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Fresh seasonal fruit on top (not in the page's own price list)",
+      "quote": "Fresh seasonal fruit on top +$12.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/custom-cakes.html",
+      "what": "item Vegan (not in the page's own price list)",
+      "quote": "Vegan (per cake, or per tier on tiered cakes) +$10.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "category teaser Bread",
+      "quote": "Bread Country sourdough, seeded rye, olive and rosemary, baguettes, and challah on Fridays and Saturdays. From $4.50"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "category teaser Pastries",
+      "quote": "Pastries Croissants, morning buns, scones, seasonal hand pies and a vegan blueberry muffin. From $3.75"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
+      "what": "category teaser Cookies",
+      "quote": "Cookies Six kinds, from brown-butter chocolate chip to a flourless chocolate crinkle. Any 12 cookies for $33.00. From $3.00"
+    },
+    {
+      "page": "https://thimbleberry.example.com/index.html",
       "what": "policy fact notice_minutes=10080 (number not in quote)",
       "quote": "Order at least 72 hours before pickup."
     },

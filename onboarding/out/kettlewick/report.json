@@ -104,6 +104,21 @@
     },
     {
       "page": "https://kettlewick.example.com/services.html",
+      "what": "item Shut-off valve replacement (not in the page's own price list)",
+      "quote": "Shut-off valve replacement, per valve $165–$240"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Visible pipe leak (not in the page's own price list)",
+      "quote": "Visible pipe leak, up to 3 ft of pipe replaced $225–$450"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Leak inside a wall or ceiling (not in the page's own price list)",
+      "quote": "Leak inside a wall or ceiling Quoted after a $79 diagnostic visit"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
       "what": "price of Water heater replacement (quote does not name it)",
       "quote": "Replace a 40 or 50 gallon gas tank, installed $1,650–$2,400"
     },
@@ -111,6 +126,116 @@
       "page": "https://kettlewick.example.com/services.html",
       "what": "price of Water heater replacement (quote does not name it)",
       "quote": "Replace a 40 or 50 gallon electric tank, installed $1,450–$2,100"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Tankless conversion (not in the page's own price list)",
+      "quote": "Tankless conversion Free on-site estimate. Installs from $3,800"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Sink, tub or shower drain (not in the page's own price list)",
+      "quote": "Sink, tub or shower drain $139–$229"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Toilet clog (not in the page's own price list)",
+      "quote": "Toilet clog $139–$199"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Main sewer line (not in the page's own price list)",
+      "quote": "Main sewer line, from an accessible cleanout $249–$395"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Camera inspection of the main line (not in the page's own price list)",
+      "quote": "Camera inspection of the main line, with video file $175 with a cleaning, $295 on its own"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Kitchen or bathroom faucet (not in the page's own price list)",
+      "quote": "Kitchen or bathroom faucet $145–$245"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Toilet, remove old and install new (not in the page's own price list)",
+      "quote": "Toilet, remove old and install new $225–$375"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Garbage disposal (not in the page's own price list)",
+      "quote": "Garbage disposal $195–$325"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Shower valve cartridge replacement (not in the page's own price list)",
+      "quote": "Shower valve cartridge replacement $185–$295"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Small patch (not in the page's own price list)",
+      "quote": "Small patch, up to 6 in $145–$225"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Medium patch (not in the page's own price list)",
+      "quote": "Medium patch, up to 2 × 2 ft (two visits) $225–$395"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Larger areas and ceilings (not in the page's own price list)",
+      "quote": "Larger areas and ceilings Quoted from photos"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Small item (not in the page's own price list)",
+      "quote": "Small item: chair, nightstand or side table $65 per item"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Medium item (not in the page's own price list)",
+      "quote": "Medium item: dresser, desk, bookcase or bed frame $120–$220 per item"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Wardrobes and closet systems (not in the page's own price list)",
+      "quote": "Wardrobes and closet systems $85–$105 per hour, 1-hour minimum"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Wall anchoring, tip-over kit included (not in the page's own price list)",
+      "quote": "Wall anchoring, tip-over kit included $35 per item"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item TV 56–85 in on drywall, your mount (not in the page's own price list)",
+      "quote": "TV 56–85 in on drywall, your mount $199"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Brick, stone or above a fireplace add (not in the page's own price list)",
+      "quote": "Brick, stone or above a fireplace add $100"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item In-wall cable and power kit add (not in the page's own price list)",
+      "quote": "In-wall cable and power kit add $129"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Fixed mount, supplied by us (not in the page's own price list)",
+      "quote": "Fixed mount, supplied by us $45"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Tilting mount, supplied by us (not in the page's own price list)",
+      "quote": "Tilting mount, supplied by us $65"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "item Full-motion mount, supplied by us (not in the page's own price list)",
+      "quote": "Full-motion mount, supplied by us $119"
     },
     {
       "page": "https://kettlewick.example.com/services.html",
@@ -148,6 +273,111 @@
       "quote": "Colorado Master Plumber License MP.0048213, Denver Plumbing Contractor License PC-27715 Lead-safe certified firm (RRP) for work in homes built before 1978"
     },
     {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Tell us what needs fixing, add your ZIP code and a photo or two. Jo reviews every request and replies with a written quote, and nothing is scheduled until you approve it."
+    },
+    {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Real numbers, so you have a rough idea before you ask. Your written quote is the price you pay."
+    },
+    {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Licensed plumbers for the water side of the house, and two handymen for the jobs that have been on your list since spring."
+    },
+    {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Describe the job, give us your ZIP code and the time of day that suits you. Photos are optional, but they help us price the job without a visit."
+    },
+    {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Most of central Denver is in our core area, from Sunnyside and Highland to Park Hill, Washington Park and Virginia Village. Lakewood, Edgewater, Lowry, Glendale and a few other nearby areas are in our"
+    },
+    {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Core area No travel fee. After-hours emergency plumbing available."
+    },
+    {
+      "page": "https://kettlewick.example.com/index.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "The full quote process, policies and FAQ"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "We prime every patch. Paint touch-up is included if you have leftover paint."
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Everything that can show up on an invoice, in one place."
+    },
+    {
+      "page": "https://kettlewick.example.com/service-area.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "No travel fee"
+    },
+    {
+      "page": "https://kettlewick.example.com/service-area.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Scheduled work and after-hours emergency plumbing."
+    },
+    {
+      "page": "https://kettlewick.example.com/service-area.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "We'll refer you"
+    },
+    {
+      "page": "https://kettlewick.example.com/how-it-works.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Quotes are valid for 30 days."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Owner and master plumber Reviews every quote request and writes every quote."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Journeyman plumber Water heaters and main-line drain work."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Journeyman plumber Leaks, fixtures and shut-off valves. Speaks Spanish."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Handyman Drywall repair and texture matching."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Handyman TV mounting and furniture assembly."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Office and scheduling Answers the office line and sets up arrival windows."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "you can request a quote online or by phone"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "gap notice_minutes",
+      "quote": "[not specified]"
+    },
+    {
       "page": "https://kettlewick.example.com/services.html",
       "what": "gap owner_reply_minutes",
       "quote": "[not specified]"
@@ -160,6 +390,11 @@
     {
       "page": "https://kettlewick.example.com/services.html",
       "what": "gap walk_ins_accepted",
+      "quote": "[not specified]"
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "gap travel_fee_cents",
       "quote": "[not specified]"
     },
     {
@@ -188,8 +423,8 @@
     }
   ],
   "model": {
-    "calls": 1,
-    "cache_hits": 13,
-    "cost_usd": 0.011785
+    "calls": 0,
+    "cache_hits": 14,
+    "cost_usd": 0.0
   }
 }

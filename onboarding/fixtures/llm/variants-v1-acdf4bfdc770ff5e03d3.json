@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-acdf4bfdc770ff5e03d3",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:28:35+00:00",
+ "answer": "We come to you.",
+ "questions": [
+  "Do you come to the customer's location for service?",
+  "Is onsite service available for all types of jobs?",
+  "How is service typically conducted by Kettlewick?",
+  "Can I expect a technician to visit my home for repairs?",
+  "Is there an option for in-shop service at Kettlewick?",
+  "What is the standard service approach of Kettlewick?"
+ ]
+}

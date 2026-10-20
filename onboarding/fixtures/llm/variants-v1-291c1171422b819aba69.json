@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-291c1171422b819aba69",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:28+00:00",
+ "answer": "Address 3127 SE Thimbleberry Street Portland, OR 97202; Phone (503) 555-0147 We answer during opening hours; General questions hello@thimbleberry.example.com; Custom cake orders cakes@thimbleberry.example.com.",
+ "questions": [
+  "What is your address?",
+  "How can I contact you by phone?",
+  "What is your email for general questions?",
+  "Can I email you for custom cake orders?",
+  "Do you have a contact number?",
+  "Where is Thimbleberry Bakehouse located?"
+ ]
+}

@@ -12,8 +12,12 @@
       "id": "q-policy-cancellation-notice-minutes",
       "kind": "contradiction",
       "targets": [
-        "info/cancellation#facts.notice_minutes",
-        "info/cancellation#answer_spoken"
+        "info/footnotes-cancellation-policy#facts.notice_minutes",
+        "info/footnotes-cancellation-policy#answer_spoken",
+        "info/cancellations-and-no-shows#facts.notice_minutes",
+        "info/cancellations-and-no-shows#answer_spoken",
+        "info/cancellations-and-no-shows-hours-more#answer_spoken",
+        "info/cancellations-and-no-shows-less-than#answer_spoken"
       ],
       "prompt": "Which is right for cancellation: notice minutes?",
       "why": "For cancellation: notice minutes, your Services & prices page says 48 hours but your Studio policies page says 24 hours. Until you answer, the assistant won't state it.",
@@ -94,17 +98,67 @@
       "id": "q-safety-policies",
       "kind": "confirm",
       "targets": [
-        "info/patch-test#answer_spoken"
+        "info/before-you-book-first-time#answer_spoken",
+        "info/color-carry-free#answer_spoken",
+        "info/patch-tests-and-allergies-free-takes#answer_spoken",
+        "info/patch-tests-and-allergies#answer_spoken",
+        "info/patch-tests-and-allergies-standard-permanent#answer_spoken",
+        "info/patch-tests-and-allergies-highlights-balayage#answer_spoken",
+        "info/patch-tests-and-allergies-smoothing-treatment#answer_spoken",
+        "info/patch-tests-and-allergies-finishing-contains#answer_spoken",
+        "info/patch-tests-and-allergies-nitrile-latex#answer_spoken",
+        "info/patch-tests-and-allergies-fragrance-free#answer_spoken",
+        "info/patch-tests-and-allergies-please-tell#answer_spoken"
       ],
       "prompt": "Your website makes some health and safety statements. Are they all correct?",
       "why": "Safety statements are only repeated to customers after you confirm them.",
       "candidates": [
         {
-          "value": "info/patch-test",
+          "value": "info/before-you-book-first-time",
           "label": "As your Quillfern Hair Studio page says",
           "evidence": {
             "url": "https://quillfern.example/index.html",
             "quote": "First time getting color with us, or reacted to hair dye before? Book a free patch test at least 72 hours before your color appointment."
+          }
+        },
+        {
+          "value": "info/color-carry-free",
+          "label": "As your Services & prices page says",
+          "evidence": {
+            "url": "https://quillfern.example/services.html",
+            "quote": "We carry a PPD-free color line for all-over color and root touch-ups. Read about patch tests and ingredients before your first color appointment."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-free-takes",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-standard-permanent",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "Our standard permanent hair color contains PPD (para-phenylenediamine). For all-over color and root touch-ups, we also carry a PPD-free color line."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-highlights-balayage",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative."
           }
         }
       ],

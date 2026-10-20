@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-0abee9a5027145c37ed3",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:43+00:00",
+ "answer": "Tips can be added to your card payment or left in cash.",
+ "questions": [
+  "Can I tip with my card payment?",
+  "Do you accept cash tips?",
+  "Can tips be added electronically?",
+  "Is tipping mandatory at your studio?",
+  "How should I leave a tip?",
+  "Are digital tips accepted?"
+ ]
+}

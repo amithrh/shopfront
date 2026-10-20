@@ -150,7 +150,49 @@ def parse_json_object(text: str) -> dict[str, Any]:
     try:
         value = json.loads(candidate)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"model reply is not JSON: {exc}") from exc
+        repaired = _close_truncated(text[text.find("{") :]) if "{" in text else None
+        if repaired is None:
+            raise ValueError(f"model reply is not JSON: {exc}") from exc
+        value = repaired
     if not isinstance(value, dict):
         raise ValueError("model reply is not a JSON object")
     return value
+
+
+def _close_truncated(text: str) -> dict[str, Any] | None:
+    """A reply cut off at the token limit: keep every complete value and close the open brackets.
+
+    Scans the JSON once, remembering the last point where a value inside an array or object ended;
+    the text up to there plus the matching closing brackets is valid JSON with only the unfinished
+    record lost."""
+    stack: list[str] = []
+    in_string = escape = False
+    cut: tuple[int, list[str]] | None = None
+    for i, ch in enumerate(text):
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch in "{[":
+            stack.append("}" if ch == "{" else "]")
+        elif ch in "}]":
+            if not stack:
+                break
+            stack.pop()
+            if not stack:
+                return None  # complete object: the parse error is elsewhere
+            cut = (i + 1, list(stack))
+    if cut is None:
+        return None
+    end, open_brackets = cut
+    try:
+        value = json.loads(text[:end] + "".join(reversed(open_brackets)))
+    except json.JSONDecodeError:
+        return None
+    return value if isinstance(value, dict) else None

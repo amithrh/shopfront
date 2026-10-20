@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-c226d948e440f26bc79f",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:43+00:00",
+ "answer": "Clients under 16 need a parent or guardian with them for any color service.",
+ "questions": [
+  "Do kids need a parent for color services?",
+  "Can teens get color services alone?",
+  "Is a guardian needed for under 16 clients?",
+  "Can a minor get a color service alone?",
+  "Do you require parental presence for young clients?",
+  "Is a parent needed for teen color services?"
+ ]
+}

@@ -32,6 +32,7 @@ askonce-onboard = "askonce_onboarding.cli:main"
 askonce-certify = "askonce_onboarding.cli:certify_main"
 askonce-answer = "askonce_onboarding.cli:answer_main"
 askonce-census = "askonce_onboarding.census:main"
+askonce-compare = "askonce_onboarding.compare:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

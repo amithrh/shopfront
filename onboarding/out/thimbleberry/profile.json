@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "thimbleberry",
   "revision": 1,
-  "updated_at": "2026-10-15T15:36:32Z",
+  "updated_at": "2026-10-20T07:51:25Z",
   "template": {
     "id": "bakery",
     "version": "1.0"
@@ -58,7 +58,7 @@
           ],
           "closures": [
             {
-              "from": "2026-11-28",
+              "from": "2026-11-26",
               "reason_spoken": "Thanksgiving Day"
             },
             {
@@ -137,31 +137,6 @@
             }
           ]
         }
-      },
-      {
-        "id": "core-area",
-        "kind": "service_area",
-        "area": {
-          "postal_codes": [
-            "97202"
-          ],
-          "localities": [
-            "Portland"
-          ]
-        },
-        "provenance": {
-          "owner_confirmed": false,
-          "evidence": [
-            {
-              "url": "https://thimbleberry.example.com/index.html",
-              "quote": "3127 SE Thimbleberry Street Portland, OR 97202"
-            },
-            {
-              "url": "https://thimbleberry.example.com/custom-cakes.html",
-              "quote": "Every cake is picked up at the bakery."
-            }
-          ]
-        }
       }
     ],
     "summary_spoken": "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland.",
@@ -213,9 +188,9 @@
       "title": "Menu",
       "categories": [
         {
-          "id": "bread",
-          "name": "Bread",
-          "spoken_name": "Bread"
+          "id": "breads",
+          "name": "Breads",
+          "spoken_name": "Breads"
         },
         {
           "id": "pastries",
@@ -228,44 +203,354 @@
           "spoken_name": "Cookies"
         },
         {
-          "id": "custom-cakes",
-          "name": "Custom cakes",
-          "spoken_name": "Custom cakes"
-        },
-        {
-          "id": "breads",
-          "name": "breads",
-          "spoken_name": "breads"
-        },
-        {
-          "id": "cakes",
-          "name": "cakes",
-          "spoken_name": "cakes"
-        },
-        {
-          "id": "extras",
-          "name": "extras",
-          "spoken_name": "extras"
-        },
-        {
-          "id": "decorations",
-          "name": "decorations",
-          "spoken_name": "decorations"
+          "id": "cakes-from-the-case",
+          "name": "Cakes from the case",
+          "spoken_name": "Cakes from the case"
         }
       ],
       "items": [
         {
+          "id": "custom-cake",
+          "name": "Custom cake",
+          "spoken_name": "Custom cake",
+          "description_spoken": "Pick a size by the number of people you're feeding. Round cakes have three layers and sheet cakes have two.",
+          "price": {
+            "kind": "from",
+            "amount_cents": 5600,
+            "currency": "USD"
+          },
+          "options": [
+            {
+              "id": "size",
+              "name": "Size",
+              "required": true,
+              "choices": [
+                {
+                  "id": "6-inch-round-3-layers",
+                  "name": "6-inch round, 3 layers",
+                  "spoken_name": "6-inch round, 3 layers",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 5600,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 12
+                  }
+                },
+                {
+                  "id": "8-inch-round-3-layers",
+                  "name": "8-inch round, 3 layers",
+                  "spoken_name": "8-inch round, 3 layers",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 8400,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 24
+                  }
+                },
+                {
+                  "id": "10-inch-round-3-layers",
+                  "name": "10-inch round, 3 layers",
+                  "spoken_name": "10-inch round, 3 layers",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 12000,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 36
+                  }
+                },
+                {
+                  "id": "quarter-sheet-9-13-in-2-layers",
+                  "name": "Quarter sheet (9 × 13 in), 2 layers",
+                  "spoken_name": "Quarter sheet (9 × 13 in), 2 layers",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 7800,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 24
+                  }
+                },
+                {
+                  "id": "half-sheet-12-18-in-2-layers",
+                  "name": "Half sheet (12 × 18 in), 2 layers",
+                  "spoken_name": "Half sheet (12 × 18 in), 2 layers",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 13500,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 48
+                  }
+                },
+                {
+                  "id": "two-tier-6-inch-on-a-10-inch",
+                  "name": "Two-tier (6-inch on a 10-inch)",
+                  "spoken_name": "Two-tier (6-inch on a 10-inch)",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 21000,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 48
+                  }
+                },
+                {
+                  "id": "three-tier-6-8-and-10-inch",
+                  "name": "Three-tier (6, 8 and 10-inch)",
+                  "spoken_name": "Three-tier (6, 8 and 10-inch)",
+                  "price": {
+                    "kind": "fixed",
+                    "amount_cents": 32000,
+                    "currency": "USD"
+                  },
+                  "attributes": {
+                    "serves": 72
+                  }
+                }
+              ]
+            },
+            {
+              "id": "extra",
+              "name": "Extra",
+              "required": false,
+              "choices": [
+                {
+                  "id": "hand-piped-buttercream-flowers",
+                  "name": "Hand-piped buttercream flowers",
+                  "spoken_name": "Hand-piped buttercream flowers",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1500,
+                    "currency": "USD"
+                  }
+                },
+                {
+                  "id": "fresh-seasonal-fruit-on-top",
+                  "name": "Fresh seasonal fruit on top",
+                  "spoken_name": "Fresh seasonal fruit on top",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1200,
+                    "currency": "USD"
+                  }
+                }
+              ],
+              "max_selections": 2
+            },
+            {
+              "id": "cake-flavor",
+              "name": "Cake flavor",
+              "required": true,
+              "choices": [
+                {
+                  "id": "vanilla-bean",
+                  "name": "Vanilla bean",
+                  "spoken_name": "Vanilla bean"
+                },
+                {
+                  "id": "dark-chocolate",
+                  "name": "Dark chocolate",
+                  "spoken_name": "Dark chocolate"
+                },
+                {
+                  "id": "lemon-poppyseed",
+                  "name": "Lemon-poppyseed",
+                  "spoken_name": "Lemon-poppyseed"
+                },
+                {
+                  "id": "carrot-with-walnuts",
+                  "name": "Carrot with walnuts",
+                  "spoken_name": "Carrot with walnuts"
+                },
+                {
+                  "id": "hazelnut-praline",
+                  "name": "Hazelnut praline",
+                  "spoken_name": "Hazelnut praline"
+                },
+                {
+                  "id": "birthday-sprinkle",
+                  "name": "Birthday sprinkle",
+                  "spoken_name": "Birthday sprinkle"
+                },
+                {
+                  "id": "gluten-free-vanilla-bean",
+                  "name": "Gluten-free vanilla bean",
+                  "spoken_name": "Gluten-free vanilla bean",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1200,
+                    "currency": "USD",
+                    "per": "tier"
+                  }
+                },
+                {
+                  "id": "gluten-free-dark-chocolate",
+                  "name": "Gluten-free dark chocolate",
+                  "spoken_name": "Gluten-free dark chocolate",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1200,
+                    "currency": "USD",
+                    "per": "tier"
+                  }
+                },
+                {
+                  "id": "gluten-free-lemon-poppyseed",
+                  "name": "Gluten-free lemon-poppyseed",
+                  "spoken_name": "Gluten-free lemon-poppyseed",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1200,
+                    "currency": "USD",
+                    "per": "tier"
+                  }
+                },
+                {
+                  "id": "vegan-vanilla-bean",
+                  "name": "Vegan vanilla bean",
+                  "spoken_name": "Vegan vanilla bean",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1000,
+                    "currency": "USD",
+                    "per": "tier"
+                  }
+                },
+                {
+                  "id": "vegan-dark-chocolate",
+                  "name": "Vegan dark chocolate",
+                  "spoken_name": "Vegan dark chocolate",
+                  "price_delta": {
+                    "kind": "fixed",
+                    "amount_cents": 1000,
+                    "currency": "USD",
+                    "per": "tier"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "filling",
+              "name": "Filling",
+              "required": true,
+              "choices": [
+                {
+                  "id": "marionberry-jam",
+                  "name": "Marionberry jam",
+                  "spoken_name": "Marionberry jam"
+                },
+                {
+                  "id": "lemon-curd",
+                  "name": "Lemon curd",
+                  "spoken_name": "Lemon curd"
+                },
+                {
+                  "id": "salted-caramel",
+                  "name": "Salted caramel",
+                  "spoken_name": "Salted caramel"
+                },
+                {
+                  "id": "chocolate-ganache",
+                  "name": "Chocolate ganache",
+                  "spoken_name": "Chocolate ganache"
+                }
+              ]
+            },
+            {
+              "id": "frosting",
+              "name": "Frosting",
+              "required": true,
+              "choices": [
+                {
+                  "id": "vanilla-buttercream",
+                  "name": "Vanilla buttercream",
+                  "spoken_name": "Vanilla buttercream"
+                },
+                {
+                  "id": "chocolate-buttercream",
+                  "name": "Chocolate buttercream",
+                  "spoken_name": "Chocolate buttercream"
+                },
+                {
+                  "id": "cream-cheese-frosting",
+                  "name": "Cream cheese frosting",
+                  "spoken_name": "Cream cheese frosting"
+                },
+                {
+                  "id": "vegan-vanilla-buttercream",
+                  "name": "Vegan vanilla buttercream",
+                  "spoken_name": "Vegan vanilla buttercream"
+                }
+              ]
+            }
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Custom cakes Layer and tiered cakes in six flavors, with gluten-free and vegan options in select flavors. From $56.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "6-inch round, 3 layers 12 $56.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "8-inch round, 3 layers 24 $84.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "10-inch round, 3 layers 36 $120.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Quarter sheet (9 × 13 in), 2 layers 24 $78.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Half sheet (12 × 18 in), 2 layers 48 $135.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Two-tier (6-inch on a 10-inch) 48 $210.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Three-tier (6, 8 and 10-inch) 72 $320.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Hand-piped buttercream flowers +$15.00"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Fresh seasonal fruit on top +$12.00"
+              }
+            ]
+          }
+        },
+        {
           "id": "country-sourdough",
           "name": "Country sourdough",
           "spoken_name": "Country sourdough",
+          "description_spoken": "A 1.5 lb round with a dark, crackly crust, fermented for 36 hours.",
           "category_ids": [
-            "bread"
+            "breads"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 900,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -273,125 +558,6 @@
               {
                 "url": "https://thimbleberry.example.com/menu.html",
                 "quote": "Country sourdough $9.00 A 1.5 lb round with a dark, crackly crust, fermented for 36 hours. Vegan Contains: wheat"
-              },
-              {
-                "url": "https://thimbleberry.example.com/index.html",
-                "quote": "Country sourdough, seeded rye, olive and rosemary, baguettes, and challah on Fridays and Saturdays. From $4.50"
-              }
-            ]
-          }
-        },
-        {
-          "id": "croissants",
-          "name": "Croissants",
-          "spoken_name": "Croissants",
-          "category_ids": [
-            "pastries"
-          ],
-          "price": {
-            "kind": "from",
-            "amount_cents": 375,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/index.html",
-                "quote": "Croissants, morning buns, scones, seasonal hand pies and a vegan blueberry muffin. From $3.75"
-              }
-            ]
-          }
-        },
-        {
-          "id": "brown-butter-chocolate-chip-cookies",
-          "name": "Brown-butter chocolate chip cookies",
-          "spoken_name": "Brown-butter chocolate chip cookies",
-          "category_ids": [
-            "cookies"
-          ],
-          "price": {
-            "kind": "from",
-            "amount_cents": 300,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/index.html",
-                "quote": "Six kinds, from brown-butter chocolate chip to a flourless chocolate crinkle. Any 12 cookies for $33.00. From $3.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "6-inch-round-cake",
-          "name": "6-inch round cake",
-          "spoken_name": "6-inch round cake",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 5600,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/index.html",
-                "quote": "6-inch roundServes up to 12 $56.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "8-inch-round-cake",
-          "name": "8-inch round cake",
-          "spoken_name": "8-inch round cake",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 8400,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/index.html",
-                "quote": "8-inch roundServes up to 24 $84.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "10-inch-round-cake",
-          "name": "10-inch round cake",
-          "spoken_name": "10-inch round cake",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 12000,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/index.html",
-                "quote": "10-inch roundServes up to 36 $120.00"
               }
             ]
           }
@@ -407,8 +573,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 1000,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -431,8 +596,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 1050,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -455,8 +619,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 450,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -472,15 +635,21 @@
           "id": "challah",
           "name": "Challah",
           "spoken_name": "Challah",
-          "description_spoken": "A six-strand braided egg bread topped with sesame seeds. Fridays and Saturdays only",
+          "description_spoken": "A six-strand braided egg bread topped with sesame seeds.",
           "category_ids": [
             "breads"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 1100,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
+          },
+          "availability": {
+            "status": "available",
+            "days": [
+              "fri",
+              "sat"
+            ]
           },
           "provenance": {
             "owner_confirmed": false,
@@ -503,8 +672,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 1200,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -531,8 +699,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 425,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -555,8 +722,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 475,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -579,8 +745,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 525,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -603,8 +768,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 450,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -627,8 +791,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 550,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -651,8 +814,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 400,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -675,8 +837,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 375,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -699,8 +860,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 325,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -723,8 +883,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 300,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -747,8 +906,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 300,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -771,8 +929,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 300,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -795,8 +952,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 300,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -819,8 +975,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 350,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -828,6 +983,10 @@
               {
                 "url": "https://thimbleberry.example.com/menu.html",
                 "quote": "Flourless chocolate crinkle $3.50 Fudgy, made with cocoa and egg whites. Gluten-free Contains: eggs, soy"
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "the flourless chocolate crinkle cookie ($3.50)"
               }
             ]
           }
@@ -843,8 +1002,7 @@
           "price": {
             "kind": "fixed",
             "amount_cents": 3300,
-            "currency": "USD",
-            "per": "dozen"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -862,13 +1020,12 @@
           "spoken_name": "Slice of cake",
           "description_spoken": "The flavor changes daily. Ask at the counter for today's cake and its allergens.",
           "category_ids": [
-            "cakes"
+            "cakes-from-the-case"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 650,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
           "provenance": {
             "owner_confirmed": false,
@@ -886,14 +1043,32 @@
           "spoken_name": "6-inch case cake",
           "description_spoken": "Vanilla bean with vanilla buttercream, or dark chocolate with chocolate buttercream. Serves up to 12.",
           "category_ids": [
-            "cakes"
+            "cakes-from-the-case"
           ],
           "price": {
             "kind": "fixed",
             "amount_cents": 4200,
-            "currency": "USD",
-            "per": "each"
+            "currency": "USD"
           },
+          "options": [
+            {
+              "id": "flavor",
+              "name": "Flavor",
+              "required": true,
+              "choices": [
+                {
+                  "id": "vanilla-bean-with-vanilla-buttercream",
+                  "name": "Vanilla bean with vanilla buttercream",
+                  "spoken_name": "Vanilla bean with vanilla buttercream"
+                },
+                {
+                  "id": "dark-chocolate-with-chocolate-buttercream",
+                  "name": "Dark chocolate with chocolate buttercream",
+                  "spoken_name": "Dark chocolate with chocolate"
+                }
+              ]
+            }
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
@@ -906,375 +1081,9 @@
                 "quote": "Most days we have 6-inch case cakes in vanilla bean or dark chocolate ($42.00, serves up to 12)."
               }
             ]
-          }
-        },
-        {
-          "id": "6-inch-round-3-layers",
-          "name": "6-inch round, 3 layers",
-          "spoken_name": "6-inch round, 3 layers",
-          "description_spoken": "serves up to 12",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 5600,
-            "currency": "USD",
-            "per": "each"
           },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "6-inch round, 3 layers 12 $56.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "8-inch-round-3-layers",
-          "name": "8-inch round, 3 layers",
-          "spoken_name": "8-inch round, 3 layers",
-          "description_spoken": "serves up to 24",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 8400,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "8-inch round, 3 layers 24 $84.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "10-inch-round-3-layers",
-          "name": "10-inch round, 3 layers",
-          "spoken_name": "10-inch round, 3 layers",
-          "description_spoken": "serves up to 36",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 12000,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "10-inch round, 3 layers 36 $120.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "quarter-sheet-9-13-in-2-layers",
-          "name": "Quarter sheet (9 × 13 in), 2 layers",
-          "spoken_name": "Quarter sheet (9 × 13 in), 2 layers",
-          "description_spoken": "serves up to 24",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 7800,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Quarter sheet (9 × 13 in), 2 layers 24 $78.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "half-sheet-12-18-in-2-layers",
-          "name": "Half sheet (12 × 18 in), 2 layers",
-          "spoken_name": "Half sheet (12 × 18 in), 2 layers",
-          "description_spoken": "serves up to 48",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 13500,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Half sheet (12 × 18 in), 2 layers 48 $135.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "two-tier-6-inch-on-a-10-inch",
-          "name": "Two-tier (6-inch on a 10-inch)",
-          "spoken_name": "Two-tier (6-inch on a 10-inch)",
-          "description_spoken": "serves up to 48",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 21000,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Two-tier (6-inch on a 10-inch) 48 $210.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "three-tier-6-8-and-10-inch",
-          "name": "Three-tier (6, 8 and 10-inch)",
-          "spoken_name": "Three-tier (6, 8 and 10-inch)",
-          "description_spoken": "serves up to 72",
-          "category_ids": [
-            "custom-cakes"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 32000,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Three-tier (6, 8 and 10-inch) 72 $320.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "hand-piped-buttercream-flowers",
-          "name": "Hand-piped buttercream flowers",
-          "spoken_name": "Hand-piped buttercream flowers",
-          "description_spoken": "additional decoration",
-          "category_ids": [
-            "extras"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 1500,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Hand-piped buttercream flowers +$15.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "fresh-seasonal-fruit-on-top",
-          "name": "Fresh seasonal fruit on top",
-          "spoken_name": "Fresh seasonal fruit on top",
-          "description_spoken": "additional decoration",
-          "category_ids": [
-            "extras"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 1200,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Fresh seasonal fruit on top +$12.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "gluten-free",
-          "name": "Gluten-free",
-          "spoken_name": "Gluten-free",
-          "description_spoken": "per cake, or per tier on tiered cakes",
-          "category_ids": [
-            "extras"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 1200,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Gluten-free (per cake, or per tier on tiered cakes) +$12.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "vegan",
-          "name": "Vegan",
-          "spoken_name": "Vegan",
-          "description_spoken": "per cake, or per tier on tiered cakes",
-          "category_ids": [
-            "extras"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 1000,
-            "currency": "USD",
-            "per": "each"
-          },
-          "availability": {
-            "status": "made_to_order"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Vegan (per cake, or per tier on tiered cakes) +$10.00"
-              }
-            ]
-          }
-        },
-        {
-          "id": "flourless-chocolate-crinkle-cookie",
-          "name": "flourless chocolate crinkle cookie",
-          "spoken_name": "flourless chocolate crinkle cookie",
-          "description_spoken": "flourless chocolate crinkle cookie",
-          "category_ids": [
-            "cookies"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 350,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "the flourless chocolate crinkle cookie ($3.50)"
-              }
-            ]
-          }
-        },
-        {
-          "id": "hand-piped-flowers",
-          "name": "hand-piped flowers",
-          "spoken_name": "hand-piped flowers",
-          "description_spoken": "hand-piped flowers",
-          "category_ids": [
-            "decorations"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 1500,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "We decorate with buttercream piping, hand-piped flowers ($15.00)"
-              }
-            ]
-          }
-        },
-        {
-          "id": "fresh-seasonal-fruit",
-          "name": "fresh seasonal fruit",
-          "spoken_name": "fresh seasonal fruit",
-          "description_spoken": "fresh seasonal fruit",
-          "category_ids": [
-            "decorations"
-          ],
-          "price": {
-            "kind": "fixed",
-            "amount_cents": 1200,
-            "currency": "USD",
-            "per": "each"
-          },
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "and fresh seasonal fruit ($12.00)."
-              }
-            ]
+          "attributes": {
+            "serves": 12
           }
         }
       ]
@@ -1284,145 +1093,327 @@
       "title": "Policies and FAQ",
       "entries": [
         {
-          "id": "custom-orders",
-          "topic": "custom_orders",
+          "id": "about-us",
+          "topic": "about",
           "question_variants": [
-            "how to order a custom cake"
+            "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland.",
+            "About us",
+            "Is a local bakery?",
+            "What kind of bakery is Bakehouse?",
+            "Is in Southeast Portland?",
+            "Does serve the neighborhood?"
           ],
-          "answer_spoken": "Order at least 72 hours before pickup.",
+          "answer_spoken": "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/index.html",
-                "quote": "Order at least 72 hours before pickup."
+                "quote": "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland. Every morning we're open, we bake naturally leavened bread, flaky pastry and cookies, and we make custom cakes to order for birthdays, weddings and everything in between."
               }
             ]
           }
         },
         {
-          "id": "deposit",
-          "topic": "deposit",
+          "id": "about-us-every-morning",
+          "topic": "about",
           "question_variants": [
-            "what is the deposit requirement for large orders"
+            "What does bake daily?",
+            "About us",
+            "Do they make custom cakes?",
+            "What types of baked goods does offer?",
+            "Can I order a custom cake for a wedding?",
+            "Does make birthday cakes?",
+            "What pastries does offer?"
           ],
-          "answer_spoken": "Orders of 25 servings or more require a 50% deposit.",
-          "facts": {
-            "deposit_percent": 50
-          },
+          "answer_spoken": "Every morning we're open, we bake naturally leavened bread, flaky pastry and cookies, and we make custom cakes to order for birthdays, weddings and everything in between.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/index.html",
-                "quote": "Orders of 25 servings or more are approved by Rosa and need a 50% deposit."
+                "quote": "Thimbleberry Bakehouse is a small neighborhood bakery in Southeast Portland. Every morning we're open, we bake naturally leavened bread, flaky pastry and cookies, and we make custom cakes to order for birthdays, weddings and everything in between."
               }
             ]
           }
         },
         {
-          "id": "pickup",
-          "topic": "pickup",
+          "id": "about-us-open-tuesday",
+          "topic": "about",
           "question_variants": [
-            "what are the pickup hours",
-            "What are the pickup hours?"
+            "Open Tuesday to Sunday.",
+            "Is open on Mondays?",
+            "What days is closed?",
+            "Can I visit on a Monday?",
+            "Is open every day?",
+            "What are days of operation?",
+            "Is open on weekends?"
           ],
-          "answer_spoken": "Pickup is available Tuesday to Sunday between 10:00 am and 2:00 pm.",
-          "facts": {
-            "pickup_start": "10:00",
-            "pickup_end": "14:00"
-          },
+          "answer_spoken": "Open Tuesday to Sunday. Closed Mondays.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/index.html",
-                "quote": "Pickup only, Tuesday to Sunday, between 10:00 am and 2:00 pm."
+                "quote": "Open Tuesday to Sunday. Closed Mondays. Hours and directions"
+              }
+            ]
+          }
+        },
+        {
+          "id": "about-us-hours-directions",
+          "topic": "about",
+          "question_variants": [
+            "Hours and directions"
+          ],
+          "answer_spoken": "Hours and directions",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Open Tuesday to Sunday. Closed Mondays. Hours and directions"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-menu",
+          "topic": "sales_tax",
+          "question_variants": [
+            "Is there a sales tax?",
+            "Do you deliver?",
+            "The menu",
+            "Everything here is baked in our kitchen each morning and sold until it runs out.",
+            "Do you have fresh baked goods daily?",
+            "Is there sales tax on your items?",
+            "What's the final price I'll pay?",
+            "Are your baked goods made in-house?"
+          ],
+          "answer_spoken": "Everything here is baked in our kitchen each morning and sold until it runs out. Oregon has no sales tax, so the price you see is the price you pay.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/menu.html",
+                "quote": "Everything here is baked in our kitchen each morning and sold until it runs out. Oregon has no sales tax, so the price you see is the price you pay."
               },
               {
                 "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "Do you deliver? No. All cakes are picked up at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm."
-              }
-            ]
-          },
-          "answer_card": "Pickup is available Tuesday to Sunday between 10:00 am and 2:00 pm. Tuesday to Sunday, between 10:00 am and 2:00 pm."
-        },
-        {
-          "id": "sales-tax",
-          "topic": "sales_tax",
-          "question_variants": [
-            "Is there a sales tax?"
-          ],
-          "answer_spoken": "No, Oregon has no sales tax.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/menu.html",
-                "quote": "Oregon has no sales tax, so the price you see is the price you pay."
+                "quote": "Do you deliver? No."
               }
             ]
           }
         },
         {
-          "id": "reservations",
-          "topic": "reservations",
-          "question_variants": [
-            "Can I reserve a loaf of bread?"
-          ],
-          "answer_spoken": "Yes, call or email by 2:00 pm the day before.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/menu.html",
-                "quote": "Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set it aside."
-              }
-            ]
-          }
-        },
-        {
-          "id": "case-cakes",
-          "topic": "case_cakes",
-          "question_variants": [
-            "Can I reserve a case cake?"
-          ],
-          "answer_spoken": "No, case cakes are first come, first served and can't be reserved.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://thimbleberry.example.com/menu.html",
-                "quote": "Case cakes are first come, first served and can't be reserved."
-              }
-            ]
-          }
-        },
-        {
-          "id": "notice-minutes",
+          "id": "custom-cake",
           "topic": "notice_minutes",
           "question_variants": [
-            "how far in advance do I need to order?"
+            "how far in advance do I need to order?",
+            "How far ahead do I need to order a custom cake?",
+            "Custom cake",
+            "Layer cakes, sheet cakes and tiered cakes, baked and decorated to order in our kitchen.",
+            "Can I order a custom cake?",
+            "Do you make cakes to order?",
+            "What types of cakes can I order?",
+            "Is there a minimum order time for cakes?"
           ],
-          "answer_spoken": "at least 72 hours before pickup",
+          "answer_spoken": "Layer cakes, sheet cakes and tiered cakes, baked and decorated to order in our kitchen. Order at least 72 hours before you need it.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Order at least 72 hours before you need it."
+                "quote": "Layer cakes, sheet cakes and tiered cakes, baked and decorated to order in our kitchen. Order at least 72 hours before you need it."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How far ahead do I need to order a custom cake? At least 72 hours before pickup."
               }
             ]
           }
         },
         {
-          "id": "pickup-start",
-          "topic": "pickup_start",
+          "id": "about-thimbleberry",
+          "topic": "about_thimbleberry",
           "question_variants": [
-            "when can I pick up my order?"
+            "About Thimbleberry",
+            "A small bakery with one big oven, on the corner of SE Thimbleberry Street and SE 32nd Avenue since 2011.",
+            "How long has been open?",
+            "What's special about oven?",
+            "Is a small business?",
+            "Since when has been operating?"
           ],
-          "answer_spoken": "Tuesday to Sunday, between 10:00 am and 2:00 pm",
+          "answer_spoken": "A small bakery with one big oven, on the corner of SE Thimbleberry Street and SE 32nd Avenue since 2011.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "A small bakery with one big oven, on the corner of SE Thimbleberry Street and SE 32nd Avenue since 2011."
+              }
+            ]
+          }
+        },
+        {
+          "id": "visit-us",
+          "topic": "visit_us",
+          "question_variants": [
+            "Visit us",
+            "Come by for a loaf, call about a cake, or send us an email.",
+            "How can I order a cake?",
+            "What's the address?",
+            "Can I contact by email?",
+            "How can I reach Bakehouse?"
+          ],
+          "answer_spoken": "Come by for a loaf, call about a cake, or send us an email. We're on the corner of SE Thimbleberry Street and SE 32nd Avenue.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "Come by for a loaf, call about a cake, or send us an email. We're on the corner of SE Thimbleberry Street and SE 32nd Avenue."
+              }
+            ]
+          }
+        },
+        {
+          "id": "questions-we-hear-a-lot",
+          "topic": "questions_we_hear_a_lot",
+          "question_variants": [
+            "Questions we hear a lot",
+            "Can't find your answer here?",
+            "Where can I find answers to my questions?",
+            "What's the contact number?",
+            "Can I email for inquiries?",
+            "Is there a helpline?",
+            "How can I get in touch?",
+            "Where can I find more information about Bakehouse?"
+          ],
+          "answer_spoken": "Can't find your answer here? Call (503) 555-0147 or email hello@thimbleberry.example.com.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can't find your answer here? Call (503) 555-0147 or email hello@thimbleberry.example.com."
+              }
+            ]
+          }
+        },
+        {
+          "id": "sizes-and-prices",
+          "topic": "sizes_and_prices",
+          "question_variants": [
+            "Sizes and prices",
+            "Pick a size by the number of people you're feeding.",
+            "How do I choose the size of my cake?",
+            "Are cake sizes determined by the number of servings?",
+            "What sizes are available for round cakes?",
+            "How many layers do sheet cakes have?",
+            "Can I select a cake size based on the number of people?",
+            "What are the options for cake sizes?"
+          ],
+          "answer_spoken": "Pick a size by the number of people you're feeding. Round cakes have three layers and sheet cakes have two.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Pick a size by the number of people you're feeding. Round cakes have three layers and sheet cakes have two. Every price includes one cake flavor, one filling, one frosting, a piped buttercream border and a message of up to 30 characters. Each tier of a tiered cake can be a different flavor."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Every price includes one cake flavor, one filling, one frosting, a piped buttercream border and a message of up to 30 characters. Each tier of a tiered cake can be a different flavor."
+              }
+            ]
+          }
+        },
+        {
+          "id": "sizes-and-prices-every-price",
+          "topic": "sizes_and_prices",
+          "question_variants": [
+            "What is included in the price of a custom cake?",
+            "Sizes and prices",
+            "Can I have different flavors for each tier of a tiered cake?",
+            "Are there additional charges for custom cake decorations?",
+            "What does the cake price cover?",
+            "Can I add a personalized message to my custom cake?",
+            "Are there different pricing options for custom cakes?"
+          ],
+          "answer_spoken": "Every price includes one cake flavor, one filling, one frosting, a piped buttercream border and a message of up to 30 characters. Each tier of a tiered cake can be a different flavor.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Pick a size by the number of people you're feeding. Round cakes have three layers and sheet cakes have two. Every price includes one cake flavor, one filling, one frosting, a piped buttercream border and a message of up to 30 characters. Each tier of a tiered cake can be a different flavor."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Every price includes one cake flavor, one filling, one frosting, a piped buttercream border and a message of up to 30 characters. Each tier of a tiered cake can be a different flavor."
+              }
+            ]
+          }
+        },
+        {
+          "id": "cakes-made-for-your-table",
+          "topic": "custom_orders",
+          "question_variants": [
+            "Cakes made for your table",
+            "Choose a size by how many people you're feeding, then pick a flavor, filling and frosting.",
+            "How do I choose a custom cake size?",
+            "Can I select the flavor for my custom cake?",
+            "Are custom cakes decorated to order?",
+            "How do I pick a custom cake?",
+            "Can I choose the filling for my custom cake?",
+            "Are custom cakes made fresh?"
+          ],
+          "answer_spoken": "Choose a size by how many people you're feeding, then pick a flavor, filling and frosting. Every custom cake is baked and decorated to order.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Choose a size by how many people you're feeding, then pick a flavor, filling and frosting. Every custom cake is baked and decorated to order."
+              }
+            ]
+          }
+        },
+        {
+          "id": "cakes-made-for-your-table-order-least",
+          "topic": "custom_orders",
+          "question_variants": [
+            "how to order a custom cake",
+            "what is the deposit requirement for large orders",
+            "what are the pickup hours",
+            "when can I pick up my order?",
+            "when can I pick up my custom cake?",
+            "Do you offer gluten-free cakes?",
+            "Are vegan cake options available?",
+            "What's the minimum order size for cakes?"
+          ],
+          "answer_spoken": "Order at least 72 hours before pickup; Gluten-free and vegan cakes are available in select flavors; Orders of 25 servings or more are approved by Rosa and need a 50% deposit; Pickup only, Tuesday to Sunday, between 10:00 am and 2:00 pm.",
           "facts": {
+            "deposit_percent": 50,
             "pickup_start": "10:00",
             "pickup_end": "14:00"
           },
@@ -1430,77 +1421,1255 @@
             "owner_confirmed": false,
             "evidence": [
               {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Order at least 72 hours before pickup"
+              },
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Gluten-free and vegan cakes are available in select flavors"
+              },
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Orders of 25 servings or more are approved by Rosa and need a 50% deposit"
+              },
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Pickup only, Tuesday to Sunday, between 10:00 am and 2:00 pm"
+              },
+              {
                 "url": "https://thimbleberry.example.com/custom-cakes.html",
                 "quote": "Pickup Tuesday to Sunday, between 10:00 am and 2:00 pm."
+              },
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "Custom cake pickups: Tuesday to Sunday, between 10:00 am and 2:00 pm."
               }
             ]
           }
         },
         {
-          "id": "deposit-percent",
+          "id": "our-most-ordered-sizes",
+          "topic": "our_most_ordered_sizes",
+          "question_variants": [
+            "Our most-ordered sizes",
+            "Sheet cakes and tiered cakes are on the custom cakes page.",
+            "What sizes of custom cakes are available?",
+            "Do they offer sheet cakes as custom options?",
+            "Can I order a tiered cake?",
+            "What are the most popular cake sizes?",
+            "Are there different sizes for custom cakes?",
+            "Where can I find information on custom cake sizes?"
+          ],
+          "answer_spoken": "Sheet cakes and tiered cakes are on the custom cakes page.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "Sheet cakes and tiered cakes are on the custom cakes page."
+              }
+            ]
+          }
+        },
+        {
+          "id": "come-say-hello",
+          "topic": "come_say_hello",
+          "question_variants": [
+            "is there parking available?",
+            "Where can I park?",
+            "Come say hello",
+            "3127 SE Thimbleberry Street, on the corner of SE 32nd Avenue.",
+            "Can I cycle to Bakehouse?",
+            "What's the street address?",
+            "Are there bike racks?"
+          ],
+          "answer_spoken": "3127 SE Thimbleberry Street, on the corner of SE 32nd Avenue. Free street parking and a bike rack by the door.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/index.html",
+                "quote": "3127 SE Thimbleberry Street, on the corner of SE 32nd Avenue. Free street parking and a bike rack by the door."
+              },
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "Street parking is free on SE Thimbleberry Street and SE 32nd Avenue. There's a bike rack right by our door."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Where can I park? Street parking is free on SE Thimbleberry Street and SE 32nd Avenue, and there's a bike rack by the door."
+              }
+            ]
+          }
+        },
+        {
+          "id": "about-allergens",
+          "topic": "about_allergens",
+          "question_variants": [
+            "About allergens",
+            "Does use common allergens in their kitchen?",
+            "Are there any allergen-free options?",
+            "Can I find information about allergens on their website?",
+            "Does guarantee allergen-free products?",
+            "What allergens are handled kitchen?",
+            "Are there traces of allergens products?"
+          ],
+          "answer_spoken": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/menu.html",
+                "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+              }
+            ]
+          }
+        },
+        {
+          "id": "about-allergens-items-marked",
+          "topic": "about_allergens",
+          "question_variants": [
+            "Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen.",
+            "About allergens",
+            "Are gluten-free items made in a dedicated gluten-free kitchen?",
+            "Does offer gluten-free options?",
+            "Are gluten-free items truly allergen-free?",
+            "Can I trust the gluten-free label on items?",
+            "Are gluten-free items made with gluten-free ingredients?",
+            "Does have a separate kitchen for gluten-free items?"
+          ],
+          "answer_spoken": "Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/menu.html",
+                "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+              }
+            ]
+          }
+        },
+        {
+          "id": "breads",
+          "topic": "reservations",
+          "question_variants": [
+            "Can I reserve a loaf of bread?",
+            "Breads",
+            "Want a loaf held for you?",
+            "How do I hold a loaf of bread for pickup?",
+            "Is it possible to have a loaf of bread set aside?",
+            "What should I do to ensure my loaf of bread is ready?",
+            "Can I call to reserve a loaf?",
+            "How far in advance should I contact for a loaf?"
+          ],
+          "answer_spoken": "Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set it aside.",
+          "applies_to": [
+            "menu/country-sourdough",
+            "menu/seeded-rye",
+            "menu/olive-and-rosemary-loaf",
+            "menu/baguette",
+            "menu/challah",
+            "menu/gluten-free-sandwich-loaf"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/menu.html",
+                "quote": "Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set it aside. You pay when you pick it up."
+              }
+            ]
+          }
+        },
+        {
+          "id": "breads-when-pick",
+          "topic": "reservations",
+          "question_variants": [
+            "You pay when you pick it up.",
+            "Can I reserve a loaf of bread?",
+            "Breads",
+            "When do I pay for my order?",
+            "Is payment required upon pickup?",
+            "Do I need to pay in advance for my order?",
+            "When is the payment process?",
+            "Is there a pre-payment option?"
+          ],
+          "answer_spoken": "You pay when you pick it up.",
+          "applies_to": [
+            "menu/country-sourdough",
+            "menu/seeded-rye",
+            "menu/olive-and-rosemary-loaf",
+            "menu/baguette",
+            "menu/challah",
+            "menu/gluten-free-sandwich-loaf"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/menu.html",
+                "quote": "Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set it aside. You pay when you pick it up."
+              }
+            ]
+          }
+        },
+        {
+          "id": "cakes-from-the-case",
+          "topic": "case_cakes",
+          "question_variants": [
+            "Can I reserve a case cake?",
+            "Cakes from the case",
+            "Case cakes are first come, first served and can't be reserved.",
+            "Are case cakes available on a first-come, first-served basis?",
+            "How do I get a cake made to order?",
+            "Can I order a specific cake from the case?",
+            "What is the policy for case cakes?",
+            "How do I order a custom cake?"
+          ],
+          "answer_spoken": "Case cakes are first come, first served and can't be reserved. For a cake made to your order, see custom cakes.",
+          "applies_to": [
+            "menu/custom-cake",
+            "menu/slice-of-cake",
+            "menu/6-inch-case-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/menu.html",
+                "quote": "Case cakes are first come, first served and can't be reserved. For a cake made to your order, see custom cakes."
+              }
+            ]
+          }
+        },
+        {
+          "id": "notice",
+          "topic": "notice",
+          "question_variants": [
+            "Notice",
+            "At least 72 hours before pickup."
+          ],
+          "answer_spoken": "At least 72 hours before pickup.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Notice At least 72 hours before pickup."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-if-i-need-a-cake-for-a-big-party",
+          "topic": "what_if_i_need_a_cake_for_a_big_party",
+          "question_variants": [
+            "What if I need a cake for a big party?",
+            "Orders that add up to 25 servings or more need Rosa's approval.",
+            "What should I do for a large cake order?",
+            "Do I need approval for big party cakes?",
+            "How do I get Rosa's approval for a large order?",
+            "What is the process for ordering a cake for many people?",
+            "Can I order a cake for a large gathering?",
+            "What are the requirements for a big party cake?"
+          ],
+          "answer_spoken": "Orders that add up to 25 servings or more need Rosa's approval. She replies within 24 hours.",
+          "facts": {
+            "approval_threshold_servings": 25
+          },
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval. She replies within 24 hours. Once she approves, a 50% deposit is due within 48 hours to hold your date, and the balance is due at pickup. See large orders for the details."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "25 servings or more Needs Rosa's approval and a 50% deposit."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-if-i-need-a-cake-for-a-big-party-once-approves",
+          "topic": "what_if_i_need_a_cake_for_a_big_party",
+          "question_variants": [
+            "Once she approves, a 50% deposit is due within 48 hours to hold your date, and the balance is due at pickup.",
+            "What if I need a cake for a big party?",
+            "What is the payment process for large orders?",
+            "Do I need to pay a deposit for large orders?",
+            "When is the balance due for large orders?",
+            "What are the payment terms for big party cakes?",
+            "How do I secure a date for a large order?",
+            "What are the details for large cake orders?"
+          ],
+          "answer_spoken": "Once she approves, a 50% deposit is due within 48 hours to hold your date, and the balance is due at pickup. See large orders for the details.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval. She replies within 24 hours. Once she approves, a 50% deposit is due within 48 hours to hold your date, and the balance is due at pickup. See large orders for the details."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "25 servings or more Needs Rosa's approval and a 50% deposit."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval."
+              }
+            ]
+          }
+        },
+        {
+          "id": "delivery",
+          "topic": "delivery",
+          "question_variants": [
+            "Delivery",
+            "We don't deliver.",
+            "Does offer delivery services?",
+            "Is pickup the only option for cake orders?",
+            "Does deliver cakes to customers?",
+            "Are there any delivery options available for cake orders?",
+            "Can I avoid pickup by choosing delivery for my cake?"
+          ],
+          "answer_spoken": "We don't deliver. Every cake is picked up at the bakery.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Delivery We don't deliver. Every cake is picked up at the bakery."
+              }
+            ]
+          }
+        },
+        {
+          "id": "flavors-fillings-and-frostings",
+          "topic": "flavors_fillings_and_frostings",
+          "question_variants": [
+            "Flavors, fillings and frostings",
+            "Choose one cake flavor, one filling and one frosting.",
+            "How many cake flavors can I choose from?",
+            "Are there options for fillings and frostings?",
+            "Can I select different allergens for my cake order?",
+            "What are the available choices for cake customization?",
+            "Are there specific allergens listed for regular recipes?",
+            "Can I choose gluten-free or vegan options for my cake?"
+          ],
+          "answer_spoken": "Choose one cake flavor, one filling and one frosting. Allergens are listed for our regular recipes; gluten-free and vegan versions are described below.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Choose one cake flavor, one filling and one frosting. Allergens are listed for our regular recipes; gluten-free and vegan versions are described below."
+              }
+            ]
+          }
+        },
+        {
+          "id": "gluten-free-cakes",
+          "topic": "gluten_free_cakes",
+          "question_variants": [
+            "Gluten-free cakes",
+            "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting.",
+            "What gluten-free cake flavors are available?",
+            "Are gluten-free cakes available in every size?",
+            "How much does a gluten-free cake cost?",
+            "Can I choose any filling and frosting for a gluten-free cake?",
+            "Are there additional charges for gluten-free cakes?",
+            "What sizes are offered for gluten-free cakes?"
+          ],
+          "answer_spoken": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "We don't recommend them for people with celiac disease."
+              }
+            ]
+          }
+        },
+        {
+          "id": "gluten-free-cakes-gluten-free",
+          "topic": "gluten_free_cakes",
+          "question_variants": [
+            "Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy.",
+            "Gluten-free cakes",
+            "What ingredients are in the gluten-free cakes?",
+            "Are there any common allergens in the gluten-free cakes?",
+            "Can individuals with soy allergies enjoy the dark chocolate gluten-free cake?",
+            "Are gluten-free cakes suitable for those with milk and egg allergies?",
+            "What are the allergen considerations for gluten-free cakes?",
+            "Are there any restrictions on ingredients for gluten-free cakes?"
+          ],
+          "answer_spoken": "Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "We don't recommend them for people with celiac disease."
+              }
+            ]
+          }
+        },
+        {
+          "id": "gluten-free-cakes-they-made",
+          "topic": "gluten_free_cakes",
+          "question_variants": [
+            "Are gluten-free cakes completely free of gluten traces?",
+            "Gluten-free cakes",
+            "Can individuals with celiac disease safely consume gluten-free cakes?",
+            "Are gluten-free cakes made in a dedicated gluten-free kitchen?",
+            "What precautions are taken to minimize gluten traces in gluten-free cakes?",
+            "Are gluten-free cakes recommended for people with severe gluten allergies?",
+            "What should individuals with gluten sensitivities be aware of when ordering gluten-free cakes?"
+          ],
+          "answer_spoken": "They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces. We don't recommend them for people with celiac disease.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "We don't recommend them for people with celiac disease."
+              }
+            ]
+          }
+        },
+        {
+          "id": "vegan-cakes",
+          "topic": "vegan_cakes",
+          "question_variants": [
+            "Vegan cakes",
+            "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream.",
+            "Are vegan cakes offered in every size?",
+            "How much does a vegan cake cost?",
+            "What filling and frosting options are available for vegan cakes?",
+            "Are there additional charges for vegan cakes?",
+            "What sizes are offered for vegan cakes?"
+          ],
+          "answer_spoken": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
+              }
+            ]
+          }
+        },
+        {
+          "id": "vegan-cakes-vegan-cakes",
+          "topic": "vegan_cakes",
+          "question_variants": [
+            "Vegan cakes contain no milk or eggs, but they do contain wheat and soy.",
+            "Vegan cakes",
+            "Are there any common allergens in vegan cakes?",
+            "Can individuals with milk and egg allergies enjoy vegan cakes?",
+            "Are vegan cakes suitable for those with wheat and soy allergies?",
+            "What are the allergen considerations for vegan cakes?",
+            "Are there any restrictions on ingredients for vegan cakes?",
+            "Can individuals with multiple allergies safely consume vegan cakes?"
+          ],
+          "answer_spoken": "Vegan cakes contain no milk or eggs, but they do contain wheat and soy.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Available in vanilla bean and dark chocolate, in every size, with marionberry jam filling and vegan vanilla buttercream. Add $10.00 per cake, or $10.00 per tier on tiered cakes. Vegan cakes contain no milk or eggs, but they do contain wheat and soy."
+              }
+            ]
+          }
+        },
+        {
+          "id": "vegan-cakes-make-cake",
+          "topic": "vegan_cakes",
+          "question_variants": [
+            "Can you make a cake that's both gluten-free and vegan?",
+            "We can't make a cake that is both gluten-free and vegan.",
+            "Can I order a cake that is both gluten-free and vegan?",
+            "Are there any options for cakes that are both gluten-free and vegan?",
+            "Can accommodate requests for gluten-free and vegan cakes?",
+            "Are there limitations on the combination of gluten-free and vegan options?",
+            "Can I have a cake that meets both gluten-free and vegan requirements?",
+            "Are there any alternatives for customers seeking both gluten-free and vegan cakes?"
+          ],
+          "answer_spoken": "We can't make a cake that is both gluten-free and vegan.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "We can't make a cake that is both gluten-free and vegan."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can you make a cake that's both gluten-free and vegan? No, we can't make a cake that is both."
+              }
+            ]
+          }
+        },
+        {
+          "id": "nuts",
+          "topic": "nuts",
+          "question_variants": [
+            "Nuts",
+            "Our carrot cake has walnuts and our hazelnut praline cake has hazelnuts.",
+            "Which cakes contain nuts?",
+            "Are there any nut-free cake options available?",
+            "Can I request a nut-free cake?",
+            "Are there any cakes with walnuts or hazelnuts?",
+            "What precautions are taken to minimize nut traces in cakes?",
+            "Are there any guarantees for nut-free cakes?"
+          ],
+          "answer_spoken": "Our carrot cake has walnuts and our hazelnut praline cake has hazelnuts. Every other flavor is made without nuts in the recipe, but tree nuts and peanuts are used in our kitchen every day, so we can't promise a nut-free cake.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Our carrot cake has walnuts and our hazelnut praline cake has hazelnuts. Every other flavor is made without nuts in the recipe, but tree nuts and peanuts are used in our kitchen every day, so we can't promise a nut-free cake."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-we-dont-make",
+          "topic": "what_we_dont_make",
+          "question_variants": [
+            "What we don't make",
+            "We don't make sugar-free cakes, and we don't use fondant or edible photo prints.",
+            "Do you offer sugar-free cake options?",
+            "Can you use fondant on cakes?",
+            "Do you provide edible photo prints?",
+            "What kind of decorations do you use?",
+            "Can you add hand-piped flowers to cakes?",
+            "Do you use fresh fruit in decorations?"
+          ],
+          "answer_spoken": "We don't make sugar-free cakes, and we don't use fondant or edible photo prints. Our decorations are buttercream piping, hand-piped flowers and fresh fruit.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "We don't make sugar-free cakes, and we don't use fondant or edible photo prints. Our decorations are buttercream piping, hand-piped flowers and fresh fruit."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-to-order",
+          "topic": "how_to_order",
+          "question_variants": [
+            "How to order",
+            "Our decorating bench is small, so we only take a limited number of custom cakes each day.",
+            "How many custom cakes do you make daily?",
+            "Are weekend orders in May, June, and December limited?",
+            "When should I contact you for a custom cake?",
+            "Do you take custom cake orders year-round?",
+            "Is there a specific time to order custom cakes?",
+            "Are custom cake orders accepted on short notice?"
+          ],
+          "answer_spoken": "Our decorating bench is small, so we only take a limited number of custom cakes each day. Weekends in May, June and December fill up first, so get in touch as soon as you know your date.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Our decorating bench is small, so we only take a limited number of custom cakes each day. Weekends in May, June and December fill up first, so get in touch as soon as you know your date."
+              }
+            ]
+          }
+        },
+        {
+          "id": "choose-your-cake",
+          "topic": "choose_your_cake",
+          "question_variants": [
+            "Choose your cake",
+            "Pick a size by servings, then a flavor, filling, frosting and any extras.",
+            "How do I choose a cake size?",
+            "Can I select different flavors for my cake?",
+            "Do you offer different fillings for cakes?",
+            "Can I choose the type of frosting?",
+            "Are there any extras I can add to my cake?",
+            "How do I personalize my cake order?"
+          ],
+          "answer_spoken": "Pick a size by servings, then a flavor, filling, frosting and any extras.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Pick a size by servings, then a flavor, filling, frosting and any extras."
+              }
+            ]
+          }
+        },
+        {
+          "id": "get-in-touch-at-least-72-hours-ahead",
+          "topic": "get_in_touch_at_least_72_hours_ahead",
+          "question_variants": [
+            "Get in touch at least 72 hours ahead",
+            "How far in advance should I contact Bakehouse?",
+            "What's the phone number?",
+            "Can I email for orders?",
+            "What information should I provide when ordering a cake?",
+            "Is there a minimum notice period for cake orders?",
+            "How can I get in touch during opening hours?"
+          ],
+          "answer_spoken": "Get in touch at least 72 hours ahead: Call (503) 555-0147 during opening hours, email cakes@thimbleberry.example.com, or ask at the counter. Tell us:",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Get in touch at least 72 hours ahead"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Call (503) 555-0147 during opening hours, email cakes@thimbleberry.example.com, or ask at the counter"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Tell us:"
+              }
+            ]
+          }
+        },
+        {
+          "id": "we-confirm-your-order",
+          "topic": "we_confirm_your_order",
+          "question_variants": [
+            "We confirm your order",
+            "Orders under 25 servings are confirmed when we reply, with nothing to pay until pickup.",
+            "When will my order be confirmed?",
+            "Do I need to pay immediately for small orders?",
+            "What's the process for orders under 25 servings?",
+            "Is payment required before picking up small orders?",
+            "How are small cake orders confirmed?",
+            "What happens after I place a small order?"
+          ],
+          "answer_spoken": "Orders under 25 servings are confirmed when we reply, with nothing to pay until pickup. Orders of 25 servings or more follow the large order steps below.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Orders under 25 servings are confirmed when we reply, with nothing to pay until pickup. Orders of 25 servings or more follow the large order steps below."
+              }
+            ]
+          }
+        },
+        {
+          "id": "pick-it-up",
+          "topic": "pick_it_up",
+          "question_variants": [
+            "Pick it up",
+            "Collect your cake at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm.",
+            "What is the minimum notice required for cake orders?",
+            "Can I order a cake with short notice?",
+            "Is there a deadline for placing cake orders?",
+            "How early should I place my cake order?",
+            "What is the cutoff time for cake orders?"
+          ],
+          "answer_spoken": "Collect your cake at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm. Any balance is paid at pickup.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Collect your cake at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm. Any balance is paid at pickup."
+              }
+            ]
+          }
+        },
+        {
+          "id": "rosa-approves-every-large-order",
+          "topic": "rosa_approves_every_large_order",
+          "question_variants": [
+            "Rosa approves every large order",
+            "Is Rosa involved in confirming large orders?",
+            "How are orders of 25 servings or more handled?",
+            "Does Rosa review every large cake order?",
+            "What's the process for confirming a large order?",
+            "How long does it take to get approval for large orders?"
+          ],
+          "answer_spoken": "Any custom cake order that adds up to 25 servings or more, whether it's one big cake or several smaller cakes for the same day, needs Rosa's approval before it's confirmed. She reviews each one herself and replies within 24 hours.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Any custom cake order that adds up to 25 servings or more, whether it's one big cake or several smaller cakes for the same day, needs Rosa's approval before it's confirmed. She reviews each one herself and replies within 24 hours. Requests sent on a Monday, when we're closed, get an answer by Tuesday at noon."
+              }
+            ]
+          }
+        },
+        {
+          "id": "rosa-approves-every-large-order-requests-sent",
+          "topic": "rosa_approves_every_large_order",
+          "question_variants": [
+            "Requests sent on a Monday, when we're closed, get an answer by Tuesday at noon.",
+            "Rosa approves every large order",
+            "When are orders sent on Mondays confirmed?",
+            "Does Rosa review orders even when you're closed?",
+            "What's the turnaround time for Monday order approvals?",
+            "Can I expect a reply by Tuesday noon for Monday orders?",
+            "How are orders handled when you're closed on Mondays?",
+            "When will I hear back about my order sent on Monday?"
+          ],
+          "answer_spoken": "Requests sent on a Monday, when we're closed, get an answer by Tuesday at noon.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Any custom cake order that adds up to 25 servings or more, whether it's one big cake or several smaller cakes for the same day, needs Rosa's approval before it's confirmed. She reviews each one herself and replies within 24 hours. Requests sent on a Monday, when we're closed, get an answer by Tuesday at noon."
+              }
+            ]
+          }
+        },
+        {
+          "id": "a-50-deposit-holds-your-date",
           "topic": "deposit_percent",
           "question_variants": [
-            "what is the deposit for large orders?"
+            "what is the deposit for large orders?",
+            "A 50% deposit holds your date",
+            "A 50% deposit holds your date: Once Rosa approves your order, a deposit of 50% of the order total holds your date.",
+            "Do I need to make a deposit for my cake order?",
+            "How much deposit is required to hold my cake order?",
+            "What payment methods are accepted for deposits?",
+            "How long do I have to pay the deposit after approval?",
+            "What happens if I don't pay the deposit within the given time?"
           ],
-          "answer_spoken": "50% of the order total",
+          "answer_spoken": "A 50% deposit holds your date: Once Rosa approves your order, a deposit of 50% of the order total holds your date. Pay it by card over the phone or in person within 48 hours of approval, or the date is released.",
           "facts": {
             "deposit_percent": 50
           },
+          "applies_to": [
+            "menu/custom-cake"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "a deposit of 50% of the order total holds your date."
+                "quote": "A 50% deposit holds your date"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Once Rosa approves your order, a deposit of 50% of the order total holds your date"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Pay it by card over the phone or in person within 48 hours of approval, or the date is released"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "The remaining balance is due at pickup"
               }
             ]
           }
         },
         {
-          "id": "refund-notice-minutes",
+          "id": "a-50-deposit-holds-your-date-remaining-balance",
+          "topic": "deposit_percent",
+          "question_variants": [
+            "The remaining balance is due at pickup.",
+            "what is the deposit for large orders?",
+            "A 50% deposit holds your date",
+            "When is the remaining balance due for large orders?",
+            "Do I pay the rest when I pick up my order?",
+            "Is full payment required at pickup for large orders?",
+            "What's the payment schedule for large cake orders?",
+            "Can I pay the balance over the phone?"
+          ],
+          "answer_spoken": "The remaining balance is due at pickup.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "A 50% deposit holds your date"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Once Rosa approves your order, a deposit of 50% of the order total holds your date"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Pay it by card over the phone or in person within 48 hours of approval, or the date is released"
+              },
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "The remaining balance is due at pickup"
+              }
+            ]
+          }
+        },
+        {
+          "id": "refunds",
           "topic": "refund_notice_minutes",
           "question_variants": [
-            "how far in advance do I need to cancel to get a refund?"
+            "how far in advance do I need to cancel to get a refund?",
+            "Can I get my deposit back?",
+            "Refunds",
+            "Cancel 7 or more days before pickup and we'll refund your deposit in full.",
+            "Can I get a refund if I cancel my order?",
+            "What's the cancellation policy for deposits?",
+            "How many days before pickup can I cancel for a refund?",
+            "Is the deposit refundable if I cancel late?"
           ],
-          "answer_spoken": "7 or more days before pickup",
+          "answer_spoken": "Cancel 7 or more days before pickup and we'll refund your deposit in full. If you cancel less than 7 days before pickup, the deposit is non-refundable, because we've already bought ingredients and set aside decorating time.",
           "facts": {
             "refund_notice_minutes": 10080
           },
+          "applies_to": [
+            "menu/custom-cake"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "Cancel 7 or more days before pickup and we'll refund your deposit in full."
+                "quote": "Cancel 7 or more days before pickup and we'll refund your deposit in full. If you cancel less than 7 days before pickup, the deposit is non-refundable, because we've already bought ingredients and set aside decorating time."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can I get my deposit back? Yes, in full, if you cancel 7 or more days before pickup. If you cancel less than 7 days before pickup, the deposit is non-refundable."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can I get my deposit back? Yes, in full, if you cancel 7 or more days before pickup."
               }
             ]
           }
         },
         {
-          "id": "change-notice-minutes",
+          "id": "refunds-example-inch",
+          "topic": "refund_notice_minutes",
+          "question_variants": [
+            "For example, a 10-inch round serves up to 36 and costs $120.00, so its deposit is $60.00 and $60.00 is due at pickup.",
+            "How is the deposit calculated for a cake order?",
+            "Can you give an example of a deposit calculation?",
+            "What's the deposit for a 10-inch round cake?",
+            "How much is due at pickup for a 10-inch cake?",
+            "What's the total cost of a 10-inch round cake?",
+            "How are deposits and final payments structured for orders?"
+          ],
+          "answer_spoken": "For example, a 10-inch round serves up to 36 and costs $120.00, so its deposit is $60.00 and $60.00 is due at pickup.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "For example, a 10-inch round serves up to 36 and costs $120.00, so its deposit is $60.00 and $60.00 is due at pickup."
+              }
+            ]
+          }
+        },
+        {
+          "id": "changes-and-cancellations",
           "topic": "change_notice_minutes",
           "question_variants": [
-            "how far in advance do I need to change my order?"
+            "how far in advance do I need to change my order?",
+            "How do I change or cancel a smaller order?",
+            "Changes and cancellations",
+            "Orders under 25 servings don't need a deposit; you pay in full at pickup.",
+            "Do small orders require a deposit?",
+            "How do I pay for orders under 25 servings?",
+            "Can I change or cancel a small order?",
+            "What's the notice required to change a small order?"
           ],
-          "answer_spoken": "48 hours before pickup",
+          "answer_spoken": "Orders under 25 servings don't need a deposit; you pay in full at pickup. To change or cancel one, call or email us at least 48 hours before pickup.",
           "facts": {
             "change_notice_minutes": 2880
           },
+          "applies_to": [
+            "menu/custom-cake"
+          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/custom-cakes.html",
-                "quote": "To change or cancel one, call or email us at least 48 hours before pickup."
+                "quote": "Orders under 25 servings don't need a deposit; you pay in full at pickup. To change or cancel one, call or email us at least 48 hours before pickup. For orders of 25 servings or more, the deposit refund rules above apply."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How do I change or cancel a smaller order? Orders under 25 servings don't need a deposit, and you pay at pickup. Call or email at least 48 hours before pickup to change or cancel."
               }
             ]
           }
         },
         {
-          "id": "waste-reduction",
+          "id": "changes-and-cancellations-orders-servings",
+          "topic": "change_notice_minutes",
+          "question_variants": [
+            "For orders of 25 servings or more, the deposit refund rules above apply.",
+            "how far in advance do I need to change my order?",
+            "How do I change or cancel a smaller order?",
+            "Changes and cancellations",
+            "What's the deposit policy for orders of 25 servings or more?",
+            "Are the same refund rules applied to large orders?",
+            "How do deposits work for large cake orders?",
+            "Can I get a refund for a large order cancellation?"
+          ],
+          "answer_spoken": "For orders of 25 servings or more, the deposit refund rules above apply.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Orders under 25 servings don't need a deposit; you pay in full at pickup. To change or cancel one, call or email us at least 48 hours before pickup. For orders of 25 servings or more, the deposit refund rules above apply."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How do I change or cancel a smaller order? Orders under 25 servings don't need a deposit, and you pay at pickup. Call or email at least 48 hours before pickup to change or cancel."
+              }
+            ]
+          }
+        },
+        {
+          "id": "ready-to-order",
+          "topic": "ready_to_order",
+          "question_variants": [
+            "Ready to order?",
+            "Call (503) 555-0147 during opening hours or email cakes@thimbleberry.example.com.",
+            "How can I contact you to place an order?",
+            "What's the phone number for cake orders?",
+            "Can I email you to order a cake?",
+            "Where can I find your opening hours?",
+            "What information should I have ready when ordering?",
+            "Is there a specific time to call for orders?"
+          ],
+          "answer_spoken": "Call (503) 555-0147 during opening hours or email cakes@thimbleberry.example.com. Read cake questions See opening hours",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/custom-cakes.html",
+                "quote": "Ready to order? Call (503) 555-0147 during opening hours or email cakes@thimbleberry.example.com. Read cake questions See opening hours"
+              }
+            ]
+          }
+        },
+        {
+          "id": "from-a-market-table-to-a-corner-shop",
+          "topic": "from_a_market_table_to_a_corner_shop",
+          "question_variants": [
+            "From a market table to a corner shop",
+            "Where did Rosa learn to bake?",
+            "Who taught Rosa how to bake?",
+            "Where is Rosa from originally?",
+            "What was Rosa's early baking experience like?",
+            "Did Rosa grow up in a baking environment?",
+            "Where did Rosa's baking journey begin?"
+          ],
+          "answer_spoken": "Rosa Ibáñez learned to bake in her grandmother's kitchen in Tucson, Arizona, rolling tortillas on weeknights and braiding bread for Sunday dinners.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Rosa Ibáñez learned to bake in her grandmother's kitchen in Tucson, Arizona, rolling tortillas on weeknights and braiding bread for Sunday dinners. After moving to Portland she spent five years baking bread overnight for restaurants, and in 2008 she started selling sourdough from a folding table at a Saturday farmers market."
+              }
+            ]
+          }
+        },
+        {
+          "id": "from-a-market-table-to-a-corner-shop-after-moving",
+          "topic": "from_a_market_table_to_a_corner_shop",
+          "question_variants": [
+            "What did Rosa do after moving to Portland?",
+            "From a market table to a corner shop",
+            "How long did Rosa work baking bread for restaurants?",
+            "When did Rosa start selling sourdough at a market?",
+            "What was Rosa's first venture in Portland?",
+            "How did Rosa transition from market sales to a shop?",
+            "What was Rosa's job before opening Bakehouse?"
+          ],
+          "answer_spoken": "After moving to Portland she spent five years baking bread overnight for restaurants, and in 2008 she started selling sourdough from a folding table at a Saturday farmers market.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Rosa Ibáñez learned to bake in her grandmother's kitchen in Tucson, Arizona, rolling tortillas on weeknights and braiding bread for Sunday dinners. After moving to Portland she spent five years baking bread overnight for restaurants, and in 2008 she started selling sourdough from a folding table at a Saturday farmers market."
+              }
+            ]
+          }
+        },
+        {
+          "id": "from-a-market-table-to-a-corner-shop-three-summers",
+          "topic": "from_a_market_table_to_a_corner_shop",
+          "question_variants": [
+            "Three summers later the line was long enough to justify a lease.",
+            "When did open?",
+            "What was the previous use location?",
+            "How long did Rosa sell at the farmers market before opening a shop?",
+            "What prompted the decision to lease a space?",
+            "What year did Rosa decide to open Bakehouse?"
+          ],
+          "answer_spoken": "Three summers later the line was long enough to justify a lease. Thimbleberry Bakehouse opened in 2011 in a former hardware store on SE Thimbleberry Street, and the old shelving still holds our bread today.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Three summers later the line was long enough to justify a lease. Thimbleberry Bakehouse opened in 2011 in a former hardware store on SE Thimbleberry Street, and the old shelving still holds our bread today."
+              }
+            ]
+          }
+        },
+        {
+          "id": "from-a-market-table-to-a-corner-shop-still-small",
+          "topic": "from_a_market_table_to_a_corner_shop",
+          "question_variants": [
+            "How many people work?",
+            "From a market table to a corner shop",
+            "What time do most employees start work?",
+            "How many ovens does have?",
+            "Why is small in size?",
+            "What is unique about the decor?",
+            "How many decorating benches are there?"
+          ],
+          "answer_spoken": "We're still small on purpose: one deck oven, one decorating bench and a team of nine people who mostly start work before sunrise.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "We're still small on purpose: one deck oven, one decorating bench and a team of nine people who mostly start work before sunrise."
+              }
+            ]
+          }
+        },
+        {
+          "id": "rosa",
+          "topic": "rosa",
+          "question_variants": [
+            "Rosa",
+            "Owner Plans every custom cake and reviews large orders herself.",
+            "Who plans every custom cake?",
+            "When can you find the owner at the counter?",
+            "What is Rosa's role in the bakery?",
+            "Does Rosa review large orders personally?",
+            "Is the owner involved in the cake-making process?",
+            "When is Rosa usually available to customers?"
+          ],
+          "answer_spoken": "Owner Plans every custom cake and reviews large orders herself. You'll usually find her at the counter on weekends.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Owner Plans every custom cake and reviews large orders herself. You'll usually find her at the counter on weekends."
+              }
+            ]
+          }
+        },
+        {
+          "id": "teo",
+          "topic": "teo",
+          "question_variants": [
+            "Teo",
+            "Head bread baker Lights the oven at 3:30 am and has fed the same sourdough starter since the farmers market days.",
+            "Who is the head bread baker?",
+            "What time does Teo start his day?",
+            "How long has Teo been using the same sourdough starter?",
+            "What is Teo's role in the bakery?",
+            "When does Teo light the oven each morning?",
+            "How experienced is Teo in baking bread?"
+          ],
+          "answer_spoken": "Head bread baker Lights the oven at 3:30 am and has fed the same sourdough starter since the farmers market days.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Head bread baker Lights the oven at 3:30 am and has fed the same sourdough starter since the farmers market days."
+              }
+            ]
+          }
+        },
+        {
+          "id": "maren",
+          "topic": "maren",
+          "question_variants": [
+            "Maren",
+            "Cake decorator Hand-pipes every buttercream flower and has written more birthday messages than she can count.",
+            "Who hand-pipes every buttercream flower?",
+            "What is Maren's specialty at the bakery?",
+            "How many birthday messages has Maren written?",
+            "What role does Maren play in cake decoration?",
+            "Is Maren responsible for writing messages on cakes?",
+            "What makes Maren's cake decorations unique?"
+          ],
+          "answer_spoken": "Cake decorator Hand-pipes every buttercream flower and has written more birthday messages than she can count.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Cake decorator Hand-pipes every buttercream flower and has written more birthday messages than she can count."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-we-bake-with",
           "topic": "waste_reduction",
           "question_variants": [
-            "what happens to leftover baked goods"
+            "What we bake with",
+            "Where does source its flour?",
+            "What type of eggs does use?",
+            "Where are the hazelnuts shortbread from?",
+            "What local ingredients does use?",
+            "Where are the eggs sourced?",
+            "What region provides the flour?"
+          ],
+          "answer_spoken": "Our flour is milled in the Willamette Valley, our eggs come from a family farm in Yamhill County, and the hazelnuts in our shortbread and praline grow in orchards south of Salem.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Our flour is milled in the Willamette Valley, our eggs come from a family farm in Yamhill County, and the hazelnuts in our shortbread and praline grow in orchards south of Salem. Butter is cultured, chocolate is dark, and nothing comes out of a mix."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-we-bake-with-butter-cultured",
+          "topic": "waste_reduction",
+          "question_variants": [
+            "Butter is cultured, chocolate is dark, and nothing comes out of a mix.",
+            "What we bake with",
+            "What type of butter does use?",
+            "Is the chocolate used dark or milk?",
+            "Does use pre-made mixes?",
+            "What kind of butter is preferred?",
+            "Is there any artificial ingredient recipes?",
+            "What is the bakery's stance on using mixes?"
+          ],
+          "answer_spoken": "Butter is cultured, chocolate is dark, and nothing comes out of a mix.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "Our flour is milled in the Willamette Valley, our eggs come from a family farm in Yamhill County, and the hazelnuts in our shortbread and praline grow in orchards south of Salem. Butter is cultured, chocolate is dark, and nothing comes out of a mix."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-we-bake-with-whatever-left",
+          "topic": "waste_reduction",
+          "question_variants": [
+            "what happens to leftover baked goods",
+            "What happens to unsold baked goods at closing?",
+            "Does sell baked goods the next day?",
+            "Where do leftover items go?",
+            "How does handle unsold products?",
+            "Is there a second-day sale items?",
+            "What community service does support?"
           ],
           "answer_spoken": "Whatever is left at closing goes to a neighborhood food pantry that same evening, so nothing we bake is sold the next day.",
           "provenance": {
@@ -1514,54 +2683,102 @@
           }
         },
         {
-          "id": "pickup-window",
-          "topic": "pickup_window",
+          "id": "our-week",
+          "topic": "our_week",
           "question_variants": [
-            "when can I pick up my custom cake?"
+            "Our week",
+            "The ovens go on long before the doors open.",
+            "When do the ovens start?",
+            "What are the opening hours?",
+            "How early do operations begin at Thimble Bakehouse?",
+            "Can you visit before it opens to customers?",
+            "What time should you expect staff at the counter?",
+            "How does prepare for the day?"
           ],
-          "answer_spoken": "Tuesday to Sunday, between 10:00 am and 2:00 pm.",
-          "facts": {
-            "pickup_start": "10:00",
-            "pickup_end": "14:00"
-          },
+          "answer_spoken": "The ovens go on long before the doors open. Here's when you'll find us at the counter:",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
-                "url": "https://thimbleberry.example.com/contact.html",
-                "quote": "Custom cake pickups: Tuesday to Sunday, between 10:00 am and 2:00 pm."
+                "url": "https://thimbleberry.example.com/about.html",
+                "quote": "The ovens go on long before the doors open. Here's when you'll find us at the counter:"
               }
             ]
           }
         },
         {
-          "id": "parking",
-          "topic": "parking",
+          "id": "opening-hours",
+          "topic": "pickup_window",
           "question_variants": [
-            "is there parking available?",
-            "Where can I park?"
+            "Opening hours",
+            "We're closed on Thanksgiving Day, December 25 and January 1.",
+            "Are you open on Thanksgiving Day?",
+            "Do you close on December 25?",
+            "Are you open on January 1?",
+            "What holidays are you closed on?",
+            "Will you be open during the holidays?",
+            "Are there any days you are completely closed?"
           ],
-          "answer_spoken": "Street parking is free on SE Thimbleberry Street and SE 32nd Avenue.",
+          "answer_spoken": "We're closed on Thanksgiving Day, December 25 and January 1.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/contact.html",
-                "quote": "Street parking is free on SE Thimbleberry Street and SE 32nd Avenue."
-              },
-              {
-                "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "Where can I park? Street parking is free on SE Thimbleberry Street and SE 32nd Avenue, and there's a bike rack by the door."
+                "quote": "We're closed on Thanksgiving Day, December 25 and January 1."
               }
             ]
-          },
-          "answer_card": "Street parking is free on SE Thimbleberry Street and SE 32nd Avenue. Street parking is free on SE Thimbleberry Street and SE 32nd Avenue, and there's a bike rack by the door."
+          }
         },
         {
-          "id": "accessibility",
-          "topic": "accessibility",
+          "id": "get-in-touch",
+          "topic": "get_in_touch",
           "question_variants": [
-            "is the bakery accessible?"
+            "Get in touch",
+            "What is your address?",
+            "How can I contact you by phone?",
+            "What is your email for general questions?",
+            "Can I email you for custom cake orders?",
+            "Do you have a contact number?"
+          ],
+          "answer_spoken": "Address 3127 SE Thimbleberry Street Portland, OR 97202; Phone (503) 555-0147 We answer during opening hours; General questions hello@thimbleberry.example.com; Custom cake orders cakes@thimbleberry.example.com.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "Address 3127 SE Thimbleberry Street Portland, OR 97202"
+              },
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "Phone (503) 555-0147 We answer during opening hours"
+              },
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "General questions hello@thimbleberry.example.com"
+              },
+              {
+                "url": "https://thimbleberry.example.com/contact.html",
+                "quote": "Custom cake orders cakes@thimbleberry.example.com"
+              }
+            ]
+          }
+        },
+        {
+          "id": "getting-here",
+          "topic": "parking",
+          "question_variants": [
+            "is the bakery accessible?",
+            "The entrance is step-free, and there's room inside for strollers and wheelchairs.",
+            "Is your entrance step-free?",
+            "Can I bring a stroller inside?",
+            "Is there room for wheelchairs inside?",
+            "Are you accessible for people with disabilities?",
+            "Can I enter without steps?",
+            "Is your bakehouse wheelchair-friendly?"
           ],
           "answer_spoken": "The entrance is step-free, and there's room inside for strollers and wheelchairs.",
           "provenance": {
@@ -1575,11 +2792,17 @@
           }
         },
         {
-          "id": "pets",
-          "topic": "pets",
+          "id": "getting-here-dogs-welcome",
+          "topic": "parking",
           "question_variants": [
             "are pets allowed?",
-            "Can I bring my dog?"
+            "Can I bring my dog?",
+            "Dogs are welcome at the bench out front.",
+            "Are dogs allowed inside?",
+            "Can I bring my pet dog?",
+            "Do you allow service animals?",
+            "Are pets welcome at the front bench?",
+            "Can I bring my dog to the bakehouse?"
           ],
           "answer_spoken": "Dogs are welcome at the bench out front. Inside, only service animals, please.",
           "provenance": {
@@ -1597,69 +2820,413 @@
           }
         },
         {
-          "id": "custom-cakes",
-          "topic": "custom_cakes",
+          "id": "is-your-kitchen-nut-free",
+          "topic": "is_your_kitchen_nut_free",
           "question_variants": [
-            "How far ahead do I need to order a custom cake?",
-            "Can I get a cake for tomorrow?",
-            "What if I need a cake for a big party?",
-            "Can I get my deposit back?"
+            "Is your kitchen nut-free?",
+            "Do you use tree nuts in your recipes?",
+            "Are peanuts used in your bakehouse?",
+            "Can I find nut-free options?",
+            "Do your products contain nuts?",
+            "Are there any nut-free items?"
           ],
-          "answer_spoken": "At least 72 hours before pickup.",
+          "answer_spoken": "No. We use tree nuts (almonds, hazelnuts and walnuts) and peanuts every day.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "How far ahead do I need to order a custom cake? At least 72 hours before pickup."
+                "quote": "Is your kitchen nut-free? No. We use tree nuts (almonds, hazelnuts and walnuts) and peanuts every day. Even when a recipe has no nuts in it, we can't guarantee it's free of nut traces."
+              }
+            ]
+          }
+        },
+        {
+          "id": "is-your-kitchen-nut-free-even-when",
+          "topic": "is_your_kitchen_nut_free",
+          "question_variants": [
+            "Even when a recipe has no nuts in it, we can't guarantee it's free of nut traces.",
+            "Is your kitchen nut-free?",
+            "Can I be sure a product is nut-free?",
+            "Do you guarantee nut-free items?",
+            "Can traces of nuts be present?",
+            "Are nut traces possible in any product?",
+            "Can I avoid nut traces in my order?",
+            "Is cross-contamination with nuts possible?"
+          ],
+          "answer_spoken": "Even when a recipe has no nuts in it, we can't guarantee it's free of nut traces.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Is your kitchen nut-free? No. We use tree nuts (almonds, hazelnuts and walnuts) and peanuts every day. Even when a recipe has no nuts in it, we can't guarantee it's free of nut traces."
+              }
+            ]
+          }
+        },
+        {
+          "id": "whats-vegan",
+          "topic": "whats_vegan",
+          "question_variants": [
+            "What's vegan?",
+            "What vegan options do you have?",
+            "Are any of your breads vegan?",
+            "Do you offer vegan muffins?",
+            "Can I find vegan cookies?",
+            "What vegan items are available?",
+            "Are there any vegan baked goods?"
+          ],
+          "answer_spoken": "Our country sourdough, seeded rye, olive & rosemary loaf and baguette are vegan, along with the vegan blueberry muffin and the ginger molasses cookie.",
+          "applies_to": [
+            "menu/custom-cake",
+            "menu/country-sourdough",
+            "menu/seeded-rye",
+            "menu/olive-and-rosemary-loaf",
+            "menu/baguette",
+            "menu/vegan-blueberry-muffin",
+            "menu/ginger-molasses"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "What's vegan? Our country sourdough, seeded rye, olive & rosemary loaf and baguette are vegan, along with the vegan blueberry muffin and the ginger molasses cookie. Vegan custom cakes come in vanilla bean or dark chocolate (add $10.00 per cake, or per tier)."
+              }
+            ]
+          }
+        },
+        {
+          "id": "whats-vegan-vegan-custom",
+          "topic": "whats_vegan",
+          "question_variants": [
+            "Vegan custom cakes come in vanilla bean or dark chocolate (add $10.00 per cake, or per tier).",
+            "What's vegan?",
+            "Do you make vegan custom cakes?",
+            "Is there an extra charge for vegan cakes?",
+            "How much more for a vegan custom cake?",
+            "Can I order a vegan cake?",
+            "What are the options for vegan cakes?"
+          ],
+          "answer_spoken": "Vegan custom cakes come in vanilla bean or dark chocolate (add $10.00 per cake, or per tier).",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "What's vegan? Our country sourdough, seeded rye, olive & rosemary loaf and baguette are vegan, along with the vegan blueberry muffin and the ginger molasses cookie. Vegan custom cakes come in vanilla bean or dark chocolate (add $10.00 per cake, or per tier)."
+              }
+            ]
+          }
+        },
+        {
+          "id": "do-you-make-sugar-free-cakes",
+          "topic": "do_you_make_sugar_free_cakes",
+          "question_variants": [
+            "Do you make sugar-free cakes?",
+            "No, we don't make sugar-free cakes.",
+            "Do you offer sugar-free cakes?",
+            "Can I get a cake without sugar?",
+            "Are there any sugar-free options?",
+            "Do you make cakes for diabetic customers?",
+            "Can I find sugar-free baked goods?",
+            "Are sugar-free cakes available?"
+          ],
+          "answer_spoken": "No, we don't make sugar-free cakes.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Do you make sugar-free cakes? No, we don't make sugar-free cakes."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-far-ahead-do-i-need-to-order-a-custom-cake",
+          "topic": "how_far_ahead_do_i_need_to_order_a_custo",
+          "question_variants": [
+            "How early should I order a custom cake?",
+            "How far ahead do I need to order a custom cake?",
+            "At least 72 hours before pickup.",
+            "What is the minimum notice for custom cakes?",
+            "Do I need to order custom cakes in advance?",
+            "How far ahead for a custom cake order?",
+            "Can I order a custom cake last minute?",
+            "What is the lead time for custom cakes?"
+          ],
+          "answer_spoken": "At least 72 hours before pickup. We take a limited number of custom cakes each day, so weekends can fill up earlier than that.",
+          "applies_to": [
+            "menu/custom-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How far ahead do I need to order a custom cake? At least 72 hours before pickup. We take a limited number of custom cakes each day, so weekends can fill up earlier than that."
+              }
+            ]
+          }
+        },
+        {
+          "id": "can-i-get-a-cake-for-tomorrow",
+          "topic": "can_i_get_a_cake_for_tomorrow",
+          "question_variants": [
+            "Can I get a cake for tomorrow?",
+            "Not a custom cake.",
+            "Can I get a cake tomorrow?",
+            "Do you have pre-made cakes available?",
+            "Are there any cakes for immediate pickup?",
+            "Can I buy a cake without ordering ahead?",
+            "Do you sell ready-made cakes?",
+            "Are there any cakes available for same-day pickup?"
+          ],
+          "answer_spoken": "Not a custom cake. Most days we have 6-inch case cakes in vanilla bean or dark chocolate ($42.00, serves up to 12).",
+          "applies_to": [
+            "menu/custom-cake",
+            "menu/6-inch-case-cake"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can I get a cake for tomorrow? Not a custom cake. Most days we have 6-inch case cakes in vanilla bean or dark chocolate ($42.00, serves up to 12). They're first come, first served and can't be reserved."
               },
               {
                 "url": "https://thimbleberry.example.com/faq.html",
                 "quote": "Can I get a cake for tomorrow? Not a custom cake."
-              },
-              {
-                "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval."
-              },
-              {
-                "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "Can I get my deposit back? Yes, in full, if you cancel 7 or more days before pickup."
               }
             ]
-          },
-          "answer_card": "At least 72 hours before pickup. Not a custom cake. Orders that add up to 25 servings or more need Rosa's approval. Yes, in full, if you cancel 7 or more days before pickup.",
+          }
+        },
+        {
+          "id": "can-i-get-a-cake-for-tomorrow-they-first",
+          "topic": "can_i_get_a_cake_for_tomorrow",
+          "question_variants": [
+            "They're first come, first served and can't be reserved.",
+            "Can I get a cake for tomorrow?",
+            "Are case cakes available on a first-come basis?",
+            "Can I book a cake for tomorrow?",
+            "Do I need to order case cakes in advance?",
+            "Are case cakes reserved or first come, first served?",
+            "Can I get a cake without prior reservation?"
+          ],
+          "answer_spoken": "They're first come, first served and can't be reserved.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can I get a cake for tomorrow? Not a custom cake. Most days we have 6-inch case cakes in vanilla bean or dark chocolate ($42.00, serves up to 12). They're first come, first served and can't be reserved."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can I get a cake for tomorrow? Not a custom cake."
+              }
+            ]
+          }
+        },
+        {
+          "id": "do-you-deliver",
+          "topic": "pickup",
+          "question_variants": [
+            "What are the pickup hours?",
+            "Do you deliver?",
+            "Do you offer delivery services?",
+            "Are there any delivery options available?",
+            "Do you provide home delivery?",
+            "Can you deliver my order?",
+            "Is delivery service available?"
+          ],
+          "answer_spoken": "No. All cakes are picked up at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm.",
           "facts": {
-            "approval_threshold_servings": 25,
-            "refund_notice_minutes": 10080
-          }
-        },
-        {
-          "id": "delivery",
-          "topic": "delivery",
-          "question_variants": [
-            "Do you deliver?"
-          ],
-          "answer_spoken": "No.",
+            "pickup_start": "10:00",
+            "pickup_end": "14:00"
+          },
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://thimbleberry.example.com/faq.html",
-                "quote": "Do you deliver? No."
+                "quote": "Do you deliver? No. All cakes are picked up at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm."
               }
             ]
           }
         },
         {
-          "id": "payment",
-          "topic": "payment",
+          "id": "do-you-do-fondant-or-photo-cakes",
+          "topic": "do_you_do_fondant_or_photo_cakes",
           "question_variants": [
-            "How can I pay?"
+            "Do you do fondant or photo cakes?",
+            "Do you use fondant for cakes?",
+            "Can I get a cake with edible photo prints?",
+            "Are fondant cakes available?",
+            "Do you offer photo cakes?",
+            "Can I have a cake with a printed image?",
+            "Are there any fondant or photo cake options?"
           ],
-          "answer_spoken": "Cash, credit and debit cards, and tap to pay.",
+          "answer_spoken": "No. We don't use fondant or edible photo prints.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Do you do fondant or photo cakes? No. We don't use fondant or edible photo prints. We decorate with buttercream piping, hand-piped flowers ($15.00) and fresh seasonal fruit ($12.00)."
+              }
+            ]
+          }
+        },
+        {
+          "id": "do-you-do-fondant-or-photo-cakes-decorate-with",
+          "topic": "do_you_do_fondant_or_photo_cakes",
+          "question_variants": [
+            "We decorate with buttercream piping, hand-piped flowers ($15.00) and fresh seasonal fruit ($12.00).",
+            "Do you do fondant or photo cakes?",
+            "How do you decorate your cakes?",
+            "Can I add hand-piped flowers to my cake?",
+            "Do you use buttercream for cake decoration?",
+            "Can I have fresh fruit on my cake?",
+            "What are the decoration options for cakes?",
+            "How are cakes decorated at your bakehouse?"
+          ],
+          "answer_spoken": "We decorate with buttercream piping, hand-piped flowers ($15.00) and fresh seasonal fruit ($12.00).",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Do you do fondant or photo cakes? No. We don't use fondant or edible photo prints. We decorate with buttercream piping, hand-piped flowers ($15.00) and fresh seasonal fruit ($12.00)."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-should-i-store-my-cake",
+          "topic": "how_should_i_store_my_cake",
+          "question_variants": [
+            "How should I store my cake?",
+            "Buttercream cakes are fine at room temperature for up to 4 hours; after that, keep them in the fridge.",
+            "How should I store a buttercream cake?",
+            "Can I keep my cake at room temperature?",
+            "Should I refrigerate my cream cheese frosted cake?",
+            "How long can a cake stay at room temperature?",
+            "What is the best way to store my cake?",
+            "How should I prepare my cake before serving?"
+          ],
+          "answer_spoken": "Buttercream cakes are fine at room temperature for up to 4 hours; after that, keep them in the fridge. Cakes with cream cheese frosting should stay refrigerated.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How should I store my cake? Buttercream cakes are fine at room temperature for up to 4 hours; after that, keep them in the fridge. Cakes with cream cheese frosting should stay refrigerated. For the best texture, take any cake out of the fridge 1 hour before serving."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-should-i-store-my-cake-best-texture",
+          "topic": "how_should_i_store_my_cake",
+          "question_variants": [
+            "For the best texture, take any cake out of the fridge 1 hour before serving.",
+            "How should I store my cake?",
+            "How long before serving should I take the cake out of the fridge?",
+            "What is the best time to remove the cake from refrigeration?",
+            "How can I ensure the best texture for my cake?",
+            "Should I let the cake sit before serving?",
+            "What is the ideal time to take the cake out of the fridge?",
+            "How do I prepare the cake for serving?"
+          ],
+          "answer_spoken": "For the best texture, take any cake out of the fridge 1 hour before serving.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How should I store my cake? Buttercream cakes are fine at room temperature for up to 4 hours; after that, keep them in the fridge. Cakes with cream cheese frosting should stay refrigerated. For the best texture, take any cake out of the fridge 1 hour before serving."
+              }
+            ]
+          }
+        },
+        {
+          "id": "can-i-reserve-bread",
+          "topic": "can_i_reserve_bread",
+          "question_variants": [
+            "Can I reserve bread?",
+            "Can I reserve bread in advance?",
+            "How do I reserve loaves of bread?",
+            "What time should I call to reserve bread?",
+            "Can I email to reserve bread?",
+            "Is it possible to hold bread for me?",
+            "How can I ensure I get the bread I want?"
+          ],
+          "answer_spoken": "Yes. Call or email by 2:00 pm the day before and we'll hold your loaves.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "Can I reserve bread? Yes. Call or email by 2:00 pm the day before and we'll hold your loaves. You pay when you pick them up."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-can-i-pay",
+          "topic": "how_can_i_pay",
+          "question_variants": [
+            "How can I pay?",
+            "Cash, credit and debit cards, and tap to pay.",
+            "What payment methods do you accept?",
+            "Can I pay with a credit card?",
+            "Do you accept debit cards?",
+            "Is tap to pay an option?",
+            "Can I use cash to pay?",
+            "What are the accepted forms of payment?"
+          ],
+          "answer_spoken": "Cash, credit and debit cards, and tap to pay. We don't accept checks.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How can I pay? Cash, credit and debit cards, and tap to pay. We don't accept checks. Oregon has no sales tax, so menu prices are what you pay."
+              },
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How can I pay? Cash, credit and debit cards, and tap to pay."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-can-i-pay-oregon-sales",
+          "topic": "how_can_i_pay",
+          "question_variants": [
+            "Oregon has no sales tax, so menu prices are what you pay.",
+            "How can I pay?",
+            "Is sales tax included in the menu prices?",
+            "Do I need to pay extra for sales tax?",
+            "Are the prices on the menu final?",
+            "Is there any additional tax on top of the menu prices?",
+            "What is the total cost I see on the menu?",
+            "Are menu prices the final amount I pay?"
+          ],
+          "answer_spoken": "Oregon has no sales tax, so menu prices are what you pay.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://thimbleberry.example.com/faq.html",
+                "quote": "How can I pay? Cash, credit and debit cards, and tap to pay. We don't accept checks. Oregon has no sales tax, so menu prices are what you pay."
+              },
               {
                 "url": "https://thimbleberry.example.com/faq.html",
                 "quote": "How can I pay? Cash, credit and debit cards, and tap to pay."
@@ -1699,33 +3266,35 @@
       "type": "custom_order",
       "title": "Custom orders",
       "items": [
-        "menu/6-inch-round-3-layers",
-        "menu/8-inch-round-3-layers",
-        "menu/10-inch-round-3-layers",
-        "menu/quarter-sheet-9-13-in-2-layers",
-        "menu/half-sheet-12-18-in-2-layers",
-        "menu/two-tier-6-inch-on-a-10-inch",
-        "menu/three-tier-6-8-and-10-inch",
-        "menu/hand-piped-buttercream-flowers",
-        "menu/fresh-seasonal-fruit-on-top",
-        "menu/gluten-free",
-        "menu/vegan"
+        "menu/custom-cake"
       ],
       "intake_fields": [
         {
           "key": "pickup_date",
           "label": "Pickup date",
-          "spoken_prompt": "What day would you like to pick it up?",
           "type": "date",
           "required": true
         },
         {
-          "key": "details",
-          "label": "Order details",
-          "spoken_prompt": "Tell me what you'd like, including size and flavor.",
-          "type": "long_text",
+          "key": "servings",
+          "label": "Servings",
+          "type": "integer",
           "required": true,
-          "max_length": 1000
+          "min": 1
+        },
+        {
+          "key": "dietary_needs",
+          "label": "Dietary needs",
+          "type": "text",
+          "required": false,
+          "max_length": 300
+        },
+        {
+          "key": "message_for_the_cake",
+          "label": "Message for the cake",
+          "type": "text",
+          "required": false,
+          "max_length": 30
         },
         {
           "key": "customer_name",
@@ -1748,11 +3317,33 @@
         "idempotency": "required",
         "read_back": [
           "item",
+          "choices",
           "pickup_date",
-          "details"
+          "servings",
+          "dietary_needs",
+          "message_for_the_cake"
+        ],
+        "say_before_confirm": [
+          "info/a-50-deposit-holds-your-date",
+          "info/changes-and-cancellations"
         ]
       },
       "availability": {
+        "lead_time_minutes": 4320,
+        "weekly": [
+          {
+            "days": [
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ],
+            "open": "10:00",
+            "close": "14:00"
+          }
+        ],
         "provenance": {
           "owner_confirmed": false,
           "evidence": [
@@ -1771,13 +3362,58 @@
             {
               "url": "https://thimbleberry.example.com/faq.html",
               "quote": "Custom cakes"
+            },
+            {
+              "url": "https://thimbleberry.example.com/custom-cakes.html",
+              "quote": "Layer cakes, sheet cakes and tiered cakes, baked and decorated to order in our kitchen. Order at least 72 hours before you need it."
+            },
+            {
+              "url": "https://thimbleberry.example.com/index.html",
+              "quote": "Order at least 72 hours before pickup"
             }
           ]
         }
       },
       "approval": {
         "module": "owner",
-        "mode": "always",
+        "mode": "when_any_rule_matches",
+        "rules": [
+          {
+            "when": "servings",
+            "op": ">=",
+            "value": 25,
+            "reason_spoken": "Orders of 25 servings or more need Rosa's approval, so I'll send your request to Rosa.",
+            "provenance": {
+              "owner_confirmed": false,
+              "evidence": [
+                {
+                  "url": "https://thimbleberry.example.com/faq.html",
+                  "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval."
+                }
+              ]
+            }
+          },
+          {
+            "when": "choices",
+            "op": "in",
+            "value": [
+              "menu/custom-cake/size/10-inch-round-3-layers",
+              "menu/custom-cake/size/half-sheet-12-18-in-2-layers",
+              "menu/custom-cake/size/two-tier-6-inch-on-a-10-inch",
+              "menu/custom-cake/size/three-tier-6-8-and-10-inch"
+            ],
+            "reason_spoken": "That size serves 25 or more, so it needs Rosa's approval. I'll send your request to Rosa.",
+            "provenance": {
+              "owner_confirmed": false,
+              "evidence": [
+                {
+                  "url": "https://thimbleberry.example.com/faq.html",
+                  "quote": "What if I need a cake for a big party? Orders that add up to 25 servings or more need Rosa's approval."
+                }
+              ]
+            }
+          }
+        ],
         "decisions": [
           "approve",
           "decline",
@@ -1810,6 +3446,14 @@
             {
               "url": "https://thimbleberry.example.com/faq.html",
               "quote": "Custom cakes"
+            },
+            {
+              "url": "https://thimbleberry.example.com/custom-cakes.html",
+              "quote": "Layer cakes, sheet cakes and tiered cakes, baked and decorated to order in our kitchen. Order at least 72 hours before you need it."
+            },
+            {
+              "url": "https://thimbleberry.example.com/index.html",
+              "quote": "Order at least 72 hours before pickup"
             }
           ]
         }
@@ -1821,7 +3465,7 @@
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/index.html",
       "title": "Thimbleberry Bakehouse | Neighborhood bakery in Southeast PortlandIllustration of a frosted three-layer cake with a rasp",
-      "retrieved_at": "2026-10-15T15:36:32Z",
+      "retrieved_at": "2026-10-20T07:51:25Z",
       "content_sha256": "c9b671533f1e24b2f3034b0a6a64b0be637a3265d5e5ecb5d92b50f7cd00e4b5",
       "injection_canaries": [
         {
@@ -1834,14 +3478,14 @@
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/menu.html",
       "title": "Menu | Thimbleberry Bakehouse",
-      "retrieved_at": "2026-10-15T15:36:32Z",
+      "retrieved_at": "2026-10-20T07:51:25Z",
       "content_sha256": "d895473689df696465d424b5a96235ea0e5f4f175906eebbcb6b650123709f8f"
     },
     "web-custom-cakes": {
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/custom-cakes.html",
       "title": "Custom cakes | Thimbleberry Bakehouse",
-      "retrieved_at": "2026-10-15T15:36:32Z",
+      "retrieved_at": "2026-10-20T07:51:25Z",
       "content_sha256": "065ea55e3c4a89b0ff364ef19ca12af5438b26373f6d4bbfcfe8345445052116",
       "injection_canaries": [
         {
@@ -1854,21 +3498,21 @@
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/about.html",
       "title": "About | Thimbleberry BakehouseIllustration of the Thimbleberry Bakehouse storefront: a green shop front with a striped a",
-      "retrieved_at": "2026-10-15T15:36:32Z",
+      "retrieved_at": "2026-10-20T07:51:25Z",
       "content_sha256": "be4a2e95a3443db10db6fe56fd96d9e19fbe067ec8dcc0e22ccd60215781d176"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/contact.html",
       "title": "Visit us | Thimbleberry BakehouseNeighborhood map showing Thimbleberry Bakehouse at the corner of SE Thimbleberry Street",
-      "retrieved_at": "2026-10-15T15:36:32Z",
+      "retrieved_at": "2026-10-20T07:51:25Z",
       "content_sha256": "1b4ebed2cd67d4a44153c1f095a3608a0b479f9612ee02a95d26fcbdeb263d66"
     },
     "web-faq": {
       "kind": "web_page",
       "url": "https://thimbleberry.example.com/faq.html",
       "title": "FAQ | Thimbleberry Bakehouse",
-      "retrieved_at": "2026-10-15T15:36:32Z",
+      "retrieved_at": "2026-10-20T07:51:25Z",
       "content_sha256": "75b26a5ec8bb0edf8d27033455bf1e40c5aa0b34c961facae27ecc434a32f9bc"
     }
   },
@@ -1955,45 +3599,33 @@
       "status": "open"
     },
     {
-      "id": "q-custom-order-notice",
-      "kind": "missing",
-      "targets": [
-        "custom-orders#availability.lead_time_minutes"
-      ],
-      "prompt": "How much notice do you need for a custom order?",
-      "why": "Your website does not say how far ahead customers must order.",
-      "answer_field": {
-        "key": "notice_hours",
-        "label": "Notice needed, in hours",
-        "type": "integer",
-        "required": true,
-        "min": 0
-      },
-      "blocking": true,
-      "status": "open"
-    },
-    {
-      "id": "q-notice-minutes",
-      "kind": "missing",
-      "targets": [
-        "info#entries"
-      ],
-      "prompt": "How much notice is required for a loaf reservation?",
-      "why": "The page mentions calling or emailing by 2:00 pm the day before, but does not specify the exact notice required. Your Menu page says: \"Want a loaf held for you? Call or email by 2:00 pm the day before and we'll set \"",
-      "answer_field": {
-        "key": "notice_minutes",
-        "label": "Notice minutes",
-        "type": "integer",
-        "required": true,
-        "min": 0
-      },
-      "blocking": false,
-      "status": "open"
-    },
-    {
       "id": "q-allergens",
       "kind": "confirm",
       "targets": [
+        "menu/custom-cake/cake-flavor/vanilla-bean#allergens",
+        "menu/custom-cake/cake-flavor/dark-chocolate#allergens",
+        "menu/custom-cake/cake-flavor/lemon-poppyseed#allergens",
+        "menu/custom-cake/cake-flavor/carrot-with-walnuts#allergens",
+        "menu/custom-cake/cake-flavor/hazelnut-praline#allergens",
+        "menu/custom-cake/cake-flavor/birthday-sprinkle#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#dietary",
+        "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#dietary",
+        "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#allergens",
+        "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#dietary",
+        "menu/custom-cake/cake-flavor/vegan-vanilla-bean#allergens",
+        "menu/custom-cake/cake-flavor/vegan-vanilla-bean#dietary",
+        "menu/custom-cake/cake-flavor/vegan-dark-chocolate#allergens",
+        "menu/custom-cake/cake-flavor/vegan-dark-chocolate#dietary",
+        "menu/custom-cake/filling/marionberry-jam#allergens",
+        "menu/custom-cake/filling/lemon-curd#allergens",
+        "menu/custom-cake/filling/salted-caramel#allergens",
+        "menu/custom-cake/filling/chocolate-ganache#allergens",
+        "menu/custom-cake/frosting/vanilla-buttercream#allergens",
+        "menu/custom-cake/frosting/chocolate-buttercream#allergens",
+        "menu/custom-cake/frosting/cream-cheese-frosting#allergens",
+        "menu/custom-cake/frosting/vegan-vanilla-buttercream#allergens",
         "menu/country-sourdough#allergens",
         "menu/country-sourdough#dietary",
         "menu/seeded-rye#allergens",
@@ -2021,25 +3653,164 @@
         "menu/ginger-molasses#dietary",
         "menu/flourless-chocolate-crinkle#allergens",
         "menu/flourless-chocolate-crinkle#dietary",
-        "menu/6-inch-case-cake#allergens",
-        "menu/6-inch-round-3-layers#allergens",
-        "menu/8-inch-round-3-layers#allergens",
-        "menu/10-inch-round-3-layers#allergens",
-        "menu/quarter-sheet-9-13-in-2-layers#allergens",
-        "menu/half-sheet-12-18-in-2-layers#allergens",
-        "menu/two-tier-6-inch-on-a-10-inch#allergens",
-        "menu/three-tier-6-8-and-10-inch#allergens",
-        "menu/hand-piped-buttercream-flowers#allergens",
-        "menu/gluten-free#allergens",
-        "menu/gluten-free#dietary",
-        "menu/vegan#allergens",
-        "menu/vegan#dietary",
-        "menu/flourless-chocolate-crinkle-cookie#allergens",
-        "menu/flourless-chocolate-crinkle-cookie#dietary"
+        "menu/6-inch-case-cake/flavor/vanilla-bean-with-vanilla-buttercream#allergens",
+        "menu/6-inch-case-cake/flavor/dark-chocolate-with-chocolate-buttercream#allergens"
       ],
       "prompt": "Your website lists what items contain and which are vegan, gluten-free and so on. Is all of it correct?",
       "why": "Allergen and diet answers are safety facts, so the assistant only says them after you confirm them.",
       "candidates": [
+        {
+          "value": {
+            "menu/custom-cake/cake-flavor/vanilla-bean#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/dark-chocolate#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/lemon-poppyseed#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/carrot-with-walnuts#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "tree_nuts",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/hazelnut-praline#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "tree_nuts",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/birthday-sprinkle#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#allergens": {
+              "contains": [
+                "eggs",
+                "milk"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-vanilla-bean#dietary": {
+              "tags": [
+                "gluten_free"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "soybeans"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-dark-chocolate#dietary": {
+              "tags": [
+                "gluten_free"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#allergens": {
+              "contains": [
+                "eggs",
+                "milk"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/gluten-free-lemon-poppyseed#dietary": {
+              "tags": [
+                "gluten_free"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-vanilla-bean#allergens": {
+              "contains": [
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-vanilla-bean#dietary": {
+              "tags": [
+                "vegan"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-dark-chocolate#allergens": {
+              "contains": [
+                "soybeans",
+                "wheat"
+              ]
+            },
+            "menu/custom-cake/cake-flavor/vegan-dark-chocolate#dietary": {
+              "tags": [
+                "vegan"
+              ]
+            },
+            "menu/custom-cake/filling/marionberry-jam#allergens": {
+              "contains": []
+            },
+            "menu/custom-cake/filling/lemon-curd#allergens": {
+              "contains": [
+                "eggs",
+                "milk"
+              ]
+            },
+            "menu/custom-cake/filling/salted-caramel#allergens": {
+              "contains": [
+                "milk"
+              ]
+            },
+            "menu/custom-cake/filling/chocolate-ganache#allergens": {
+              "contains": [
+                "milk",
+                "soybeans"
+              ]
+            },
+            "menu/custom-cake/frosting/vanilla-buttercream#allergens": {
+              "contains": [
+                "milk"
+              ]
+            },
+            "menu/custom-cake/frosting/chocolate-buttercream#allergens": {
+              "contains": [
+                "milk",
+                "soybeans"
+              ]
+            },
+            "menu/custom-cake/frosting/cream-cheese-frosting#allergens": {
+              "contains": [
+                "milk"
+              ]
+            },
+            "menu/custom-cake/frosting/vegan-vanilla-buttercream#allergens": {
+              "contains": [
+                "soybeans"
+              ]
+            }
+          },
+          "label": "As listed on your Custom cakes page",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Vanilla bean wheat, milk, eggs Available Available"
+          }
+        },
         {
           "value": {
             "menu/country-sourdough#allergens": {
@@ -2119,6 +3890,7 @@
               "contains": [
                 "eggs",
                 "milk",
+                "tree_nuts",
                 "wheat"
               ]
             },
@@ -2171,6 +3943,7 @@
             "menu/hazelnut-shortbread#allergens": {
               "contains": [
                 "milk",
+                "tree_nuts",
                 "wheat"
               ]
             },
@@ -2203,7 +3976,14 @@
                 "gluten_free"
               ]
             },
-            "menu/6-inch-case-cake#allergens": {
+            "menu/6-inch-case-cake/flavor/vanilla-bean-with-vanilla-buttercream#allergens": {
+              "contains": [
+                "eggs",
+                "milk",
+                "wheat"
+              ]
+            },
+            "menu/6-inch-case-cake/flavor/dark-chocolate-with-chocolate-buttercream#allergens": {
               "contains": [
                 "eggs",
                 "milk",
@@ -2217,125 +3997,91 @@
             "url": "https://thimbleberry.example.com/menu.html",
             "quote": "Country sourdough $9.00 A 1.5 lb round with a dark, crackly crust, fermented for 36 hours. Vegan Contains: wheat"
           }
-        },
-        {
-          "value": {
-            "menu/6-inch-round-3-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/8-inch-round-3-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/10-inch-round-3-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/quarter-sheet-9-13-in-2-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/half-sheet-12-18-in-2-layers#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/two-tier-6-inch-on-a-10-inch#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/three-tier-6-8-and-10-inch#allergens": {
-              "contains": [
-                "eggs",
-                "milk",
-                "wheat"
-              ]
-            },
-            "menu/hand-piped-buttercream-flowers#allergens": {
-              "contains": [
-                "milk"
-              ]
-            },
-            "menu/gluten-free#allergens": {
-              "contains": [
-                "eggs",
-                "milk"
-              ]
-            },
-            "menu/gluten-free#dietary": {
-              "tags": [
-                "gluten_free"
-              ]
-            },
-            "menu/vegan#allergens": {
-              "contains": [
-                "soybeans",
-                "wheat"
-              ]
-            },
-            "menu/vegan#dietary": {
-              "tags": [
-                "vegan"
-              ]
-            }
-          },
-          "label": "As listed on your Custom cakes page",
-          "evidence": {
-            "url": "https://thimbleberry.example.com/custom-cakes.html",
-            "quote": "6-inch round, 3 layers 12 $56.00"
-          }
-        },
-        {
-          "value": {
-            "menu/gluten-free-sandwich-loaf#allergens": {
-              "contains": [
-                "wheat"
-              ]
-            },
-            "menu/gluten-free-sandwich-loaf#dietary": {
-              "tags": [
-                "gluten_free"
-              ]
-            },
-            "menu/flourless-chocolate-crinkle-cookie#allergens": {
-              "contains": [
-                "wheat"
-              ]
-            },
-            "menu/flourless-chocolate-crinkle-cookie#dietary": {
-              "tags": [
-                "gluten_free"
-              ]
-            }
-          },
-          "label": "As listed on your FAQ page",
-          "evidence": {
-            "url": "https://thimbleberry.example.com/faq.html",
-            "quote": "Do you have gluten-free options? Yes: the gluten-free sandwich loaf ($12.00)"
-          }
         }
       ],
       "answer_field": {
         "key": "allergens_correct",
         "label": "Allergen and diet information is correct",
+        "type": "boolean",
+        "required": true
+      },
+      "blocking": true,
+      "status": "open"
+    },
+    {
+      "id": "q-safety-policies",
+      "kind": "confirm",
+      "targets": [
+        "info/cakes-made-for-your-table-order-least#answer_spoken",
+        "info/about-allergens-items-marked#answer_spoken",
+        "info/about-allergens#answer_spoken",
+        "info/flavors-fillings-and-frostings#answer_spoken",
+        "info/gluten-free-cakes-gluten-free#answer_spoken",
+        "info/gluten-free-cakes-they-made#answer_spoken",
+        "info/gluten-free-cakes#answer_spoken",
+        "info/vegan-cakes-vegan-cakes#answer_spoken",
+        "info/vegan-cakes#answer_spoken",
+        "info/vegan-cakes-make-cake#answer_spoken",
+        "info/nuts#answer_spoken",
+        "info/refunds#answer_spoken",
+        "info/is-your-kitchen-nut-free-even-when#answer_spoken",
+        "info/is-your-kitchen-nut-free#answer_spoken"
+      ],
+      "prompt": "Your website makes some health and safety statements. Are they all correct?",
+      "why": "Safety statements are only repeated to customers after you confirm them.",
+      "candidates": [
+        {
+          "value": "info/cakes-made-for-your-table-order-least",
+          "label": "As your Thimbleberry Bakehouse page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/index.html",
+            "quote": "Order at least 72 hours before pickup"
+          }
+        },
+        {
+          "value": "info/about-allergens-items-marked",
+          "label": "As your Menu page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/menu.html",
+            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+          }
+        },
+        {
+          "value": "info/about-allergens",
+          "label": "As your Menu page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/menu.html",
+            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+          }
+        },
+        {
+          "value": "info/flavors-fillings-and-frostings",
+          "label": "As your Custom cakes page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Choose one cake flavor, one filling and one frosting. Allergens are listed for our regular recipes; gluten-free and vegan versions are described below."
+          }
+        },
+        {
+          "value": "info/gluten-free-cakes-gluten-free",
+          "label": "As your Custom cakes page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+          }
+        },
+        {
+          "value": "info/gluten-free-cakes-they-made",
+          "label": "As your Custom cakes page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/custom-cakes.html",
+            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+          }
+        }
+      ],
+      "answer_field": {
+        "key": "safety_correct",
+        "label": "Safety statements are correct",
         "type": "boolean",
         "required": true
       },
@@ -2353,18 +4099,23 @@
           "version": "1.0"
         },
         "profile_revision": 1,
-        "profile_sha256": "3eed8918f36affe02c7e2bbfcd44e0d22551e31633dff1b340beb24f127a5342",
-        "started_at": "2026-10-15T15:44:51Z",
-        "finished_at": "2026-10-15T15:44:51Z",
+        "profile_sha256": "5362529780e47edc0ee6d01e9514f0470e5c0aba8adf347c53fd6d92e29867cb",
+        "started_at": "2026-10-20T07:51:46Z",
+        "finished_at": "2026-10-20T07:51:48Z",
         "result": "passed",
-        "cases_total": 82,
-        "cases_passed": 82,
+        "cases_total": 108,
+        "cases_passed": 108,
         "failures": []
       }
     ]
   },
   "vocabulary": {
     "attributes": {
+      "serves": {
+        "label": "serves",
+        "type": "integer",
+        "claim_class": "policy"
+      },
       "deposit_percent": {
         "label": "deposit percent",
         "type": "integer",
@@ -2380,6 +4131,11 @@
         "type": "text",
         "claim_class": "policy"
       },
+      "approval_threshold_servings": {
+        "label": "approval threshold servings",
+        "type": "integer",
+        "claim_class": "policy"
+      },
       "refund_notice_minutes": {
         "label": "refund notice minutes",
         "type": "integer",
@@ -2387,11 +4143,6 @@
       },
       "change_notice_minutes": {
         "label": "change notice minutes",
-        "type": "integer",
-        "claim_class": "policy"
-      },
-      "approval_threshold_servings": {
-        "label": "approval threshold servings",
         "type": "integer",
         "claim_class": "policy"
       }

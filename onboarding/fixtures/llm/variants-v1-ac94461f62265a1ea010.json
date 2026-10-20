@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-ac94461f62265a1ea010",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:03+00:00",
+ "answer": "An adult 18 or older needs to be home at the start and end of every visit. Please keep pets in another room while we work.",
+ "questions": [
+  "Do I need to be home during your visit?",
+  "Can I leave while you're working at my home?",
+  "Is it required for someone to be present during service?",
+  "Do pets need to be kept away during your work?",
+  "Can I go out while you're fixing things at home?",
+  "Must an adult be home when you work?"
+ ]
+}

@@ -116,6 +116,7 @@ def test_owner_answers_turn_conditional_into_certified(pid, tmp_path):
     verdict, recorded = run(updated, snapshots=OUT / pid / "snapshots")
     assert failures(verdict) == [], failures(verdict)
     assert verdict.verdict == "CERTIFIED"
+    assert verdict.summary["skipped"] == 0, [c for c in verdict.cases if c["status"] == "skipped"]
     # With the disputes settled, the commit flows really ran (not skipped).
     commit_cases = [c for c in verdict.cases if c["check"] in ("confirm_before_commit", "idempotent_retry")]
     assert commit_cases and all(c["status"] == "passed" for c in commit_cases)

@@ -1,8 +1,0 @@
-{
- "key": "review-v1-585d8b8c9b9013da6e39",
- "kind": "review-v1",
- "model_id": "apac.amazon.nova-pro-v1:0",
- "cost_usd": 0.004123,
- "recorded_at": "2026-10-15T14:22:57+00:00",
- "text": "{\"contradictions\": [{\"fact_ids\": [\"F52\", \"F57\"], \"prompt\": \"Please confirm the cancellation notice period.\", \"why\": \"Services & prices page states 48 hours while Studio policies page states 24 hours.\"}]}"
-}

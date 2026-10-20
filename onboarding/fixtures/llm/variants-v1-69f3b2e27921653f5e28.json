@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-69f3b2e27921653f5e28",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:18+00:00",
+ "answer": "Orders under 25 servings are confirmed when we reply, with nothing to pay until pickup. Orders of 25 servings or more follow the large order steps below.",
+ "questions": [
+  "When will my order be confirmed?",
+  "Do I need to pay immediately for small orders?",
+  "What's the process for orders under 25 servings?",
+  "Is payment required before picking up small orders?",
+  "How are small cake orders confirmed?",
+  "What happens after I place a small order?"
+ ]
+}

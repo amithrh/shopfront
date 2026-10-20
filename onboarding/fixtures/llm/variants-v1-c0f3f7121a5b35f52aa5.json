@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-c0f3f7121a5b35f52aa5",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:43+00:00",
+ "answer": "We accept credit and debit cards, tap-to-pay and cash. We don't accept checks.",
+ "questions": [
+  "Do you accept checks for payment?",
+  "Can I pay with a credit card?",
+  "Do you take debit cards?",
+  "Can I use tap-to-pay at your studio?",
+  "Do you accept cash payments?",
+  "Are checks a valid payment method?"
+ ]
+}

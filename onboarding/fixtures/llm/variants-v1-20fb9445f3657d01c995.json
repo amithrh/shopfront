@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-20fb9445f3657d01c995",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:38+00:00",
+ "answer": "Fixtures we supply are billed at our cost plus 15%.",
+ "questions": [
+  "How are supplied fixtures billed?",
+  "What's the markup on supplied fixtures?",
+  "How much do you charge for supplied fixtures?",
+  "Is there an extra charge for fixtures you supply?",
+  "What's the cost for fixtures provided by you?",
+  "How is the price calculated for supplied fixtures?"
+ ]
+}

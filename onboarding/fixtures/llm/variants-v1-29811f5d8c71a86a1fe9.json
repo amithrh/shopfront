@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-29811f5d8c71a86a1fe9",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:28:35+00:00",
+ "answer": "What needs doing: A few sentences about the problem or the job.",
+ "questions": [
+  "What details should I include in a quote request?",
+  "How should I describe the problem in a quote request?",
+  "What information is needed for a job quote?",
+  "Can I just mention the problem in a few sentences for a quote?",
+  "Do I need to explain the job or problem for a quote?",
+  "What kind of description is helpful for a quote request?"
+ ]
+}

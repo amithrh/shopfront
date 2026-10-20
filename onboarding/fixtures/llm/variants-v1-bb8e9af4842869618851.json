@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-bb8e9af4842869618851",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:13:36+00:00",
+ "answer": "Your appointment time is held just for you, so we ask for at least 24 hours' notice if you need to cancel or reschedule. Moving an appointment counts the same as cancelling it.",
+ "questions": [
+  "How much notice is needed to cancel an appointment?",
+  "What is the required notice for appointment changes?",
+  "How far in advance must I cancel to avoid charges?",
+  "What is the cancellation policy for appointments?",
+  "How soon should I inform if I need to reschedule?",
+  "What is the notice period for appointment cancellations?"
+ ]
+}

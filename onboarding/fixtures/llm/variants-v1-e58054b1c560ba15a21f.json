@@ -1,0 +1,14 @@
+{
+ "key": "variants-v1-e58054b1c560ba15a21f",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T07:12:28+00:00",
+ "answer": "We're closed on Thanksgiving Day, December 25 and January 1.",
+ "questions": [
+  "Are you open on Thanksgiving Day?",
+  "Do you close on December 25?",
+  "Are you open on January 1?",
+  "What holidays are you closed on?",
+  "Will you be open during the holidays?",
+  "Are there any days you are completely closed?"
+ ]
+}
