@@ -217,15 +217,6 @@ def xfail(reason: str) -> Any:
     return pytest.mark.xfail(strict=True, reason=reason)
 
 
-# ---------------------------------------------------------------------------- known gaps (root causes)
-
-POLICY_COVERAGE = (
-    "knowledge.best_entry: no variant covers >= MIN_COVERAGE (0.5) of the question's content words, or the "
-    "only shared word is not 'decisive' (used by another entry and not the topic), so a question the "
-    "profile answers becomes 'I don't know that. Want me to ask Inés?'"
-)
-
-
 # ---------------------------------------------------------------------------- find_item: resolution
 
 
@@ -439,17 +430,8 @@ POLICY: list[Any] = [
     pytest.param("is there a cancellation fee", Answer("info/cancellation", says=("50 percent",)), id="cancel-fee"),
     pytest.param("do you charge a fee for late cancellations", Answer("info/cancellation"), id="cancel-late-fee"),
     pytest.param("how much do you charge if I don't show up", Answer("info/cancellation", says=("no-show",)), id="cancel-no-show-charge"),
-    pytest.param(
-        "If I cancel the day before, do I get charged?", Answer("info/cancellation"), id="cancel-day-before-charged",
-        marks=xfail(POLICY_COVERAGE + ": {before, cancel, charg, day} -- every cancel variant covers 1/4"),
-    ),
-    pytest.param(
-        "what's the no-show fee", Answer("info/cancellation"), id="cancel-no-show-fee",
-        marks=xfail(
-            POLICY_COVERAGE + ": {fee, no, show} -- best variant \"what if I don't show up\" covers 1/3; the answer's "
-            "'a no-show is charged in full' has 'no', but words only an answer contains count when rare, and 'no' is not"
-        ),
-    ),
+    pytest.param("If I cancel the day before, do I get charged?", Answer("info/cancellation"), id="cancel-day-before-charged"),
+    pytest.param("what's the no-show fee", Answer("info/cancellation"), id="cancel-no-show-fee"),
     pytest.param("can I move my appointment to next week", Answer("info/how-to-cancel"), id="cancel-move-appointment"),
     # -- payment
     pytest.param("do you take cards", Answer("info/payment"), id="pay-cards"),
@@ -465,19 +447,10 @@ POLICY: list[Any] = [
     pytest.param("where is the entrance", Answer("info/entrance", says=("Suite B",)), id="park-entrance"),
     # -- walk-ins and booking
     pytest.param("do you take walk-ins", Answer("info/walk-ins", says=("doesn't take walk-ins",)), id="walkin-do-you"),
-    pytest.param(
-        "can I just walk in for a haircut today", Answer("info/walk-ins"), id="walkin-just-walk-in-today",
-        marks=xfail(POLICY_COVERAGE + ": {walk, haircut, today} -- 'can I just walk in' and 'can I drop in for a haircut' each cover 1/3"),
-    ),
-    pytest.param(
-        "can I come in without an appointment", Answer("info/walk-ins"), id="walkin-without-appointment",
-        marks=xfail(POLICY_COVERAGE + ": {come, without, appoint} -- 'do I need an appointment' covers 1/3"),
-    ),
+    pytest.param("can I just walk in for a haircut today", Answer("info/walk-ins"), id="walkin-just-walk-in-today"),
+    pytest.param("can I come in without an appointment", Answer("info/walk-ins"), id="walkin-without-appointment"),
     pytest.param("can I pick my stylist", Answer("info/stylist-choice"), id="book-pick-stylist"),
-    pytest.param(
-        "can I request Wren", Answer("info/stylist-choice"), id="book-request-wren",
-        marks=xfail(POLICY_COVERAGE + ": {request, wren} share no word with any variant (stylist names are not in the matcher)"),
-    ),
+    pytest.param("can I request Wren", Answer("info/stylist-choice"), id="book-request-wren"),
     pytest.param("how far in advance can I book", Answer("info/booking-rules", says=("8 weeks",)), id="book-how-far-ahead"),
     pytest.param("how will I know my appointment is confirmed", Answer("info/email-confirmation"), id="book-confirmation"),
     # -- deposits
@@ -487,15 +460,9 @@ POLICY: list[Any] = [
     pytest.param("is the deposit refundable", Answer("info/deposit-refund"), id="deposit-refundable"),
     # -- lateness, redo, gift cards
     pytest.param("what if I'm running late", Answer("info/late-arrival", says=("15 minutes",)), id="late-running"),
-    pytest.param(
-        "I'm going to be 20 minutes late", Answer("info/late-arrival"), id="late-20-minutes",
-        marks=xfail(POLICY_COVERAGE + ": {20, going, late, minute} -- \"what if I'm late\" covers 1/4"),
-    ),
+    pytest.param("I'm going to be 20 minutes late", Answer("info/late-arrival"), id="late-20-minutes"),
     pytest.param("what if I don't like my color", Answer("info/redo", says=("7 days",)), id="redo-dont-like-color"),
-    pytest.param(
-        "what if I hate my haircut", Answer("info/redo"), id="redo-hate-haircut",
-        marks=xfail(POLICY_COVERAGE + ": {hate, haircut} -- 'haircut' also appears in the walk-ins entry, so it is not decisive"),
-    ),
+    pytest.param("what if I hate my haircut", Answer("info/redo"), id="redo-hate-haircut"),
     pytest.param("do you sell gift cards", Answer("info/gift-cards"), id="gift-sell"),
     pytest.param("do gift certificates expire", Answer("info/gift-cards", says=("never expire",)), id="gift-certificates-expire"),
     # -- accessibility
@@ -512,14 +479,7 @@ POLICY: list[Any] = [
     ),
     pytest.param("is there a persulfate-free bleach", Answer("info/lightener", says=("no persulfate-free",)), id="safety-persulfate-bleach"),
     pytest.param("do you have fragrance free shampoo", Answer("info/fragrance-free"), id="safety-fragrance-free"),
-    pytest.param(
-        "do you have PPD free hair dye", Answer("info/hair-color-ppd", says=("PPD-free",)), id="safety-ppd-free-dye",
-        marks=xfail(
-            "knowledge.best_entry ambiguity: patch-test scores 0.5 on {hair, dye, free} ('I reacted to hair dye "
-            "before', 'is the patch test free') within AMBIGUITY_MARGIN 0.1 of hair-color-ppd's 0.571 on a different "
-            "topic, so a confirmed safety fact (a PPD-free color line exists) becomes a hand-off"
-        ),
-    ),
+    pytest.param("do you have PPD free hair dye", Answer("info/hair-color-ppd", says=("PPD-free",)), id="safety-ppd-free-dye"),
     pytest.param("do I need a patch test", Answer("info/patch-test", says=("72 hours",)), id="safety-patch-test"),
     pytest.param("I reacted to hair dye before", Answer("info/patch-test"), id="safety-reacted-before"),
     # -- weddings and house calls
@@ -536,17 +496,11 @@ POLICY: list[Any] = [
     # -- kids and teens
     pytest.param("how old does my kid have to be for the kids cut", Answer("info/minors-color", says=("12 and under",)), id="minor-kids-cut-age"),
     pytest.param("can my teenager get her hair colored", Answer("info/minors-color", says=("under 16",)), id="minor-teen-color"),
-    pytest.param(
-        "can my 14 year old get highlights without me", Answer("info/minors-color"), id="minor-14-highlights-alone",
-        marks=xfail(POLICY_COVERAGE + ": {14, highlight, old, without, year} -- best variant covers 1/5"),
-    ),
+    pytest.param("can my 14 year old get highlights without me", Answer("info/minors-color"), id="minor-14-highlights-alone"),
     # -- hours / about
     pytest.param("can I get color on Sunday", Answer("info/sunday-services"), id="hours-color-sunday"),
     pytest.param("who owns the salon", Answer("info/about", says=("Inés Calderón",)), id="about-owner"),
-    pytest.param(
-        "how many stylists work there", Answer("info/about"), id="about-how-many-stylists",
-        marks=xfail(POLICY_COVERAGE + ": {stylist, work} -- 'stylist' is shared with stylist-choice, so not decisive"),
-    ),
+    pytest.param("how many stylists work there", Answer("info/about"), id="about-how-many-stylists"),
     # -- out of scope: hand off, never guess
     pytest.param("do you offer student discounts", HandsOff(never=("discount",)), id="oos-student-discount"),
     pytest.param("what's the wifi password", HANDOFF, id="oos-wifi"),

@@ -370,75 +370,24 @@ POLICIES: list[Any] = [
 ]
 
 POLICY_XFAILS: list[Any] = [
-    # ---- WRONG answers: an unrelated policy spoken for an out-of-scope or different question
-    pytest.param(
-        "what's the weather like tomorrow", HANDOFF,
-        marks=xfail(
-            "WRONG ANSWER: the lone distinctive word 'tomorrow' matches info/same-day-cake, so a weather question is "
-            "answered 'Not a custom cake, since those need 72 hours' notice. Most days we have 6-inch case cakes ...'"
-        ),
-        id="weather-tomorrow",
-    ),
-    pytest.param(
-        "do you have a loyalty card", HANDOFF,
-        marks=xfail("WRONG ANSWER: 'card' matches info/payment, so a loyalty-card question gets the payment-methods answer"),
-        id="loyalty-card",
-    ),
-    pytest.param(
-        "how much is the deposit on a big cake", "info/deposit",
-        marks=xfail(
-            "WRONG ENTRY: answered with info/large-orders (Rosa's approval, no deposit amount) instead of info/deposit "
-            "(50 percent within 48 hours); 'deposit' covers only 1/3 of the question words"
-        ),
-        id="deposit-on-a-big-cake",
-    ),
-    pytest.param(
-        "is the gluten free bread safe for celiacs", "info/gluten-free-options",
-        marks=xfail(
-            "WRONG ENTRY: a bread question answered with info/gluten-free-cakes ('Gluten-free cakes come in vanilla bean, "
-            "dark chocolate or lemon-poppyseed, for 12 dollars more ...'); info/gluten-free-options covers the loaf"
-        ),
-        id="gluten-free-bread-celiac",
-    ),
-    # ---- MISSES: the profile answers, but the reply is "I don't know that. Want me to ask Rosa?"
-    pytest.param(
-        "what forms of payment do you accept", "info/payment",
-        marks=xfail("MISS: 'payment' (topic word) is in no question variant and is not stemmed to 'pay', so coverage is 0 -> hand-off"),
-        id="forms-of-payment",
-    ),
-    pytest.param(
-        "what's your refund policy", "info/cancellation",
-        marks=xfail("MISS: 'refund' appears in no question variant of info/cancellation (which states the refund rule) -> hand-off"),
-        id="refund-policy",
-    ),
-    pytest.param(
-        "do I need to put down a deposit", "info/deposit",
-        marks=xfail("MISS: 'put down a deposit' covers 1/3 of the words of 'do I need to pay a deposit' (< MIN_COVERAGE 0.5) -> hand-off"),
-        id="put-down-a-deposit",
-    ),
-    pytest.param(
-        "if I cancel my birthday cake do I get my money back", "info/cancellation",
-        marks=xfail("MISS: long natural question; best variant covers 2/5 words (< 0.5) -> hand-off although info/cancellation answers it"),
-        id="cancel-money-back",
-    ),
-    pytest.param(
-        "who owns the bakery", {"info/team", "info/about"},
-        marks=xfail(
-            "MISS: info/team says 'Rosa owns the bakery' but no variant has 'own' -> hand-off. Words only an "
-            "answer contains count when rare in the profile, and 'bakery' is not (or 'same day cake' would be "
-            "answered by info/large-orders' passing 'for the same day')"
-        ),
-        id="who-owns-the-bakery",
-    ),
+    # Former wrong answers and misses, kept as regression cases. An unrelated policy must not answer an
+    # out-of-scope question on one non-distinctive word ('tomorrow', 'card') ...
+    pytest.param("what's the weather like tomorrow", HANDOFF, id="weather-tomorrow"),
+    pytest.param("do you have a loyalty card", HANDOFF, id="loyalty-card"),
+    # ... the question's topic ('deposit') or kind of thing ('bread', not cake) picks the entry ...
+    pytest.param("how much is the deposit on a big cake", "info/deposit", id="deposit-on-a-big-cake"),
+    pytest.param("is the gluten free bread safe for celiacs", "info/gluten-free-options", id="gluten-free-bread-celiac"),
+    # ... and the profile's answer is found through topic words, synonyms and idioms, not handed off.
+    pytest.param("what forms of payment do you accept", "info/payment", id="forms-of-payment"),
+    pytest.param("what's your refund policy", "info/cancellation", id="refund-policy"),
+    pytest.param("do I need to put down a deposit", "info/deposit", id="put-down-a-deposit"),
+    pytest.param("if I cancel my birthday cake do I get my money back", "info/cancellation", id="cancel-money-back"),
+    pytest.param("who owns the bakery", {"info/team", "info/about"}, id="who-owns-the-bakery"),
     pytest.param(
         "can I change the flavor of my cake order", "info/cancellation",
         id="change-flavor-of-order",  # info/cancellation leaves one word over, info/how-to-order two
     ),
-    pytest.param(
-        "can I park out front", "info/parking",
-        marks=xfail("MISS: 'park' covers 1/3 of the words (< 0.5) -> hand-off although info/parking answers it"),
-        id="park-out-front",
-    ),
+    pytest.param("can I park out front", "info/parking", id="park-out-front"),
 ]
 
 

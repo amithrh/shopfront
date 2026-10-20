@@ -20,7 +20,7 @@ def test_stem(word: str, stem: str) -> None:
 
 def test_tokens_drop_stop_words_and_fold_forms() -> None:
     assert knowledge.tokens("Can I get my deposit back?") == frozenset({"deposit", "back"})
-    assert knowledge.tokens("Hi, what's your cancellation policy?") == frozenset({"cancel", "policy"})
+    assert knowledge.tokens("Hi, what's your cancellation policy?") == frozenset({"cancel"})
     assert knowledge.tokens("the of and") == frozenset()
 
 
@@ -81,3 +81,30 @@ def test_variants_and_answer_together_can_explain_a_question() -> None:
     assert knowledge.score_entry(question, entry, None) >= knowledge.MATCH_THRESHOLD
     # A word neither the variants nor the answer contain keeps the partial rule: no answer.
     assert knowledge.score_entry(knowledge.tokens("how fast will my pizza arrive"), entry, None) == 0.0
+
+
+def test_stems_synonyms_and_idioms_fold() -> None:
+    assert knowledge.stem("charged") == knowledge.stem("charge") == knowledge.stem("charging") == "charge"
+    assert knowledge.stem("accessibility") == knowledge.stem("accessible") == "access"
+    assert knowledge.tokens("what forms of payment do you accept") == frozenset({"payment", "take"})
+    assert knowledge.tokens("do I need to put down a deposit") == knowledge.tokens("do I need to pay a deposit")
+    assert knowledge.tokens("what if I hate my haircut") == knowledge.tokens("what if I don't like my haircut")
+    assert knowledge.tokens("can I come in without an appointment") == frozenset({"come", "walk"})
+    assert knowledge.tokens("hablan español") == knowledge.tokens("hablan espanol")
+
+
+def test_words_for_the_business_count_only_alone() -> None:
+    assert knowledge.tokens("who owns the bakery") == frozenset({"own"})
+    assert knowledge.tokens("tell me about the bakery") == frozenset({"bakery"})
+
+
+def test_a_lone_rare_word_needs_the_rest_of_the_question_explained() -> None:
+    entry = {
+        "id": "same-day",
+        "topic": "lead_time",
+        "question_variants": ["can I get a cake for tomorrow"],
+        "answer_spoken": "Not a custom cake, but most days we have case cakes.",
+    }
+    frequency = {"cake": 3, "tomorrow": 1}
+    assert not knowledge.decisive(knowledge.tokens("what's the weather like tomorrow"), entry, frequency)
+    assert knowledge.decisive(knowledge.tokens("a case cake for tomorrow"), entry, frequency)
