@@ -32,6 +32,7 @@ limits the next question must respect:
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+import re
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -68,6 +69,13 @@ needs (gluten-free, vegetarian, halal, kosher, sugar-free) need the owner's diet
 DIET_FIELD_HINTS = ("diet", "allerg")
 """Intake keys whose free text may state a dietary need ("dietary_needs": "vegan")."""
 
+HEAD_COUNT_FIELD = re.compile(r"serving|guest|people|person|party|head ?count|attendee", re.IGNORECASE)
+"""A business's integer intake field that counts people ("servings", "guests", "party size")."""
+
+HEAD_COUNT_ALIASES = ("party_size", "guests", "people", "persons", "headcount", "head_count", "servings", "attendees")
+"""Keys a host uses for the head count, whatever the business called its field."""
+
+
 
 @dataclass(frozen=True)
 class ItemRequest:
@@ -75,6 +83,9 @@ class ItemRequest:
 
     item: str
     choices: dict[str, Any]
+    intake: dict[str, Any] = field(default_factory=dict)
+    """The caller's details, plus the head count in the business's own field when it was given under
+    another name (`party_size`) or only in the item phrase ("a cake for 30 people")."""
     focus: tuple[ChoiceFocus, ...] = ()
     notes: tuple[str, ...] = ()
     note_refs: tuple[str, ...] = ()
@@ -91,6 +102,36 @@ def _needs_from_intake(intake: Mapping[str, Any]) -> list[str]:
             if any(search.contains_phrase(text, search.normalize(p)) for p in phrases) and tag not in tags:
                 tags.append(tag)
     return tags
+
+
+def _with_head_count(
+    profile: Profile, module_id: str | None, intake: Mapping[str, Any], phrase_count: int | None
+) -> dict[str, Any]:
+    """`intake` with the module's head-count field filled from an alias key or the phrase's count."""
+    out = dict(intake)
+    if module_id is None:
+        return out
+    try:
+        fields = profile.intake_fields(module_id)
+    except Exception:  # noqa: BLE001 - unknown module: nothing to fill
+        return out
+    target = next(
+        (
+            str(f["key"])
+            for f in fields
+            if f.get("type") == "integer" and HEAD_COUNT_FIELD.search(f"{f.get('key', '')} {f.get('label', '')}")
+        ),
+        None,
+    )
+    if target is None or out.get(target) not in (None, ""):
+        return out
+    for alias in HEAD_COUNT_ALIASES:
+        if alias != target and out.get(alias) not in (None, ""):
+            out[target] = out.pop(alias)
+            return out
+    if phrase_count is not None:
+        out[target] = phrase_count
+    return out
 
 
 def _state(profile: Profile, ref: str) -> Any | None:
@@ -168,9 +209,12 @@ def request_for(
     lookup = resolve_item(profile, text, module_type=module_type)
     entry = lookup.found
     if entry is None:
-        return ItemRequest(item=text, choices=given, lookup=lookup)
+        return ItemRequest(item=text, choices=given, intake=dict(intake or {}), lookup=lookup)
+    modules = profile.transactional_modules_for(entry.ref)
+    typed = [m for m in modules if profile.module_type(m) == module_type]
+    details = _with_head_count(profile, typed[0] if typed else None, intake or {}, lookup.servings)
     ref, item = entry.ref, entry.item
-    needs = list(dict.fromkeys([*lookup.dietary, *_needs_from_intake(intake or {})]))
+    needs = list(dict.fromkeys([*lookup.dietary, *_needs_from_intake(details)]))
     item_tags = {str(t) for t in (_state(profile, f"{ref}#dietary.tags") or ())}
     needs = [n for n in needs if n not in item_tags]
     explicit, said, keys = _explicit(ref, item, given)
@@ -236,7 +280,7 @@ def request_for(
             servings = f"for {lookup.servings} people" if named.reason == "servings" and lookup.servings else None
             focus.append(ChoiceFocus(group_id=gid, choice_ids=named.choice_ids, reason=named.reason, label=servings, hard=False))
     return ItemRequest(
-        item=ref, choices=out, focus=tuple(focus), notes=tuple(notes), note_refs=tuple(dict.fromkeys(note_refs)), lookup=lookup
+        item=ref, choices=out, intake=details, focus=tuple(focus), notes=tuple(notes), note_refs=tuple(dict.fromkeys(note_refs)), lookup=lookup
     )
 
 

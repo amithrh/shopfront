@@ -834,3 +834,27 @@ async def test_head_count_narrows_the_size_question(plain_client: Any, deps: Any
 async def test_an_explicit_choice_beats_the_item_phrase(plain_client: Any) -> None:
     data = await _order(plain_client, "carrot cake", {"size": "6 inch", "flavor": "vanilla bean", "filling": "caramel", "frosting": "cream cheese"}, {"servings": 10})
     assert data["commitment"]["choices"]["flavor"] == "vanilla bean", data["speak"]
+
+
+async def test_head_count_under_another_name_fills_the_servings_field(plain_client: Any) -> None:
+    data = await call(
+        plain_client,
+        "place_custom_order",
+        {
+            "item": "ten inch round vanilla bean cake with lemon curd and vanilla buttercream",
+            "date": "2026-10-18",
+            "details": {**WHO, "party_size": 30},
+        },
+    )
+    # pending_owner: the 25-servings approval rule saw the 30 (no "Number of servings?" question)
+    assert data["status"] == "pending_owner", data["speak"]
+
+
+async def test_head_count_in_the_item_phrase_fills_the_servings_field(plain_client: Any) -> None:
+    data = await call(
+        plain_client,
+        "place_custom_order",
+        {"item": "ten inch round vanilla bean cake with lemon curd and vanilla buttercream for 30 people", "date": "2026-10-18", "details": WHO},
+    )
+    # pending_owner: the 25-servings approval rule saw the 30 (no "Number of servings?" question)
+    assert data["status"] == "pending_owner", data["speak"]

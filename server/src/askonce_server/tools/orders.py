@@ -56,7 +56,7 @@ async def _plan(
         item=request.item,
         choices=request.choices,
         day=date,
-        intake=dict(details or {}),
+        intake=request.intake,
         principal=principal(ctx),
         module_id=module_id,
         nonce=anonymous_nonce(ctx),
