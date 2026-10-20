@@ -23,9 +23,9 @@ the real host from the `ServiceEndpoint` output. `deploy.sh` does both. The host
 unless the service is replaced.
 
 **Profiles.** In DynamoDB storage the server reads profiles from the table, not from files.
-`scripts/seed_dynamodb.py` publishes the **DEV-SEED** live copies of the three gold profiles (from
-`scripts/dev_seed_live.py`; certification run id `dev-seed`, *not* a real certification). The image also
-carries them in `/app/profiles-live` (labelled `DEV-SEED.txt`) for memory-storage runs.
+`scripts/seed_dynamodb.py` publishes `profiles/live/`: the three demo businesses as certified by the
+deterministic certifier (`scripts/certify_demo.py`, verdicts in `profiles/certification/`). The image also
+carries them in `/app/profiles-live` for memory-storage runs.
 
 ## Prerequisites
 
@@ -52,9 +52,8 @@ npx -y aws-cdk@2.1143.0 synth -c image_tag=abc123 -c public_host=<host>.ecs.ap-s
 # Deploy everything (idempotent: core layer, build + push the arm64 image, service, real host)
 AWS_PROFILE=shopfront ./deploy.sh
 
-# Seed the DEV-SEED live profiles into the table (once, or after changing them). From the repo root.
-# boto3 needs botocore[crt] for `aws login` profiles (friction log #12), hence `uv run --with`.
-server/.venv/bin/python scripts/dev_seed_live.py
+# Seed the certified live profiles (profiles/live/) into the table (once, or after re-certifying).
+# From the repo root. boto3 needs botocore[crt] for `aws login` profiles (friction log #12), hence `uv run --with`.
 server/.venv/bin/python scripts/seed_dynamodb.py --dry-run                           # validate only
 AWS_PROFILE=shopfront uv run --project server --with "botocore[crt]==1.43.111" \
   python scripts/seed_dynamodb.py

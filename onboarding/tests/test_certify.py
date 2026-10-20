@@ -143,3 +143,34 @@ def test_service_area_answer_moves_the_zip_code():
     areas = {loc["id"]: loc.get("area", {}) for loc in updated["business"]["locations"]}
     assert "80033" not in areas.get("extended-area", {}).get("postal_codes", [])
     assert "80238" in areas["core-area"]["postal_codes"]
+
+
+@pytest.mark.parametrize("name", sorted(GOLD))
+def test_every_gold_check_runs_including_the_owner_task_and_quotes_on_page_snapshots(name, tmp_path):
+    # The owner task is reached through the business's own approval rule (servings >= 25, color services),
+    # and with the sites' pages as snapshots every evidence quote is checked: nothing is skipped.
+    import hashlib
+    import shutil
+
+    snaps = tmp_path / "snapshots"
+    snaps.mkdir()
+    wanted = {s.get("content_sha256") for s in GOLD[name]["sources"].values()}
+    for page in (REPO / "sites" / name).rglob("*.html"):
+        digest = hashlib.sha256(page.read_bytes()).hexdigest()
+        if digest in wanted:
+            shutil.copyfile(page, snaps / f"{digest}.html")
+    verdict, _recorded = run(GOLD[name], snapshots=snaps)
+    assert verdict.verdict == "CERTIFIED"
+    assert [c["id"] for c in verdict.cases if c["status"] != "passed"] == []
+    assert any(c["id"].startswith("task_lifecycle.") and c["status"] == "passed" for c in verdict.cases if c["id"] != "task_lifecycle.ask_owner")
+
+
+@pytest.mark.parametrize("name", sorted(GOLD))
+def test_published_live_profiles_are_the_certified_gold_profiles(name):
+    live = json.loads((REPO / "profiles" / "live" / f"{name}.json").read_text())
+    verdict = json.loads((REPO / "profiles" / "certification" / f"{name}.json").read_text())
+    assert verdict["verdict"] == "CERTIFIED" and verdict["summary"]["failed"] == 0 and verdict["summary"]["skipped"] == 0
+    assert live["certification"]["status"] == "live" and live["certification"]["certified_run"] == verdict["run_id"]
+    body = {k: v for k, v in live.items() if k != "certification"}
+    assert body == {k: v for k, v in GOLD[name].items() if k != "certification"}, "re-run scripts/certify_demo.py"
+    load_profile(live, schema_path=SCHEMA_PATH, strict=True)

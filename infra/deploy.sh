@@ -49,7 +49,7 @@ fi
 
 # 2. Image.
 TAG="$(git -C "$REPO" rev-parse --short=12 HEAD)"
-if [[ -n "$(git -C "$REPO" status --porcelain -- server packages/mcp-tasks schema profiles scripts/dev_seed_live.py)" ]]; then
+if [[ -n "$(git -C "$REPO" status --porcelain -- server packages/mcp-tasks schema profiles)" ]]; then
   TAG="${TAG}-dirty-$(date -u +%Y%m%d%H%M%S)"
 fi
 if aws ecr describe-images --repository-name askonce-mcp --image-ids "imageTag=$TAG" --region "$REGION" >/dev/null 2>&1; then

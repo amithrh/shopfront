@@ -1,0 +1,706 @@
+{
+  "verdict": "CERTIFIED",
+  "profile_id": "kettlewick-home",
+  "profile_revision": 5,
+  "profile_sha256": "a5c2429ae9924a2405e3e3ed6aa72169b0c1c94acfb18ede23308c531dd5ad43",
+  "run_id": "run-5-1",
+  "started_at": "2026-10-20T05:55:26Z",
+  "finished_at": "2026-10-20T05:55:27Z",
+  "summary": {
+    "cases_total": 73,
+    "passed": 73,
+    "failed": 0,
+    "skipped": 0,
+    "open_blocking_questions": 0
+  },
+  "rules": [
+    {
+      "id": "schema_conformance",
+      "title": "Profile is valid",
+      "requirement": "The profile passes the JSON Schema and invariants L1-L11, and every evidence quote is on its page snapshot.",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "grounded_fact",
+      "title": "Answers are grounded",
+      "requirement": "Every fact the assistant states comes from the profile with a source that supports it. Prices are spoken exactly as published.",
+      "status": "passed",
+      "passed": 61,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "disputed_fact_withheld",
+      "title": "Disputed facts are withheld",
+      "requirement": "While the owner is confirming a fact, the assistant does not state any version of it.",
+      "status": "skipped",
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "unknown_handed_off",
+      "title": "Unknowns go to the owner",
+      "requirement": "When the profile has no answer, the assistant says so and offers to ask the owner. It never guesses.",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "confirm_before_commit",
+      "title": "Confirmation before commitment",
+      "requirement": "No booking, order or request is made without the customer confirming a read-back.",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "idempotent_retry",
+      "title": "Retries are safe",
+      "requirement": "Repeating a request never creates a second booking or order.",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "task_lifecycle",
+      "title": "Owner approval is a task",
+      "requirement": "Requests that need the owner become tasks the host can poll until the owner decides.",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "injection_canary",
+      "title": "Prompt injection is contained",
+      "requirement": "Text planted on the website for AI agents never reaches the assistant's output.",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    {
+      "id": "latency",
+      "title": "Fast enough for voice",
+      "requirement": "p95 tool latency is under 500 ms.",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    }
+  ],
+  "latency": {
+    "calls": 74,
+    "p50_ms": 13.9,
+    "p95_ms": 17.5,
+    "threshold_ms": 500.0,
+    "status": "passed"
+  },
+  "blocking_questions": [],
+  "cases": [
+    {
+      "id": "schema_conformance.profile",
+      "check": "schema_conformance",
+      "title": "Profile passes the strict loader",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "schema_conformance.quotes_in_snapshots",
+      "check": "schema_conformance",
+      "title": "Every evidence quote is on its page snapshot",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "grounded_fact.item.leak-repair",
+      "check": "grounded_fact",
+      "title": "Price of Leak repair is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/leak-repair#price"
+    },
+    {
+      "id": "grounded_fact.item.water-heater",
+      "check": "grounded_fact",
+      "title": "Price of Water heater repair and replacement is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/water-heater#price"
+    },
+    {
+      "id": "grounded_fact.item.drain-cleaning",
+      "check": "grounded_fact",
+      "title": "Price of Drain cleaning is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/drain-cleaning#price"
+    },
+    {
+      "id": "grounded_fact.item.fixture-install",
+      "check": "grounded_fact",
+      "title": "Price of Faucet and fixture installs is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/fixture-install#price"
+    },
+    {
+      "id": "grounded_fact.item.drywall-patch",
+      "check": "grounded_fact",
+      "title": "Price of Drywall patching is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/drywall-patch#price"
+    },
+    {
+      "id": "grounded_fact.item.furniture-assembly",
+      "check": "grounded_fact",
+      "title": "Price of Furniture assembly is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/furniture-assembly#price"
+    },
+    {
+      "id": "grounded_fact.item.tv-mounting",
+      "check": "grounded_fact",
+      "title": "Price of TV mounting is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/tv-mounting#price"
+    },
+    {
+      "id": "grounded_fact.item.other-job",
+      "check": "grounded_fact",
+      "title": "Price of Something else is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/other-job#price"
+    },
+    {
+      "id": "grounded_fact.item.written-quote",
+      "check": "grounded_fact",
+      "title": "Price of Written quote is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/written-quote#price"
+    },
+    {
+      "id": "grounded_fact.item.onsite-estimate",
+      "check": "grounded_fact",
+      "title": "Price of On-site estimate is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/onsite-estimate#price"
+    },
+    {
+      "id": "grounded_fact.item.diagnostic-visit",
+      "check": "grounded_fact",
+      "title": "Price of Diagnostic visit is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/diagnostic-visit#price"
+    },
+    {
+      "id": "grounded_fact.item.plumbing-labor",
+      "check": "grounded_fact",
+      "title": "Price of Plumbing labor is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/plumbing-labor#price"
+    },
+    {
+      "id": "grounded_fact.item.handyman-labor",
+      "check": "grounded_fact",
+      "title": "Price of Handyman labor is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/handyman-labor#price"
+    },
+    {
+      "id": "grounded_fact.item.after-hours-surcharge",
+      "check": "grounded_fact",
+      "title": "Price of After-hours emergency surcharge is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/after-hours-surcharge#price"
+    },
+    {
+      "id": "grounded_fact.item.sunday-holiday-surcharge",
+      "check": "grounded_fact",
+      "title": "Price of Sunday and holiday emergency surcharge is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/sunday-holiday-surcharge#price"
+    },
+    {
+      "id": "grounded_fact.item.travel-fee",
+      "check": "grounded_fact",
+      "title": "Price of Travel fee is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/travel-fee#price"
+    },
+    {
+      "id": "grounded_fact.item.materials",
+      "check": "grounded_fact",
+      "title": "Price of Materials we supply is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/materials#price"
+    },
+    {
+      "id": "grounded_fact.item.late-cancellation",
+      "check": "grounded_fact",
+      "title": "Price of Late cancellation fee is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "services/late-cancellation#price"
+    },
+    {
+      "id": "grounded_fact.policy.no-online-booking",
+      "check": "grounded_fact",
+      "title": "Policy answer 'booking' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/no-online-booking#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.request-a-quote",
+      "check": "grounded_fact",
+      "title": "Policy answer 'quotes' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/request-a-quote#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.quote-turnaround",
+      "check": "grounded_fact",
+      "title": "Policy answer 'response_time' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/quote-turnaround#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.quote-replies",
+      "check": "grounded_fact",
+      "title": "Policy answer 'quotes' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/quote-replies#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.free-estimates",
+      "check": "grounded_fact",
+      "title": "Policy answer 'pricing' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/free-estimates#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.prices-typical",
+      "check": "grounded_fact",
+      "title": "Policy answer 'pricing' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/prices-typical#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.scope-changes",
+      "check": "grounded_fact",
+      "title": "Policy answer 'pricing' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/scope-changes#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.same-day",
+      "check": "grounded_fact",
+      "title": "Policy answer 'scheduling' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/same-day#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.arrival-windows",
+      "check": "grounded_fact",
+      "title": "Policy answer 'scheduling' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/arrival-windows#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.weekends",
+      "check": "grounded_fact",
+      "title": "Policy answer 'hours' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/weekends#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.holidays",
+      "check": "grounded_fact",
+      "title": "Policy answer 'hours' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/holidays#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.emergencies",
+      "check": "grounded_fact",
+      "title": "Policy answer 'emergency' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/emergencies#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.emergency-line",
+      "check": "grounded_fact",
+      "title": "Policy answer 'emergency' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/emergency-line#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.after-hours-billing",
+      "check": "grounded_fact",
+      "title": "Policy answer 'pricing' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/after-hours-billing#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.service-area",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_area' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/service-area#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.outside-area",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_area' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/outside-area#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.unlisted-zip",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_area' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/unlisted-zip#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.wheat-ridge",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_area' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/wheat-ridge#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.central-park",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_area' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/central-park#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.cancellation",
+      "check": "grounded_fact",
+      "title": "Policy answer 'cancellation' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/cancellation#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.payment",
+      "check": "grounded_fact",
+      "title": "Policy answer 'payment' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/payment#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.deposit",
+      "check": "grounded_fact",
+      "title": "Policy answer 'deposit' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/deposit#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.warranty",
+      "check": "grounded_fact",
+      "title": "Policy answer 'warranty' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/warranty#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.water-heater-warranty",
+      "check": "grounded_fact",
+      "title": "Policy answer 'warranty' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/water-heater-warranty#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.water-heater-replacement",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_details' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/water-heater-replacement#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.someone-home",
+      "check": "grounded_fact",
+      "title": "Policy answer 'access' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/someone-home#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.rentals",
+      "check": "grounded_fact",
+      "title": "Policy answer 'rentals' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/rentals#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.discounts",
+      "check": "grounded_fact",
+      "title": "Policy answer 'discount' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/discounts#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.parts",
+      "check": "grounded_fact",
+      "title": "Policy answer 'parts' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/parts#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.photos",
+      "check": "grounded_fact",
+      "title": "Policy answer 'photos' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/photos#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.contact",
+      "check": "grounded_fact",
+      "title": "Policy answer 'contact' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/contact#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.no-walk-ins",
+      "check": "grounded_fact",
+      "title": "Policy answer 'location' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/no-walk-ins#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.licensing",
+      "check": "grounded_fact",
+      "title": "Policy answer 'licensing' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/licensing#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.lead-asbestos",
+      "check": "grounded_fact",
+      "title": "Policy answer 'safety' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/lead-asbestos#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.in-home-practices",
+      "check": "grounded_fact",
+      "title": "Policy answer 'in_home' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/in-home-practices#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.spanish",
+      "check": "grounded_fact",
+      "title": "Policy answer 'language' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/spanish#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.team",
+      "check": "grounded_fact",
+      "title": "Policy answer 'about' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/team#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.history",
+      "check": "grounded_fact",
+      "title": "Policy answer 'about' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/history#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.not-offered",
+      "check": "grounded_fact",
+      "title": "Policy answer 'not_offered' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/not-offered#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.drain-methods",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_details' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/drain-methods#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.tv-mounting-limits",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_details' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/tv-mounting-limits#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.drywall-details",
+      "check": "grounded_fact",
+      "title": "Policy answer 'service_details' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "policies/drywall-details#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.business_info",
+      "check": "grounded_fact",
+      "title": "Business info states only statable facts",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "unknown_handed_off.q1",
+      "check": "unknown_handed_off",
+      "title": "Unknown: Is there a helipad on your roof?",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "unknown_handed_off.q2",
+      "check": "unknown_handed_off",
+      "title": "Unknown: Do you offer submarine tours?",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "unknown_handed_off.q3",
+      "check": "unknown_handed_off",
+      "title": "Unknown: Do you rent out telescopes?",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "task_lifecycle.ask_owner",
+      "check": "task_lifecycle",
+      "title": "An unknown becomes an owner question task",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "confirm_before_commit.quotes.declined",
+      "check": "confirm_before_commit",
+      "title": "Request a free written quote: a declined read-back commits nothing",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "confirm_before_commit.quotes.confirmed",
+      "check": "confirm_before_commit",
+      "title": "Request a free written quote: commits only after a confirmed read-back",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "idempotent_retry.quotes",
+      "check": "idempotent_retry",
+      "title": "Request a free written quote: a retry does not commit twice",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "task_lifecycle.quotes",
+      "check": "task_lifecycle",
+      "title": "Request a free written quote: owner decisions are pollable tasks",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "injection_canary.all_outputs",
+      "check": "injection_canary",
+      "title": "No injection text in any of 148 tool outputs",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    },
+    {
+      "id": "latency.p95",
+      "check": "latency",
+      "title": "p95 tool latency under 500 ms",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": null
+    }
+  ],
+  "suite": {
+    "id": "askonce_core",
+    "version": "1.0"
+  }
+}

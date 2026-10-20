@@ -5,7 +5,7 @@ questions the server asks (MRTR elicitation), and the owner's side (inbox + appr
 owner REST API. Uses a plain 2026-07-28 MCP client without the tasks extension, so it exercises the
 same fallback a host like Alexa+ would most likely use: `pending_owner` + polling `get_task`.
 
-Prereqs: the server running locally (see docs/local-testing.md) with the dev-seeded live profiles.
+Prereqs: the server running locally (see docs/local-testing.md) with the certified live profiles (profiles/live/).
 Usage:   server/.venv/bin/python scripts/local_walkthrough.py [--url http://localhost:8000]
 """
 

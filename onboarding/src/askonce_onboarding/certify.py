@@ -475,15 +475,60 @@ class Certifier:
             elif status == "pending_owner":
                 task.fail("waiting for the owner but no task id was returned")
             else:
-                task.skip(f"no owner step for this request (status {status})")
+                await self.owner_routed_task(client, tool, module_id, module, task, status)
+
+    async def owner_routed_task(self, client: Client, tool: str, module_id: str, module: dict[str, Any], task: Case, status: Any) -> None:
+        """The first request needed no owner (a plain haircut, a small cake): make one the module's
+        approval rules route to the owner (a color service, 25 servings) and check it becomes a task."""
+        routed = self.owner_routed(module_id, module)
+        if routed is None:
+            task.skip(f"no request in this module needs the owner (status {status})")
+            return
+        ref, overrides = routed
+        args = await self.commit_args(client, module_id, module, ref)
+        if isinstance(args, str):
+            task.fail(f"could not make a request that needs the owner ({ref or overrides}): {args}")
+            return
+        args["details"] = {**args.get("details", {}), **overrides}
+        data = await self.call(client, tool, args)
+        if not data.get("task_id"):
+            task.fail(f"{ref or overrides} should need the owner but returned status {data.get('status')!r}: {str(data.get('speak'))[:160]}")
+            return
+        polled = await self.call(client, "get_task", {"task_id": data["task_id"]})
+        if polled.get("task_status") not in ("working", "input_required", "completed"):
+            task.fail(f"task status {polled.get('task_status')!r}")
 
     async def commitments(self) -> int:
         items, _ = await self.deps.commitments.list_for_business(self.pid)
         return len(items)
 
-    async def commit_args(self, client: Client, module_id: str, module: dict[str, Any]) -> dict[str, Any] | str:
+    def owner_routed(self, module_id: str, module: dict[str, Any]) -> tuple[str | None, dict[str, Any]] | None:
+        """A request the module's own approval rules send to the owner: (item ref or None for the
+        default item, intake overrides). `when: item` picks a listed item ("color services need Ines");
+        a threshold on an intake field (`servings >= 25`) sets that field to the threshold."""
+        approval = module.get("approval") or {}
+        if approval.get("mode") == "always":
+            return None
         refs = module.get("items") or [s["item"] for s in module.get("services", [])]
-        item = self.catalog_item(refs[0]) if refs else None
+        fields = {f["key"]: f for f in module.get("intake_fields", [])}
+        for rule in approval.get("rules") or []:
+            when, op, value = rule.get("when"), rule.get("op"), rule.get("value")
+            if when == "item" and op in ("in", "==", "eq"):
+                wanted = value if isinstance(value, list) else [value]
+                hit = next((r for r in refs if r in wanted), None)
+                if hit is not None:
+                    return hit, {}
+            elif when in fields and isinstance(value, int | float) and op in (">=", ">", "gte", "gt"):
+                bump = 0 if op in (">=", "gte") else 1
+                return None, {when: int(value) + bump}
+        return None
+
+    async def commit_args(
+        self, client: Client, module_id: str, module: dict[str, Any], ref: str | None = None
+    ) -> dict[str, Any] | str:
+        refs = module.get("items") or [s["item"] for s in module.get("services", [])]
+        ref = ref or (refs[0] if refs else None)
+        item = self.catalog_item(ref) if ref else None
         if item is None:
             return "no catalog item to request"
         details: dict[str, Any] = {}

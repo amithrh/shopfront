@@ -3,20 +3,21 @@
 Run AskOnce on your own machine and try it the way a judge or an MCP host would. Nothing touches AWS:
 storage is in memory, so restarting the server clears every order, booking and task.
 
-## 1. Seed the demo businesses as "live"
+## 1. The demo businesses (already certified)
 
-The server lists only certified (`live`) businesses. Until the certifier is built, this dev-only script writes
-promoted copies of the gold profiles to `.local/profiles-live/` (git-ignored). Their certification run is
-labelled `dev-seed`, which is not a real certification.
+The server lists only `live` businesses, and a business goes live only after the deterministic certifier
+passes it. `profiles/live/` holds the three demo businesses as certified (verdicts in
+`profiles/certification/`: every check decided in code on the real MCP server's trace, every evidence quote
+matched against the page snapshot from `sites/`). To re-certify after editing a profile in `profiles/`:
 
 ```bash
-server/.venv/bin/python scripts/dev_seed_live.py
+cd onboarding && uv run python ../scripts/certify_demo.py
 ```
 
 ## 2. Start the server
 
 ```bash
-cd server && ASKONCE_PROFILE_DIRS=../.local/profiles-live ASKONCE_CORS_ORIGINS=http://localhost:6274,http://localhost:5173 uv run python -m askonce_server
+cd server && ASKONCE_PROFILE_DIRS=../profiles/live ASKONCE_CORS_ORIGINS=http://localhost:6274,http://localhost:5173 uv run python -m askonce_server
 ```
 
 MCP is served at `http://localhost:8000/mcp` (protocol 2026-07-28, with a legacy 2025-11-25 fallback). The owner REST
