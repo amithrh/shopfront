@@ -88,6 +88,10 @@ DAY_MODULE_TYPES: frozenset[str] = frozenset({"custom_order", "quote_request", "
 SlotWithHolds = tuple[SlotOption, tuple[CapacityHold, ...]]
 
 
+ONE_PERSON_EACH = "each appointment is for one person"
+"""`party_size_out_of_range` detail when a party asks for one resource's slot (see `_evaluate`)."""
+
+
 def cell_key(business_id: str, module_id: str, cell_start_utc: datetime, resource_id: str | None) -> str:
     """Counter for one interval cell (`CAP#<biz>#<module>#CELL#<utc start>#<resource or ->`)."""
     if cell_start_utc.tzinfo is None:
@@ -361,6 +365,8 @@ class _BookingRules:
     sessions: tuple[JsonObj, ...]
     party_min: int
     party_max: int | None
+    party_declared: bool
+    """The service publishes a party size. Without one, a resource (a stylist) serves one person."""
     capacity_per_slot: int | None
     capacity_per_day: int | None
     lead_minutes: int
@@ -758,6 +764,7 @@ class AvailabilityEngine:
             sessions=sessions,
             party_min=int(party.get("min") or 1),
             party_max=int(party["max"]) if party.get("max") else None,
+            party_declared=bool(party),
             capacity_per_slot=availability.get("capacity_per_slot"),
             capacity_per_day=availability.get("capacity_per_day"),
             lead_minutes=int(availability.get("lead_time_minutes") or 0),
@@ -812,6 +819,9 @@ class AvailabilityEngine:
         covering = rules.schedule.line_at(day, local.hour * 60 + local.minute) if rules.interval else None
         if covering is not None:
             day = covering[0]  # a start after midnight on a line that opened the day before
+        if rules.interval and rules.resources and not rules.party_declared and party_size > 1:
+            # A stylist's 30 minutes cut one person's hair: a party needs one appointment each.
+            return _problem("party_size_out_of_range", ONE_PERSON_EACH, field="party_size")
         if party_size < rules.party_min or (rules.party_max is not None and party_size > rules.party_max):
             return _problem(
                 "party_size_out_of_range",

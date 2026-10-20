@@ -19,7 +19,7 @@ from mcp.server.mcpserver import (
 )
 from askonce_server.domain.planning import CommitPlan
 from askonce_server.tools.booking import AnyModuleArg, DetailsArg, ItemArg
-from askonce_server.tools.catalog import commit_item
+from askonce_server.tools import choices as item_choices
 from askonce_server.tools.confirm import (
     ConfirmCommit,
     commit_flow,
@@ -49,16 +49,19 @@ async def _plan(
 ) -> CommitPlan:
     deps = get_deps(ctx)
     profile = await live_profile(deps, business_id)
-    return await deps.orders.plan(
+    # Choices named in the item phrase ("half sheet carrot cake") and dietary needs ("vegan cake").
+    request = item_choices.request_for(profile, item, "custom_order", choices, details)
+    plan = await deps.orders.plan(
         profile,
-        item=commit_item(profile, item, "custom_order"),
-        choices=dict(choices or {}),
+        item=request.item,
+        choices=request.choices,
         day=date,
         intake=dict(details or {}),
         principal=principal(ctx),
         module_id=module_id,
         nonce=anonymous_nonce(ctx),
     )
+    return item_choices.apply(plan, request)
 
 
 async def order_plan(

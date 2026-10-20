@@ -104,6 +104,19 @@ class ReadBackItem(_Model):
     fact_refs: tuple[str, ...] = ()
 
 
+class ChoiceFocus(_Model):
+    """The choices an option-group question should offer (tools layer: what the item phrase said).
+
+    `hard` (a dietary need) means only these may be taken; otherwise they only narrow the question."""
+
+    group_id: str
+    choice_ids: tuple[str, ...]
+    reason: Literal["named", "dietary", "servings"]
+    label: str | None = None
+    """How the offered choices are described: "gluten-free", "without milk or eggs", "for 30 people"."""
+    hard: bool = False
+
+
 class CommitPlan(_Model):
     """Everything needed to confirm and then commit one request."""
 
@@ -140,6 +153,12 @@ class CommitPlan(_Model):
     problems: tuple[PlanProblem, ...] = ()
     fact_refs: tuple[str, ...] = ()
     """Every profile fact the plan relied on (grounding for the confirmation and the result)."""
+    choice_focus: tuple[ChoiceFocus, ...] = ()
+    """Tools layer: the choices the next option question offers (see `tools.choices`). Additive."""
+    choice_notes: tuple[str, ...] = ()
+    """Tools layer: spoken before that question ("Lemon curd has milk and eggs, so it isn't vegan.")."""
+    choice_note_refs: tuple[str, ...] = ()
+    """The facts `choice_notes` state."""
 
     @property
     def ok(self) -> bool:

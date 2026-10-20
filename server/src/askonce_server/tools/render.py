@@ -28,6 +28,8 @@ The same module builds the results where nothing is stored (`not_confirmed`, `ne
 
 from __future__ import annotations
 
+import re
+
 from collections.abc import Mapping, Sequence
 from datetime import date, datetime, time
 from typing import Any
@@ -37,6 +39,7 @@ import pydantic_core
 
 from askonce_server.domain.models import OPEN_STATUSES, Commitment, PriceQuote
 from askonce_server.domain.pricing import price_for
+from askonce_server.domain.availability import ONE_PERSON_EACH
 from askonce_server.domain.planning import CommitPlan, PlanProblem, SlotOption
 from askonce_server.ids import spoken_reference
 from askonce_server.profile.model import JsonObj, Profile
@@ -659,6 +662,58 @@ def _group_question(profile: Profile, item_ref: str | None, group_id: str | None
     return f"Which {name} would you like?", name
 
 
+def _focused_question(profile: Profile, plan: CommitPlan, group_id: str | None) -> tuple[str, list[str]] | None:
+    """The question for an option group the item phrase narrowed (`plan.choice_focus`), offering only
+    those choices, and the facts it states; None when the group was not narrowed."""
+    focus = next((f for f in plan.choice_focus if f.group_id == group_id), None)
+    if focus is None or not plan.item_ref or not focus.choice_ids:
+        return None
+    try:
+        _module_id, item = profile.item(plan.item_ref)
+    except Exception:  # noqa: BLE001
+        return None
+    group = next((g for g in item.get("options", ()) or () if g.get("id") == group_id), None)
+    if group is None:
+        return None
+    by_id = {str(c["id"]): c for c in group.get("choices") or ()}
+    refs = [f"{plan.item_ref}/{group_id}/{cid}#spoken_name" for cid in focus.choice_ids if cid in by_id]
+    names = [str(by_id[cid].get("spoken_name") or by_id[cid].get("name") or cid) for cid in focus.choice_ids if cid in by_id]
+    if not names:
+        return None
+    noun = str(group.get("name") or group_id).lower()
+    label = focus.label or ""
+    after = label.startswith(("without", "for ", "with "))
+    described = f"{noun} {label}" if after else (f"{label} {noun}" if label else noun)
+    if len(names) == 1:
+        return f"Would you like {names[0]} for the {noun}? It's the only {described} I can offer.", refs
+    return f"Which {described}: {speech.join(names, conjunction='or')}?", refs
+
+
+_TOO_LONG = re.compile(r"must be at most (\d+) characters$")
+_AT_MOST = re.compile(r"must be at most ([\d.]+)$")
+_AT_LEAST = re.compile(r"must be at least ([\d.]+)$")
+
+
+def _invalid_intake_speech(label: str, detail: str) -> str:
+    """Why an intake answer was refused, in words the customer can act on. `detail` comes from
+    `domain.intake` ("<label>: <reason>", reasons are fixed templates that never echo the input), so
+    only recognised reasons are turned into speech; anything else gets the generic retry."""
+    reason = detail.rsplit(": ", 1)[-1].strip()
+    if match := _TOO_LONG.search(reason):
+        return f"The {label} can be at most {match.group(1)} characters. Could you make it shorter?"
+    if match := _AT_MOST.search(reason):
+        return f"The {label} can be at most {match.group(1)}. Could you say it again?"
+    if match := _AT_LEAST.search(reason):
+        return f"The {label} has to be at least {match.group(1)}. Could you say it again?"
+    if "phone number" in reason or "digit" in reason or "country code" in reason:
+        return f"That doesn't sound like a full {label}. Could you say it again, with the area code?"
+    if "email" in reason:
+        return f"That doesn't sound like an email address. Could you say the {label} again?"
+    if "date" in reason:
+        return f"I didn't catch the {label}. Which day is it for?"
+    return f"I couldn't use the {label}. Could you say it again?"
+
+
 def _intake_label(profile: Profile, module_id: str, key: str | None) -> str:
     if key:
         try:
@@ -709,11 +764,19 @@ def problem_result(
         status = "needs_info"
         choice_problems = [p for p in problems if p.code in ("missing_choice", "invalid_choice")]
         if choice_problems:
-            # Name every open choice, then ask the first one's own spoken question.
+            # Name every open choice, then ask the first one's own spoken question (or, when the item
+            # phrase narrowed that group, a question offering only the fitting choices).
             first_choice = choice_problems[0]
             question, name = _group_question(profile, plan.item_ref, first_choice.field)
+            focused = _focused_question(profile, plan, first_choice.field)
+            if focused is not None:
+                question, refs = focused
+                facts = grounding.dedupe_facts([*facts, *grounding.facts_for(profile, refs)])
             names_needed = [_group_question(profile, plan.item_ref, p.field)[1] for p in choice_problems]
-            if first_choice.code == "invalid_choice":
+            if plan.choice_notes:
+                lead = " ".join([*plan.choice_notes, question])
+                facts = grounding.dedupe_facts([*facts, *grounding.facts_for(profile, plan.choice_note_refs)])
+            elif first_choice.code == "invalid_choice":
                 lead = f"That {name} isn't one of the options. {question}"
             elif len(names_needed) > 1:
                 lead = f"I still need the {speech.join(names_needed)}. {question}"
@@ -721,7 +784,10 @@ def problem_result(
                 lead = question
             missing_fields = [p.field for p in choice_problems if p.field]
         elif first is not None and first.code == "invalid_intake":
-            lead = f"I couldn't use the {_intake_label(profile, plan.module_id, first.field)}. Could you say it again?"
+            lead = _invalid_intake_speech(_intake_label(profile, plan.module_id, first.field), first.detail)
+            missing_fields = [first.field] if first.field else []
+        elif first is not None and first.code == "party_size_out_of_range" and first.detail == ONE_PERSON_EACH:
+            lead = "Each appointment is for one person, so I'll book them one at a time. Who's the first one for?"
             missing_fields = [first.field] if first.field else []
         elif first is not None:
             lead = _PROBLEM_SPEECH.get(first.code, "I need a bit more information.").format(business=business)

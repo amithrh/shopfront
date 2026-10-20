@@ -752,20 +752,21 @@ async def test_check_availability_phrasing(
     await grounded(deps, data, gold_dollars)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "party_size is accepted but ignored for interval bookings with stylists: availability._option holds "
-        "units=1/limit=1 per stylist cell regardless of party size and the salon services declare no party_size "
-        "bounds, so 'haircuts for my two kids' is offered single-stylist 30-minute slots ('Saturday at 9 am with "
-        "Wren') as if one stylist could cut both children at once"
-    ),
-)
 async def test_two_kids_are_not_offered_one_stylist_slot(client: Any) -> None:
     data = await call(client, "check_availability", {"item": "kids haircuts", "date_from": SAT, "date_to": SAT, "party_size": 2})
     assert data["item_ref"] == "services/kids-cut"
     single = [s for s in data["slots"] if s["resource_id"] is not None]
     assert not single, f"a party of 2 offered single-stylist slots: {data['speak']!r}"
+    # Instead: times when two stylists are free together, one appointment each.
+    assert data["slots"] and all(" and " in s["resource_spoken_name"] for s in data["slots"]), data["slots"]
+    assert data["speak"].startswith("Each appointment is for one person, so here are times with two free together:"), data["speak"]
+    assert data["speak"].endswith("I'll book each one separately."), data["speak"]
+
+
+async def test_booking_two_kids_into_one_stylist_slot_is_refused_with_the_reason(plain_client: Any) -> None:
+    data = await call(plain_client, "book", {"item": "kids haircut", "start": f"{SAT}T10:00", "party_size": 2})
+    assert data["status"] == "needs_info" and data["missing_fields"][0] == "party_size", data
+    assert data["speak"].startswith("Each appointment is for one person"), data["speak"]
 
 
 # ---------------------------------------------------------------------------- book: the phrase reaches the commitment
@@ -786,14 +787,6 @@ async def test_book_a_blow_out_with_curls_books_the_hot_tool_blowout(plain_clien
     assert "$55" not in data["speak"], data["speak"]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "book() drops the length choice named in the item phrase: 'balayage for long hair' comes back needs_info "
-        "asking 'Is your hair shoulder length or shorter, or past your shoulder blades?' although find_item and "
-        "check_availability resolve the same phrase to past the shoulder blades"
-    ),
-)
 async def test_book_balayage_for_long_hair_does_not_ask_the_length_again(plain_client: Any) -> None:
     data = await call(plain_client, "book", {"item": "balayage for long hair", "start": f"{SAT}T10:00", "details": {"stylist": "ines"}})
     assert "length" not in data.get("missing_fields", []), data

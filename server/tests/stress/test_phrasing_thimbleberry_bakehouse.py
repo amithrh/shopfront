@@ -737,7 +737,7 @@ async def test_custom_order_phrasing(plain_client: Any, deps: Any, elicitation: 
     await assert_grounded(deps, data)
 
 
-# ---- known failures: what the item phrase said is lost, or a dietary request is silently contradicted
+# ---- what the item phrase says is kept, and a dietary request is never silently contradicted
 
 
 async def _order(client: Any, item: str, choices: dict[str, str], details: dict[str, Any]) -> dict[str, Any]:
@@ -746,11 +746,6 @@ async def _order(client: Any, item: str, choices: dict[str, str], details: dict[
     )
 
 
-@xfail(
-    "SAFETY: item 'gluten-free birthday cake' with flavor 'chocolate' is confirmed as plain 'dark chocolate' "
-    "(contains wheat) for $56; the gluten-free need in the item phrase is dropped (should be gluten-free dark "
-    "chocolate, $68, or a question naming only gluten-free flavors)"
-)
 async def test_gluten_free_cake_order_keeps_the_gluten_free_flavor(plain_client: Any) -> None:
     data = await _order(
         plain_client, "gluten-free birthday cake",
@@ -761,10 +756,6 @@ async def test_gluten_free_cake_order_keeps_the_gluten_free_flavor(plain_client:
     assert flavor in (None, "gluten-free dark chocolate"), (data["status"], flavor, data["speak"])
 
 
-@xfail(
-    "SAFETY: item 'vegan cake' with lemon curd filling (owner-confirmed milk and eggs) is confirmed silently; the "
-    "profile says vegan cakes come with marionberry jam filling and vegan vanilla buttercream (info/vegan-cakes)"
-)
 async def test_vegan_cake_order_never_silently_takes_a_dairy_filling(plain_client: Any, elicitation: ElicitationScript) -> None:
     data = await _order(
         plain_client, "vegan cake",
@@ -775,11 +766,6 @@ async def test_vegan_cake_order_never_silently_takes_a_dairy_filling(plain_clien
     assert data["status"] != "confirmed" or warned, (data["status"], data["speak"], elicitation.seen)
 
 
-@xfail(
-    "item 'gluten free chocolate cake' without a flavor choice re-asks 'Which flavor: vanilla bean, dark chocolate, ...' "
-    "(the non-gluten-free list); answering 'dark chocolate' would order a wheat cake. find_item resolves the same "
-    "phrase to the gluten-free dark chocolate flavor"
-)
 async def test_order_reads_the_flavor_from_the_item_phrase(plain_client: Any) -> None:
     data = await _order(
         plain_client, "gluten free chocolate cake", {"size": "6 inch", "filling": "salted caramel", "frosting": "chocolate frosting"}, {"servings": 10}
@@ -792,12 +778,10 @@ async def test_order_reads_the_flavor_from_the_item_phrase(plain_client: Any) ->
     [
         pytest.param(
             "half sheet cake", {"flavor": "lemon", "filling": "lemon curd", "frosting": "vanilla buttercream"}, "size",
-            marks=xfail("size named in the item phrase ('half sheet cake') is dropped: the order asks 'Which size?'"),
             id="half-sheet-cake",
         ),
         pytest.param(
             "carrot cake", {"size": "6 inch", "filling": "caramel", "frosting": "cream cheese"}, "flavor",
-            marks=xfail("flavor named in the item phrase ('carrot cake') is dropped: the order asks 'Which flavor?'"),
             id="carrot-cake",
         ),
     ],
@@ -807,10 +791,6 @@ async def test_order_keeps_choices_named_in_the_item_phrase(plain_client: Any, i
     assert group not in data["missing_fields"], data["speak"]
 
 
-@xfail(
-    "a 40-character cake message gets 'I couldn't use the message on the cake. Could you say it again?' without the "
-    "30-character limit (custom-cake message_max_characters=30), so repeating it fails again"
-)
 async def test_too_long_message_says_the_limit(plain_client: Any) -> None:
     data = await _order(
         plain_client, "birthday cake",
@@ -818,3 +798,39 @@ async def test_too_long_message_says_the_limit(plain_client: Any) -> None:
         {"servings": 10, "message": "Happy 40th Birthday to the best dad ever"},
     )
     assert data["status"] == "needs_info" and "30" in data["speak"], data["speak"]
+
+
+async def test_one_sentence_order_keeps_every_named_choice(plain_client: Any) -> None:
+    # What a voice model actually sends: everything in the item phrase, no `choices`.
+    data = await _order(plain_client, "ten inch round vanilla bean cake with lemon curd and vanilla buttercream", {}, {"servings": 30})
+    assert data["status"] == "pending_owner", data["speak"]
+    assert data["commitment"]["choices"] == {
+        "size": "ten inch round", "flavor": "vanilla bean", "filling": "lemon curd", "frosting": "vanilla buttercream",
+    }
+
+
+async def test_vegan_cake_says_why_a_filling_is_refused_and_offers_only_fitting_ones(plain_client: Any, deps: Any) -> None:
+    data = await _order(
+        plain_client, "vegan cake", {"size": "8 inch", "flavor": "vegan vanilla", "filling": "lemon curd", "frosting": "vegan frosting"}, {"servings": 20}
+    )
+    assert data["status"] == "needs_info" and data["missing_fields"] == ["filling"], data["speak"]
+    assert data["speak"].startswith("Lemon curd has milk and eggs, so it isn't vegan.")
+    assert "marionberry jam" in data["speak"] and "salted caramel" not in data["speak"]
+    await assert_grounded(deps, data)
+
+
+async def test_vegan_cake_without_a_flavor_offers_only_the_vegan_flavors(plain_client: Any, deps: Any) -> None:
+    data = await _order(plain_client, "vegan cake", {"size": "8 inch"}, {"servings": 20})
+    assert "Which vegan cake flavor: vegan vanilla bean or vegan dark chocolate?" in data["speak"], data["speak"]
+    await assert_grounded(deps, data)
+
+
+async def test_head_count_narrows_the_size_question(plain_client: Any, deps: Any) -> None:
+    data = await _order(plain_client, "cake for 30 people", {}, {"servings": 30})
+    assert "Which size for 30 people:" in data["speak"] and "six inch" not in data["speak"], data["speak"]
+    await assert_grounded(deps, data)
+
+
+async def test_an_explicit_choice_beats_the_item_phrase(plain_client: Any) -> None:
+    data = await _order(plain_client, "carrot cake", {"size": "6 inch", "flavor": "vanilla bean", "filling": "caramel", "frosting": "cream cheese"}, {"servings": 10})
+    assert data["commitment"]["choices"]["flavor"] == "vanilla bean", data["speak"]

@@ -38,11 +38,12 @@ from mcp.server.mcpserver.exceptions import ToolError
 from mcp_tasks import InvalidTransition, TaskNotFound
 from askonce_server.domain.availability import MAX_SEARCH_DAYS
 from askonce_server.domain.planning import CommitPlan, SlotOption
-from askonce_server.errors import DisputedFact
+from askonce_server.errors import DisputedFact, NotFound, UnknownItem
 from askonce_server.ids import reference_prefix
 from askonce_server.profile.model import Profile
 from askonce_server.tools import grounding, render, speech
-from askonce_server.tools.catalog import TRANSACTIONAL, commit_item, resolve_item, unmet_result
+from askonce_server.tools import choices as item_choices
+from askonce_server.tools.catalog import TRANSACTIONAL, resolve_item, unmet_result
 from askonce_server.tools.confirm import (
     SKIPPED_CONFIRMATION,
     ConfirmCommit,
@@ -55,7 +56,7 @@ from askonce_server.tools.confirm import (
 )
 from askonce_server.tools.context import anonymous_nonce, finish, get_deps, live_profile, principal, tool_span
 from askonce_server.tools.discovery import BusinessId
-from askonce_server.tools.schemas import AvailabilityResult, Card, CardAction, CardLine, CommitmentResult
+from askonce_server.tools.schemas import AvailabilityResult, Card, CardAction, CardLine, CommitmentResult, SlotView
 
 ItemArg = Annotated[str, Field(description="Service or item as the customer said it, or an item ref.", max_length=120)]
 StartArg = Annotated[
@@ -96,6 +97,8 @@ AnyModuleArg = Annotated[
 ResourceArg = Annotated[str | None, Field(description="Preferred stylist/table/instructor, if any.", max_length=64)]
 
 SPOKEN_SLOTS = 3
+MAX_SIDE_BY_SIDE_SCAN = 60
+"""Free slots read per resource when looking for times a party can be served at once."""
 
 
 def parse_day(value: str | None, name: str) -> date | None:
@@ -178,6 +181,9 @@ async def check_availability(
             return finish(result, profile, outcome="not_offered")
         chosen = modules[0]
         kind = profile.module_type(chosen)
+        if kind == "booking" and (party_size or 1) > 1 and _one_person_each(profile, chosen, entry.ref):
+            result = await _side_by_side(deps, profile, entry, chosen, first, last, party_size or 1, limit)
+            return finish(result, profile, outcome="ok" if result.slots else "none_open", module_id=chosen)
         try:
             slots = await _open_slots(deps, profile, kind, entry.ref, chosen, first, last, party_size, resource, limit)
         except DisputedFact as disputed:
@@ -237,6 +243,82 @@ async def check_availability(
             speak=speak, facts=facts, card=card, handoff=handoff, module_id=chosen, item_ref=entry.ref, slots=views
         )
         return finish(result, profile, outcome="ok" if views else "none_open", module_id=chosen)
+
+
+def _count(n: int) -> str:
+    return {2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}.get(n, str(n))
+
+
+def _one_person_each(profile: Profile, module_id: str, item_ref: str) -> bool:
+    """A resource (a stylist) serves one person per appointment: an interval booking module with
+    resources whose service publishes no party size (same rule as `availability._evaluate`)."""
+    module = profile.module(module_id)
+    if (module.get("slotting") or {}).get("mode", "interval") != "interval" or not module.get("resources"):
+        return False
+    service = next((x for x in module.get("services", ()) or () if x.get("item") == item_ref), None)
+    return service is not None and not service.get("party_size")
+
+
+async def _side_by_side(
+    deps: Any,
+    profile: Profile,
+    entry: Any,
+    module_id: str,
+    first: date | None,
+    last: date | None,
+    party: int,
+    limit: int,
+) -> AvailabilityResult:
+    """Times when `party` different resources are free at once, one appointment each ("two haircuts
+    for my kids" -> "Saturday at 9 am with Wren and Ines"). Each appointment is booked separately."""
+    module = profile.module(module_id)
+    service = next((x for x in module.get("services", ()) or () if x.get("item") == entry.ref), None) or {}
+    wanted = service.get("resource_ids")
+    resource_ids = [str(r["id"]) for r in module.get("resources", ()) or () if wanted is None or r["id"] in wanted]
+    by_start: dict[str, list[SlotOption]] = {}
+    for rid in resource_ids:
+        try:
+            free = await deps.bookings.open_slots(
+                profile, item=entry.ref, module_id=module_id, date_from=first, date_to=last, party_size=1,
+                resource_id=rid, limit=MAX_SIDE_BY_SIDE_SCAN,
+            )
+        except (NotFound, UnknownItem):
+            continue
+        for slot in free:
+            if slot.window is not None and slot.resource_id == rid:
+                by_start.setdefault(slot.window.start.isoformat(), []).append(slot)
+    together = [slots[:party] for _start, slots in sorted(by_start.items()) if len(slots) >= party][:limit]
+    today = deps.clock.now().astimezone(profile.timezone).date()
+    names = render.resource_names(profile, module_id)
+    views: list[SlotView] = []
+    spoken: list[str] = []
+    refs: list[str] = [f"{entry.ref}#spoken_name"]
+    for group in together:
+        view = render.slot_view(profile, group[0], resource_names=names, today=today)
+        who = speech.join([names.get(str(s.resource_id), str(s.resource_id)) for s in group])
+        views.append(view.model_copy(update={"resource_id": None, "resource_spoken_name": who}))
+        spoken.append(f"{view.label_spoken} with {who}")
+        refs.extend(r for s in group for r in s.fact_refs)
+    facts = grounding.facts_for(profile, refs)
+    if views:
+        times = speech.join(spoken[:2], conjunction="or")
+        speak = speech.sentences(
+            f"Each appointment is for one person, so here are times with {_count(party)} free together: {times}",
+            tail="I'll book each one separately.",
+        )
+    else:
+        speak = speech.sentences(
+            "Each appointment is for one person",
+            f"I couldn't find a time with {_count(party)} free together in that range",
+        )
+    card = Card(
+        kind="slots",
+        title=entry.name,
+        subtitle=f"{party} appointments at once",
+        lines=[CardLine(label=speech.capitalize(v.label_spoken), value=v.resource_spoken_name or "") for v in views],
+        citations=grounding.citations_for(profile, facts),
+    )
+    return AvailabilityResult(speak=speak, facts=facts, card=card, module_id=module_id, item_ref=entry.ref, slots=views)
 
 
 async def _open_slots(
@@ -301,18 +383,20 @@ async def book_plan(
     """Round-independent plan from the tool arguments alone (decides which intake fields are missing)."""
     deps = get_deps(ctx)
     profile = await live_profile(deps, business_id)
-    return await deps.bookings.plan(
+    request = item_choices.request_for(profile, item, "booking", choices, details)
+    plan = await deps.bookings.plan(
         profile,
-        item=commit_item(profile, item, "booking"),
+        item=request.item,
         start=start,
         party_size=party_size,
         intake=dict(details or {}),
         principal=principal(ctx),
         module_id=module_id,
         resource_id=resource,
-        choices=dict(choices or {}),
+        choices=request.choices,
         nonce=anonymous_nonce(ctx),
     )
+    return item_choices.apply(plan, request)
 
 
 async def book_intake(
@@ -336,18 +420,20 @@ async def book_final_plan(
     """Re-plan with the intake answers merged into `details`."""
     deps = get_deps(ctx)
     profile = await live_profile(deps, business_id)
-    return await deps.bookings.plan(
+    request = item_choices.request_for(profile, item, "booking", choices, details)
+    plan = await deps.bookings.plan(
         profile,
-        item=commit_item(profile, item, "booking"),
+        item=request.item,
         start=start,
         party_size=party_size,
         intake=merge_intake(details, intake),
         principal=principal(ctx),
         module_id=module_id,
         resource_id=resource,
-        choices=dict(choices or {}),
+        choices=request.choices,
         nonce=anonymous_nonce(ctx),
     )
+    return item_choices.apply(plan, request)
 
 
 async def book_confirmation(

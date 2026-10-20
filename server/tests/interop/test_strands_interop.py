@@ -1,16 +1,19 @@
-"""Strands interop: run `strands_tasks_interop.py` under the onboarding venv against a live AskOnce server.
+"""Strands interop: run `strands_tasks_interop.py` with Strands against a live AskOnce server.
 
 Strands 1.57.1 ships its own SEP-2663 client (on mcp 2.1.1), written independently of `mcp_tasks`. The
 script places a big custom-cake order that becomes an owner task, the owner approves over the signed REST
 API, and Strands polls the task to completion (both `call_tool_sync` and `submit_tool_sync`/`get_task_sync`).
 
-Skips when the onboarding venv (or strands in it) is missing. Runs in a subprocess so the two `mcp`
-versions never share an interpreter.
+The client runs in its own pinned, isolated environment (`uv run --isolated --with strands-agents==1.57.1
+--with mcp==2.1.1`, cached by uv after the first run), in a subprocess so the two `mcp` versions never share
+an interpreter. Skips only when `uv` is not installed (or cannot build that environment, e.g. offline on a
+cold cache).
 """
 
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 from collections.abc import Iterator
 from pathlib import Path
@@ -21,23 +24,30 @@ from e2e_support import ADMIN_TOKEN, BAKERY, Shop, injection_canaries, loaded, r
 
 from askonce_server.config import REPO_ROOT
 
-ONBOARDING_PYTHON = REPO_ROOT / "onboarding" / ".venv" / "bin" / "python"
 SCRIPT = Path(__file__).with_name("strands_tasks_interop.py")
+STRANDS_PINS = ("strands-agents==1.57.1", "mcp==2.1.1")
 
 
-def _strands_available() -> bool:
-    if not ONBOARDING_PYTHON.exists():
-        return False
-    probe = subprocess.run(  # noqa: S603 - fixed interpreter path, fixed arguments
-        [str(ONBOARDING_PYTHON), "-I", "-c", "import strands.tools.mcp as m; m.TasksConfig"],
+def _strands_python() -> list[str] | None:
+    """The command that starts a Python with Strands' own SEP-2663 client, or None if unavailable."""
+    uv = shutil.which("uv")
+    if uv is None:
+        return None
+    command = [uv, "run", "--isolated", "--no-project", *(a for pin in STRANDS_PINS for a in ("--with", pin)), "python"]
+    probe = subprocess.run(  # noqa: S603 - fixed arguments
+        [*command, "-I", "-c", "import strands.tools.mcp as m; m.TasksConfig"],
         capture_output=True,
-        timeout=60,
+        timeout=300,
         check=False,
+        cwd=REPO_ROOT,
     )
-    return probe.returncode == 0
+    return command if probe.returncode == 0 else None
 
 
-pytestmark = pytest.mark.skipif(not _strands_available(), reason="onboarding venv with strands is not available")
+STRANDS_PYTHON = _strands_python()
+
+
+pytestmark = pytest.mark.skipif(STRANDS_PYTHON is None, reason="uv is not installed (or offline with a cold uv cache)")
 
 
 @pytest.fixture
@@ -53,7 +63,7 @@ def shop(
 
 def test_strands_client_completes_an_owner_approved_task(shop: Shop) -> None:
     completed = subprocess.run(  # noqa: S603 - fixed interpreter and script
-        [str(ONBOARDING_PYTHON), str(SCRIPT), shop.url, ADMIN_TOKEN],
+        [*(STRANDS_PYTHON or ()), str(SCRIPT), shop.url, ADMIN_TOKEN],
         capture_output=True,
         text=True,
         timeout=120,
