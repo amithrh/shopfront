@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-cd751a0cedf17318ab12",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "ZIP code not listed? Send a quote request anyway and Jo will tell you whether we can get to you.",
+ "questions": [
+  "My ZIP code isn't listed, can you still help?",
+  "What if my area isn't in your service list?",
+  "Can you send a quote request for an unlisted ZIP code?",
+  "Will Jo tell me if you can service my area?",
+  "Do you cover areas outside your listed ZIP codes?",
+  "What if I'm in a different ZIP code?",
+  "Can you provide service in an unlisted area?",
+  "How do I know if you service my location?"
+ ]
+}

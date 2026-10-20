@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-1daebe336cf94f643386",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:20+00:00",
+ "answer": "This isn't a booking. Jo reviews your request and replies with a written quote, and nothing is scheduled until you approve it.",
+ "questions": [
+  "Is a quote the same as booking?",
+  "What happens after I request a quote?",
+  "Do I need to approve the quote?",
+  "How does the quote process work?",
+  "Is anything scheduled without my approval?",
+  "What does Jo do with my quote request?",
+  "Do I get a written quote after request?",
+  "Is the quote process mandatory before work?"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-802e53d282916fed42ea",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:20+00:00",
+ "answer": "You see a written price before we start, and the invoice matches it. If we open a wall and find something nobody could have known about, we stop and send a new quote.",
+ "questions": [
+  "Do I see a price before work starts?",
+  "Will the final invoice match the initial quote?",
+  "What happens if unexpected issues are found?",
+  "Is there a guarantee on the quoted price?",
+  "Do you provide written estimates before work?",
+  "What if hidden problems are discovered during work?",
+  "Are there any surprises on the final bill?",
+  "Is the price fixed once work begins?"
+ ]
+}

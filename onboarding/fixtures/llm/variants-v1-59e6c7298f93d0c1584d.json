@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-59e6c7298f93d0c1584d",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "We confirm every appointment by email within one business day of your request.",
+ "questions": [
+  "Will I receive a confirmation for my appointment?",
+  "How soon will I get an appointment confirmation?",
+  "Is there a standard confirmation process for appointments?",
+  "What method is used for appointment confirmations?",
+  "Can I expect a call or email for confirmation?",
+  "Are confirmations sent automatically after booking?",
+  "What should I do if I don't receive a confirmation?",
+  "How do I know my appointment is confirmed?"
+ ]
+}

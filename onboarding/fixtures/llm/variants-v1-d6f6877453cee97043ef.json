@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-d6f6877453cee97043ef",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward. If we find something the quote didn't cover, we stop, show you, and send a revised quote.",
+ "questions": [
+  "What happens before work starts?",
+  "Do techs wear shoe covers?",
+  "Is the area cleaned after work?",
+  "What if the job changes?",
+  "Do they explain the quote to me?",
+  "Is there a pre-work walkthrough?",
+  "What if they find extra work?",
+  "Do they revise quotes if needed?"
+ ]
+}

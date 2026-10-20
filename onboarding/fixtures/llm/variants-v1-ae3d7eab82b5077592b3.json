@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-ae3d7eab82b5077592b3",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "Book them on their own or add them to any service.",
+ "questions": [
+  "Can I book add-ons separately?",
+  "Are add-ons available for all services?",
+  "How do I add services to my appointment?",
+  "Can I get an add-on without a main service?",
+  "Are there any restrictions on booking add-ons?",
+  "Do add-ons have their own booking times?",
+  "Can I change my add-ons after booking?",
+  "Are add-ons charged separately from main services?"
+ ]
+}

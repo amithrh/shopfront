@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-37b41198c77c3356f328",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:29:41+00:00",
+ "answer": "We don't book jobs online or schedule anything on the first call. Every job starts with a quote request, so you know the price before anyone comes to your door.",
+ "questions": [
+  "Can I book a repair online?",
+  "How do I get a price for a repair?",
+  "Do I need a quote before you start work?",
+  "Can you give me an estimate over the phone?",
+  "What's the first step to getting a repair?",
+  "Do I pay for the quote request?",
+  "How long does it take to get a quote?",
+  "Can I schedule a repair without a quote?"
+ ]
+}

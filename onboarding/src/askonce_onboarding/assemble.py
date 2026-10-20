@@ -430,7 +430,9 @@ class Assembler:
         return fields
 
     def build(self, review: Callable[[list[JsonObj]], list[JsonObj]] | None = None,
-              variants: Callable[[str, list[JsonObj]], dict[str, list[str]]] | None = None) -> Result:
+              variants: Callable[[str, list[JsonObj]], dict[str, list[str]]] | None = None,
+              topics: Callable[[str, list[tuple[str, str]]], list[str | None]] | None = None) -> Result:
+        self.topics_fn = topics
         fields = self.business_fields()
 
         def first(name: str) -> str | None:
@@ -500,10 +502,13 @@ class Assembler:
         catalog = self.catalog(catalog_id)
         if catalog:
             modules[catalog_id] = catalog
+        self.business_name = business["name"]
         knowledge = self.knowledge("info")
         if knowledge:
             if variants is not None:
                 self.add_variants(knowledge["entries"], variants(business["name"], knowledge["entries"]), business["name"])
+            self.name_subjects(knowledge["entries"])
+            share_topics(knowledge["entries"])
             for e in knowledge["entries"]:
                 e.pop("_heading", None)
             modules["info"] = knowledge
@@ -1477,7 +1482,8 @@ class Assembler:
         for e in entries:
             if e.get("_section"):
                 e["_topic"] = section_topic.get(e["_section"]) or snake(e["_heading"])
-        merged = self.dedupe_entries(entries)
+        # Statements split off a section can repeat a statement made elsewhere: those merge again.
+        merged = self.dedupe_entries(self.regroup_by_subject(self.dedupe_entries(entries)))
         built: list[tuple[JsonObj, list[JsonObj]]] = []
         taken: dict[str, JsonObj] = {}
         for e in merged:
@@ -1500,11 +1506,13 @@ class Assembler:
         if sum(len(c) for _, c in built) > MAX_ENTRIES:
             # The schema holds 100 entries (and owner answers add some): keep the most informative statements.
             def weight(pair: tuple[JsonObj, list[JsonObj]]) -> tuple:
-                """Specific statements first: a question's answer, a number, a 'not', a fact or a safety note."""
+                """Specific statements first: a question's answer, a number, a 'not', a fact, a safety note or
+                something addressed to the customer."""
                 e = pair[0]
                 text = e["_text"]
                 score = 2 * (e.get("_kind") in ("faq", "dl")) + bool(e["_facts"]) + e["_safety"] + bool(re.search(r"\d", text))
                 score += bool(re.search(r"\b(no|not|never|don't|can't|won't|only)\b|n't\b", text, re.I)) + (len(text) >= 40)
+                score += bool(re.search(r"\byour?\b", text, re.I))  # it tells the customer something to do or expect
                 score -= e["_page"] == self.home and e.get("_kind") != "faq"
                 return (score, not e.get("_model"), len(text))
             keep, count = set(), 0
@@ -1551,17 +1559,93 @@ class Assembler:
                 owners.setdefault(norm_words(strip_name(q, business)), set()).add(eid)
         by_id = {e["id"]: e for e in entries}
         for e in entries:
-            have = {norm_words(v) for v in e["question_variants"]}
+            fresh: list[str] = []
             for q in found.get(e["id"], []):
                 q = strip_name(q, business)
-                key = norm_words(q)
-                shared = owners.get(key, set())
-                if key in have or len(e["question_variants"]) >= 8:
-                    continue
+                shared = owners.get(norm_words(q), set())
                 if len(shared) > 1 and len({by_id[i]["topic"] for i in shared if i in by_id}) > 1:
                     continue  # one phrasing for two different subjects is ambiguous: kept by neither
-                e["question_variants"].append(q)
-                have.add(key)
+                fresh.append(q)
+            existing = e["question_variants"]
+            if len(fresh) >= 3:
+                # Customer phrasings say how it is asked: a section heading ("We do the work") or a sentence
+                # copied from the page is not one. The page's own questions (an FAQ's) stay first.
+                heading = norm_words(e.get("_heading") or "")
+                existing = [v for v in existing if v.rstrip().endswith("?") and norm_words(v) != heading]
+            merged: list[str] = []
+            for v in [*existing, *fresh]:
+                if norm_words(v) not in (norm_words(m) for m in merged):
+                    merged.append(v)
+            e["question_variants"] = merged[:8] or e["question_variants"]
+
+    def name_subjects(self, entries: list[JsonObj]) -> None:
+        """A statement split off its section that no longer says what it is about ("Add $10.00 per cake" under
+        "Vegan cakes") is read out with the section heading in front, as a definition list reads."""
+        for e in entries:
+            if e["answer_spoken"] not in getattr(self, "split_texts", set()):
+                continue
+            head = e["topic"].split("_")[0]
+            heading = clean_text(e.get("_heading") or "", 60) or ""
+            said = {singular(w) for w in re.findall(r"[a-z]+", e["answer_spoken"].lower())}
+            named = {singular(w) for w in re.findall(r"[a-z]+", heading.lower())}
+            line = spoken(f"{heading.rstrip(':.')}: {e['answer_spoken']}")
+            if singular(head) in named - said and line and len(line) <= 240 and not heading.endswith("?"):
+                e["answer_spoken"] = line
+
+    def regroup_by_subject(self, units: list[JsonObj]) -> list[JsonObj]:
+        """Statements regrouped by subject: the model names what each statement is about, statements next to
+        each other about the same thing become one entry (within the two spoken sentences), and every entry
+        takes its subject as its topic. Without names (no model reply) the units stay as they are."""
+        topics_fn = getattr(self, "topics_fn", None)
+        if topics_fn is None or not units:
+            return units
+        items: list[tuple[int, str]] = []
+        for ui, u in enumerate(units):
+            text = u["_text"]
+            parts: list[str] = []
+            for p in re.split(r"(?<=[.!?])\s+", text):
+                if parts and len(parts[-1]) < 20:
+                    parts[-1] = f"{parts[-1]} {p}"  # "Parking." labels the sentence after it
+                elif p:
+                    parts.append(p)
+            for part in ([text] if len(parts) <= 2 and len(text) <= 240 else parts):
+                items.append((ui, part))
+        labels = topics_fn(getattr(self, "business_name", ""), [(units[ui]["_heading"], t) for ui, t in items])
+        if not any(labels):
+            return units
+        out: list[JsonObj] = []
+        for ui, u in enumerate(units):
+            groups: list[list[Any]] = []
+            for (i, t), label in zip(items, labels, strict=True):
+                if i != ui:
+                    continue
+                last = groups[-1] if groups else None
+                if last and label and last[1] == label and len(last[0]) + len(t) < 240 and len(re.findall(r"[.!?](\s|$)", last[0])) < 2:
+                    last[0] = f"{last[0]} {t}"
+                else:
+                    groups.append([t, label])
+            if len(groups) == 1:
+                out.append({**u, "_topic": groups[0][1] or u["_topic"]})
+                continue
+            facts_left = dict(u["_facts"])
+            for k, (t, label) in enumerate(groups):
+                evs = self.unit_evidence(u["_page"], t, None)
+                if not evs:
+                    evs = u["_evs"]
+                mine = {key: v for key, v in facts_left.items()
+                        if isinstance(v, int) and not isinstance(v, bool) and quote_supports_number(t, v)}
+                if k == len(groups) - 1:
+                    mine = dict(facts_left)  # whatever no part states by number stays with the last part
+                for key in mine:
+                    facts_left.pop(key, None)
+                self.split_texts = getattr(self, "split_texts", set()) | {spoken(t) or t}
+                out.append({**u, "_text": t, "_topic": label or u["_topic"], "_evs": evs, "_facts": mine,
+                            "_fact_quotes": {key: v for key, v in (u.get("_fact_quotes") or {}).items() if key in mine},
+                            "_questions": list(u["_questions"]) if k == 0 else [],
+                            "_question": u.get("_question") if k == 0 else None,
+                            "_lead": bool(u.get("_lead", True)) and k == 0,
+                            "_safety": bool(SAFETY_WORDS.search(t)) or (u["_safety"] and k == 0)})
+        return out
 
     def policy_record_facts(self, page: Page, rec: JsonObj, ev: JsonObj) -> JsonObj:
         facts: JsonObj = {}
@@ -2710,6 +2794,27 @@ SAFETY_WORDS = re.compile(
     r"persulfates?|formaldehyde\w*|lead-safe|asbestos|hazard\w*|sensitivit\w*|reacted)\b",
     re.I,
 )
+
+
+def share_topics(entries: list[JsonObj]) -> None:
+    """Subjects named apart that start with the same word are one topic for the matcher ("cancellation
+    notice" and "cancellation charges" are both "cancellation"): the words all of them start with."""
+    by_head: dict[str, set[str]] = {}
+    for e in entries:
+        by_head.setdefault(e["topic"].split("_")[0], set()).add(e["topic"])
+    rename: dict[str, str] = {}
+    for topics in by_head.values():
+        if len(topics) < 2:
+            continue
+        common: list[str] = []
+        for words_at in zip(*(t.split("_") for t in topics)):
+            if len(set(words_at)) > 1:
+                break
+            common.append(words_at[0])
+        for t in topics:
+            rename[t] = "_".join(common)
+    for e in entries:
+        e["topic"] = rename.get(e["topic"], e["topic"])
 
 
 def strip_name(question: str, business: str) -> str:

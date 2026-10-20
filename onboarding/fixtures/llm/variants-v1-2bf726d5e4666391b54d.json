@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-2bf726d5e4666391b54d",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:46:03+00:00",
+ "answer": "Describe the job, give us your ZIP code and the time of day that suits you. Photos are optional, but they help us price the job without a visit.",
+ "questions": [
+  "What should I include in my job description?",
+  "Do I need to provide my ZIP code?",
+  "Can I choose a time for the quote?",
+  "Are photos required for a quote?",
+  "How can I help you price the job?",
+  "What time works best for a quote?",
+  "Is a visit necessary for a quote?",
+  "Can I skip photos in my quote request?"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-9f7a5259a2a4db4feab3",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:27:56+00:00",
+ "answer": "Can't find your answer here? Call (503) 555-0147 or email hello@thimbleberry.example.com.",
+ "questions": [
+  "What's the phone number for the bakery?",
+  "How can I get in touch with the bakery?",
+  "Is there an email address for the bakery?",
+  "What if I can't find the information I need?",
+  "Can I call the bakery for assistance?",
+  "What's the best way to contact the bakery?",
+  "Do you have a contact page with phone and email?",
+  "How can I reach out to the bakery directly?"
+ ]
+}

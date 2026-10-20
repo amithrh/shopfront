@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-8c4dec72f36d2b961ca2",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:06+00:00",
+ "answer": "We don't deliver. Every cake is picked up at the bakery.",
+ "questions": [
+  "Do you offer delivery service?",
+  "Can I have my order delivered?",
+  "Is there an option for home delivery?",
+  "Do you ship cakes?",
+  "Can I get my cake sent to me?",
+  "Is delivery available for orders?",
+  "Do you provide doorstep delivery?",
+  "Are there any delivery options available?"
+ ]
+}

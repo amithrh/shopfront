@@ -2,15 +2,15 @@
   "verdict": "CONDITIONAL",
   "profile_id": "thimbleberry",
   "profile_revision": 1,
-  "profile_sha256": "5362529780e47edc0ee6d01e9514f0470e5c0aba8adf347c53fd6d92e29867cb",
+  "profile_sha256": "d791fccada40d83a23c9b4c27db9a4eae1e2bd56ea01d301abbaa885904af6d3",
   "run_id": "run-1-1",
-  "started_at": "2026-10-20T07:51:46Z",
-  "finished_at": "2026-10-20T07:51:48Z",
+  "started_at": "2026-10-20T08:48:02Z",
+  "finished_at": "2026-10-20T08:48:06Z",
   "summary": {
     "cases_total": 121,
-    "passed": 109,
+    "passed": 107,
     "failed": 0,
-    "skipped": 12,
+    "skipped": 14,
     "open_blocking_questions": 5
   },
   "rules": [
@@ -29,9 +29,9 @@
       "title": "Answers are grounded",
       "requirement": "Every fact the assistant states comes from the profile with a source that supports it. Prices are spoken exactly as published.",
       "status": "passed",
-      "passed": 72,
+      "passed": 70,
       "failed": 0,
-      "skipped": 12,
+      "skipped": 14,
       "failures": []
     },
     {
@@ -107,8 +107,8 @@
   ],
   "latency": {
     "calls": 125,
-    "p50_ms": 17.9,
-    "p95_ms": 20.9,
+    "p50_ms": 37.9,
+    "p95_ms": 44.2,
     "threshold_ms": 500.0,
     "status": "passed"
   },
@@ -343,7 +343,7 @@
     {
       "id": "grounded_fact.policy.about-us",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'location' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us#answer_spoken"
@@ -351,7 +351,7 @@
     {
       "id": "grounded_fact.policy.about-us-every-morning",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'products' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us-every-morning#answer_spoken"
@@ -359,7 +359,7 @@
     {
       "id": "grounded_fact.policy.about-us-open-tuesday",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'hours' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us-open-tuesday#answer_spoken"
@@ -367,7 +367,7 @@
     {
       "id": "grounded_fact.policy.about-us-hours-directions",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'hours' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us-hours-directions#answer_spoken"
@@ -383,7 +383,7 @@
     {
       "id": "grounded_fact.policy.custom-cake",
       "check": "grounded_fact",
-      "title": "Policy answer 'notice_minutes' is grounded",
+      "title": "Policy answer 'custom_cakes' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/custom-cake#answer_spoken"
@@ -391,7 +391,7 @@
     {
       "id": "grounded_fact.policy.about-thimbleberry",
       "check": "grounded_fact",
-      "title": "Policy answer 'about_thimbleberry' is grounded",
+      "title": "Policy answer 'history' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-thimbleberry#answer_spoken"
@@ -399,7 +399,7 @@
     {
       "id": "grounded_fact.policy.visit-us",
       "check": "grounded_fact",
-      "title": "Policy answer 'visit_us' is grounded",
+      "title": "Policy answer 'contact' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/visit-us#answer_spoken"
@@ -407,7 +407,7 @@
     {
       "id": "grounded_fact.policy.questions-we-hear-a-lot",
       "check": "grounded_fact",
-      "title": "Policy answer 'questions_we_hear_a_lot' is grounded",
+      "title": "Policy answer 'contact' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/questions-we-hear-a-lot#answer_spoken"
@@ -415,23 +415,39 @@
     {
       "id": "grounded_fact.policy.sizes-and-prices",
       "check": "grounded_fact",
-      "title": "Policy answer 'sizes_and_prices' is grounded",
+      "title": "Policy answer 'cake' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/sizes-and-prices#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.sizes-and-prices-round-cakes",
+      "check": "grounded_fact",
+      "title": "Policy answer 'cake' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/sizes-and-prices-round-cakes#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.sizes-and-prices-every-price",
       "check": "grounded_fact",
-      "title": "Policy answer 'sizes_and_prices' is grounded",
+      "title": "Policy answer 'cake' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/sizes-and-prices-every-price#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.sizes-and-prices-each-tier",
+      "check": "grounded_fact",
+      "title": "Policy answer 'tiered_cakes' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/sizes-and-prices-each-tier#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.cakes-made-for-your-table",
       "check": "grounded_fact",
-      "title": "Policy answer 'custom_orders' is grounded",
+      "title": "Policy answer 'custom_cakes' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/cakes-made-for-your-table#answer_spoken"
@@ -439,7 +455,7 @@
     {
       "id": "grounded_fact.policy.cakes-made-for-your-table-order-least",
       "check": "grounded_fact",
-      "title": "Policy answer 'custom_orders' is grounded",
+      "title": "Policy answer 'order' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/cakes-made-for-your-table-order-least#answer_spoken"
@@ -447,7 +463,7 @@
     {
       "id": "grounded_fact.policy.our-most-ordered-sizes",
       "check": "grounded_fact",
-      "title": "Policy answer 'our_most_ordered_sizes' is grounded",
+      "title": "Policy answer 'custom_cakes' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/our-most-ordered-sizes#answer_spoken"
@@ -455,7 +471,7 @@
     {
       "id": "grounded_fact.policy.come-say-hello",
       "check": "grounded_fact",
-      "title": "Policy answer 'come_say_hello' is grounded",
+      "title": "Policy answer 'parking' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/come-say-hello#answer_spoken"
@@ -463,15 +479,23 @@
     {
       "id": "grounded_fact.policy.about-allergens",
       "check": "grounded_fact",
-      "title": "Policy answer 'about_allergens' is grounded",
+      "title": "Policy answer 'allergens' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/about-allergens#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.about-allergens-each-item",
+      "check": "grounded_fact",
+      "title": "Policy answer 'cross_contamination' is grounded",
+      "status": "skipped",
+      "detail": "answer withheld or handed off",
+      "fact_ref": "info/about-allergens-each-item#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.about-allergens-items-marked",
       "check": "grounded_fact",
-      "title": "Policy answer 'about_allergens' is grounded",
+      "title": "Policy answer 'gluten_free' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/about-allergens-items-marked#answer_spoken"
@@ -479,7 +503,7 @@
     {
       "id": "grounded_fact.policy.breads",
       "check": "grounded_fact",
-      "title": "Policy answer 'reservations' is grounded",
+      "title": "Policy answer 'loaf_hold' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/breads#answer_spoken"
@@ -487,7 +511,7 @@
     {
       "id": "grounded_fact.policy.breads-when-pick",
       "check": "grounded_fact",
-      "title": "Policy answer 'reservations' is grounded",
+      "title": "Policy answer 'payment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/breads-when-pick#answer_spoken"
@@ -503,26 +527,42 @@
     {
       "id": "grounded_fact.policy.notice",
       "check": "grounded_fact",
-      "title": "Policy answer 'notice' is grounded",
+      "title": "Policy answer 'order' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/notice#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.rosa-approves-every-large-order",
+      "check": "grounded_fact",
+      "title": "Policy answer 'large_orders' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/rosa-approves-every-large-order#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.rosa-approves-every-large-order-reviews-each",
+      "check": "grounded_fact",
+      "title": "Policy answer 'reply_time' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/rosa-approves-every-large-order-reviews-each#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.what-if-i-need-a-cake-for-a-big-party",
       "check": "grounded_fact",
-      "title": "Policy answer 'what_if_i_need_a_cake_for_a_big_party' is grounded",
+      "title": "Policy answer 'deposit' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/what-if-i-need-a-cake-for-a-big-party#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.what-if-i-need-a-cake-for-a-big-party-once-approves",
+      "id": "grounded_fact.policy.what-if-i-need-a-cake-for-a-big-party-large-orders",
       "check": "grounded_fact",
-      "title": "Policy answer 'what_if_i_need_a_cake_for_a_big_party' is grounded",
+      "title": "Policy answer 'large_orders' is grounded",
       "status": "passed",
       "detail": "",
-      "fact_ref": "info/what-if-i-need-a-cake-for-a-big-party-once-approves#answer_spoken"
+      "fact_ref": "info/what-if-i-need-a-cake-for-a-big-party-large-orders#answer_spoken"
     },
     {
       "id": "grounded_fact.policy.delivery",
@@ -535,7 +575,7 @@
     {
       "id": "grounded_fact.policy.flavors-fillings-and-frostings",
       "check": "grounded_fact",
-      "title": "Policy answer 'flavors_fillings_and_frostings' is grounded",
+      "title": "Policy answer 'custom_cakes' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/flavors-fillings-and-frostings#answer_spoken"
@@ -543,15 +583,23 @@
     {
       "id": "grounded_fact.policy.gluten-free-cakes",
       "check": "grounded_fact",
-      "title": "Policy answer 'gluten_free_cakes' is grounded",
+      "title": "Policy answer 'gluten_free' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/gluten-free-cakes#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.gluten-free-cakes-cake-tier",
+      "check": "grounded_fact",
+      "title": "Policy answer 'gluten_free' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/gluten-free-cakes-cake-tier#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.gluten-free-cakes-gluten-free",
       "check": "grounded_fact",
-      "title": "Policy answer 'gluten_free_cakes' is grounded",
+      "title": "Policy answer 'gluten_free' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/gluten-free-cakes-gluten-free#answer_spoken"
@@ -559,15 +607,23 @@
     {
       "id": "grounded_fact.policy.gluten-free-cakes-they-made",
       "check": "grounded_fact",
-      "title": "Policy answer 'gluten_free_cakes' is grounded",
+      "title": "Policy answer 'gluten_free' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/gluten-free-cakes-they-made#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.gluten-free-cakes-recommend-them",
+      "check": "grounded_fact",
+      "title": "Policy answer 'gluten_free' is grounded",
+      "status": "skipped",
+      "detail": "answer withheld or handed off",
+      "fact_ref": "info/gluten-free-cakes-recommend-them#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.vegan-cakes",
       "check": "grounded_fact",
-      "title": "Policy answer 'vegan_cakes' is grounded",
+      "title": "Policy answer 'vegan' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/vegan-cakes#answer_spoken"
@@ -575,7 +631,7 @@
     {
       "id": "grounded_fact.policy.vegan-cakes-vegan-cakes",
       "check": "grounded_fact",
-      "title": "Policy answer 'vegan_cakes' is grounded",
+      "title": "Policy answer 'vegan' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/vegan-cakes-vegan-cakes#answer_spoken"
@@ -583,7 +639,7 @@
     {
       "id": "grounded_fact.policy.vegan-cakes-make-cake",
       "check": "grounded_fact",
-      "title": "Policy answer 'vegan_cakes' is grounded",
+      "title": "Policy answer 'gluten_free' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/vegan-cakes-make-cake#answer_spoken"
@@ -591,7 +647,7 @@
     {
       "id": "grounded_fact.policy.nuts",
       "check": "grounded_fact",
-      "title": "Policy answer 'nuts' is grounded",
+      "title": "Policy answer 'nut_free' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/nuts#answer_spoken"
@@ -599,7 +655,7 @@
     {
       "id": "grounded_fact.policy.what-we-dont-make",
       "check": "grounded_fact",
-      "title": "Policy answer 'what_we_dont_make' is grounded",
+      "title": "Policy answer 'decorations' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/what-we-dont-make#answer_spoken"
@@ -607,7 +663,7 @@
     {
       "id": "grounded_fact.policy.how-to-order",
       "check": "grounded_fact",
-      "title": "Policy answer 'how_to_order' is grounded",
+      "title": "Policy answer 'custom_cakes' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/how-to-order#answer_spoken"
@@ -615,7 +671,7 @@
     {
       "id": "grounded_fact.policy.choose-your-cake",
       "check": "grounded_fact",
-      "title": "Policy answer 'choose_your_cake' is grounded",
+      "title": "Policy answer 'custom_cakes' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/choose-your-cake#answer_spoken"
@@ -623,7 +679,7 @@
     {
       "id": "grounded_fact.policy.get-in-touch-at-least-72-hours-ahead",
       "check": "grounded_fact",
-      "title": "Policy answer 'get_in_touch_at_least_72_hours_ahead' is grounded",
+      "title": "Policy answer 'order' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/get-in-touch-at-least-72-hours-ahead#answer_spoken"
@@ -631,7 +687,7 @@
     {
       "id": "grounded_fact.policy.we-confirm-your-order",
       "check": "grounded_fact",
-      "title": "Policy answer 'we_confirm_your_order' is grounded",
+      "title": "Policy answer 'order' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/we-confirm-your-order#answer_spoken"
@@ -639,31 +695,15 @@
     {
       "id": "grounded_fact.policy.pick-it-up",
       "check": "grounded_fact",
-      "title": "Policy answer 'pick_it_up' is grounded",
+      "title": "Policy answer 'pickup' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/pick-it-up#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.rosa-approves-every-large-order",
-      "check": "grounded_fact",
-      "title": "Policy answer 'rosa_approves_every_large_order' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/rosa-approves-every-large-order#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.rosa-approves-every-large-order-requests-sent",
-      "check": "grounded_fact",
-      "title": "Policy answer 'rosa_approves_every_large_order' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/rosa-approves-every-large-order-requests-sent#answer_spoken"
-    },
-    {
       "id": "grounded_fact.policy.a-50-deposit-holds-your-date",
       "check": "grounded_fact",
-      "title": "Policy answer 'deposit_percent' is grounded",
+      "title": "Policy answer 'deposit' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/a-50-deposit-holds-your-date#answer_spoken"
@@ -671,7 +711,7 @@
     {
       "id": "grounded_fact.policy.a-50-deposit-holds-your-date-remaining-balance",
       "check": "grounded_fact",
-      "title": "Policy answer 'deposit_percent' is grounded",
+      "title": "Policy answer 'payment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/a-50-deposit-holds-your-date-remaining-balance#answer_spoken"
@@ -679,7 +719,7 @@
     {
       "id": "grounded_fact.policy.refunds",
       "check": "grounded_fact",
-      "title": "Policy answer 'refund_notice_minutes' is grounded",
+      "title": "Policy answer 'cancellation' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/refunds#answer_spoken"
@@ -687,7 +727,7 @@
     {
       "id": "grounded_fact.policy.refunds-example-inch",
       "check": "grounded_fact",
-      "title": "Policy answer 'refund_notice_minutes' is grounded",
+      "title": "Policy answer 'deposit' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/refunds-example-inch#answer_spoken"
@@ -695,15 +735,23 @@
     {
       "id": "grounded_fact.policy.changes-and-cancellations",
       "check": "grounded_fact",
-      "title": "Policy answer 'change_notice_minutes' is grounded",
+      "title": "Policy answer 'small_orders' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/changes-and-cancellations#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.changes-and-cancellations-change-cancel",
+      "check": "grounded_fact",
+      "title": "Policy answer 'changes' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/changes-and-cancellations-change-cancel#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.changes-and-cancellations-orders-servings",
       "check": "grounded_fact",
-      "title": "Policy answer 'change_notice_minutes' is grounded",
+      "title": "Policy answer 'deposit' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/changes-and-cancellations-orders-servings#answer_spoken"
@@ -711,7 +759,7 @@
     {
       "id": "grounded_fact.policy.ready-to-order",
       "check": "grounded_fact",
-      "title": "Policy answer 'ready_to_order' is grounded",
+      "title": "Policy answer 'contact' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/ready-to-order#answer_spoken"
@@ -719,7 +767,7 @@
     {
       "id": "grounded_fact.policy.from-a-market-table-to-a-corner-shop",
       "check": "grounded_fact",
-      "title": "Policy answer 'from_a_market_table_to_a_corner_shop' is grounded",
+      "title": "Policy answer 'owner' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/from-a-market-table-to-a-corner-shop#answer_spoken"
@@ -727,7 +775,7 @@
     {
       "id": "grounded_fact.policy.from-a-market-table-to-a-corner-shop-after-moving",
       "check": "grounded_fact",
-      "title": "Policy answer 'from_a_market_table_to_a_corner_shop' is grounded",
+      "title": "Policy answer 'owner' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/from-a-market-table-to-a-corner-shop-after-moving#answer_spoken"
@@ -735,7 +783,7 @@
     {
       "id": "grounded_fact.policy.from-a-market-table-to-a-corner-shop-three-summers",
       "check": "grounded_fact",
-      "title": "Policy answer 'from_a_market_table_to_a_corner_shop' is grounded",
+      "title": "Policy answer 'history' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/from-a-market-table-to-a-corner-shop-three-summers#answer_spoken"
@@ -743,7 +791,7 @@
     {
       "id": "grounded_fact.policy.from-a-market-table-to-a-corner-shop-still-small",
       "check": "grounded_fact",
-      "title": "Policy answer 'from_a_market_table_to_a_corner_shop' is grounded",
+      "title": "Policy answer 'business_size' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/from-a-market-table-to-a-corner-shop-still-small#answer_spoken"
@@ -751,7 +799,7 @@
     {
       "id": "grounded_fact.policy.rosa",
       "check": "grounded_fact",
-      "title": "Policy answer 'rosa' is grounded",
+      "title": "Policy answer 'owner' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/rosa#answer_spoken"
@@ -759,7 +807,7 @@
     {
       "id": "grounded_fact.policy.teo",
       "check": "grounded_fact",
-      "title": "Policy answer 'teo' is grounded",
+      "title": "Policy answer 'head_baker' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/teo#answer_spoken"
@@ -767,58 +815,10 @@
     {
       "id": "grounded_fact.policy.maren",
       "check": "grounded_fact",
-      "title": "Policy answer 'maren' is grounded",
+      "title": "Policy answer 'cake' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/maren#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.what-we-bake-with",
-      "check": "grounded_fact",
-      "title": "Policy answer 'waste_reduction' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/what-we-bake-with#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.what-we-bake-with-butter-cultured",
-      "check": "grounded_fact",
-      "title": "Policy answer 'waste_reduction' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/what-we-bake-with-butter-cultured#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.what-we-bake-with-whatever-left",
-      "check": "grounded_fact",
-      "title": "Policy answer 'waste_reduction' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/what-we-bake-with-whatever-left#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.our-week",
-      "check": "grounded_fact",
-      "title": "Policy answer 'our_week' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/our-week#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.opening-hours",
-      "check": "grounded_fact",
-      "title": "Policy answer 'pickup_window' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/opening-hours#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.get-in-touch",
-      "check": "grounded_fact",
-      "title": "Policy answer 'get_in_touch' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/get-in-touch#answer_spoken"
     },
     {
       "id": "grounded_fact.business_info",
@@ -941,14 +941,6 @@
       "fact_ref": "info/cakes-made-for-your-table-order-least#answer_spoken"
     },
     {
-      "id": "disputed_fact_withheld.q-safety-policies.info-about-allergens-items-marked-answer_spoken",
-      "check": "disputed_fact_withheld",
-      "title": "'info/about-allergens-items-marked#answer_spoken' is withheld while q-safety-policies is open",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/about-allergens-items-marked#answer_spoken"
-    },
-    {
       "id": "disputed_fact_withheld.q-safety-policies.info-about-allergens-answer_spoken",
       "check": "disputed_fact_withheld",
       "title": "'info/about-allergens#answer_spoken' is withheld while q-safety-policies is open",
@@ -957,12 +949,36 @@
       "fact_ref": "info/about-allergens#answer_spoken"
     },
     {
+      "id": "disputed_fact_withheld.q-safety-policies.info-about-allergens-each-item-answer_spoken",
+      "check": "disputed_fact_withheld",
+      "title": "'info/about-allergens-each-item#answer_spoken' is withheld while q-safety-policies is open",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/about-allergens-each-item#answer_spoken"
+    },
+    {
+      "id": "disputed_fact_withheld.q-safety-policies.info-about-allergens-items-marked-answer_spoken",
+      "check": "disputed_fact_withheld",
+      "title": "'info/about-allergens-items-marked#answer_spoken' is withheld while q-safety-policies is open",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/about-allergens-items-marked#answer_spoken"
+    },
+    {
       "id": "disputed_fact_withheld.q-safety-policies.info-flavors-fillings-and-frostings-answer_spoken",
       "check": "disputed_fact_withheld",
       "title": "'info/flavors-fillings-and-frostings#answer_spoken' is withheld while q-safety-policies is open",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/flavors-fillings-and-frostings#answer_spoken"
+    },
+    {
+      "id": "disputed_fact_withheld.q-safety-policies.info-gluten-free-cakes-answer_spoken",
+      "check": "disputed_fact_withheld",
+      "title": "'info/gluten-free-cakes#answer_spoken' is withheld while q-safety-policies is open",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/gluten-free-cakes#answer_spoken"
     },
     {
       "id": "disputed_fact_withheld.q-safety-policies.info-gluten-free-cakes-gluten-free-answer_spoken",
@@ -981,20 +997,12 @@
       "fact_ref": "info/gluten-free-cakes-they-made#answer_spoken"
     },
     {
-      "id": "disputed_fact_withheld.q-safety-policies.info-gluten-free-cakes-answer_spoken",
+      "id": "disputed_fact_withheld.q-safety-policies.info-gluten-free-cakes-recommend-them-answer_spoken",
       "check": "disputed_fact_withheld",
-      "title": "'info/gluten-free-cakes#answer_spoken' is withheld while q-safety-policies is open",
+      "title": "'info/gluten-free-cakes-recommend-them#answer_spoken' is withheld while q-safety-policies is open",
       "status": "passed",
       "detail": "",
-      "fact_ref": "info/gluten-free-cakes#answer_spoken"
-    },
-    {
-      "id": "disputed_fact_withheld.q-safety-policies.info-vegan-cakes-vegan-cakes-answer_spoken",
-      "check": "disputed_fact_withheld",
-      "title": "'info/vegan-cakes-vegan-cakes#answer_spoken' is withheld while q-safety-policies is open",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/vegan-cakes-vegan-cakes#answer_spoken"
+      "fact_ref": "info/gluten-free-cakes-recommend-them#answer_spoken"
     },
     {
       "id": "disputed_fact_withheld.q-safety-policies.info-vegan-cakes-answer_spoken",
@@ -1005,28 +1013,20 @@
       "fact_ref": "info/vegan-cakes#answer_spoken"
     },
     {
+      "id": "disputed_fact_withheld.q-safety-policies.info-vegan-cakes-vegan-cakes-answer_spoken",
+      "check": "disputed_fact_withheld",
+      "title": "'info/vegan-cakes-vegan-cakes#answer_spoken' is withheld while q-safety-policies is open",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/vegan-cakes-vegan-cakes#answer_spoken"
+    },
+    {
       "id": "disputed_fact_withheld.q-safety-policies.info-vegan-cakes-make-cake-answer_spoken",
       "check": "disputed_fact_withheld",
       "title": "'info/vegan-cakes-make-cake#answer_spoken' is withheld while q-safety-policies is open",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/vegan-cakes-make-cake#answer_spoken"
-    },
-    {
-      "id": "disputed_fact_withheld.q-safety-policies.info-nuts-answer_spoken",
-      "check": "disputed_fact_withheld",
-      "title": "'info/nuts#answer_spoken' is withheld while q-safety-policies is open",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/nuts#answer_spoken"
-    },
-    {
-      "id": "disputed_fact_withheld.q-safety-policies.info-refunds-answer_spoken",
-      "check": "disputed_fact_withheld",
-      "title": "'info/refunds#answer_spoken' is withheld while q-safety-policies is open",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/refunds#answer_spoken"
     },
     {
       "id": "unknown_handed_off.q1",

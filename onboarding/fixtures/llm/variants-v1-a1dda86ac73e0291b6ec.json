@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-a1dda86ac73e0291b6ec",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "Scheduled work only. We don't run after-hours emergency calls out here, but we'll handle an emergency during regular hours.",
+ "questions": [
+  "Do you offer emergency services after hours?",
+  "Can you handle emergencies during regular hours?",
+  "What if I have an urgent repair need?",
+  "Are you available for scheduled work only?",
+  "Do you provide after-hours support?",
+  "Can you assist with an emergency during business hours?",
+  "What are your service hours?",
+  "Do you have a 24/7 emergency line?"
+ ]
+}

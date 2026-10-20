@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "kettlewick",
   "revision": 1,
-  "updated_at": "2026-10-20T07:51:28Z",
+  "updated_at": "2026-10-20T08:47:41Z",
   "template": {
     "id": "home_services",
     "version": "1.0"
@@ -1464,17 +1464,44 @@
       "title": "Policies and FAQ",
       "entries": [
         {
-          "id": "services-and-price",
-          "topic": "services_and_price",
+          "id": "about-us",
+          "topic": "quote",
           "question_variants": [
-            "how are prices determined",
-            "Services and price",
-            "Typical prices for the jobs we do most.",
-            "What are the usual costs for common jobs?",
-            "Do you provide a written quote before starting work?",
-            "Can the price change after the initial quote?",
-            "Is there a standard pricing for all services?",
-            "How are prices determined for each job?"
+            "What info do I need for a repair quote?",
+            "Do you need photos for the quote?",
+            "Will someone review my repair request?",
+            "Is a quote binding once received?",
+            "Can I get a quote without scheduling?",
+            "What details should I include in my request?",
+            "Do I need to approve the quote?",
+            "Is there a form for quote requests?"
+          ],
+          "answer_spoken": "Tell us what needs fixing, add your ZIP code and a photo or two. Jo reviews every request and replies with a written quote, and nothing is scheduled until you approve it.",
+          "applies_to": [
+            "services/written-quote"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://kettlewick.example.com/index.html",
+                "quote": "Tell us what needs fixing, add your ZIP code and a photo or two. Jo reviews every request and replies with a written quote, and nothing is scheduled until you approve it."
+              }
+            ]
+          }
+        },
+        {
+          "id": "services-and-price",
+          "topic": "pricing",
+          "question_variants": [
+            "How much does a typical repair cost?",
+            "Do you have a price list for common jobs?",
+            "Will the quote I receive be the final price?",
+            "What happens if I want changes after the quote?",
+            "Are there any hidden fees in the quote?",
+            "Can I get an estimate without an in-person visit?",
+            "Is the quote valid for a limited time?",
+            "Do prices vary depending on the job complexity?"
           ],
           "answer_spoken": "Typical prices for the jobs we do most. Every job still gets a written quote before work starts, and that quote is the price you pay unless you approve a change.",
           "applies_to": [
@@ -1495,70 +1522,17 @@
           }
         },
         {
-          "id": "service-area",
-          "topic": "service_area",
-          "question_variants": [
-            "What areas do you serve?",
-            "Service area",
-            "We work across central Denver and a ring of nearby neighborhoods and suburbs.",
-            "Where do you provide your services in Denver?",
-            "Are there specific neighborhoods you don't service?",
-            "Is there a difference in pricing across different areas?",
-            "Do you service suburbs around Denver?",
-            "Are your rates consistent throughout your service area?"
-          ],
-          "answer_spoken": "We work across central Denver and a ring of nearby neighborhoods and suburbs. Our prices are the same everywhere we go.",
-          "applies_to": [
-            "services/travel-fee"
-          ],
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/service-area.html",
-                "quote": "We work across central Denver and a ring of nearby neighborhoods and suburbs. Our prices are the same everywhere we go. Only the travel fee changes."
-              }
-            ]
-          }
-        },
-        {
-          "id": "service-area-only-travel",
-          "topic": "service_area",
-          "question_variants": [
-            "Only the travel fee changes.",
-            "What areas do you serve?",
-            "Service area",
-            "Is there an additional charge for travel?",
-            "How does the travel fee vary?",
-            "Are service prices affected by location?",
-            "What changes when you travel to different areas?",
-            "Is the travel fee the only variable cost?"
-          ],
-          "answer_spoken": "Only the travel fee changes.",
-          "applies_to": [
-            "services/travel-fee"
-          ],
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/service-area.html",
-                "quote": "We work across central Denver and a ring of nearby neighborhoods and suburbs. Our prices are the same everywhere we go. Only the travel fee changes."
-              }
-            ]
-          }
-        },
-        {
           "id": "how-quotes-work",
-          "topic": "how_quotes_work",
+          "topic": "quote",
           "question_variants": [
-            "How quotes work",
-            "We don't book jobs online or schedule anything on the first call.",
-            "Do you schedule jobs before giving a quote?",
-            "Is an initial call required for a quote?",
-            "How are prices communicated before work begins?",
-            "Can I book a job without a quote?",
-            "Is a quote necessary before any work is done?"
+            "Can I book a repair online?",
+            "How do I get a price for a repair?",
+            "Do I need a quote before you start work?",
+            "Can you give me an estimate over the phone?",
+            "What's the first step to getting a repair?",
+            "Do I pay for the quote request?",
+            "How long does it take to get a quote?",
+            "Can I schedule a repair without a quote?"
           ],
           "answer_spoken": "We don't book jobs online or schedule anything on the first call. Every job starts with a quote request, so you know the price before anyone comes to your door.",
           "provenance": {
@@ -1573,15 +1547,16 @@
         },
         {
           "id": "a-denver-repair-company-that-prices-the-job-before-it-starts",
-          "topic": "a_denver_repair_company_that_prices_the",
+          "topic": "company",
           "question_variants": [
-            "A Denver repair company that prices the job before it starts.",
-            "When was established?",
-            "Who founded Home Repair?",
-            "What was the initial setup?",
-            "Why was started?",
-            "Did start with a specific focus on certain customers?",
-            "What was the original service area?"
+            "When did this repair company start?",
+            "Who founded the home repair service?",
+            "Has the company always been in Denver?",
+            "What was the first service offered?",
+            "Why did the company start in Sunnyside?",
+            "Have you been around since 2014?",
+            "What's the company's background?",
+            "Did the company begin with just one van?"
           ],
           "answer_spoken": "Kettlewick started in 2014 with one van, one plumber and a list of Sunnyside neighbors who were tired of surprise invoices.",
           "provenance": {
@@ -1596,16 +1571,16 @@
         },
         {
           "id": "contact-us",
-          "topic": "quote_requests",
+          "topic": "quote",
           "question_variants": [
-            "how do i get a quote",
-            "what do i do in a plumbing emergency",
-            "Contact us",
-            "The best way to get a price is the quote request form on this page.",
-            "How can I get a price for a job?",
-            "Is there an online booking system for jobs?",
-            "What's the best method to request a quote?",
-            "Do you have an emergency contact for plumbing issues?"
+            "How can I get a price for a repair?",
+            "Is there a form to request a quote?",
+            "What's the quickest way to get an estimate?",
+            "Do I fill out anything to get a price?",
+            "Can I get a quote without talking to someone?",
+            "Where do I find the quote request form?",
+            "Is the quote request form on your website?",
+            "What should I do in a plumbing emergency?"
           ],
           "answer_spoken": "The best way to get a price is the quote request form on this page. For a plumbing emergency, call the emergency line instead.",
           "provenance": {
@@ -1620,16 +1595,16 @@
         },
         {
           "id": "diagnostic-visit",
-          "topic": "diagnostic_visit",
+          "topic": "payment",
           "question_variants": [
-            "how much is a diagnostic visit",
-            "Diagnostic visit",
-            "Credited toward the repair if you approve it on the same visit.",
-            "What happens to the diagnostic visit cost if I approve the repair?",
-            "Is the diagnostic fee refundable?",
-            "How is the diagnostic visit fee handled if repair is approved?",
-            "Does the initial visit cost get deducted from the repair bill?",
-            "What is the policy on diagnostic fees for approved repairs?"
+            "Can I use a credit toward future repairs?",
+            "What happens if I approve the repair on-site?",
+            "Is there a credit for on-the-spot approvals?",
+            "How does the on-visit approval work?",
+            "Do I get a discount for immediate approval?",
+            "Is there an incentive for approving repairs quickly?",
+            "What's the benefit of approving repairs right away?",
+            "Does approving on the visit affect the cost?"
           ],
           "answer_spoken": "Credited toward the repair if you approve it on the same visit.",
           "facts": {
@@ -1649,16 +1624,68 @@
           }
         },
         {
-          "id": "how-a-quote-works",
-          "topic": "how_a_quote_works",
+          "id": "what-it-costs",
+          "topic": "pricing",
           "question_variants": [
-            "How a quote works",
-            "We don't book jobs online.",
-            "How do I get a quote for a job?",
-            "Can I book a job online?",
-            "What happens after I send a request?",
-            "Do I decide the final price?",
-            "Is there an online booking system?"
+            "Will I get an estimate before work starts?",
+            "Is the quote the final price I'll pay?",
+            "Do you provide pricing details upfront?",
+            "Can I see the cost before asking for service?",
+            "Is the written quote my total cost?",
+            "Are there any hidden fees in the quote?",
+            "Will the price change after the quote?",
+            "Do I get a written price estimate?"
+          ],
+          "answer_spoken": "Real numbers, so you have a rough idea before you ask. Your written quote is the price you pay.",
+          "applies_to": [
+            "services/written-quote"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://kettlewick.example.com/index.html",
+                "quote": "Real numbers, so you have a rough idea before you ask. Your written quote is the price you pay."
+              }
+            ]
+          }
+        },
+        {
+          "id": "what-we-fix",
+          "topic": "staff",
+          "question_variants": [
+            "Who will fix my plumbing issues?",
+            "Are the workers licensed for water repairs?",
+            "Who handles general handywork jobs?",
+            "Do you have specialized staff for different tasks?",
+            "Are your plumbers certified?",
+            "Who comes for non-emergency repairs?",
+            "Can I request a specific type of worker?",
+            "Do you employ professional handymen?"
+          ],
+          "answer_spoken": "Licensed plumbers for the water side of the house, and two handymen for the jobs that have been on your list since spring.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://kettlewick.example.com/index.html",
+                "quote": "Licensed plumbers for the water side of the house, and two handymen for the jobs that have been on your list since spring."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-a-quote-works",
+          "topic": "quote",
+          "question_variants": [
+            "Can I schedule a repair online?",
+            "How do I start the process for a repair?",
+            "What's the first step to getting a repair quote?",
+            "Do I need to talk to someone for a quote?",
+            "Is there an online form for repair requests?",
+            "How do I get a price for a home repair?",
+            "Can I get an estimate without visiting your website?",
+            "What happens after I send a quote request?"
           ],
           "answer_spoken": "We don't book jobs online. You send a request, we send a price, and you decide.",
           "provenance": {
@@ -1672,17 +1699,41 @@
           }
         },
         {
+          "id": "send-a-request",
+          "topic": "quote",
+          "question_variants": [
+            "How do I get a quote?",
+            "What should I include in my job description?",
+            "Do I need to provide my ZIP code?",
+            "Can I choose a time for the quote?",
+            "Are photos required for a quote?",
+            "How can I help you price the job?",
+            "What time works best for a quote?",
+            "Is a visit necessary for a quote?"
+          ],
+          "answer_spoken": "Describe the job, give us your ZIP code and the time of day that suits you. Photos are optional, but they help us price the job without a visit.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://kettlewick.example.com/index.html",
+                "quote": "Describe the job, give us your ZIP code and the time of day that suits you. Photos are optional, but they help us price the job without a visit."
+              }
+            ]
+          }
+        },
+        {
           "id": "approve-and-schedule",
-          "topic": "approval",
+          "topic": "scheduling",
           "question_variants": [
             "How do I approve a quote?",
-            "Approve and schedule",
-            "Say yes and pick a 2-hour arrival window.",
-            "Can I choose a time for the work?",
-            "What happens after I accept the price?",
-            "Do I need to confirm the price?",
-            "Is work done before I approve?",
-            "How do I schedule the job?"
+            "How do I schedule a repair visit?",
+            "What happens after I agree to the quote?",
+            "Can I choose when the repair will be done?",
+            "Do I need to be home when you start work?",
+            "What are the available time slots for repairs?",
+            "Is there a specific time I should schedule for?",
+            "Do I confirm the repair before you arrive?"
           ],
           "answer_spoken": "Say yes and pick a 2-hour arrival window. Work starts only after you've approved the price.",
           "provenance": {
@@ -1697,15 +1748,16 @@
         },
         {
           "id": "where-we-work-extended-area",
-          "topic": "where_we_work",
+          "topic": "service",
           "question_variants": [
-            "Extended area $35 travel fee per visit.",
-            "What's the travel fee for areas outside the main service zone?",
-            "Is there an extra charge for visits to extended areas?",
-            "How much is the travel fee per visit in extended areas?",
-            "Are travel fees applied to all types of visits?",
-            "What areas are considered 'extended' for travel fee purposes?",
-            "Is the $35 travel fee only for certain types of work?"
+            "Is there a fee for out-of-area visits?",
+            "Do you charge extra for distant locations?",
+            "What's the cost for travel outside your main area?",
+            "Are there additional charges for extended service areas?",
+            "How much is the travel fee per visit?",
+            "Do you have a travel charge for certain areas?",
+            "Is the travel fee the same for all services?",
+            "What areas have a travel fee applied?"
           ],
           "answer_spoken": "Extended area $35 travel fee per visit. Scheduled work only.",
           "applies_to": [
@@ -1723,16 +1775,16 @@
         },
         {
           "id": "plumbing",
-          "topic": "plumbing",
+          "topic": "pricing",
           "question_variants": [
-            "Plumbing",
-            "Done by licensed plumbers.",
-            "Who does your plumbing work?",
-            "What's the hourly rate for plumbing?",
-            "Are your plumbers licensed?",
-            "How much does hourly plumbing cost?",
-            "Do you have licensed plumbers?",
-            "What's the price range for plumbing work?"
+            "How much do plumbers charge per hour?",
+            "What's the rate for hourly plumbing work?",
+            "Are your plumbers licensed and insured?",
+            "What's the price range for hourly repairs?",
+            "Do you have a standard hourly rate?",
+            "How are the costs for plumbing work determined?",
+            "Is there a minimum charge for hourly work?",
+            "What's included in the hourly plumbing rate?"
           ],
           "answer_spoken": "Done by licensed plumbers. Hourly work: $125–$145 per hour.",
           "applies_to": [
@@ -1754,15 +1806,16 @@
         },
         {
           "id": "leak-repair",
-          "topic": "leak_repair",
+          "topic": "services",
           "question_variants": [
-            "Leak repair",
-            "What types of leaks do you fix?",
-            "Do you repair under-sink pipe leaks?",
-            "Can you fix dripping supply lines?",
+            "Can you fix a dripping supply line?",
+            "Do you repair leaking shut-off valves?",
+            "What types of pipe leaks do you fix?",
+            "Can you handle under-sink pipe connections?",
             "Do you work on copper, PEX, or galvanized pipes?",
-            "What leak repairs do you offer?",
-            "Do you fix visible pipe leaks?"
+            "Is a visible pipe leak something you can repair?",
+            "What kind of pipe issues do you specialize in?",
+            "Can you help with a leaking pipe under the sink?"
           ],
           "answer_spoken": "Dripping supply lines, leaking shut-off valves, under-sink connections and visible pipe leaks in copper, PEX or galvanized pipe.",
           "applies_to": [
@@ -1784,15 +1837,16 @@
         },
         {
           "id": "leak-repair-leaks-inside",
-          "topic": "leak_repair",
+          "topic": "services",
           "question_variants": [
-            "Leaks inside a wall or ceiling are tracked down on a $79 diagnostic visit, then quoted.",
-            "How do you find leaks inside walls?",
-            "What's the cost for a diagnostic visit?",
-            "Do you offer leak detection services?",
-            "How much does a leak diagnostic visit cost?",
-            "What happens during a leak diagnostic visit?",
-            "Do you track down hidden leaks?"
+            "How do you find leaks inside walls or ceilings?",
+            "What's the process for diagnosing hidden leaks?",
+            "Do you offer a service for tracking down leaks?",
+            "Is there a fee for diagnosing hidden leaks?",
+            "What happens after you find a hidden leak?",
+            "Can you detect leaks that aren't visible?",
+            "How much does it cost to find a hidden leak?",
+            "What's involved in a diagnostic visit for leaks?"
           ],
           "answer_spoken": "Leaks inside a wall or ceiling are tracked down on a $79 diagnostic visit, then quoted.",
           "applies_to": [
@@ -1814,15 +1868,16 @@
         },
         {
           "id": "leak-repair-open-drywall",
-          "topic": "leak_repair",
+          "topic": "services",
           "question_variants": [
-            "If we open drywall to reach a leak, our handyman team can patch it.",
-            "Do you patch drywall after leak repairs?",
-            "Is drywall patching quoted separately?",
-            "What happens if you need to open drywall?",
-            "Do you fix drywall after accessing a leak?",
-            "Is there an extra charge for drywall patching?",
-            "How is drywall repair handled after a leak fix?"
+            "Will you patch drywall after fixing a leak?",
+            "Is drywall repair included in the leak fix?",
+            "Do you offer handyman services for patching?",
+            "How is the cost for patching drywall determined?",
+            "What happens if you need to open walls for repairs?",
+            "Is there an extra charge for drywall work?",
+            "Can you repair the wall after accessing a leak?",
+            "What's the process for patching after a repair?"
           ],
           "answer_spoken": "If we open drywall to reach a leak, our handyman team can patch it. Patching is quoted separately.",
           "applies_to": [
@@ -1844,16 +1899,16 @@
         },
         {
           "id": "water-heaters",
-          "topic": "water_heaters",
+          "topic": "services",
           "question_variants": [
-            "Water heaters",
-            "Repairs for gas and electric tank water heaters, and replacement with a new 40- or 50-gallon tank.",
-            "Do you repair water heaters?",
-            "What types of water heaters do you fix?",
-            "Can you replace a water heater?",
-            "Do you work on gas and electric water heaters?",
-            "What sizes of water heaters do you replace?",
-            "Do you offer water heater repair services?"
+            "Do you repair gas and electric water heaters?",
+            "Can you replace my old water heater?",
+            "What sizes of water heaters do you install?",
+            "Do you offer water heater repair services?",
+            "Is replacement with a new tank an option?",
+            "What types of water heaters do you work on?",
+            "Can you install a new 40- or 50-gallon tank?",
+            "Do you service both gas and electric heaters?"
           ],
           "answer_spoken": "Repairs for gas and electric tank water heaters, and replacement with a new 40- or 50-gallon tank.",
           "applies_to": [
@@ -1875,15 +1930,16 @@
         },
         {
           "id": "water-heaters-replacements-include",
-          "topic": "water_heaters",
+          "topic": "services",
           "question_variants": [
             "What's included in a water heater replacement?",
-            "Water heaters",
-            "Do you remove the old water heater?",
+            "Do you remove the old tank during replacement?",
             "Is the permit fee included in the replacement cost?",
-            "What does a water heater replacement involve?",
-            "Do you provide an expansion tank if needed?",
-            "Is the City of Denver permit included in the replacement?"
+            "What services are part of a water heater install?",
+            "Do you provide new connectors with a replacement?",
+            "Is an expansion tank included if required by code?",
+            "What does the replacement process involve?",
+            "Do you handle the City of Denver permit for replacements?"
           ],
           "answer_spoken": "Replacements include haul-away of the old tank, new connectors, an expansion tank if code requires one, and the City of Denver permit. We pull the permit, and the permit fee is included.",
           "applies_to": [
@@ -1905,15 +1961,16 @@
         },
         {
           "id": "water-heaters-year-labor",
-          "topic": "water_heaters",
+          "topic": "warranty",
           "question_variants": [
-            "2-year labor warranty on water heater installs.",
-            "What's your warranty on water heater installs?",
-            "Do you offer a warranty on labor for water heaters?",
-            "What's the manufacturer warranty on installed tanks?",
-            "How long is the labor warranty for water heaters?",
-            "Is there a warranty on water heater installations?",
-            "What warranties come with a new water heater install?"
+            "How long is the warranty on water heater installs?",
+            "What's the labor warranty for water heater replacements?",
+            "Do the tanks you install come with a warranty?",
+            "Is there a manufacturer warranty on installed tanks?",
+            "What coverage does the 2-year labor warranty provide?",
+            "How long is the warranty on the tanks you install?",
+            "Are there any warranties on your repair services?",
+            "What does the 6-year manufacturer warranty cover?"
           ],
           "answer_spoken": "2-year labor warranty on water heater installs. The tanks we install carry a 6-year manufacturer warranty.",
           "applies_to": [
@@ -1935,13 +1992,16 @@
         },
         {
           "id": "approve-the-quote-and-pick-an-arrival-window",
-          "topic": "approve_the_quote_and_pick_an_arrival_wi",
+          "topic": "scheduling",
           "question_variants": [
-            "Approve the quote and pick an arrival window",
-            "Can I choose a specific time for the job?",
-            "What are the available arrival windows?",
-            "How do I reply to confirm the quote?",
-            "What are the scheduling options for approved quotes?"
+            "Do I need to make a deposit for scheduling?",
+            "How do I schedule a repair visit?",
+            "What are the available time slots for repairs?",
+            "Can I choose the day and time for the repair?",
+            "What happens after I approve the repair quote?",
+            "Are there different scheduling options for large jobs?",
+            "Do you offer weekend repair appointments?",
+            "What's the process for confirming a repair visit?"
           ],
           "answer_spoken": "Reply to approve, and we'll offer 2-hour arrival windows that fit the time you asked for: 8–10 am, 10 am–12 pm, 12–2 pm or 2–4 pm on weekdays, and 8–10 am on Saturdays. Jobs quoted over $1,500 need a 30% deposit when you schedule.",
           "provenance": {
@@ -1960,15 +2020,16 @@
         },
         {
           "id": "water-heaters-water-sure",
-          "topic": "water_heaters",
+          "topic": "services",
           "question_variants": [
             "No hot water and not sure why?",
             "What should I do if I have no hot water?",
-            "Do you offer diagnostic visits for water heater issues?",
-            "How much does a water heater diagnostic visit cost?",
-            "What's the first step if my water heater isn't working?",
-            "Can you diagnose water heater problems?",
-            "Is there a fee for checking water heater issues?"
+            "Can you diagnose why I have no hot water?",
+            "Is there a service for checking hot water issues?",
+            "How much does a diagnostic visit for hot water cost?",
+            "What's the first step if my water isn't heating?",
+            "Do you offer a visit to find out why no hot water?",
+            "What happens during a diagnostic visit for water heaters?"
           ],
           "answer_spoken": "No hot water and not sure why? Start with a $79 diagnostic visit.",
           "applies_to": [
@@ -1990,16 +2051,16 @@
         },
         {
           "id": "drain-cleaning",
-          "topic": "drain_cleaning",
+          "topic": "services",
           "question_variants": [
-            "Drain cleaning",
-            "Slow or stopped sinks, tubs, showers and toilets, and main sewer line clogs.",
-            "What drain issues do you fix?",
-            "Do you clear clogged toilets and showers?",
-            "How do you clean drains?",
+            "Can you unclog slow or stopped drains?",
+            "Do you clear main sewer line clogs?",
             "What methods do you use for drain cleaning?",
-            "Do you fix main sewer line clogs?",
-            "Can you unclog sinks and tubs?"
+            "Are chemical drain cleaners used in your services?",
+            "Can you fix clogged sinks, tubs, or toilets?",
+            "What equipment do you use for drain repairs?",
+            "Do you offer services for drain issues?",
+            "How do you approach drain cleaning and repairs?"
           ],
           "answer_spoken": "Slow or stopped sinks, tubs, showers and toilets, and main sewer line clogs. We clear drains with cable augers and a main-line cable machine, never with chemical drain cleaners.",
           "applies_to": [
@@ -2021,15 +2082,16 @@
         },
         {
           "id": "drain-cleaning-main-line",
-          "topic": "drain_cleaning",
+          "topic": "services",
           "question_variants": [
-            "Main line cleaning needs an accessible cleanout.",
-            "What's needed for main line cleaning?",
-            "Do you require a cleanout for main line cleaning?",
+            "What if my home doesn't have a main line cleanout?",
+            "Do you need access to a cleanout for main line cleaning?",
             "What happens if there's no accessible cleanout?",
-            "Is a diagnostic visit needed for main line cleaning?",
-            "Do you quote main line cleaning after a visit?",
-            "What's the process for main line cleaning?"
+            "Is a diagnostic visit required without a cleanout?",
+            "How do you quote main line cleaning without a cleanout?",
+            "What's the process for main line cleaning in my home?",
+            "Do you offer services for homes without a cleanout?",
+            "What alternatives are there if I lack a main line cleanout?"
           ],
           "answer_spoken": "Main line cleaning needs an accessible cleanout. Without one, we quote the job after a diagnostic visit.",
           "applies_to": [
@@ -2051,15 +2113,16 @@
         },
         {
           "id": "drain-cleaning-excavate-replace",
-          "topic": "drain_cleaning",
+          "topic": "services",
           "question_variants": [
-            "We don't excavate or replace sewer lines, and we don't offer hydro-jetting.",
-            "Do you replace or excavate sewer lines?",
-            "What do you do if a broken line is found?",
-            "Do you offer hydro-jetting services?",
-            "What happens if the camera shows a broken sewer line?",
-            "Do you provide videos of sewer line issues?",
-            "What services don't you offer for sewer lines?"
+            "Do you replace sewer lines?",
+            "Can you hydro-jet my pipes?",
+            "What if my sewer line is broken?",
+            "Do you provide videos of sewer inspections?",
+            "Can you recommend an excavation contractor?",
+            "Do you offer sewer line services?",
+            "What services don't you provide for sewers?",
+            "Is sewer line replacement within your services?"
           ],
           "answer_spoken": "We don't excavate or replace sewer lines, and we don't offer hydro-jetting. If the camera shows a broken line, you get the video to share with an excavation contractor.",
           "applies_to": [
@@ -2081,16 +2144,16 @@
         },
         {
           "id": "faucet-and-fixture-installs",
-          "topic": "faucet_and_fixture_installs",
+          "topic": "services",
           "question_variants": [
-            "Faucet and fixture installs",
-            "New faucets, toilets, garbage disposals and shower valve cartridges.",
-            "What fixtures do you install?",
-            "Can you install new faucets and toilets?",
-            "Do you supply the fixtures for installation?",
-            "What types of fixtures do you install?",
-            "Can you install garbage disposals and shower valve cartridges?",
-            "Do you offer faucet and fixture installation services?"
+            "Can you install new faucets?",
+            "Do you replace toilets?",
+            "Can I buy my own garbage disposal?",
+            "Do you supply shower valve cartridges?",
+            "Can you provide the fixtures I need?",
+            "What fixtures can you install?",
+            "Do you offer supply options for fixtures?",
+            "Can I choose my own fixtures for installation?"
           ],
           "answer_spoken": "New faucets, toilets, garbage disposals and shower valve cartridges. Buy the fixture yourself or have us supply it.",
           "applies_to": [
@@ -2112,15 +2175,16 @@
         },
         {
           "id": "faucet-and-fixture-installs-fixtures-supply",
-          "topic": "faucet_and_fixture_installs",
+          "topic": "pricing",
           "question_variants": [
-            "Fixtures we supply are billed at our cost plus 15%.",
-            "How are supplied fixtures billed?",
+            "How are supplied fixtures priced?",
             "What's the markup on supplied fixtures?",
-            "How much do you charge for supplied fixtures?",
-            "Is there an extra charge for fixtures you supply?",
-            "What's the cost for fixtures provided by you?",
-            "How is the price calculated for supplied fixtures?"
+            "Are supplied fixtures priced above cost?",
+            "How is the cost of supplied fixtures calculated?",
+            "Do you add a percentage to supplied fixtures?",
+            "What's the pricing model for supplied fixtures?",
+            "Are supplied fixtures billed at a higher rate?",
+            "How much more do supplied fixtures cost?"
           ],
           "answer_spoken": "Fixtures we supply are billed at our cost plus 15%.",
           "applies_to": [
@@ -2142,15 +2206,16 @@
         },
         {
           "id": "faucet-and-fixture-installs-2",
-          "topic": "faucet_and_fixture_installs",
+          "topic": "warranty",
           "question_variants": [
-            "Fixtures you supply are covered by our labor warranty, but we can't warranty the part itself.",
-            "What's covered by your labor warranty?",
-            "Do you warranty customer-supplied fixtures?",
-            "What can't you warranty on installed fixtures?",
+            "Is my supplied fixture covered by warranty?",
+            "Do you warranty parts I provide?",
+            "What's covered under your labor warranty?",
+            "Can you warranty the fixture I supply?",
+            "Does your warranty include supplied parts?",
+            "What parts are excluded from your warranty?",
             "Is the part itself covered by your warranty?",
-            "What does your labor warranty include?",
-            "Are customer-supplied parts covered by your warranty?"
+            "Do you offer any warranty on supplied fixtures?"
           ],
           "answer_spoken": "Fixtures you supply are covered by our labor warranty, but we can't warranty the part itself.",
           "applies_to": [
@@ -2172,16 +2237,16 @@
         },
         {
           "id": "handyman",
-          "topic": "handyman",
+          "topic": "pricing",
           "question_variants": [
-            "Handyman",
-            "Hourly work: $85–$105 per hour.",
-            "What's your hourly rate for handyman work?",
-            "Do you offer handyman services?",
-            "What times are handyman services available?",
-            "How much does handyman work cost per hour?",
-            "Are handyman services scheduled during regular hours?",
-            "What's the price range for hourly handyman work?"
+            "What's your hourly rate for work?",
+            "How much do you charge per hour?",
+            "Is there a range in your hourly pricing?",
+            "Do you have different rates for hourly work?",
+            "What are the hours for scheduled work?",
+            "Is there an hourly charge for services?",
+            "What's the cost for hourly handyman services?",
+            "Are there specific hours for scheduled work?"
           ],
           "answer_spoken": "Hourly work: $85–$105 per hour. Scheduled during regular hours only.",
           "applies_to": [
@@ -2201,16 +2266,16 @@
         },
         {
           "id": "drywall-patching",
-          "topic": "drywall_patching",
+          "topic": "services",
           "question_variants": [
-            "Drywall patching",
-            "Nail pops, doorknob holes, anchor holes, water-damage cutouts and the hole the plumber left.",
-            "What types of drywall issues do you fix?",
-            "Can you patch nail pops and doorknob holes?",
-            "Do you match textures like orange-peel and knockdown?",
-            "What drywall problems do you address?",
-            "Can you fix water-damage cutouts in drywall?",
-            "Do you patch holes left by plumbers?"
+            "Can you fix nail pops?",
+            "Do you repair doorknob holes?",
+            "Can you patch anchor holes?",
+            "Do you fix water-damage cutouts?",
+            "Can you match orange-peel textures?",
+            "Do you repair holes left by plumbers?",
+            "What types of patches do you offer?",
+            "Can you match knockdown textures?"
           ],
           "answer_spoken": "Nail pops, doorknob holes, anchor holes, water-damage cutouts and the hole the plumber left. We match orange-peel and knockdown textures.",
           "applies_to": [
@@ -2229,18 +2294,19 @@
           }
         },
         {
-          "id": "drywall-patching-medium-patches",
-          "topic": "drywall_patching",
+          "id": "drywall-patching-prime-every",
+          "topic": "services",
           "question_variants": [
-            "Medium patches take two visits: one to patch, and one to texture after it dries.",
-            "How many visits are needed for medium patches?",
-            "Do you return to texture after patching?",
-            "What's involved in medium drywall patching?",
-            "Is there a follow-up visit for texturing?",
-            "How is the patching process handled?",
-            "Do you texture after the initial patch?"
+            "Is priming included in patch services?",
+            "Do you offer paint touch-up services?",
+            "What if I have leftover paint?",
+            "Is paint touch-up part of the service?",
+            "Do you prime every patch you do?",
+            "What if I don't have leftover paint?",
+            "Are there any additional charges for priming?",
+            "Is paint touch-up service conditional?"
           ],
-          "answer_spoken": "Medium patches take two visits: one to patch, and one to texture after it dries.",
+          "answer_spoken": "We prime every patch. Paint touch-up is included if you have leftover paint.",
           "applies_to": [
             "services/drywall-patching",
             "services/furniture-assembly",
@@ -2251,22 +2317,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/services.html",
-                "quote": "Medium patches take two visits: one to patch, and one to texture after it dries."
+                "quote": "We prime every patch. Paint touch-up is included if you have leftover paint."
               }
             ]
           }
         },
         {
           "id": "drywall-patching-homes-built",
-          "topic": "drywall_patching",
+          "topic": "lead_paint",
           "question_variants": [
-            "Homes built before 1978: we follow lead-safe work practices as an RRP-certified firm.",
-            "Do you follow special practices for older homes?",
+            "Do you handle lead paint safely?",
             "Are you certified for lead-safe work?",
-            "What practices do you follow for pre-1978 homes?",
-            "Do you have RRP certification?",
-            "How do you handle lead-safe work?",
-            "Are there special procedures for homes built before 1978?"
+            "What if my home was built before 1978?",
+            "How do you deal with lead paint?",
+            "Are lead-safe practices followed?",
+            "What certifications do you have for lead work?",
+            "Do you follow specific practices for older homes?",
+            "Is lead paint a concern for your services?"
           ],
           "answer_spoken": "Homes built before 1978: we follow lead-safe work practices as an RRP-certified firm.",
           "applies_to": [
@@ -2286,15 +2353,16 @@
         },
         {
           "id": "drywall-patching-suspect-asbestos",
-          "topic": "drywall_patching",
+          "topic": "asbestos",
           "question_variants": [
-            "If we suspect asbestos, for example in a popcorn ceiling, we stop and refer you to a licensed abatement contractor.",
-            "What do you do if asbestos is suspected?",
+            "What if you find asbestos?",
             "Do you handle asbestos removal?",
+            "What's your policy on suspected asbestos?",
             "Who do you refer for asbestos issues?",
-            "What happens if you find asbestos during a job?",
+            "Are you licensed for asbestos work?",
+            "What if there's asbestos in my ceiling?",
             "Do you stop work if asbestos is suspected?",
-            "Who should I contact for asbestos removal?"
+            "Who should I contact for asbestos concerns?"
           ],
           "answer_spoken": "If we suspect asbestos, for example in a popcorn ceiling, we stop and refer you to a licensed abatement contractor.",
           "applies_to": [
@@ -2314,16 +2382,16 @@
         },
         {
           "id": "furniture-assembly",
-          "topic": "furniture_assembly",
+          "topic": "services",
           "question_variants": [
-            "Furniture assembly",
-            "Flat-pack furniture you've already bought: beds, dressers, desks, shelving, wardrobes and closet systems.",
-            "What types of furniture do you assemble?",
             "Can you assemble flat-pack furniture?",
-            "Do you assemble beds and dressers?",
-            "What furniture assembly services do you offer?",
-            "Can you put together wardrobes and closet systems?",
-            "Do you assemble shelving and desks?"
+            "Do you put together beds and dressers?",
+            "What types of flat-pack furniture do you assemble?",
+            "Can you build wardrobes and closet systems?",
+            "Do you offer furniture assembly services?",
+            "What if I've already bought flat-pack furniture?",
+            "Are desks and shelving included in assembly services?",
+            "Can you help with furniture I've purchased?"
           ],
           "answer_spoken": "Flat-pack furniture you've already bought: beds, dressers, desks, shelving, wardrobes and closet systems.",
           "applies_to": [
@@ -2343,15 +2411,16 @@
         },
         {
           "id": "furniture-assembly-break-down",
-          "topic": "furniture_assembly",
+          "topic": "services",
           "question_variants": [
-            "We break down the boxes and leave them for your recycling, or haul the packaging away for $25.",
-            "Do you recycle packaging after furniture assembly?",
-            "Can you remove packaging for a fee after assembly?",
-            "What's the cost for hauling away packaging post-assembly?",
-            "Is there an extra charge for disposing of boxes?",
-            "Do you offer recycling services for assembly debris?",
-            "Can I pay you to take away assembly waste?"
+            "Do you dispose of packaging after assembly?",
+            "Can you haul away packaging for a fee?",
+            "What's the cost to remove packaging?",
+            "Do you offer recycling services for boxes?",
+            "Is there a charge for packaging removal?",
+            "What if I want you to recycle the boxes?",
+            "Do you break down boxes after assembly?",
+            "How much to haul away furniture packaging?"
           ],
           "answer_spoken": "We break down the boxes and leave them for your recycling, or haul the packaging away for $25.",
           "applies_to": [
@@ -2370,73 +2439,17 @@
           }
         },
         {
-          "id": "furniture-assembly-recommend-wall",
-          "topic": "furniture_assembly",
-          "question_variants": [
-            "We recommend wall anchoring for dressers and bookcases in any home with kids.",
-            "Should I anchor dressers and bookcases if I have kids?",
-            "Is wall anchoring recommended for furniture in homes with children?",
-            "Do you suggest securing dressers in homes with kids?",
-            "Is it necessary to anchor bookcases in child-friendly homes?",
-            "What's your advice on securing furniture in homes with children?",
-            "Do you recommend extra safety measures for furniture in kid-friendly homes?"
-          ],
-          "answer_spoken": "We recommend wall anchoring for dressers and bookcases in any home with kids.",
-          "applies_to": [
-            "services/drywall-patching",
-            "services/furniture-assembly",
-            "services/tv-mounting"
-          ],
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/services.html",
-                "quote": "We recommend wall anchoring for dressers and bookcases in any home with kids."
-              }
-            ]
-          }
-        },
-        {
-          "id": "tv-mounting",
-          "topic": "tv_mounting",
-          "question_variants": [
-            "TV mounting",
-            "Wall-mounted TVs, level and centered, with cables tidied or hidden inside the wall.",
-            "Will my TV be level and centered after mounting?",
-            "Can you hide TV cables when mounting?",
-            "Do you tidy or conceal cables during TV mounting?",
-            "Will my wall-mounted TV look neat and organized?",
-            "Can you mount my TV and hide the wires?",
-            "Is cable management included in your TV mounting service?"
-          ],
-          "answer_spoken": "Wall-mounted TVs, level and centered, with cables tidied or hidden inside the wall.",
-          "applies_to": [
-            "services/drywall-patching",
-            "services/furniture-assembly",
-            "services/tv-mounting"
-          ],
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/services.html",
-                "quote": "Wall-mounted TVs, level and centered, with cables tidied or hidden inside the wall."
-              }
-            ]
-          }
-        },
-        {
           "id": "tv-mounting-plaster-lath",
-          "topic": "tv_mounting",
+          "topic": "services",
           "question_variants": [
-            "Plaster-and-lath walls, common in Denver homes built before 1950, are quoted from photos.",
-            "Can you quote TV mounting for old Denver homes?",
-            "Do you need photos to quote TV mounting in older homes?",
-            "Is TV mounting in pre-1950 Denver homes quoted from photos?",
-            "Can you provide a quote for TV mounting in vintage homes?",
-            "Do you assess plaster-and-lath walls for TV mounting quotes?",
-            "Is a photo quote necessary for TV mounting in historic homes?"
+            "Do you work on plaster-and-lath walls?",
+            "What if my home was built before 1950?",
+            "Can you quote work from photos?",
+            "Are older Denver homes within your expertise?",
+            "Do you handle unique wall types?",
+            "What if my walls are plaster-and-lath?",
+            "Can you provide a quote based on photos?",
+            "Are specialized wall types quoted differently?"
           ],
           "answer_spoken": "Plaster-and-lath walls, common in Denver homes built before 1950, are quoted from photos.",
           "applies_to": [
@@ -2456,15 +2469,16 @@
         },
         {
           "id": "tv-mounting-mount-ceilings",
-          "topic": "tv_mounting",
+          "topic": "services",
           "question_variants": [
-            "We mount TVs up to 85 in.",
-            "What's the maximum TV size you can mount?",
-            "Do you mount TVs larger than 85 inches?",
-            "Can you mount a TV on the ceiling?",
-            "Is there a size limit for TVs you mount?",
-            "Do you offer ceiling TV mounting services?",
-            "What's the largest TV size you're equipped to mount?"
+            "What's the max TV size you mount?",
+            "Do you mount TVs on ceilings?",
+            "Can you mount an 85-inch TV?",
+            "What if I want a ceiling-mounted TV?",
+            "Are there size limits for TV mounting?",
+            "Do you have restrictions on TV mounting?",
+            "What if I have a very large TV?",
+            "Are ceiling mounts within your services?"
           ],
           "answer_spoken": "We mount TVs up to 85 in. We don't mount on ceilings.",
           "applies_to": [
@@ -2484,15 +2498,16 @@
         },
         {
           "id": "tv-mounting-wall-uses",
-          "topic": "tv_mounting",
+          "topic": "services",
           "question_variants": [
-            "The in-wall kit uses a code-approved power bridge, so you don't need an electrician.",
-            "Do you need an electrician for in-wall TV kits?",
-            "Is an electrician required for your in-wall TV mounting?",
-            "Do you use a code-approved power bridge for in-wall kits?",
-            "Can you install in-wall TV kits without an electrician?",
-            "Do you handle electrical work for TV mounting?",
-            "Is electrician service included in your in-wall TV mounting?"
+            "Do you use a code-approved power bridge?",
+            "What if I need new outlets or circuits?",
+            "Are electricians needed for your services?",
+            "What's included in your in-wall kit?",
+            "Do you add new electrical components?",
+            "What if I need electrical work done?",
+            "Are there any electrical requirements for your services?",
+            "What's the process for in-wall installations?"
           ],
           "answer_spoken": "The in-wall kit uses a code-approved power bridge, so you don't need an electrician. We don't add new outlets or circuits.",
           "applies_to": [
@@ -2512,16 +2527,16 @@
         },
         {
           "id": "rates-and-fees-after-hours",
-          "topic": "after_hours_emergencies",
+          "topic": "emergencies",
           "question_variants": [
-            "how are after-hours emergencies billed",
-            "After-hours emergencies.",
-            "What's the cost for an after-hours emergency visit?",
-            "How much is the after-hours surcharge for emergencies?",
-            "Is there an extra fee for emergency visits outside regular hours?",
-            "What's included in the $79 diagnostic visit for emergencies?",
-            "Do you charge more for emergencies outside your regular hours?",
-            "How are after-hours emergencies billed in addition to the diagnostic visit?"
+            "What's the cost for after-hours emergencies?",
+            "Do you charge extra for night visits?",
+            "What's included in the emergency visit fee?",
+            "Are there surcharges for after-hours work?",
+            "How are emergency visits billed?",
+            "What if I have an issue outside regular hours?",
+            "Is there a diagnostic fee for emergencies?",
+            "What's the process for after-hours emergencies?"
           ],
           "answer_spoken": "After-hours emergencies. An emergency visit outside regular hours is billed as the $79 diagnostic visit plus the after-hours surcharge, plus labor and materials.",
           "facts": {
@@ -2535,22 +2550,22 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/services.html",
-                "quote": "After-hours emergencies. An emergency visit outside regular hours is billed as the $79 diagnostic visit plus the after-hours surcharge, plus labor and materials. Emergencies are active leaks you can't stop, burst pipes, no water to the house, sewage backups and leaking water heaters. Handyman work is never done after hours."
+                "quote": "After-hours emergencies. An emergency visit outside regular hours is billed as the $79 diagnostic visit plus the after-hours surcharge, plus labor and materials."
               }
             ]
           }
         },
         {
           "id": "rates-and-fees-emergencies-active",
-          "topic": "after_hours_emergencies",
+          "topic": "emergencies",
           "question_variants": [
-            "What qualifies as an emergency for after-hours service?",
-            "how are after-hours emergencies billed",
-            "Do you handle handyman work after hours?",
-            "What types of emergencies do you respond to outside regular hours?",
-            "Is burst pipe repair considered an after-hours emergency?",
-            "Do you offer after-hours service for sewage backups?",
-            "Are leaking water heaters considered emergencies for after-hours service?"
+            "What constitutes an emergency for your services?",
+            "Do you handle burst pipes as emergencies?",
+            "What if I have a sewage backup?",
+            "Are leaking water heaters considered emergencies?",
+            "Do you work on handyman tasks after hours?",
+            "Are there specific emergencies you respond to?",
+            "What services are available during emergencies?"
           ],
           "answer_spoken": "Emergencies are active leaks you can't stop, burst pipes, no water to the house, sewage backups and leaking water heaters. Handyman work is never done after hours.",
           "provenance": {
@@ -2558,23 +2573,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/services.html",
-                "quote": "After-hours emergencies. An emergency visit outside regular hours is billed as the $79 diagnostic visit plus the after-hours surcharge, plus labor and materials. Emergencies are active leaks you can't stop, burst pipes, no water to the house, sewage backups and leaking water heaters. Handyman work is never done after hours."
+                "quote": "Emergencies are active leaks you can't stop, burst pipes, no water to the house, sewage backups and leaking water heaters. Handyman work is never done after hours."
               }
             ]
           }
         },
         {
           "id": "what-we-dont-do",
-          "topic": "what_we_dont_do",
+          "topic": "services",
           "question_variants": [
-            "What we don't do",
-            "We'd rather point you to the right specialist than take a job we can't do well.",
-            "Will you refer me to a specialist if the job is beyond your scope?",
-            "Do you accept jobs you're not qualified to do?",
-            "Can you perform all types of home repair services?",
-            "Will you take on a job you're not skilled in?",
-            "Do you have limits on the types of repairs you undertake?",
-            "Will you direct me to the right professional for complex jobs?"
+            "What if you can't do a job?",
+            "Do you refer to specialists when needed?",
+            "What if the job is beyond your expertise?",
+            "Are you willing to recommend other professionals?",
+            "Do you only take jobs you can do well?",
+            "What if I need a specialist for my issue?",
+            "Are there jobs you won't undertake?",
+            "Do you prioritize quality over quantity?"
           ],
           "answer_spoken": "We'd rather point you to the right specialist than take a job we can't do well.",
           "provenance": {
@@ -2589,15 +2604,16 @@
         },
         {
           "id": "what-we-dont-do-sewer-line",
-          "topic": "what_we_dont_do",
+          "topic": "services",
           "question_variants": [
-            "Do you handle sewer line replacement or excavation?",
-            "What we don't do",
-            "Can you install new gas lines in my home?",
-            "Do you work on electrical panels or new circuits?",
-            "Can you service my furnace, boiler, or air conditioning?",
-            "Do you offer roofing, gutter, or septic system services?",
-            "Can you repair or install sprinkler and irrigation systems?"
+            "What plumbing services do you offer?",
+            "Can you replace my sewer line?",
+            "Do you install new gas lines?",
+            "Can you fix my electrical panel?",
+            "Do you repair furnaces and boilers?",
+            "Can you fix my roofing and gutters?",
+            "Do you work on septic systems?",
+            "Can you install a sprinkler system?"
           ],
           "answer_spoken": "Sewer line excavation or replacement; Hydro-jetting; New gas lines (we connect gas water heaters only); Electrical panels, new circuits or new outlets; Furnaces, boilers and air conditioning; Roofing and gutters; Septic systems; Sprinkler",
           "provenance": {
@@ -2648,15 +2664,16 @@
         },
         {
           "id": "what-we-dont-do-irrigation-systems",
-          "topic": "what_we_dont_do",
+          "topic": "services",
           "question_variants": [
-            "and irrigation systems; Appliance repair; Asbestos or mold removal.",
-            "Do you repair household appliances?",
-            "Can you remove asbestos or mold from my home?",
-            "Is appliance repair part of your services?",
-            "Do you offer services for asbestos or mold removal?",
-            "Can you handle repairs for small kitchen appliances?",
-            "Is mold remediation included in your service offerings?"
+            "What appliance repair services do you offer?",
+            "Can you remove asbestos or mold?",
+            "Do you fix washing machines?",
+            "Can you repair my refrigerator?",
+            "Do you handle irrigation system repairs?",
+            "Can you remove hazardous materials?",
+            "Do you offer specialized repair services?",
+            "What if I need urgent appliance repair?"
           ],
           "answer_spoken": "and irrigation systems; Appliance repair; Asbestos or mold removal.",
           "provenance": {
@@ -2707,15 +2724,16 @@
         },
         {
           "id": "outside-our-area-take-jobs",
-          "topic": "outside_our_area",
+          "topic": "service",
           "question_variants": [
-            "Outside our area",
-            "Do you service Arvada?",
-            "Are you available in Aurora for repairs?",
-            "Can you help with home repairs in Westminster?",
-            "Do you offer services in Englewood?",
-            "Are you operational in Centennial for home repairs?",
-            "Can you recommend a contractor for Boulder County?"
+            "Do you service Arvada and Aurora?",
+            "Can you recommend a contractor for Boulder County?",
+            "Do you work in Westminster and Englewood?",
+            "Are you available in Centennial and Littleton?",
+            "Do you cover Thornton and Northglenn?",
+            "Can you handle jobs in Golden?",
+            "What areas do you not service?",
+            "Can you suggest a trusted contractor nearby?"
           ],
           "answer_spoken": "We don't take jobs in these areas, or anywhere in Boulder County, but we're glad to pass along a licensed contractor we trust: Arvada; Aurora; Westminster; Englewood; Centennial, Greenwood Village; Littleton; Thornton, Northglenn; Golden.",
           "provenance": {
@@ -2762,16 +2780,16 @@
         },
         {
           "id": "extended-area",
-          "topic": "emergency_service",
+          "topic": "service",
           "question_variants": [
             "Do you provide after-hours emergency service in the extended area?",
-            "Extended area",
-            "Scheduled work only.",
-            "Do you offer after-hours emergency service in extended areas?",
-            "Can you handle emergencies during regular hours in extended areas?",
-            "Is scheduled work available in areas outside your main service zone?",
-            "Do you provide services in extended areas only by appointment?",
-            "Can you assist with emergencies in extended areas during daytime?"
+            "Do you offer emergency services after hours?",
+            "Can you handle emergencies during regular hours?",
+            "What if I have an urgent repair need?",
+            "Are you available for scheduled work only?",
+            "Do you provide after-hours support?",
+            "Can you assist with an emergency during business hours?",
+            "What are your service hours?"
           ],
           "answer_spoken": "Scheduled work only. We don't run after-hours emergency calls out here, but we'll handle an emergency during regular hours.",
           "provenance": {
@@ -2786,16 +2804,16 @@
         },
         {
           "id": "service-area-code-listed",
-          "topic": "service_area",
+          "topic": "service",
           "question_variants": [
             "ZIP code not listed?",
-            "Service area",
-            "Can I request a quote if my ZIP code isn't listed?",
-            "Will Jo confirm service availability for unlisted ZIP codes?",
-            "Should I send a quote request even if my ZIP code isn't listed?",
-            "Can you service areas with ZIP codes not on your list?",
-            "Is it possible to get a quote for service in an unlisted ZIP code?",
-            "Will you consider providing service in areas with unlisted ZIP codes?"
+            "My ZIP code isn't listed, can you still help?",
+            "What if my area isn't in your service list?",
+            "Can you send a quote request for an unlisted ZIP code?",
+            "Will Jo tell me if you can service my area?",
+            "Do you cover areas outside your listed ZIP codes?",
+            "What if I'm in a different ZIP code?",
+            "Can you provide service in an unlisted area?"
           ],
           "answer_spoken": "ZIP code not listed? Send a quote request anyway and Jo will tell you whether we can get to you.",
           "provenance": {
@@ -2809,89 +2827,22 @@
           }
         },
         {
-          "id": "send-a-quote-request",
-          "topic": "send_a_quote_request",
-          "question_variants": [
-            "Send a quote request",
-            "What needs doing: A few sentences about the problem or the job.",
-            "What details should I include in a quote request?",
-            "How should I describe the problem in a quote request?",
-            "What information is needed for a job quote?",
-            "Can I just mention the problem in a few sentences for a quote?",
-            "Do I need to explain the job or problem for a quote?",
-            "What kind of description is helpful for a quote request?"
-          ],
-          "answer_spoken": "What needs doing: A few sentences about the problem or the job.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "What needs doing"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "A few sentences about the problem or the job"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Brand and model numbers help for water heaters and fixtures"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Your ZIP code"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "So we can confirm you're in our service area"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Preferred time window"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Weekday morning (arrival 8 am–12 pm), weekday afternoon (arrival 12–4 pm), Saturday morning (arrival 8–10 am), or first available"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Photos (optional)"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Up to 5 photos, 10 MB each"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "You can also text them to (720) 555-0147"
-              }
-            ]
-          }
-        },
-        {
           "id": "send-a-quote-request-brand-model",
-          "topic": "send_a_quote_request",
+          "topic": "quote",
           "question_variants": [
-            "Are brand and model numbers necessary for a quote?",
-            "Send a quote request",
-            "Why are ZIP codes required in a quote request?",
-            "Can I specify a preferred time for the service visit?",
-            "What time windows are available for service visits?",
-            "Is it important to include my ZIP code in the quote request?",
-            "How does providing a time window help with scheduling?"
+            "Do you need brand and model numbers for quotes?",
+            "Why do you ask for my ZIP code?",
+            "What time windows are available for service?",
+            "Can I choose a specific time for the technician to arrive?",
+            "Do you offer morning or afternoon appointments?",
+            "Can I schedule a Saturday morning appointment?",
+            "What if I need service outside regular hours?",
+            "How do I let you know my preferred time?"
           ],
-          "answer_spoken": "Brand and model numbers help for water heaters and fixtures; Your ZIP code: So we can confirm you're in our service area; Preferred time window: Weekday morning (arrival 8 am–12 pm), weekday afternoon (arrival 12–4 pm), Saturday morning",
+          "answer_spoken": "Send a quote request: Brand and model numbers help for water heaters and fixtures; Your ZIP code: So we can confirm you're in our service area; Preferred time window: Weekday morning (arrival 8 am–12 pm), weekday afternoon (arrival 12–4",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "What needs doing"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "A few sentences about the problem or the job"
-              },
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
                 "quote": "Brand and model numbers help for water heaters and fixtures"
@@ -2919,39 +2870,27 @@
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
                 "quote": "Up to 5 photos, 10 MB each"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "You can also text them to (720) 555-0147"
               }
             ]
           }
         },
         {
           "id": "send-a-quote-request-arrival-first",
-          "topic": "send_a_quote_request",
+          "topic": "quote",
           "question_variants": [
-            "(arrival 8–10 am), or first available; Photos (optional): Up to 5 photos, 10 MB each.",
-            "Send a quote request",
-            "Can I send photos with my quote request?",
-            "What are the limits for photo submissions with a quote request?",
-            "How can I send photos if I'm requesting a quote?",
-            "Is there an alternative way to submit photos for a quote?",
-            "What's the maximum size for each photo in a quote request?",
-            "Can I text photos to a specific number for a quote request?"
+            "Can I send photos to help with the quote?",
+            "What's the limit on photo size for quotes?",
+            "How many photos can I include in a quote request?",
+            "Do I need to send photos for a quote?",
+            "Can I text photos to a specific number?",
+            "What if I don't have photos to send?",
+            "How do I send photos for a quote?",
+            "Is there a preferred method for sending photos?"
           ],
-          "answer_spoken": "(arrival 8–10 am), or first available; Photos (optional): Up to 5 photos, 10 MB each. You can also text them to (720) 555-0147; How to reach you: Text, email or a phone call.",
+          "answer_spoken": "(arrival 8–10 am), or first available; Photos (optional): Up to 5 photos, 10 MB each.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "What needs doing"
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "A few sentences about the problem or the job"
-              },
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
                 "quote": "Brand and model numbers help for water heaters and fixtures"
@@ -2979,28 +2918,56 @@
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
                 "quote": "Up to 5 photos, 10 MB each"
-              },
+              }
+            ]
+          }
+        },
+        {
+          "id": "send-a-quote-request-also-text",
+          "topic": "quote",
+          "question_variants": [
+            "Can I text my quote request?",
+            "What's the phone number for texting quote requests?",
+            "How can I be reached for quote follow-up?",
+            "Do you prefer text, email, or phone calls for contact?",
+            "What if I need to update my contact information?",
+            "Can I choose how you reach me?",
+            "What are the options for receiving quote responses?",
+            "How do I ensure you can contact me?"
+          ],
+          "answer_spoken": "Send a quote request: You can also text them to (720) 555-0147; How to reach you: Text, email or a phone call.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
                 "quote": "You can also text them to (720) 555-0147"
+              },
+              {
+                "url": "https://kettlewick.example.com/how-it-works.html",
+                "quote": "How to reach you"
+              },
+              {
+                "url": "https://kettlewick.example.com/how-it-works.html",
+                "quote": "Text, email or a phone call"
               }
             ]
           }
         },
         {
           "id": "quotes",
-          "topic": "quotes",
+          "topic": "quote",
           "question_variants": [
             "how long are quotes valid for?",
-            "Quotes",
-            "Free, written and valid for 30 days.",
-            "Are your quotes free of charge?",
-            "How long are your written quotes valid for?",
-            "Do your quotes cover all described work?",
-            "Is there a cost associated with getting a quote?",
-            "How many days is a quote from you good for?"
+            "How long is a quote valid for?",
+            "Is the quote written and free?",
+            "What's the duration of a valid quote?",
+            "Do I need to pay for a quote?",
+            "Can I use the quote within 30 days?",
+            "Is there an expiration date on quotes?",
+            "What if I need the quote after 30 days?"
           ],
-          "answer_spoken": "Free, written and valid for 30 days. A quote covers the work it describes.",
+          "answer_spoken": "Quotes: Free, written and valid for 30 days.",
           "facts": {
             "valid_days": 30
           },
@@ -3009,27 +2976,47 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Quotes Free, written and valid for 30 days. A quote covers the work it describes. Anything extra gets a revised quote first."
-              },
+                "quote": "Free, written and valid for 30 days."
+              }
+            ]
+          }
+        },
+        {
+          "id": "quotes-quote-covers",
+          "topic": "quote",
+          "question_variants": [
+            "What does a quote cover?",
+            "Is the quote specific to the described work?",
+            "Does the quote include all necessary work?",
+            "What if additional work is needed?",
+            "Are there any hidden costs in the quote?",
+            "Does the quote cover all aspects of the job?",
+            "What if the work scope changes?",
+            "Is the quote comprehensive for the described task?"
+          ],
+          "answer_spoken": "A quote covers the work it describes.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Quotes Free, written and valid for 30 days."
+                "quote": "A quote covers the work it describes."
               }
             ]
           }
         },
         {
           "id": "quotes-anything-extra",
-          "topic": "quotes",
+          "topic": "quote",
           "question_variants": [
-            "Anything extra gets a revised quote first.",
-            "how long are quotes valid for?",
-            "Quotes",
-            "What happens if additional work is needed after the initial quote?",
-            "Do you provide revised quotes for extra work?",
-            "Is there a process for updating quotes when scope changes?",
-            "How are unexpected extras handled in your quoting process?",
-            "Do you issue new quotes for work beyond the initial estimate?"
+            "What happens if there are extra costs?",
+            "Do I get a revised quote for additional work?",
+            "Are there any surprises in the final bill?",
+            "What if the job requires more than quoted?",
+            "Can I expect the final cost to exceed the quote?",
+            "How are additional costs communicated?",
+            "What if the work scope expands?",
+            "Are revisions to the quote provided in writing?"
           ],
           "answer_spoken": "Anything extra gets a revised quote first.",
           "provenance": {
@@ -3037,27 +3024,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Quotes Free, written and valid for 30 days. A quote covers the work it describes. Anything extra gets a revised quote first."
-              },
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Quotes Free, written and valid for 30 days."
+                "quote": "Anything extra gets a revised quote first."
               }
             ]
           }
         },
         {
           "id": "rescheduling-and-cancelling",
-          "topic": "rescheduling_and_cancelling",
+          "topic": "cancellation_fee",
           "question_variants": [
             "what is the policy for rescheduling or cancelling?",
-            "Rescheduling and cancelling",
-            "Free up to 24 hours before your arrival window.",
-            "Can I reschedule or cancel my appointment for free?",
-            "What's the deadline for free rescheduling or cancellation?",
+            "What's the policy for canceling a service appointment?",
             "Is there a fee for last-minute cancellations?",
-            "How soon do I need to cancel to avoid a fee?",
-            "What's the cost of canceling within 24 hours of the appointment?"
+            "How much is the late cancellation fee?",
+            "Can I cancel without a fee up to 24 hours before?",
+            "What if I need to cancel at the last minute?",
+            "Are there any penalties for canceling an appointment?",
+            "What's the cutoff time for free cancellations?"
           ],
           "answer_spoken": "Free up to 24 hours before your arrival window. Inside 24 hours there's a $49 late cancellation fee.",
           "facts": {
@@ -3081,16 +3064,16 @@
           "id": "payment",
           "topic": "payment",
           "question_variants": [
-            "what payment methods are accepted?",
-            "Payment",
-            "Due when the job is done.",
-            "What payment methods do you accept upon job completion?",
+            "What payment methods do you accept?",
             "Can I pay with a credit or debit card?",
-            "Do you accept bank transfers for payment?",
-            "Can I write a check to pay for your services?",
-            "What are the accepted forms of payment after the job is done?"
+            "Do you accept bank transfers or checks?",
+            "What if I prefer to pay in cash?",
+            "Are there any payment methods you don't accept?",
+            "Can I pay online using a credit card?",
+            "What if I don't have a bank account?",
+            "Are there any additional fees for certain payment methods?"
           ],
-          "answer_spoken": "Due when the job is done. We take credit and debit cards, bank transfer (ACH) and checks.",
+          "answer_spoken": "Payment: We take credit and debit cards, bank transfer (ACH) and checks. We don't take cash.",
           "facts": {
             "accepts_cash": false,
             "accepts_checks": true
@@ -3100,47 +3083,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Payment Due when the job is done. We take credit and debit cards, bank transfer (ACH) and checks. We don't take cash."
-              }
-            ]
-          }
-        },
-        {
-          "id": "payment-take-cash",
-          "topic": "payment",
-          "question_variants": [
-            "We don't take cash.",
-            "what payment methods are accepted?",
-            "Payment",
-            "Do you accept cash payments?",
-            "Is cash an accepted form of payment for your services?",
-            "Can I pay you in cash for the work done?",
-            "Do you have a cash payment policy?",
-            "Are there any services where cash payment is accepted?"
-          ],
-          "answer_spoken": "We don't take cash.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Payment Due when the job is done. We take credit and debit cards, bank transfer (ACH) and checks. We don't take cash."
+                "quote": "We take credit and debit cards, bank transfer (ACH) and checks. We don't take cash."
               }
             ]
           }
         },
         {
           "id": "deposits",
-          "topic": "deposits",
+          "topic": "deposit",
           "question_variants": [
             "when is a deposit required and how much?",
-            "Deposits",
-            "30% when you schedule, for jobs quoted over $1,500.",
-            "How can I pay the required deposit for large jobs?",
-            "What's the deposit amount for jobs exceeding $1,500?",
-            "Can I pay the job deposit using a credit card?",
-            "Is bank transfer an option for paying the job deposit?",
-            "What's the payment method for the 30% deposit on large jobs?"
+            "Is there a deposit required for large jobs?",
+            "What's the deposit amount for jobs over $1,500?",
+            "Can I pay the deposit using a credit card?",
+            "What if I prefer to pay the deposit via bank transfer?",
+            "Are there any exceptions to the deposit requirement?",
+            "What if I can't pay the deposit upfront?",
+            "How is the deposit applied to the final bill?"
           ],
           "answer_spoken": "30% when you schedule, for jobs quoted over $1,500. Payable by card or bank transfer.",
           "facts": {
@@ -3162,13 +3121,13 @@
           "topic": "warranty",
           "question_variants": [
             "what is the warranty period for different services?",
-            "Warranty",
-            "1 year on plumbing labor, 2 years on water heater installs and 90 days on handyman work.",
-            "How long is the warranty on plumbing work?",
-            "What's the warranty period for water heater installations?",
-            "Do you offer a warranty on handyman services?",
-            "Is there a warranty on the parts you use?",
-            "How long does your labor warranty last?"
+            "What's the warranty period for plumbing work?",
+            "How long is the warranty on water heater installations?",
+            "Is there a warranty on handyman services?",
+            "What if something goes wrong after the warranty period?",
+            "Are parts covered under the warranty?",
+            "What if I need repairs within the warranty period?",
+            "How do I claim warranty coverage?"
           ],
           "answer_spoken": "1 year on plumbing labor, 2 years on water heater installs and 90 days on handyman work. Parts carry the manufacturer's warranty.",
           "facts": {
@@ -3182,47 +3141,79 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Warranty 1 year on plumbing labor, 2 years on water heater installs and 90 days on handyman work. Parts carry the manufacturer's warranty. Parts you supply are covered for our labor only."
+                "quote": "1 year on plumbing labor, 2 years on water heater installs and 90 days on handyman work. Parts carry the manufacturer's warranty."
               }
             ]
           }
         },
         {
-          "id": "warranty-parts-supply",
-          "topic": "warranty",
+          "id": "do-i-need-to-buy-the-parts",
+          "topic": "services",
           "question_variants": [
-            "Parts you supply are covered for our labor only.",
-            "what is the warranty period for different services?",
-            "Warranty",
-            "Do you warranty parts I provide?",
-            "Is my supplied part covered under your warranty?",
-            "Do you cover labor for customer-supplied parts?",
-            "Are parts I bring covered for your labor?",
-            "Does your warranty include parts I supply?"
+            "Can you supply the parts I need?",
+            "Do you sell fixtures and parts?",
+            "What if I buy my own parts?",
+            "Can you install parts I've purchased?",
+            "Is there a markup on supplied parts?",
+            "Do you provide materials for the job?",
+            "What's the cost for supplied parts?",
+            "Can I use my own fixtures?"
           ],
-          "answer_spoken": "Parts you supply are covered for our labor only.",
+          "answer_spoken": "No. We can supply fixtures and parts at our cost plus 15%, or install ones you've bought.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Warranty 1 year on plumbing labor, 2 years on water heater installs and 90 days on handyman work. Parts carry the manufacturer's warranty. Parts you supply are covered for our labor only."
+                "quote": "Do I need to buy the parts? No. We can supply fixtures and parts at our cost plus 15%, or install ones you've bought. Parts you supply are covered by our labor warranty only."
+              },
+              {
+                "url": "https://kettlewick.example.com/how-it-works.html",
+                "quote": "Parts you supply are covered for our labor only."
+              }
+            ]
+          }
+        },
+        {
+          "id": "do-i-need-to-buy-the-parts-parts-supply",
+          "topic": "services",
+          "question_variants": [
+            "Do you cover labor for parts I provide?",
+            "What if I bring my own parts?",
+            "Is labor warranty valid for customer-supplied parts?",
+            "Can I use my parts with your service?",
+            "Are parts I supply included in warranty?",
+            "Will you install parts I buy elsewhere?",
+            "Does your labor warranty apply to my parts?",
+            "Can I choose my own parts for repair?"
+          ],
+          "answer_spoken": "Parts you supply are covered by our labor warranty only.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://kettlewick.example.com/how-it-works.html",
+                "quote": "Do I need to buy the parts? No. We can supply fixtures and parts at our cost plus 15%, or install ones you've bought. Parts you supply are covered by our labor warranty only."
+              },
+              {
+                "url": "https://kettlewick.example.com/how-it-works.html",
+                "quote": "Parts you supply are covered for our labor only."
               }
             ]
           }
         },
         {
           "id": "someone-at-home",
-          "topic": "someone_at_home",
+          "topic": "requirements",
           "question_variants": [
             "who needs to be home during the service?",
-            "Someone at home",
-            "An adult 18 or older needs to be home at the start and end of every visit.",
-            "Do I need to be home during your visit?",
-            "Can I leave while you're working at my home?",
-            "Is it required for someone to be present during service?",
-            "Do pets need to be kept away during your work?",
-            "Can I go out while you're fixing things at home?"
+            "Do I need to be home during the service?",
+            "What if I'm not available when the technician arrives?",
+            "Can someone else be present for the service?",
+            "What if I have pets at home?",
+            "Do pets need to be kept away during the work?",
+            "What if I'm not an adult during the service?",
+            "Can I leave my home unattended during the repair?"
           ],
           "answer_spoken": "An adult 18 or older needs to be home at the start and end of every visit. Please keep pets in another room while we work.",
           "facts": {
@@ -3240,16 +3231,16 @@
         },
         {
           "id": "rentals",
-          "topic": "rentals",
+          "topic": "rental_homes",
           "question_variants": [
             "do you work on rental homes?",
-            "Rentals",
-            "We work on rental homes when the property owner or manager approves the quote in writing.",
-            "Do you service rental properties?",
-            "Can you work on a rental home I own?",
-            "Do you need written approval for rental work?",
-            "Can I hire you for my rental property?",
-            "Do you bill rental property owners directly?"
+            "Do you work on rental properties?",
+            "What if I'm a tenant needing repairs?",
+            "Can the property owner approve the quote in writing?",
+            "Will you bill the property owner directly?",
+            "What if I'm the property manager?",
+            "Can I get repairs done without the owner's approval?",
+            "What if the owner is unavailable for approval?"
           ],
           "answer_spoken": "We work on rental homes when the property owner or manager approves the quote in writing. We bill the owner or manager directly.",
           "facts": {
@@ -3270,13 +3261,13 @@
           "topic": "discounts",
           "question_variants": [
             "are there any discounts available?",
-            "how much is the senior and veteran discount",
-            "Discounts",
-            "10% off labor for customers 65 and older and military veterans, up to $100 per job.",
-            "Do seniors get a discount on your services?",
-            "Is there a discount for military veterans?",
-            "What discount do you offer to older customers?",
-            "Do you have a discount for veterans?"
+            "Are there discounts for seniors or veterans?",
+            "What's the discount for customers 65 and older?",
+            "Can military veterans get a discount?",
+            "Is there a limit to the discount amount?",
+            "How do I claim the senior or veteran discount?",
+            "What if I qualify for multiple discounts?",
+            "Are discounts applicable to all services?"
           ],
           "answer_spoken": "10% off labor for customers 65 and older and military veterans, up to $100 per job. One discount per job.",
           "facts": {
@@ -3299,16 +3290,16 @@
         },
         {
           "id": "send-a-quote-request-quote-form",
-          "topic": "send_a_quote_request",
+          "topic": "quote",
           "question_variants": [
-            "Use the quote form, email quotes@kettlewick.example.com, or call the office and we'll write it up with you.",
-            "Send a quote request",
-            "How can I request a quote?",
             "Can I email for a quote?",
-            "Do you have a quote form online?",
-            "Can I call to get a quote?",
-            "What's the best way to get a quote?",
-            "How do I start the quoting process?"
+            "How do I get a quote?",
+            "What's the quote process like?",
+            "Do I need to call for a quote?",
+            "Can I fill out a form for a quote?",
+            "What info do you need for a quote?",
+            "Is there a contact for quote requests?",
+            "How can I request a quote?"
           ],
           "answer_spoken": "Use the quote form, email quotes@kettlewick.example.com, or call the office and we'll write it up with you. Here's what we ask for:",
           "provenance": {
@@ -3323,16 +3314,16 @@
         },
         {
           "id": "jo-reviews-it-and-sends-a-written-quote",
-          "topic": "jo_reviews_it_and_sends_a_written_quote",
+          "topic": "quote",
           "question_variants": [
-            "Jo reviews it and sends a written quote",
-            "Jo Lindqvist, our owner and master plumber, reads every request herself.",
-            "Who reviews the quote requests?",
-            "Does Jo Lindqvist personally look at every quote request?",
-            "What is Jo's role in the quote process?",
-            "How are quote requests handled?",
-            "Is there a specific person who reads all quote requests?",
-            "What happens after I send a quote request to Kettlewick?"
+            "Who reviews my quote request?",
+            "How will I receive my quote reply?",
+            "What are the possible quote replies?",
+            "Does the owner read quote requests?",
+            "Can I get a quote by text?",
+            "Is Jo Lindqvist involved in quoting?",
+            "How many ways can I get a quote reply?",
+            "What's the quote response process?"
           ],
           "answer_spoken": "Jo Lindqvist, our owner and master plumber, reads every request herself. You'll get one of three replies, by text or email:",
           "applies_to": [
@@ -3350,15 +3341,16 @@
         },
         {
           "id": "jo-reviews-it-and-sends-a-written-quote-fixed-price",
-          "topic": "jo_reviews_it_and_sends_a_written_quote",
+          "topic": "quote",
           "question_variants": [
-            "A fixed price for the job as described.",
-            "How are most small jobs priced?",
-            "What type of jobs receive a fixed price quote?",
-            "Are faucet and drain jobs priced the same way?",
-            "Do assembly and TV installation jobs have fixed prices?",
-            "Is there a standard pricing for certain common tasks?",
-            "How does determine the price for simple repairs?"
+            "Are most jobs priced upfront?",
+            "How are faucet jobs priced?",
+            "Is there a fixed price for drywall work?",
+            "What jobs have a set price?",
+            "Are TV installations priced the same way?",
+            "Do I get a fixed price for small repairs?",
+            "Are drain issues priced the same?",
+            "How are assembly jobs priced?"
           ],
           "answer_spoken": "A fixed price for the job as described. Most faucet, drain, drywall, assembly and TV jobs are priced this way.",
           "applies_to": [
@@ -3376,15 +3368,16 @@
         },
         {
           "id": "jo-reviews-it-and-sends-a-written-quote-free-site",
-          "topic": "jo_reviews_it_and_sends_a_written_quote",
+          "topic": "quote",
           "question_variants": [
-            "A free on-site estimate for projects expected to cost more than $1,000, like water heater replacements.",
-            "What kind of projects require a free on-site estimate?",
-            "Are water heater replacements estimated on-site?",
-            "How are estimates handled for expensive projects?",
-            "Is there a threshold for jobs that need an on-site estimate?",
-            "What projects typically cost more than $1,000?",
-            "How does approach pricing for major repairs?"
+            "Do big projects need an on-site estimate?",
+            "Is a water heater replacement expensive?",
+            "How are large projects quoted?",
+            "Do I need a visit for big jobs?",
+            "What's the process for costly repairs?",
+            "Are on-site estimates free?",
+            "What triggers an on-site estimate?",
+            "Is a visit needed for expensive work?"
           ],
           "answer_spoken": "A free on-site estimate for projects expected to cost more than $1,000, like water heater replacements.",
           "applies_to": [
@@ -3403,15 +3396,16 @@
         },
         {
           "id": "jo-reviews-it-and-sends-a-written-quote-diagnostic-visit",
-          "topic": "jo_reviews_it_and_sends_a_written_quote",
+          "topic": "quote",
           "question_variants": [
-            "A $79 diagnostic visit when we need to find the problem before we can price the fix.",
-            "When is a diagnostic visit charged at $79?",
-            "What situations require a diagnostic visit before pricing?",
-            "Is there a fee for identifying the problem before a repair?",
-            "How are complex issues handled in terms of pricing?",
-            "What does the $79 diagnostic visit cover?",
-            "In what cases is a diagnostic visit necessary before giving a quote?"
+            "What if the problem isn't clear?",
+            "Is there a fee for finding the issue?",
+            "How do I get a price if the problem's unknown?",
+            "What's a diagnostic visit?",
+            "Do I pay for finding the problem?",
+            "Is there a charge for diagnosing issues?",
+            "What if the issue isn't obvious?",
+            "How much is a diagnostic visit?"
           ],
           "answer_spoken": "A $79 diagnostic visit when we need to find the problem before we can price the fix.",
           "applies_to": [
@@ -3429,64 +3423,65 @@
           }
         },
         {
-          "id": "we-do-the-work",
-          "topic": "we_do_the_work",
+          "id": "we-do-the-work-your-tech",
+          "topic": "work_process",
           "question_variants": [
-            "We do the work",
-            "Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward.",
-            "Do your technicians review the quote with you?",
-            "Will the technician wear shoe covers during the job?",
-            "Do you clean up after completing the work?",
-            "Will you stop if you find something not in the quote?",
-            "Do you provide a revised quote for extra work?",
-            "What happens if the job is different from the quote?"
+            "What happens before work starts?",
+            "Do techs wear shoe covers?",
+            "Is the area cleaned after work?",
+            "What if the job changes?",
+            "Do they explain the quote to me?",
+            "Is there a pre-work walkthrough?",
+            "What if they find extra work?",
+            "Do they revise quotes if needed?"
           ],
-          "answer_spoken": "Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward. If we find something the quote didn't cover, we stop, show you, and send a revised quote.",
+          "answer_spoken": "We do the work: Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward. If we find something the quote didn't cover, we stop, show you, and send a revised quote.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward. If we find something the quote didn't cover, we stop, show you, and send a revised quote. We never go over the approved price without your OK. Payment is due when the job is done."
+                "quote": "Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward. If we find something the quote didn't cover, we stop, show you, and send a revised quote."
               }
             ]
           }
         },
         {
           "id": "we-do-the-work-never-over",
-          "topic": "we_do_the_work",
+          "topic": "work_process",
           "question_variants": [
-            "We never go over the approved price without your OK.",
-            "We do the work",
-            "Will you exceed the quote price without my approval?",
-            "When is payment due for the job?",
-            "Do you charge more than the approved quote?",
-            "Is payment required upon job completion?",
-            "Can the price go over the quote without my OK?",
-            "What's your policy on payment and price changes?"
+            "Can the price change without me knowing?",
+            "Do I need to approve extra costs?",
+            "Will the price go up without my OK?",
+            "Are there hidden fees?",
+            "Can they charge more than quoted?",
+            "Is the final price guaranteed?",
+            "Do I get to say yes to extra costs?",
+            "Are there surprises on the bill?"
           ],
-          "answer_spoken": "We never go over the approved price without your OK. Payment is due when the job is done.",
+          "answer_spoken": "We do the work: We never go over the approved price without your OK.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Your tech walks through the quote with you before starting, wears shoe covers and cleans up afterward. If we find something the quote didn't cover, we stop, show you, and send a revised quote. We never go over the approved price without your OK. Payment is due when the job is done."
+                "quote": "We never go over the approved price without your OK."
               }
             ]
           }
         },
         {
           "id": "can-i-book-a-time-online",
-          "topic": "can_i_book_a_time_online",
+          "topic": "scheduling",
           "question_variants": [
-            "Can I book a time online?",
-            "Can I schedule a service time online?",
-            "Is online booking available for your services?",
-            "Do you offer online appointment scheduling?",
-            "Can I book a time slot through your website?",
-            "Is there an online system for scheduling visits?",
-            "Can I pick a time for service on your site?"
+            "Can I just show up for service?",
+            "Do I need a quote first?",
+            "Is a quote request mandatory?",
+            "Can I skip the quote process?",
+            "Do I need to ask for a quote?",
+            "Is there work without a quote?",
+            "Can I get service without a quote?",
+            "Is a quote always needed before work?"
           ],
           "answer_spoken": "No. Every job starts with a quote request.",
           "provenance": {
@@ -3501,16 +3496,16 @@
         },
         {
           "id": "can-i-book-a-time-online-once-approve",
-          "topic": "can_i_book_a_time_online",
+          "topic": "scheduling",
           "question_variants": [
-            "Once you approve the quote, we schedule a 2-hour arrival window with you.",
-            "Can I book a time online?",
-            "How do you schedule a service visit?",
-            "What's the process after I approve the quote?",
-            "Do you set a specific time for the job?",
-            "How is the arrival time determined after quote approval?",
-            "Can I choose a time slot after approving the quote?",
-            "What happens once I agree to the quote?"
+            "How do I schedule after approving a quote?",
+            "What's the arrival time frame?",
+            "Do I get a specific time for service?",
+            "How long is the service window?",
+            "What happens after I approve the quote?",
+            "Is there a set time for the job?",
+            "How is the arrival time decided?",
+            "What's the process after quote approval?"
           ],
           "answer_spoken": "Once you approve the quote, we schedule a 2-hour arrival window with you.",
           "provenance": {
@@ -3525,16 +3520,15 @@
         },
         {
           "id": "do-you-offer-same-day-service",
-          "topic": "do_you_offer_same_day_service",
+          "topic": "same_day_service",
           "question_variants": [
-            "Do you offer same-day service?",
-            "Sometimes, for active leaks and no-hot-water calls, when the schedule has room.",
-            "Do you provide same-day service for emergencies?",
-            "Can I get service the same day I call?",
-            "Is same-day service available for urgent issues?",
-            "Do you offer immediate service for leaks?",
-            "Can you come out the same day for no hot water?",
-            "Is there a chance for same-day repair?"
+            "Can I get same-day service for leaks?",
+            "Is same-day service guaranteed?",
+            "What qualifies for same-day repair?",
+            "Can I get urgent service for no hot water?",
+            "Is there a chance for immediate repair?",
+            "Can urgent issues be fixed the same day?",
+            "Is same-day service possible for emergencies?"
           ],
           "answer_spoken": "Sometimes, for active leaks and no-hot-water calls, when the schedule has room. We can't guarantee it.",
           "provenance": {
@@ -3542,23 +3536,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Do you offer same-day service? Sometimes, for active leaks and no-hot-water calls, when the schedule has room. We can't guarantee it. If water is leaking right now, turn off your main shut-off valve and call our emergency line at (720) 555-0199."
+                "quote": "Sometimes, for active leaks and no-hot-water calls, when the schedule has room. We can't guarantee it."
               }
             ]
           }
         },
         {
           "id": "do-you-offer-same-day-service-water-leaking",
-          "topic": "do_you_offer_same_day_service",
+          "topic": "emergencies",
           "question_variants": [
-            "If water is leaking right now, turn off your main shut-off valve and call our emergency line at (720) 555-0199.",
-            "Do you offer same-day service?",
-            "What should I do if I have an active leak?",
-            "How do I handle a situation with no hot water?",
-            "What's the emergency number for immediate issues?",
-            "Do I need to turn off my main water valve for a leak?",
-            "What's the procedure for a plumbing emergency?",
-            "How can I get help for a burst pipe?"
+            "What should I do if water is leaking?",
+            "Is there an emergency number to call?",
+            "What's the main shut-off valve for?",
+            "How do I stop a leak right now?",
+            "What's the emergency line number?",
+            "Do I need to act fast for a leak?",
+            "What's the first step in a water emergency?",
+            "How do I handle a current leak?"
           ],
           "answer_spoken": "If water is leaking right now, turn off your main shut-off valve and call our emergency line at (720) 555-0199.",
           "provenance": {
@@ -3566,23 +3560,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Do you offer same-day service? Sometimes, for active leaks and no-hot-water calls, when the schedule has room. We can't guarantee it. If water is leaking right now, turn off your main shut-off valve and call our emergency line at (720) 555-0199."
+                "quote": "If water is leaking right now, turn off your main shut-off valve and call our emergency line at (720) 555-0199."
               }
             ]
           }
         },
         {
           "id": "what-counts-as-an-emergency",
-          "topic": "what_counts_as_an_emergency",
+          "topic": "emergencies",
           "question_variants": [
-            "What counts as an emergency?",
-            "A leak you can't stop, a burst pipe, no water to the house, sewage backing up, or a leaking water heater.",
+            "What counts as an emergency for you?",
+            "Is a burst pipe an emergency?",
+            "What if sewage is backing up?",
+            "Are handyman jobs emergencies?",
+            "What if my water heater is leaking?",
+            "Is no water to the house an emergency?",
             "What situations are considered emergencies?",
-            "Is a burst pipe an emergency for you?",
-            "Do you treat sewage backups as emergencies?",
-            "Are handyman jobs emergencies in your view?",
-            "What qualifies as an emergency service call?",
-            "Is a leaking water heater an emergency?"
+            "Are all leaks treated as emergencies?"
           ],
           "answer_spoken": "A leak you can't stop, a burst pipe, no water to the house, sewage backing up, or a leaking water heater. Handyman jobs aren't emergencies for us.",
           "provenance": {
@@ -3590,23 +3584,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "What counts as an emergency? A leak you can't stop, a burst pipe, no water to the house, sewage backing up, or a leaking water heater. Handyman jobs aren't emergencies for us. They're scheduled during regular hours."
+                "quote": "A leak you can't stop, a burst pipe, no water to the house, sewage backing up, or a leaking water heater. Handyman jobs aren't emergencies for us."
               }
             ]
           }
         },
         {
           "id": "what-counts-as-an-emergency-they-scheduled",
-          "topic": "what_counts_as_an_emergency",
+          "topic": "service",
           "question_variants": [
-            "They're scheduled during regular hours.",
-            "What counts as an emergency?",
-            "Are non-emergency jobs done during regular hours?",
-            "Do you schedule non-urgent work normally?",
-            "Is routine work done during your regular business hours?",
-            "Are standard services scheduled like usual?",
-            "Do you handle non-emergency tasks during normal hours?",
-            "Is your regular schedule for non-urgent jobs?"
+            "When are services done?",
+            "Are there specific service hours?",
+            "Is there an off-hour service?",
+            "When can I expect service?",
+            "Are services scheduled during normal hours?",
+            "Is there an after-hours service?",
+            "What are the regular service hours?",
+            "Can I get service outside regular hours?"
           ],
           "answer_spoken": "They're scheduled during regular hours.",
           "provenance": {
@@ -3614,23 +3608,23 @@
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "What counts as an emergency? A leak you can't stop, a burst pipe, no water to the house, sewage backing up, or a leaking water heater. Handyman jobs aren't emergencies for us. They're scheduled during regular hours."
+                "quote": "They're scheduled during regular hours."
               }
             ]
           }
         },
         {
           "id": "do-you-work-in-wheat-ridge",
-          "topic": "do_you_work_in_wheat_ridge",
+          "topic": "service",
           "question_variants": [
-            "Do you work in Wheat Ridge?",
-            "Not at the moment.",
             "Do you service Wheat Ridge?",
-            "Are you available in Wheat Ridge?",
-            "Can you work in the 80033 area?",
-            "Do you cover Wheat Ridge in your service area?",
-            "Is Wheat Ridge included in your service locations?",
-            "Can you provide services in Wheat Ridge?"
+            "Are you available in Arvada?",
+            "Is my area outside your service zone?",
+            "Can I get service in 80033?",
+            "Do you cover all areas?",
+            "Is my location within your service area?",
+            "Are there places you don't service?",
+            "Can I get service in my zip code?"
           ],
           "answer_spoken": "Not at the moment. Wheat Ridge (80033) and Arvada are outside our service area.",
           "provenance": {
@@ -3645,16 +3639,16 @@
         },
         {
           "id": "do-you-work-in-wheat-ridge-call-office",
-          "topic": "do_you_work_in_wheat_ridge",
+          "topic": "service",
           "question_variants": [
-            "Call the office and we'll refer you to a licensed plumber who works there.",
-            "Do you work in Wheat Ridge?",
-            "Can you recommend a plumber for Wheat Ridge?",
-            "Who can service my home in Wheat Ridge?",
-            "Do you have referrals for Wheat Ridge plumbing?",
-            "Can you suggest a licensed plumber for 80033?",
-            "Who should I call for plumbing in Wheat Ridge?",
-            "Can you provide a referral for Wheat Ridge services?"
+            "Who can I call for service in other areas?",
+            "Can you recommend a plumber for my area?",
+            "What if you don't service my location?",
+            "Do you have referrals for other plumbers?",
+            "Can I get a local plumber's contact?",
+            "What's the process for out-of-area service?",
+            "Who services areas you don't cover?",
+            "Can you help me find a plumber nearby?"
           ],
           "answer_spoken": "Call the office and we'll refer you to a licensed plumber who works there.",
           "provenance": {
@@ -3669,15 +3663,16 @@
         },
         {
           "id": "is-central-park-in-your-service-area",
-          "topic": "is_central_park_in_your_service_area",
+          "topic": "service",
           "question_variants": [
-            "Is Central Park in your service area?",
             "Do you service Central Park?",
-            "Is Central Park within your service area?",
-            "What's the travel fee for Central Park visits?",
-            "Do you charge extra for Central Park services?",
-            "Is there a surcharge for visits to Central Park?",
-            "Can you work in the 80238 area?"
+            "Is there a fee for Central Park visits?",
+            "What's the travel fee for 80238?",
+            "Are you available in my extended area?",
+            "How much is the travel charge?",
+            "Do you cover Central Park?",
+            "What's the cost for out-of-area service?",
+            "Is there an extra charge for my location?"
           ],
           "answer_spoken": "Yes. Central Park (80238) is in our extended area, so the $35 travel fee applies to each visit.",
           "applies_to": [
@@ -3694,39 +3689,17 @@
           }
         },
         {
-          "id": "do-i-need-to-buy-the-parts",
-          "topic": "do_i_need_to_buy_the_parts",
-          "question_variants": [
-            "Do I need to buy the parts?",
-            "Do I have to buy my own parts?",
-            "Can you provide the parts needed for the job?",
-            "What's your policy on supplying parts?",
-            "Do you install parts that I purchase?",
-            "Can you supply fixtures for the job?",
-            "Is it mandatory for me to buy the parts?"
-          ],
-          "answer_spoken": "No. We can supply fixtures and parts at our cost plus 15%, or install ones you've bought.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/how-it-works.html",
-                "quote": "Do I need to buy the parts? No. We can supply fixtures and parts at our cost plus 15%, or install ones you've bought. Parts you supply are covered by our labor warranty only."
-              }
-            ]
-          }
-        },
-        {
           "id": "can-i-send-photos-by-text",
-          "topic": "can_i_send_photos_by_text",
+          "topic": "photos",
           "question_variants": [
-            "Can I send photos by text?",
             "Can I send photos of the issue?",
-            "Do you accept photos via text message?",
-            "How can I send pictures for a quote?",
-            "What's the text number for sending photos?",
-            "Can I attach photos to the quote request?",
-            "Is there a way to send images for assessment?"
+            "How do I submit photos for a quote?",
+            "Is there a photo limit for the quote form?",
+            "What info should I include with my photos?",
+            "Can I text photos to you?",
+            "How many photos can I attach to the form?",
+            "What's the process for sending photos?",
+            "Is there a specific number for photo submissions?"
           ],
           "answer_spoken": "Yes. Text them to (720) 555-0147 with your name and ZIP code, or attach up to 5 to the quote form.",
           "provenance": {
@@ -3741,16 +3714,16 @@
         },
         {
           "id": "do-you-work-weekends",
-          "topic": "do_you_work_weekends",
+          "topic": "scheduling",
           "question_variants": [
-            "Do you work weekends?",
-            "We schedule work on Saturday mornings, with arrivals from 8 to 10 am.",
-            "Do you work on weekends?",
-            "Are you available on Saturdays?",
-            "What's your schedule for weekend work?",
-            "Do you charge extra on Sundays?",
-            "What time do you arrive on Saturday mornings?",
-            "Are emergencies handled on Sundays?"
+            "Do you work on Saturdays?",
+            "What's the Saturday service time?",
+            "Are there Sunday services?",
+            "What's the holiday service fee?",
+            "Is there a surcharge for weekend work?",
+            "What time do you arrive on Saturdays?",
+            "Do you handle emergencies on Sundays?",
+            "What's the extra charge for holiday service?"
           ],
           "answer_spoken": "We schedule work on Saturday mornings, with arrivals from 8 to 10 am. On Sundays and holidays we handle plumbing emergencies only, with a $195 surcharge.",
           "provenance": {
@@ -3765,15 +3738,16 @@
         },
         {
           "id": "are-you-licensed-and-insured",
-          "topic": "are_you_licensed_and_insured",
+          "topic": "licensing",
           "question_variants": [
-            "Are you licensed and insured?",
-            "Are you a licensed company?",
-            "Do you have insurance for your work?",
-            "What's your plumbing license number?",
-            "Are your technicians certified?",
-            "What insurance does your company carry?",
-            "Is legally authorized to operate?"
+            "Are you licensed plumbers?",
+            "What's Jo's plumber license number?",
+            "Do you have a company license?",
+            "What insurance do you carry?",
+            "Is the company insured?",
+            "What's the company's contractor license?",
+            "Do you have workers' compensation?",
+            "What qualifications do you hold?"
           ],
           "answer_spoken": "Yes. Jo holds Colorado Master Plumber License MP.0048213, the company holds Denver Plumbing Contractor License PC-27715, and we carry $2,000,000 in general liability insurance plus workers' compensation.",
           "provenance": {
@@ -3788,15 +3762,16 @@
         },
         {
           "id": "can-you-do-the-job-in-spanish",
-          "topic": "can_you_do_the_job_in_spanish",
+          "topic": "languages",
           "question_variants": [
-            "Can you do the job in Spanish?",
-            "Can you communicate in Spanish?",
             "Do you have Spanish-speaking staff?",
-            "Can quotes be provided in Spanish?",
+            "Can I get a quote in Spanish?",
             "Is there a plumber who speaks Spanish?",
-            "Can I get service in Spanish?",
-            "Do you offer bilingual service?"
+            "Can Elena help with plumbing in Spanish?",
+            "Do you offer services in Spanish?",
+            "Can I communicate in Spanish for repairs?",
+            "Is Spanish available for service quotes?",
+            "Can I discuss plumbing issues in Spanish?"
           ],
           "answer_spoken": "Yes. Elena, one of our plumbers, speaks Spanish, and we can write your quote in Spanish too.",
           "provenance": {
@@ -3811,16 +3786,16 @@
         },
         {
           "id": "our-story",
-          "topic": "our_story",
+          "topic": "company",
           "question_variants": [
-            "Our story",
-            "Jo Lindqvist spent eleven years with larger plumbing outfits before starting Kettlewick.",
-            "What's the background of Jo Lindqvist?",
-            "How long did Jo work with larger plumbing companies?",
-            "What motivated Jo to start Kettlewick?",
-            "What was Jo's experience before Kettlewick?",
-            "Why did Jo leave larger plumbing outfits?",
-            "What prompted Jo to start his own business?"
+            "Who started this plumbing company?",
+            "How long was Jo with other plumbing companies?",
+            "What experience does Jo have in plumbing?",
+            "Why did Jo leave larger plumbing companies?",
+            "What prompted Jo to start this company?",
+            "How many years did Jo work elsewhere before starting?",
+            "What was Jo's role in previous plumbing jobs?",
+            "Did Jo have a good experience at previous jobs?"
           ],
           "answer_spoken": "Jo Lindqvist spent eleven years with larger plumbing outfits before starting Kettlewick. The work was good.",
           "provenance": {
@@ -3835,16 +3810,16 @@
         },
         {
           "id": "our-story-pricing-wasn",
-          "topic": "our_story",
+          "topic": "company",
           "question_variants": [
-            "The pricing wasn't: customers got an hourly guess on the phone and a very different number on the invoice.",
-            "Our story",
-            "Why did Jo start Kettlewick?",
-            "What was wrong with the pricing at larger outfits?",
-            "Why did customers dislike the pricing at larger companies?",
-            "What issue did Jo have with larger plumbing companies?",
-            "Why was there a problem with invoicing at larger firms?",
-            "What pricing issue led to the start?"
+            "Were the previous pricing methods clear?",
+            "Did the old company provide accurate quotes?",
+            "How did the old pricing system work?",
+            "Was there a discrepancy in the old invoices?",
+            "Did the previous company have transparent pricing?",
+            "How was pricing handled in the old company?",
+            "Were customers satisfied with the old pricing?",
+            "Did the old company have consistent pricing?"
           ],
           "answer_spoken": "The pricing wasn't: customers got an hourly guess on the phone and a very different number on the invoice.",
           "provenance": {
@@ -3858,62 +3833,41 @@
           }
         },
         {
-          "id": "our-story-kettlewick-built",
-          "topic": "our_story",
+          "id": "our-story-written-price",
+          "topic": "pricing",
           "question_variants": [
-            "So Kettlewick was built around one rule.",
-            "What's pricing policy?",
-            "How does ensure transparent pricing?",
-            "What's the rule about pricing?",
-            "How does your invoice match the quote?",
-            "What ensures the quote price is final?",
-            "How does guarantee clear and fair pricing?"
+            "Do I see a price before work starts?",
+            "Will the final invoice match the initial quote?",
+            "What happens if unexpected issues are found?",
+            "Is there a guarantee on the quoted price?",
+            "Do you provide written estimates before work?",
+            "What if hidden problems are discovered during work?",
+            "Are there any surprises on the final bill?",
+            "Is the price fixed once work begins?"
           ],
-          "answer_spoken": "So Kettlewick was built around one rule. You see a written price before we start, and the invoice matches it.",
+          "answer_spoken": "You see a written price before we start, and the invoice matches it. If we open a wall and find something nobody could have known about, we stop and send a new quote.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/about.html",
-                "quote": "So Kettlewick was built around one rule. You see a written price before we start, and the invoice matches it. If we open a wall and find something nobody could have known about, we stop and send a new quote. Every job still works that way."
-              }
-            ]
-          }
-        },
-        {
-          "id": "our-story-open-wall",
-          "topic": "our_story",
-          "question_variants": [
-            "If we open a wall and find something nobody could have known about, we stop and send a new quote.",
-            "Do you adjust quotes if unexpected issues arise?",
-            "What happens if hidden problems are found during work?",
-            "Is the quote final once work begins?",
-            "Do you provide new estimates for unforeseen work?",
-            "Are additional costs communicated before proceeding?",
-            "Is every job quoted the same way?"
-          ],
-          "answer_spoken": "If we open a wall and find something nobody could have known about, we stop and send a new quote. Every job still works that way.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://kettlewick.example.com/about.html",
-                "quote": "So Kettlewick was built around one rule. You see a written price before we start, and the invoice matches it. If we open a wall and find something nobody could have known about, we stop and send a new quote. Every job still works that way."
+                "quote": "You see a written price before we start, and the invoice matches it. If we open a wall and find something nobody could have known about, we stop and send a new quote."
               }
             ]
           }
         },
         {
           "id": "our-story-today-people",
-          "topic": "our_story",
+          "topic": "company",
           "question_variants": [
-            "Today we're six people with four vans.",
-            "How many employees work?",
-            "What types of homes do you primarily service?",
-            "How many vans does operate?",
-            "What era homes do you commonly work on?",
-            "Do you specialize in older home repairs?",
-            "How is equipped for jobs?"
+            "How many employees does the company have now?",
+            "What types of homes do you mostly work on?",
+            "Has the company size increased over time?",
+            "Do you specialize in older homes in Denver?",
+            "What kind of homes require your services the most?",
+            "How has the company grown since its start?",
+            "Are your services tailored for specific home types?",
+            "What areas do you primarily service in Denver?"
           ],
           "answer_spoken": "Today we're six people with four vans. Most of our work is in Denver's older homes: 1920s bungalows, 1950s ranches with galvanized steel water lines, and plaster walls that don't behave like drywall.",
           "provenance": {
@@ -3928,16 +3882,16 @@
         },
         {
           "id": "credentials",
-          "topic": "insurance",
+          "topic": "credentials",
           "question_variants": [
-            "what insurance do you have",
-            "do you conduct background checks",
-            "Credentials",
-            "What is Jo Lindqvist's Colorado Master Plumber License number?",
-            "Do you have a Denver Plumbing Contractor License?",
-            "What is your general liability insurance coverage amount?",
-            "Are your employees covered by workers' compensation?",
-            "Is Lead-safe certified?"
+            "What licenses does the company hold?",
+            "Is the company insured for plumbing work?",
+            "Who holds the Master Plumber License?",
+            "Do you have workers' compensation for employees?",
+            "Is the company certified for lead-safe work?",
+            "What credentials does the company possess?",
+            "Are there any background checks for employees?",
+            "What insurance coverage does the company offer?"
           ],
           "answer_spoken": "Colorado Master Plumber License MP.0048213, held by Jo Lindqvist; Denver Plumbing Contractor License PC-27715; $2,000,000 general liability insurance, and workers' compensation for every employee; Lead-safe certified firm (RRP) for work in",
           "provenance": {
@@ -3968,16 +3922,16 @@
         },
         {
           "id": "credentials-homes-built",
-          "topic": "insurance",
+          "topic": "credentials",
           "question_variants": [
-            "homes built before 1978; Background checks for everyone who comes to your home.",
-            "what insurance do you have",
-            "do you conduct background checks",
-            "Credentials",
-            "Are background checks conducted for all employees?",
-            "Is safety a priority when selecting staff?",
-            "How does ensure employee trustworthiness?",
-            "Do all home visitors pass background checks?"
+            "Are employees background checked?",
+            "Is the company lead-safe certified?",
+            "What safety certifications does the company have?",
+            "Do you have a Master Plumber on staff?",
+            "Is the company insured for general liability?",
+            "Are there any special certifications for old homes?",
+            "What credentials should I look for in a plumber?",
+            "Does the company have all necessary licenses?"
           ],
           "answer_spoken": "homes built before 1978; Background checks for everyone who comes to your home.",
           "provenance": {
@@ -4008,16 +3962,16 @@
         },
         {
           "id": "how-we-work-in-your-home",
-          "topic": "work_in_home",
+          "topic": "work_process",
           "question_variants": [
-            "how do you work in customers' homes",
-            "How we work in your home",
-            "Do you use drop cloths during home repairs?",
-            "Is the work area photographed before and after?",
-            "Are old parts removed unless requested otherwise?",
-            "Do you ensure a clean work area post-job?",
-            "Is there a protocol for working in homes?",
-            "What measures are taken to protect home interiors?"
+            "Do you clean up after the job?",
+            "Will you show me before and after photos?",
+            "What happens to old parts after repair?",
+            "Do you use shoe covers during work?",
+            "Is the work area left clean?",
+            "Do you take photos of the problem?",
+            "Are drop cloths used to protect surfaces?",
+            "Can I keep the old fixtures if I want?"
           ],
           "answer_spoken": "Shoe covers on and drop cloths down before any tools come out; We photograph the problem and show you before and after; Old parts and fixtures leave with us unless you want to keep them; The work area is left as clean as we found it.",
           "provenance": {
@@ -4044,16 +3998,15 @@
         },
         {
           "id": "phone-text-and-email",
-          "topic": "after_hours_surcharge",
+          "topic": "contact_info",
           "question_variants": [
-            "is there a surcharge for after hours service",
-            "Phone, text and email",
-            "Office: (720) 555-0142 During office hours; Emergency plumbing: (720) 555-0199 24/7 for our core service area.",
-            "What are the contact hours office?",
-            "How can I reach for plumbing emergencies?",
-            "Is there a 24/7 contact number?",
-            "What's the phone number office?",
-            "How can I contact outside of office hours?"
+            "What's the office phone number?",
+            "How can I reach you for emergencies?",
+            "What are your office hours?",
+            "Can I call you after hours?",
+            "What's the number for plumbing emergencies?",
+            "How can I contact you during office hours?",
+            "Is there a different number for emergencies?"
           ],
           "answer_spoken": "Office: (720) 555-0142 During office hours; Emergency plumbing: (720) 555-0199 24/7 for our core service area.",
           "provenance": {
@@ -4074,67 +4027,27 @@
               {
                 "url": "https://kettlewick.example.com/contact.html",
                 "quote": "(720) 555-019924/7 for our core service area"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "After-hours surcharge applies"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Text photos"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "(720) 555-0147Include your name and ZIP code"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "email"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "quotes@kettlewick.example.com"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Office and warehouse"
               }
             ]
           }
         },
         {
           "id": "phone-text-and-email-after-hours",
-          "topic": "after_hours_surcharge",
+          "topic": "contact_info",
           "question_variants": [
-            "What is the address office and warehouse?",
-            "is there a surcharge for after hours service",
-            "Phone, text and email",
-            "Can I visit location for walk-in service?",
-            "What's the email address for quote requests?",
-            "How can I send photos via text to Kettlewick?",
-            "Is there an after-hours surcharge for contacting Kettlewick?",
-            "What information should I include when texting photos to Kettlewick?"
+            "Is there an after-hours fee?",
+            "Can I send photos via text?",
+            "What should I include when texting photos?",
+            "What's the email for quotes?",
+            "Where is your office located?",
+            "Do you offer walk-in service?",
+            "What's the address of your warehouse?",
+            "How can I request a quote via email?"
           ],
-          "answer_spoken": "After-hours surcharge applies; Text photos: (720) 555-0147 Include your name and ZIP code; Email: quotes@kettlewick.example.com; Office and warehouse: 1880 W. Quill Ave, Unit B, Denver, CO 80211 No walk-in service.",
+          "answer_spoken": "After-hours surcharge applies; Text photos: (720) 555-0147 Include your name and ZIP code; Email: quotes@kettlewick.example.com; Office and warehouse: 1880 W.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Office"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "(720) 555-0142During office hours"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Emergency plumbing"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "(720) 555-019924/7 for our core service area"
-              },
               {
                 "url": "https://kettlewick.example.com/contact.html",
                 "quote": "After-hours surcharge applies"
@@ -4158,82 +4071,50 @@
               {
                 "url": "https://kettlewick.example.com/contact.html",
                 "quote": "Office and warehouse"
+              },
+              {
+                "url": "https://kettlewick.example.com/contact.html",
+                "quote": "1880 W"
               }
             ]
           }
         },
         {
-          "id": "phone-text-and-email-come",
-          "topic": "after_hours_surcharge",
+          "id": "phone-text-and-email-quill-unit",
+          "topic": "location",
           "question_variants": [
-            "We come to you.",
-            "is there a surcharge for after hours service",
-            "Phone, text and email",
-            "Do you come to the customer's location for service?",
-            "Is onsite service available for all types of jobs?",
-            "How is service typically conducted?",
-            "Can I expect a technician to visit my home for repairs?",
-            "Is there an option for in-shop service?"
+            "Where is your physical location?",
+            "Do you offer walk-in services?",
+            "What's your address in Denver?",
+            "Can I visit your office without an appointment?",
+            "Where can I find your office?",
+            "Is there a specific unit for your office?",
+            "Do you have a storefront in Denver?",
+            "What's the ZIP code of your location?"
           ],
-          "answer_spoken": "We come to you.",
+          "answer_spoken": "Quill Ave, Unit B, Denver, CO 80211 No walk-in service.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Office"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "(720) 555-0142During office hours"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Emergency plumbing"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "(720) 555-019924/7 for our core service area"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "After-hours surcharge applies"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Text photos"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "(720) 555-0147Include your name and ZIP code"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "email"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "quotes@kettlewick.example.com"
-              },
-              {
-                "url": "https://kettlewick.example.com/contact.html",
-                "quote": "Office and warehouse"
+                "quote": "Quill Ave, Unit B, Denver, CO 80211No walk-in service."
               }
             ]
           }
         },
         {
           "id": "hours",
-          "topic": "holiday_surcharge",
+          "topic": "availability",
           "question_variants": [
             "What are the emergency plumbing hours?",
-            "Hours",
-            "The office answers the phone and email during office hours.",
-            "What are the office hours?",
-            "When is the office operational?",
-            "Are there specific hours for phone and email responses?",
-            "When can I expect office services?",
-            "What are the operational hours office?"
+            "Are you available outside of office hours?",
+            "How can I reach you in an emergency?",
+            "Do you offer 24/7 service?",
+            "What are your regular office hours?",
+            "Is there someone to call after hours?",
+            "How quickly do you respond to emergencies?",
+            "Can I email you outside of office hours?"
           ],
           "answer_spoken": "The office answers the phone and email during office hours. The emergency line is answered 24 hours a day, 7 days a week, for plumbing emergencies in our core service area.",
           "provenance": {
@@ -4252,16 +4133,16 @@
         },
         {
           "id": "hours-office-closed",
-          "topic": "holiday_surcharge",
+          "topic": "holidays",
           "question_variants": [
-            "is there a surcharge on holidays",
-            "The office is closed on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day and Christmas Day.",
-            "Is the office closed on holidays?",
-            "What holidays does observe for closures?",
-            "Is there a surcharge for emergency calls on holidays?",
-            "Does maintain emergency services on holidays?",
-            "Are there different rates for holiday emergency services?",
-            "What holiday schedule does follow?"
+            "Are you open on holidays?",
+            "What holidays are you closed on?",
+            "Is there a surcharge on holidays?",
+            "Can I call you on Memorial Day?",
+            "Do you work on Thanksgiving Day?",
+            "Is the emergency line open on holidays?",
+            "What's the holiday surcharge amount?",
+            "Are you available on Christmas Day?"
           ],
           "answer_spoken": "The office is closed on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day and Christmas Day. The emergency line stays open on those days, and the $195 holiday surcharge applies.",
           "provenance": {
@@ -4276,16 +4157,16 @@
         },
         {
           "id": "request-a-free-quote",
-          "topic": "request_a_free_quote",
+          "topic": "quote",
           "question_variants": [
-            "Request a free quote",
-            "This isn't a booking.",
-            "Is a quote request a confirmed booking?",
-            "How does the quote process begin?",
-            "Does Jo Lindqvist review every quote request?",
-            "Is approval required before scheduling a service?",
-            "What happens after submitting a quote request?",
-            "Is there a written quote provided for services?"
+            "Is a quote the same as booking?",
+            "What happens after I request a quote?",
+            "Do I need to approve the quote?",
+            "How does the quote process work?",
+            "Is anything scheduled without my approval?",
+            "What does Jo do with my quote request?",
+            "Do I get a written quote after request?",
+            "Is the quote process mandatory before work?"
           ],
           "answer_spoken": "This isn't a booking. Jo reviews your request and replies with a written quote, and nothing is scheduled until you approve it.",
           "applies_to": [
@@ -4297,6 +4178,30 @@
               {
                 "url": "https://kettlewick.example.com/contact.html",
                 "quote": "This isn't a booking. Jo reviews your request and replies with a written quote, and nothing is scheduled until you approve it."
+              }
+            ]
+          }
+        },
+        {
+          "id": "quote-request",
+          "topic": "quote",
+          "question_variants": [
+            "Can I get a quote without calling?",
+            "Is there an online form for quotes?",
+            "Do you offer phone quotes?",
+            "How can I request a quote?",
+            "Is quoting available online?",
+            "Can I call for a quote?",
+            "What's the process for getting a quote?",
+            "Are online quotes as good as phone quotes?"
+          ],
+          "answer_spoken": "you can request a quote online or by phone",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://kettlewick.example.com/about.html",
+                "quote": "Request a quote"
               }
             ]
           }
@@ -4593,7 +4498,7 @@
       "kind": "web_page",
       "url": "https://kettlewick.example.com/index.html",
       "title": "Kettlewick Home Repair | Denver plumbing and handyman repairsCutaway drawing of a Denver house and the jobs we handle in",
-      "retrieved_at": "2026-10-20T07:51:28Z",
+      "retrieved_at": "2026-10-20T08:47:41Z",
       "content_sha256": "5d28ede9b67a76fc61c2270e7815457ed2beb3b60c72237f112d3169cba24824",
       "injection_canaries": [
         {
@@ -4606,7 +4511,7 @@
       "kind": "web_page",
       "url": "https://kettlewick.example.com/services.html",
       "title": "Services and prices | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-20T07:51:28Z",
+      "retrieved_at": "2026-10-20T08:47:41Z",
       "content_sha256": "85df4ef96a71c58a1da4d19e99946cb4f889647e8b4c0548a7a3a2b1ea353336",
       "injection_canaries": [
         {
@@ -4619,28 +4524,28 @@
       "kind": "web_page",
       "url": "https://kettlewick.example.com/service-area.html",
       "title": "Service area | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-20T07:51:28Z",
+      "retrieved_at": "2026-10-20T08:47:41Z",
       "content_sha256": "bc34ded07bbce6d5914fd93d0021aedd5a4cf5dff1b05fba334033bf8eaa188a"
     },
     "web-how-it-works": {
       "kind": "web_page",
       "url": "https://kettlewick.example.com/how-it-works.html",
       "title": "How quotes work | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-20T07:51:28Z",
+      "retrieved_at": "2026-10-20T08:47:41Z",
       "content_sha256": "9a05d89b1d02e14deb81f655a77eb8d8ac0c0d8de49c5ce597cfd9d48d22708e"
     },
     "web-about": {
       "kind": "web_page",
       "url": "https://kettlewick.example.com/about.html",
       "title": "About us | Kettlewick Home RepairA white Kettlewick service van with a yellow stripe and a ladder on the roof",
-      "retrieved_at": "2026-10-20T07:51:28Z",
+      "retrieved_at": "2026-10-20T08:47:41Z",
       "content_sha256": "ff5404b5454de31cbb481f5bd3510b558ba03c7ac1391da3c34d5612a6ad9a42"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://kettlewick.example.com/contact.html",
       "title": "Contact and quote requests | Kettlewick Home Repair",
-      "retrieved_at": "2026-10-20T07:51:28Z",
+      "retrieved_at": "2026-10-20T08:47:41Z",
       "content_sha256": "4ba653f0142fa309e54e452c8f5660bd9b03e4924e4f29c9530f19011b46318b"
     }
   },
@@ -4936,9 +4841,9 @@
           "version": "1.0"
         },
         "profile_revision": 1,
-        "profile_sha256": "b125e432533c54fe9002ebdeb1b41c0a6fa5fe1c4bb4dc51785bbbccd3503b4d",
-        "started_at": "2026-10-20T07:51:39Z",
-        "finished_at": "2026-10-20T07:51:44Z",
+        "profile_sha256": "47ff8586c23aed8179d667ec2d5603876b4771c31c557ed7433cd598fbdc1e09",
+        "started_at": "2026-10-20T08:47:52Z",
+        "finished_at": "2026-10-20T08:47:59Z",
         "result": "passed",
         "cases_total": 100,
         "cases_passed": 100,

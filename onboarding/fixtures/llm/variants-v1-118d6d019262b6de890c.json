@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-118d6d019262b6de890c",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service.",
+ "questions": [
+  "Can I choose my stylist for the appointment?",
+  "What happens if I don't specify a stylist?",
+  "Are there any restrictions on stylist selection?",
+  "How do I request a specific stylist?",
+  "Can I change my stylist preference after booking?",
+  "Are all stylists available for every service?",
+  "What if my preferred stylist is unavailable?",
+  "How do I know which stylists offer my service?"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-e320dff0355143a7047b",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:27:56+00:00",
+ "answer": "Open Tuesday to Sunday. Closed Mondays.",
+ "questions": [
+  "Are you open on Mondays?",
+  "What days are you closed?",
+  "Do you have different hours on weekends?",
+  "Are you open every day of the week?",
+  "What are your operating days?",
+  "Is the bakery open on Tuesday?",
+  "Do you close on Mondays?",
+  "What time do you open on Sundays?"
+ ]
+}

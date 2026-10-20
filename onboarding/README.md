@@ -34,9 +34,12 @@ to group variants or copy an allergen list). Holiday closures are resolved in co
 date as written, a named holiday as its next date in the business's country. Re-locate every quote on its
 page or drop the fact. Assemble the profile deterministically: merge one product seen on several pages, drop
 category teasers, derive approval rules (servings thresholds, items whose footnote mark needs a deposit),
-read-outs before confirming and booking resources. Ask the model for a few customer phrasings per policy
-answer (cached per entry, `variants.py`), and put first a question the server's own matcher answers with that
-entry. Find contradictions per key, plus a model review pass held to invariant L10; an owner's answer to a
+read-outs before confirming and booking resources. One model call per site names the subject of each
+policy statement (`topics.py`): a section's statements are regrouped by subject, each entry takes its subject
+as its topic, and subjects that start alike share one ("cancellation notice", "cancellation charges").
+Ask the model for eight customer phrasings per policy answer, including indirect ones ("I have sensitive
+skin"; cached per entry, `variants.py`); they replace headings and page sentences as question variants, and a
+question the server's own matcher answers with that entry goes first. Find contradictions per key, plus a model review pass held to invariant L10; an owner's answer to a
 contradiction also corrects any policy entry that repeated the overruled value. Validate with the server's
 strict loader against the snapshots. Model replies are cached in `fixtures/llm/`.
 

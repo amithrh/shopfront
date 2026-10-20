@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-c8354f5c971346bd6372",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "We take credit and debit cards, bank transfer (ACH) and checks. We don't take cash.",
+ "questions": [
+  "What payment methods do you accept?",
+  "Can I pay with a credit or debit card?",
+  "Do you accept bank transfers or checks?",
+  "What if I prefer to pay in cash?",
+  "Are there any payment methods you don't accept?",
+  "Can I pay online using a credit card?",
+  "What if I don't have a bank account?",
+  "Are there any additional fees for certain payment methods?"
+ ]
+}

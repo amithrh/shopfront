@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-e7224ef62e326ff55aa6",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "An adult 18 or older needs to be home at the start and end of every visit. Please keep pets in another room while we work.",
+ "questions": [
+  "Do I need to be home during the service?",
+  "What if I'm not available when the technician arrives?",
+  "Can someone else be present for the service?",
+  "What if I have pets at home?",
+  "Do pets need to be kept away during the work?",
+  "What if I'm not an adult during the service?",
+  "Can I leave my home unattended during the repair?",
+  "What if I have special requirements for the service?"
+ ]
+}

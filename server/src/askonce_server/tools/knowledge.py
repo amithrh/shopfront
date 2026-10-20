@@ -408,6 +408,11 @@ def best_entry(profile: Profile, question: str, topic: str | None) -> tuple[str,
     entries = profile.knowledge_entries()
     frequency = document_frequency([entry for _module_id, entry in entries], units)
     in_answers = answer_frequency([entry for _module_id, entry in entries], units)
+    # The business's own name is in many answers, but an answer that names it ("Kettlewick started in 2014")
+    # explains it in a question as well as a rare word would ("when did Kettlewick start").
+    for word in tokens(str(profile.business.get("name") or "")) | tokens(str(profile.business.get("spoken_name") or "")):
+        if word in in_answers:
+            in_answers[word] = 1
     # "Do you deliver to Beaverton?": a place the customer names is where, not what, they ask about. A
     # place the business never mentions is left out of the match (one it does mention still counts).
     unknown_places = {w for w in named_places(question, units) if not frequency.get(w) and not in_answers.get(w)}

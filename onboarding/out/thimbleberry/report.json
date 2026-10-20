@@ -194,7 +194,7 @@
   ],
   "model": {
     "calls": 0,
-    "cache_hits": 7,
+    "cache_hits": 8,
     "cost_usd": 0.0
   }
 }

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-310eaf18ae62f474b99a",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:59+00:00",
+ "answer": "We accept credit and debit cards, tap-to-pay and cash. We don't accept checks.",
+ "questions": [
+  "What payment methods do you accept?",
+  "Can I pay with a credit card?",
+  "Do you accept cash payments?",
+  "What if I want to pay with a debit card?",
+  "Are checks accepted as payment?",
+  "Can I use tap-to-pay for my appointment?",
+  "What's the policy on payment methods?",
+  "Do you have any restrictions on payment types?"
+ ]
+}

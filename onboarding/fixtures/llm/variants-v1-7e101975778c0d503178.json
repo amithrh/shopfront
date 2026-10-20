@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-7e101975778c0d503178",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:26+00:00",
+ "answer": "No. All cakes are picked up at the bakery, Tuesday to Sunday, between 10:00 am and 2:00 pm.",
+ "questions": [
+  "Do you offer cake delivery?",
+  "Can I pick up a cake at the bakery?",
+  "What are the cake pickup hours?",
+  "Are cakes available for pickup every day?",
+  "Can I get my cake on a Monday?",
+  "What days can I collect my cake?",
+  "Is there a specific time for cake pickup?",
+  "Do you have weekend pickup options for cakes?"
+ ]
+}

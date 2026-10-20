@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-9ab28e4bee9741a4ad71",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:20+00:00",
+ "answer": "The office is closed on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day and Christmas Day. The emergency line stays open on those days, and the $195 holiday surcharge applies.",
+ "questions": [
+  "Are you open on holidays?",
+  "What holidays are you closed on?",
+  "Is there a surcharge on holidays?",
+  "Can I call you on Memorial Day?",
+  "Do you work on Thanksgiving Day?",
+  "Is the emergency line open on holidays?",
+  "What's the holiday surcharge amount?",
+  "Are you available on Christmas Day?"
+ ]
+}

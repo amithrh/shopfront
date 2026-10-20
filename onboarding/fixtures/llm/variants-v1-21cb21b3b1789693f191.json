@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-21cb21b3b1789693f191",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:29:26+00:00",
+ "answer": "Oregon has no sales tax, so menu prices are what you pay.",
+ "questions": [
+  "Is there sales tax on menu items?",
+  "Do I need to add tax to the menu price?",
+  "Are the prices listed final?",
+  "Is sales tax included in the price?",
+  "What's the total cost I'll pay?",
+  "Do I pay extra for sales tax?",
+  "Are menu prices what I pay?",
+  "Is there any additional cost beyond the menu price?"
+ ]
+}

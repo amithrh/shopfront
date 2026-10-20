@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-90e48dea0d41ff572b55",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:39+00:00",
+ "answer": "Color services need a $50 deposit, taken by card when we confirm your appointment. It comes off your bill at checkout.",
+ "questions": [
+  "Is there a deposit required for color services?",
+  "What is the amount of the deposit for color services?",
+  "How is the deposit for color services collected?",
+  "Is the deposit deducted from the final bill?",
+  "What payment method is used for the color service deposit?",
+  "Are there any additional charges for color services?",
+  "How does the deposit process work for color appointments?",
+  "Is the deposit refundable or applied to the service cost?"
+ ]
+}

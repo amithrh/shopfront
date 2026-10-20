@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-b3966d2ca59895e13819",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "A quote covers the work it describes.",
+ "questions": [
+  "What does a quote cover?",
+  "Is the quote specific to the described work?",
+  "Does the quote include all necessary work?",
+  "What if additional work is needed?",
+  "Are there any hidden costs in the quote?",
+  "Does the quote cover all aspects of the job?",
+  "What if the work scope changes?",
+  "Is the quote comprehensive for the described task?"
+ ]
+}

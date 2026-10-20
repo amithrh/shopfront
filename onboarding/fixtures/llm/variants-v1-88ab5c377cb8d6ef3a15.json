@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-88ab5c377cb8d6ef3a15",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:20+00:00",
+ "answer": "Quill Ave, Unit B, Denver, CO 80211 No walk-in service.",
+ "questions": [
+  "Where is your physical location?",
+  "Do you offer walk-in services?",
+  "What's your address in Denver?",
+  "Can I visit your office without an appointment?",
+  "Where can I find your office?",
+  "Is there a specific unit for your office?",
+  "Do you have a storefront in Denver?",
+  "What's the ZIP code of your location?"
+ ]
+}

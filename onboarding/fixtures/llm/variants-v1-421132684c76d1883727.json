@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-421132684c76d1883727",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:39+00:00",
+ "answer": "Appointments start every 15 minutes: 10:00, 10:15, 10:30, 10:45 and so on.",
+ "questions": [
+  "How frequently do appointments start at the studio?",
+  "What is the interval between appointment start times?",
+  "Are appointments scheduled every 15 minutes?",
+  "What are the specific times for appointment starts?",
+  "How are appointment times structured at the studio?",
+  "Is there a consistent pattern for appointment start times?",
+  "What are the designated times for appointments?",
+  "How often are new appointments scheduled?"
+ ]
+}

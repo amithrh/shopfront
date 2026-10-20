@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-b6b41252f82ed92c4982",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:59+00:00",
+ "answer": "If you're more than 15 minutes late, we may need to shorten your service or move your appointment to another time so the next client isn't kept waiting. If you're running behind, call us and we'll tell you what we can do.",
+ "questions": [
+  "What if I'm more than 15 minutes late?",
+  "Do I get charged for being late?",
+  "Can my service be shortened if I'm late?",
+  "What should I do if I'm running behind?",
+  "Will my appointment be moved if I'm late?",
+  "Is there a policy for late arrivals?",
+  "What happens if I'm late for my appointment?",
+  "Do I need to call if I'm running late?"
+ ]
+}

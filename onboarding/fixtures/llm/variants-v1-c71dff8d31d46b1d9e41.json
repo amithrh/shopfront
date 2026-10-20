@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-c71dff8d31d46b1d9e41",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:39+00:00",
+ "answer": "Call (512) 555-0147 during studio hours, or email quillfernhairstudio@example.com. We reply to email within one business day.",
+ "questions": [
+  "What is the contact number for the studio during operating hours?",
+  "How can I reach the studio via email?",
+  "Is there a specific email address provided for inquiries?",
+  "What is the response time for email inquiries?",
+  "Can I contact the studio by phone or email?",
+  "What are the studio's contact details for communication?",
+  "Is there a guaranteed response time for email communication?",
+  "How can I get in touch with the studio for further information?"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-dce359b1cc65255dd785",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "Call the office and we'll refer you to a licensed plumber who works there.",
+ "questions": [
+  "Who can I call for service in other areas?",
+  "Can you recommend a plumber for my area?",
+  "What if you don't service my location?",
+  "Do you have referrals for other plumbers?",
+  "Can I get a local plumber's contact?",
+  "What's the process for out-of-area service?",
+  "Who services areas you don't cover?",
+  "Can you help me find a plumber nearby?"
+ ]
+}

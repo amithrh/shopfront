@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-01dddb563322c52a1ad0",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:33:34+00:00",
+ "answer": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you.",
+ "questions": [
+  "How do I book an appointment?",
+  "Can I choose my stylist when booking?",
+  "What services can I book online?",
+  "How far in advance should I book?",
+  "Can I book multiple services at once?",
+  "Do I need to specify a time for my appointment?",
+  "Can I book for someone else?",
+  "What information do I need to provide when booking?"
+ ]
+}

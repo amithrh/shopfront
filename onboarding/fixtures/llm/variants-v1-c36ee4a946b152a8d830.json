@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-c36ee4a946b152a8d830",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "We schedule work on Saturday mornings, with arrivals from 8 to 10 am. On Sundays and holidays we handle plumbing emergencies only, with a $195 surcharge.",
+ "questions": [
+  "Do you work on Saturdays?",
+  "What's the Saturday service time?",
+  "Are there Sunday services?",
+  "What's the holiday service fee?",
+  "Is there a surcharge for weekend work?",
+  "What time do you arrive on Saturdays?",
+  "Do you handle emergencies on Sundays?",
+  "What's the extra charge for holiday service?"
+ ]
+}

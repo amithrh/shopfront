@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 import pytest
@@ -124,3 +125,14 @@ def test_named_places_are_capitalised_names_or_postal_codes_after_a_place_word()
     assert knowledge.named_places("Do you deliver to Beaverton?") == {"beaverton"}
     assert knowledge.named_places("Do you come out to 80211?") == {"80211"}
     assert knowledge.named_places("Can I go to cancel it?") == frozenset()
+
+
+def test_the_business_name_is_explained_by_an_answer_that_names_it(live_raw_profiles: dict[str, dict[str, Any]]) -> None:
+    raw = copy.deepcopy(live_raw_profiles["kettlewick-home"])
+    entries = {e["id"]: e for m in raw["modules"].values() for e in m.get("entries") or ()}
+    entries["history"]["question_variants"] = ["When did this repair company start?", "How old is the company?"]
+    entries["arrival-windows"]["question_variants"].append("When do you start the work?")
+    for other in ("team", "warranty", "spanish"):  # the name is in many answers, so not a rare word
+        entries[other]["answer_spoken"] = f"At Kettlewick: {entries[other]['answer_spoken']}"[:240]
+    match = knowledge.best_entry(loaded(raw), "When did Kettlewick start?", None)
+    assert match is not None and match[1]["id"] == "history"

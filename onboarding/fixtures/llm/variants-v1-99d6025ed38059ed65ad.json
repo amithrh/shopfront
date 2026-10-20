@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-99d6025ed38059ed65ad",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "Every appointment has to finish by closing time, so longer services need an earlier start. For example, balayage past the shoulder blades takes 4 hours, so on a Saturday it has to start by 1:00 pm.",
+ "questions": [
+  "What's the latest start time for longer services?",
+  "How do service durations affect appointment times?",
+  "Are there specific start times for certain services?",
+  "What's the policy for services that take over 3 hours?",
+  "How do I know the required start time for my service?",
+  "Are there any exceptions to the closing time rule?",
+  "What happens if my service runs past closing time?",
+  "How do I schedule a service that takes several hours?"
+ ]
+}

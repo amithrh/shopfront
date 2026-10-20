@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-b323b209b8e5493a3978",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:29:41+00:00",
+ "answer": "Extended area $35 travel fee per visit. Scheduled work only.",
+ "questions": [
+  "Is there a fee for out-of-area visits?",
+  "Do you charge extra for distant locations?",
+  "What's the cost for travel outside your main area?",
+  "Are there additional charges for extended service areas?",
+  "How much is the travel fee per visit?",
+  "Do you have a travel charge for certain areas?",
+  "Is the travel fee the same for all services?",
+  "What areas have a travel fee applied?"
+ ]
+}

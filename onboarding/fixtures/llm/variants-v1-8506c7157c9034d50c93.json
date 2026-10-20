@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-8506c7157c9034d50c93",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:20+00:00",
+ "answer": "After-hours surcharge applies; Text photos: (720) 555-0147 Include your name and ZIP code; Email: quotes@kettlewick.example.com; Office and warehouse: 1880 W.",
+ "questions": [
+  "Is there an after-hours fee?",
+  "Can I send photos via text?",
+  "What should I include when texting photos?",
+  "What's the email for quotes?",
+  "Where is your office located?",
+  "Do you offer walk-in service?",
+  "What's the address of your warehouse?",
+  "How can I request a quote via email?"
+ ]
+}

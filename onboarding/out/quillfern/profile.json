@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "profile_id": "quillfern",
   "revision": 1,
-  "updated_at": "2026-10-20T07:51:36Z",
+  "updated_at": "2026-10-20T08:47:49Z",
   "template": {
     "id": "salon",
     "version": "1.0"
@@ -780,15 +780,16 @@
       "entries": [
         {
           "id": "about-us",
-          "topic": "about",
+          "topic": "studio",
           "question_variants": [
-            "Quillfern is a three-chair hair studio in East Austin for cuts, color and blowouts.",
-            "About us",
-            "How many chairs are there?",
-            "Where is located in Austin?",
-            "What type of lighting is used in the mirrors?",
-            "Does match the color seen in-studio outdoors?",
-            "Is a good place for cuts and color?"
+            "What services does the hair studio offer?",
+            "How many chairs are there at the studio?",
+            "Are the mirrors in the studio daylight-balanced?",
+            "What can I expect to see in the chair?",
+            "Is the color I see in the chair accurate?",
+            "Do they offer cuts, color, and blowouts?",
+            "Is the studio located in East Austin?",
+            "What type of lighting is used in the mirrors?"
           ],
           "answer_spoken": "Quillfern is a three-chair hair studio in East Austin for cuts, color and blowouts. Every mirror is lit with daylight-balanced bulbs, so the color you see in the chair is the color you see outside.",
           "applies_to": [
@@ -806,15 +807,16 @@
         },
         {
           "id": "about-us-open-tuesday",
-          "topic": "about",
+          "topic": "location",
           "question_variants": [
-            "Open Tuesday through Sunday.",
-            "What are the opening days?",
-            "Is open on Mondays?",
-            "When does close during the week?",
-            "Can I visit on a Monday?",
-            "What day of the week is closed?",
-            "Are there any days doesn't operate?"
+            "Are you open on Mondays?",
+            "What are your operating days?",
+            "Do you close on any specific day of the week?",
+            "Are you open every day of the week?",
+            "What days are you closed?",
+            "Do you have any days off?",
+            "Are you open on weekends?",
+            "What are your studio's working hours?"
           ],
           "answer_spoken": "Open Tuesday through Sunday. Closed Mondays.",
           "provenance": {
@@ -833,14 +835,16 @@
         },
         {
           "id": "about-us-east-marigold",
-          "topic": "about",
+          "topic": "location",
           "question_variants": [
-            "1906 East Marigold Street, Suite B, Austin, TX 78702",
-            "Where can I find in Austin?",
-            "What street is located on?",
-            "Can you provide the full address?",
-            "Is on East Marigold Street?",
-            "What suite number is in?"
+            "What is the address of the hair studio?",
+            "Where is the studio located?",
+            "Can you provide the exact location of the studio?",
+            "What is the street name and number of the studio?",
+            "Where can I find the hair studio in Austin?",
+            "What is the suite number of the studio?",
+            "Is the studio located on East Marigold Street?",
+            "Can you give me the full address of the studio?"
           ],
           "answer_spoken": "1906 East Marigold Street, Suite B, Austin, TX 78702",
           "provenance": {
@@ -859,14 +863,16 @@
         },
         {
           "id": "services-and-price",
-          "topic": "services_and_price",
+          "topic": "appointment",
           "question_variants": [
-            "Services & price",
-            "What we do, how long it takes, who does it and what it costs.",
-            "How much time does each appointment take?",
-            "Who performs the services?",
-            "What is the cost of services?",
-            "Do appointments have a cancellation policy?"
+            "How long do appointments typically last?",
+            "What information is provided about each appointment?",
+            "Is there a cancellation policy for appointments?",
+            "How often do appointments start?",
+            "What details are included in the appointment information?",
+            "Are appointments covered by a cancellation policy?",
+            "How frequently are appointments scheduled?",
+            "What should I know about the appointment duration and cost?"
           ],
           "answer_spoken": "What we do, how long it takes, who does it and what it costs. Appointments start every 15 minutes, and every appointment is covered by our cancellation policy.†",
           "provenance": {
@@ -881,43 +887,92 @@
         },
         {
           "id": "the-team",
-          "topic": "the_team",
+          "topic": "stylists",
           "question_variants": [
-            "The team",
-            "Three stylists, each with their own lane.",
-            "How many stylists work?",
-            "Does match clients with stylists?",
-            "Who are the stylists?",
-            "Can I choose my stylist?",
-            "How does assign stylists to clients?"
+            "How many stylists work at the studio?",
+            "Are there multiple stylists available?",
+            "Do the stylists have their own specialties?",
+            "Is there a specific stylist for each service?",
+            "How many stylists can I choose from?",
+            "Are the stylists experienced in different areas?",
+            "Do the stylists have their own lanes?",
+            "Is there a variety of stylists to choose from?"
           ],
-          "answer_spoken": "Three stylists, each with their own lane. Ask for anyone by name, or tell us what you're after and we'll match you with the right chair.",
+          "answer_spoken": "Three stylists, each with their own lane.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/team.html",
-                "quote": "Three stylists, each with their own lane. Ask for anyone by name, or tell us what you're after and we'll match you with the right chair. If you don't have a preference, we book the first available stylist who offers your service."
+                "quote": "Three stylists, each with their own lane."
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-team-anyone-name",
+          "topic": "stylist",
+          "question_variants": [
+            "Can I request a specific stylist by name?",
+            "How can I be matched with the right stylist?",
+            "Is it possible to ask for a particular stylist?",
+            "Can I specify what I'm looking for in a stylist?",
+            "Do I have the option to choose a stylist?",
+            "How can I ensure I get the right stylist for my needs?",
+            "Can I tell the studio what I want and they'll match me with a stylist?",
+            "Is there flexibility in selecting a stylist?"
+          ],
+          "answer_spoken": "Ask for anyone by name, or tell us what you're after and we'll match you with the right chair.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/team.html",
+                "quote": "Ask for anyone by name, or tell us what you're after and we'll match you with the right chair."
+              }
+            ]
+          }
+        },
+        {
+          "id": "booking",
+          "topic": "stylist",
+          "question_variants": [
+            "Can I choose my stylist for the appointment?",
+            "What happens if I don't specify a stylist?",
+            "Are there any restrictions on stylist selection?",
+            "How do I request a specific stylist?",
+            "Can I change my stylist preference after booking?",
+            "Are all stylists available for every service?",
+            "What if my preferred stylist is unavailable?",
+            "How do I know which stylists offer my service?"
+          ],
+          "answer_spoken": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service."
               },
               {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Ask for anyone by name. If you don't have a preference, we'll book the first available stylist who offers your service."
+                "url": "https://quillfern.example/team.html",
+                "quote": "If you don't have a preference, we book the first available stylist who offers your service."
               }
             ]
           }
         },
         {
           "id": "studio-policy",
-          "topic": "studio_policy",
+          "topic": "contact_info",
           "question_variants": [
-            "Studio policy",
-            "The fine print, kept short.",
-            "What is policy?",
-            "Where can I find terms and conditions?",
-            "Is there a contact number policy inquiries?",
-            "What should I do if policy is unclear?",
-            "How can I get more information about policy?",
-            "Does have a detailed policy document?"
+            "What should I do if something is unclear in the information provided?",
+            "How can I get in touch with the studio for clarification?",
+            "Is there a contact number provided for inquiries?",
+            "What is the phone number to call for any unclear information?",
+            "How can I reach out to the studio for further information?",
+            "What is the contact information for the studio?",
+            "Is there a way to contact the studio directly?",
+            "Can I call the studio for any unclear details?"
           ],
           "answer_spoken": "The fine print, kept short. If anything here is unclear, call us at (512) 555-0147.",
           "provenance": {
@@ -932,15 +987,16 @@
         },
         {
           "id": "contact-and-hour",
-          "topic": "contact_and_hour",
+          "topic": "location",
           "question_variants": [
-            "Contact & hour",
-            "Call, email, or find us on East Marigold Street.",
-            "How can I contact Hair Studio?",
-            "Where is located?",
-            "Can I email Hair Studio?",
-            "What are the operating hours?",
-            "Is there a specific entrance?"
+            "How can I get in touch with the studio?",
+            "What are the different ways to contact the studio?",
+            "Is there a specific location detail provided for finding the studio?",
+            "Can I call, email, or visit the studio's location?",
+            "What is the studio's address and how can I find it?",
+            "Are there any distinctive features to help locate the studio?",
+            "What should I look for when trying to find the studio?",
+            "Is there a recommended method for contacting the studio?"
           ],
           "answer_spoken": "Call, email, or find us on East Marigold Street. The door is around back, under the yellow light.",
           "provenance": {
@@ -955,16 +1011,16 @@
         },
         {
           "id": "most-booked",
-          "topic": "most_booked",
+          "topic": "services",
           "question_variants": [
-            "Most booked",
-            "The services people come back for.",
-            "What are the popular services?",
-            "How can I see the prices for services?",
-            "Where can I find the duration of services?",
-            "Does list all service details online?",
-            "Can I see who the stylists are for each service?",
-            "Are service times available on services page?"
+            "What services are offered at the studio?",
+            "Where can I find information about the studio's services?",
+            "Are the prices and times for services available?",
+            "What are the popular services at the studio?",
+            "Can I see the list of services and their details?",
+            "Where can I find the pricing and duration of services?",
+            "What are the recurring services that customers enjoy?",
+            "Is there a dedicated page for the studio's services?"
           ],
           "answer_spoken": "The services people come back for. Every price, time and stylist is on the services page.",
           "provenance": {
@@ -979,15 +1035,16 @@
         },
         {
           "id": "before-you-book",
-          "topic": "appointments",
+          "topic": "appointment",
           "question_variants": [
             "how often are appointments scheduled?",
-            "Before you book",
-            "Appointments start every 15 minutes: 10:00, 10:15, 10:30, 10:45 and so on.",
-            "Can I book an appointment at 10:20?",
-            "Does offer appointments every 15 minutes?",
-            "Is it possible to schedule an appointment at 10:50?",
-            "What time slots are available for booking?"
+            "How frequently do appointments start at the studio?",
+            "What is the interval between appointment start times?",
+            "Are appointments scheduled every 15 minutes?",
+            "What are the specific times for appointment starts?",
+            "How are appointment times structured at the studio?",
+            "Is there a consistent pattern for appointment start times?",
+            "What are the designated times for appointments?"
           ],
           "answer_spoken": "Appointments start every 15 minutes: 10:00, 10:15, 10:30, 10:45 and so on.",
           "facts": {
@@ -1009,12 +1066,12 @@
           "question_variants": [
             "What is the deposit policy for color services?",
             "is a deposit required for color services?",
-            "Footnotes",
-            "Color services need a $50 deposit, taken by card when we confirm your appointment.",
-            "What is the deposit amount for color services?",
+            "Is there a deposit required for color services?",
+            "What is the amount of the deposit for color services?",
             "How is the deposit for color services collected?",
-            "When is the deposit for color services applied to the bill?",
-            "Is the deposit for color services refundable?"
+            "Is the deposit deducted from the final bill?",
+            "What payment method is used for the color service deposit?",
+            "Are there any additional charges for color services?"
           ],
           "answer_spoken": "Color services need a $50 deposit, taken by card when we confirm your appointment. It comes off your bill at checkout.",
           "facts": {
@@ -1040,16 +1097,16 @@
         },
         {
           "id": "before-you-book-first-time",
-          "topic": "appointments",
+          "topic": "patch_test",
           "question_variants": [
             "is a patch test required for first-time color clients or those with a history of reactions?",
             "First time getting color with us, or reacted to hair dye before?",
-            "Do I need a patch test before my first color appointment?",
-            "How far in advance should I book a patch test?",
-            "Is there a charge for the patch test?",
-            "What should I do if I've reacted to hair dye before visiting Quillfern?",
-            "Can I book a patch test less than 72 hours before my appointment?",
-            "Are patch tests required for all clients?"
+            "Do I need to book a patch test for color services?",
+            "How far in advance should I schedule a patch test?",
+            "Is there a cost associated with the patch test?",
+            "What should I do if I've reacted to hair dye before?",
+            "Are patch tests required for first-time color appointments?",
+            "How long before my color appointment should I book a patch test?"
           ],
           "answer_spoken": "First time getting color with us, or reacted to hair dye before? Book a free patch test at least 72 hours before your color appointment.",
           "facts": {
@@ -1070,13 +1127,15 @@
         },
         {
           "id": "before-you-book-sundays-cuts",
-          "topic": "appointments",
+          "topic": "sunday_services",
           "question_variants": [
-            "Sundays are for cuts, styling and treatments.",
-            "Can I book a color appointment for Sunday?",
-            "Is Sunday a day for cuts and styling?",
-            "What days of the week does offer color services?",
-            "Are there any restrictions on services offered on Sundays?"
+            "Are color services offered on Sundays?",
+            "What types of appointments can I schedule on Sundays?",
+            "Is there a limitation on services provided on Sundays?",
+            "Can I get a haircut or styling on Sundays?",
+            "Are there any restrictions on Sunday services?",
+            "What should I expect during a Sunday visit to the studio?",
+            "Are there specific services that are not available on Sundays?"
           ],
           "answer_spoken": "Sundays are for cuts, styling and treatments. We don't do color on Sundays.",
           "provenance": {
@@ -1091,46 +1150,40 @@
         },
         {
           "id": "ines-calderon",
-          "topic": "ines_calderon",
+          "topic": "owner",
           "question_variants": [
-            "Inés Calderón",
-            "Who is the owner?",
-            "How many years has Inés Calderón been a hair colorist?",
-            "When did Inés Calderón open Hair Studio?",
-            "What is Inés Calderón's background before opening Quillfern?",
-            "How long has Inés Calderón been coloring hair in San Antonio and Austin?",
-            "Is Inés Calderón still involved in haircuts?"
+            "Who is the owner of the hair studio?",
+            "What is the owner's background in the industry?",
+            "How long has the owner been in the hair industry?",
+            "When was the hair studio established?",
+            "What is the owner's role at the studio?",
+            "How many years of experience does the owner have?",
+            "What prompted the owner to open the studio?",
+            "Can you provide information about the studio's owner?"
           ],
           "answer_spoken": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin.",
-          "applies_to": [
-            "services/balayage",
-            "services/color-correction"
-          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/team.html",
-                "quote": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin. She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week."
-              },
-              {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Owner and color director Balayage, highlights, gray blending and color correction."
+                "quote": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin."
               }
             ]
           }
         },
         {
           "id": "ines-calderon-person-balayage",
-          "topic": "ines_calderon",
+          "topic": "owner",
           "question_variants": [
-            "What services does Inés Calderón specialize in?",
-            "Inés Calderón",
-            "Can Inés Calderón help with color correction?",
-            "Does Inés Calderón offer balayage services?",
-            "Is Inés Calderón available for haircuts?",
-            "What should I book with Inés Calderón for highlights?",
-            "Does Inés Calderón have slots for haircuts each week?"
+            "What services does the owner specialize in?",
+            "Can I book an appointment with the owner for specific services?",
+            "What are the owner's areas of expertise in hair services?",
+            "Are there any haircut slots available with the owner?",
+            "What types of hair services does the owner offer?",
+            "Can I request the owner for certain hair treatments?",
+            "Is the owner available for appointments on a regular basis?",
+            "What are the owner's key services at the studio?"
           ],
           "answer_spoken": "She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week.",
           "applies_to": [
@@ -1142,27 +1195,23 @@
             "evidence": [
               {
                 "url": "https://quillfern.example/team.html",
-                "quote": "Owner and color director, 16 years behind the chair Inés opened Quillfern in 2019 after nine years of coloring hair in San Antonio and Austin. She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week."
-              },
-              {
-                "url": "https://quillfern.example/index.html",
-                "quote": "Owner and color director Balayage, highlights, gray blending and color correction."
+                "quote": "She's the person to see for balayage, highlights, gray blending and color correction, and she still keeps a few haircut slots open each week."
               }
             ]
           }
         },
         {
           "id": "wren-abernathy",
-          "topic": "wren_abernathy",
+          "topic": "senior_stylist_services",
           "question_variants": [
-            "Wren Abernathy",
-            "Senior stylist Precision cuts, bobs and pixies, men's cuts and clipper work.",
-            "What type of cuts does Wren Abernathy specialize in?",
-            "Does Wren Abernathy do men's haircuts?",
-            "Can Wren Abernathy cut pixies and bobs?",
-            "Is Wren Abernathy skilled in clipper work?",
-            "What are the senior stylist's expertise?",
-            "Does Wren Abernathy offer precision cuts?"
+            "What types of haircuts does the senior stylist offer?",
+            "Can the senior stylist provide men's haircuts?",
+            "What are the senior stylist's areas of expertise?",
+            "Are there specific haircut styles the senior stylist specializes in?",
+            "Can I book a precision cut with the senior stylist?",
+            "What services does the senior stylist excel in?",
+            "Is the senior stylist experienced in clipper work?",
+            "What should I expect from a senior stylist appointment?"
           ],
           "answer_spoken": "Senior stylist Precision cuts, bobs and pixies, men's cuts and clipper work.",
           "applies_to": [
@@ -1180,15 +1229,16 @@
         },
         {
           "id": "june-okafor",
-          "topic": "june_okafor",
+          "topic": "stylist",
           "question_variants": [
-            "June Okafor",
-            "What hair types does June Okafor specialize in?",
-            "Does June Okafor do kids' cuts?",
-            "Can June Okafor style hair for events?",
-            "Is June Okafor the go-to for curly hair?",
-            "What services does June Okafor offer for curly and coily hair?",
-            "Does June Okafor do blowouts?"
+            "What are the specialties of the stylist with 6 years of experience?",
+            "Can the stylist provide services for curly and coily hair?",
+            "What types of haircuts does the stylist offer?",
+            "Is the stylist experienced in event styling and updos?",
+            "Can I book a kids cut with the stylist?",
+            "What makes the stylist the go-to for kids cuts?",
+            "Are blowouts and event styling part of the stylist's services?",
+            "What should I know about the stylist's expertise in hair services?"
           ],
           "answer_spoken": "Stylist, 6 years behind the chair June specializes in curly and coily hair, cut dry and curl by curl so you can see the shape as it happens. She also does blowouts, event styling and updos, and she's our go-to for kids cuts.",
           "applies_to": [
@@ -1213,14 +1263,14 @@
           "id": "parking",
           "topic": "parking",
           "question_variants": [
-            "Parking",
-            "Free parking for 6 cars in the lot behind the building, entered from the alley off Marigold Street.",
-            "Is there parking available?",
-            "How many cars can park lot?",
-            "Where is the parking entrance?",
-            "Does have accessible entrance from the parking lot?",
-            "Is parking free?",
-            "Can I park behind the building?"
+            "Is there parking available at the studio?",
+            "How many cars can be parked at the studio?",
+            "Where is the parking lot located in relation to the studio?",
+            "Is the studio's entrance accessible from the parking lot?",
+            "Are there any parking restrictions at the studio?",
+            "What type of parking is available for customers?",
+            "Is the studio's entrance step-free for easy access?",
+            "Can I park behind the building when visiting the studio?"
           ],
           "answer_spoken": "Free parking for 6 cars in the lot behind the building, entered from the alley off Marigold Street. Our step-free entrance faces the lot.",
           "provenance": {
@@ -1235,16 +1285,16 @@
         },
         {
           "id": "get-in-touch",
-          "topic": "get_in_touch",
+          "topic": "contact_info",
           "question_variants": [
-            "Get in touch",
-            "how to book an appointment",
-            "Call (512) 555-0147 during studio hours, or email quillfernhairstudio@example.com.",
-            "What is the phone number?",
-            "How can I contact via email?",
-            "What are the studio hours?",
-            "How quickly does respond to emails?",
-            "Can I call outside of their studio hours?"
+            "What is the contact number for the studio during operating hours?",
+            "How can I reach the studio via email?",
+            "Is there a specific email address provided for inquiries?",
+            "What is the response time for email inquiries?",
+            "Can I contact the studio by phone or email?",
+            "What are the studio's contact details for communication?",
+            "Is there a guaranteed response time for email communication?",
+            "How can I get in touch with the studio for further information?"
           ],
           "answer_spoken": "Call (512) 555-0147 during studio hours, or email quillfernhairstudio@example.com. We reply to email within one business day.",
           "provenance": {
@@ -1263,16 +1313,16 @@
         },
         {
           "id": "cuts",
-          "topic": "cuts",
+          "topic": "cut_details",
           "question_variants": [
-            "Cuts",
-            "Every cut includes a shampoo and a finish, except bang trims.",
-            "Does every cut include a shampoo?",
-            "Is a finish included with every cut?",
-            "Are bang trims the only exception to cut inclusions?",
-            "What does a standard cut appointment include?",
-            "Do I need to pay extra for a shampoo with my cut?",
-            "Is a finish service part of the cut price?"
+            "Do cuts include shampoo and finish?",
+            "Is a shampoo part of every haircut?",
+            "Are bang trims different from regular cuts?",
+            "What's included in a standard haircut?",
+            "Do all haircuts come with a finish?",
+            "Is a shampoo service free with cuts?",
+            "Are there extra charges for shampoo?",
+            "What services are excluded from regular cuts?"
           ],
           "answer_spoken": "Every cut includes a shampoo and a finish, except bang trims.",
           "applies_to": [
@@ -1295,16 +1345,16 @@
         },
         {
           "id": "styling",
-          "topic": "styling",
+          "topic": "blowouts",
           "question_variants": [
-            "Styling",
-            "Blowouts and event hair, done in the studio.",
-            "Does offer blowouts?",
-            "Can I get my hair styled for an event?",
-            "Are styling services done in-studio?",
-            "What types of styling does provide?",
-            "Is event hair styling available?",
-            "Do I need to book styling services in advance?"
+            "Can I get a blowout at the studio?",
+            "Are event hairstyles done on-site?",
+            "Do you offer blowouts as a service?",
+            "Where are blowouts and event hair done?",
+            "Is there an extra charge for studio blowouts?",
+            "What hair services are available in the studio?",
+            "Do I need an appointment for a blowout?",
+            "Are there any mobile blowout services?"
           ],
           "answer_spoken": "Blowouts and event hair, done in the studio.",
           "applies_to": [
@@ -1324,15 +1374,16 @@
         },
         {
           "id": "styling-wedding-parties",
-          "topic": "styling",
+          "topic": "wedding_parties",
           "question_variants": [
-            "Wedding parties of 3 or more: email us at least 4 weeks ahead so we can block out the chairs.",
-            "How should I book styling for a wedding party?",
-            "What is the minimum number of people for a wedding party styling?",
-            "How far in advance should I email for wedding party styling?",
-            "Does style wedding parties outside of the studio?",
-            "What is the process for booking a wedding party?",
-            "Can accommodate large wedding parties for styling?"
+            "How do I book a wedding party appointment?",
+            "Can wedding parties be styled at the studio?",
+            "What's the advance notice for wedding party bookings?",
+            "Do I need to email for wedding party bookings?",
+            "Are there special rates for wedding party services?",
+            "Can I book less than 3 people for a wedding party?",
+            "Is there a minimum number for wedding party bookings?",
+            "Are wedding party services done on-site only?"
           ],
           "answer_spoken": "Wedding parties of 3 or more: email us at least 4 weeks ahead so we can block out the chairs. We style in the studio only.",
           "applies_to": [
@@ -1352,16 +1403,16 @@
         },
         {
           "id": "color",
-          "topic": "color",
+          "topic": "deposit",
           "question_variants": [
-            "Color",
-            "Services marked * need a $50 deposit when you book.",
-            "Which color services require a deposit?",
-            "How much is the deposit for certain color services?",
-            "Are there any color services available on Sundays?",
-            "What should I do if I want a color service on Sunday?",
-            "Is there a special procedure for booking color services?",
-            "Can I get color services on a Sunday?"
+            "Is there a deposit required for certain services?",
+            "What services need a $50 deposit?",
+            "Do all services require a deposit?",
+            "Can I book color services on Sundays?",
+            "What's the deposit amount for marked services?",
+            "Are there any exceptions to the deposit rule?",
+            "Why is there no color service on Sundays?",
+            "How do I know if a service requires a deposit?"
           ],
           "answer_spoken": "Services marked with an asterisk need a $50 deposit when you book. We don't do color on Sundays.",
           "applies_to": [
@@ -1390,15 +1441,16 @@
         },
         {
           "id": "color-carry-free",
-          "topic": "color",
+          "topic": "color_options",
           "question_variants": [
-            "We carry a PPD-free color line for all-over color and root touch-ups.",
-            "Does offer PPD-free color options?",
-            "What types of color services use PPD-free products?",
-            "Can I get an all-over color with PPD-free products?",
-            "What should I read before my first color appointment?",
-            "Are there specific ingredients I should know about color services?",
-            "Is there a patch test requirement for PPD-free color?"
+            "Do you offer PPD-free color options?",
+            "What should I read before my color appointment?",
+            "Are there special color lines for root touch-ups?",
+            "Can I get an all-over color without PPD?",
+            "What ingredients are in the PPD-free color?",
+            "Is a patch test necessary before coloring?",
+            "Are there any restrictions on the PPD-free color?",
+            "How do I request a PPD-free color service?"
           ],
           "answer_spoken": "We carry a PPD-free color line for all-over color and root touch-ups. Read about patch tests and ingredients before your first color appointment.",
           "applies_to": [
@@ -1423,16 +1475,16 @@
         },
         {
           "id": "treatments",
-          "topic": "treatments",
+          "topic": "add_ons",
           "question_variants": [
-            "Treatments",
-            "Book them on their own or add them to any service.",
-            "Can I book a treatment alone?",
-            "Is it possible to add a treatment to any service?",
-            "How do I book a treatment?",
-            "Are treatments available as standalone services?",
-            "Can I combine a treatment with another service?",
-            "What is the process for booking a treatment?"
+            "Can I book add-ons separately?",
+            "Are add-ons available for all services?",
+            "How do I add services to my appointment?",
+            "Can I get an add-on without a main service?",
+            "Are there any restrictions on booking add-ons?",
+            "Do add-ons have their own booking times?",
+            "Can I change my add-ons after booking?",
+            "Are add-ons charged separately from main services?"
           ],
           "answer_spoken": "Book them on their own or add them to any service.",
           "applies_to": [
@@ -1455,13 +1507,13 @@
           "topic": "cancellation",
           "question_variants": [
             "What is the cancellation policy?",
-            "Footnotes",
-            "Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule.",
-            "What is cancellation policy?",
-            "How much notice do I need to give to cancel an appointment?",
-            "What happens if I cancel my appointment with less than 48 hours' notice?",
+            "What's the notice required to cancel an appointment?",
             "Is there a fee for last-minute cancellations?",
-            "How can I reschedule an appointment?"
+            "How much notice do I need to reschedule?",
+            "What happens if I cancel with less than 48 hours?",
+            "Are there any exceptions to the cancellation policy?",
+            "Do I get a full refund for cancellations?",
+            "What's the charge for canceling within 48 hours?"
           ],
           "answer_spoken": "Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule. Cancellations with less than 48 hours' notice are charged 50% of the service price.",
           "facts": {
@@ -1480,14 +1532,15 @@
         },
         {
           "id": "footnotes-sundays-cuts",
-          "topic": "footnotes",
+          "topic": "sunday_services",
           "question_variants": [
-            "Footnotes",
-            "Sundays are for cuts, styling and treatments only.",
-            "On which days can I book color services?",
-            "Are there any restrictions on service bookings on Sundays?",
-            "What types of services are reserved for Sundays?",
-            "Can I get a cut or styling service on Sunday?"
+            "Can I book color services on Sunday?",
+            "Are there any restrictions on Sunday services?",
+            "What days are color services available?",
+            "Is styling available every day of the week?",
+            "Can I get a treatment on Sunday?",
+            "Are there different service hours on Sundays?",
+            "What's the schedule for color services?"
           ],
           "answer_spoken": "Sundays are for cuts, styling and treatments only. Color services are booked Tuesday through Saturday.",
           "provenance": {
@@ -1502,41 +1555,40 @@
         },
         {
           "id": "wren-abernathy-senior-stylist",
-          "topic": "wren_abernathy",
+          "topic": "senior_stylist_services",
           "question_variants": [
-            "How many years has Wren Abernathy been a stylist?",
-            "Wren Abernathy",
-            "What tools does Wren Abernathy use for cutting hair?",
-            "What types of haircuts does Wren Abernathy specialize in?",
-            "Does Wren Abernathy offer both shear and clipper cuts?",
-            "What are some examples of haircuts Wren Abernathy is known for?",
-            "Is Wren Abernathy experienced in cutting various hair lengths and styles?"
+            "What styles does the senior stylist offer?",
+            "Can the senior stylist cut with both shears and clippers?",
+            "What's the experience of the senior stylist?",
+            "Are there any specialty cuts offered by the senior stylist?",
+            "Can I request the senior stylist for my cut?",
+            "What's the senior stylist's approach to haircuts?",
+            "Are there any limitations to the senior stylist's services?",
+            "How long has the senior stylist been practicing?"
           ],
           "answer_spoken": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades.",
-          "applies_to": [
-            "services/smoothing-treatment"
-          ],
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/team.html",
-                "quote": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades. Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair."
+                "quote": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades."
               }
             ]
           }
         },
         {
           "id": "wren-abernathy-wren-also",
-          "topic": "wren_abernathy",
+          "topic": "senior_stylist_services",
           "question_variants": [
-            "What services does Wren Abernathy offer?",
-            "Wren Abernathy",
-            "Can Wren Abernathy do single-process color?",
-            "Does Wren Abernathy perform smoothing treatments?",
-            "Can Wren Abernathy trim beards?",
-            "Is Wren available for hair services?",
-            "What treatments can Wren Abernathy provide?"
+            "Does the senior stylist offer color services?",
+            "Can I get a beard tidy-up at the studio?",
+            "What smoothing treatments are available?",
+            "Is single-process color done by the senior stylist?",
+            "Can I book a beard tidy-up with a haircut?",
+            "Are there any restrictions on the senior stylist's services?",
+            "What additional services does the senior stylist provide?",
+            "Can I request the senior stylist for color services?"
           ],
           "answer_spoken": "Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair.",
           "applies_to": [
@@ -1547,23 +1599,23 @@
             "evidence": [
               {
                 "url": "https://quillfern.example/team.html",
-                "quote": "Senior stylist, 9 years behind the chair Wren cuts with shears and clippers in equal measure: sharp bobs, pixies, tapers and fades. Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair."
+                "quote": "Wren also handles single-process color and our smoothing treatments, and is happy to tidy up a beard while you're in the chair."
               }
             ]
           }
         },
         {
           "id": "whos-in-when",
-          "topic": "whos_in_when",
+          "topic": "studio",
           "question_variants": [
-            "Studio hours for each day are on the contact page.",
-            "Who's in when",
-            "What are the studio's opening hours?",
-            "Where can I find the studio's schedule?",
-            "What time is the studio open each day?",
-            "How can I check the studio's hours?",
-            "Are the studio hours listed online?",
-            "Where are the contact page studio hours located?"
+            "Where can I find the studio's operating hours?",
+            "Are the studio hours the same every day?",
+            "How do I check the studio's closing time?",
+            "Is there a contact page with studio hours?",
+            "Are there any special hours for certain days?",
+            "Can I visit the studio outside of regular hours?",
+            "Are the studio hours listed on the website?",
+            "How do I know when the studio is open?"
           ],
           "answer_spoken": "Studio hours for each day are on the contact page.",
           "provenance": {
@@ -1577,15 +1629,17 @@
           }
         },
         {
-          "id": "booking",
-          "topic": "booking",
+          "id": "booking-appointments-start",
+          "topic": "appointment",
           "question_variants": [
             "how do i book an appointment?",
-            "Booking",
-            "Appointments start every 15 minutes (on the hour, at :15, :30 and :45) and are booked in 15-minute blocks.",
-            "How are appointment times arranged?",
-            "What is the appointment booking pattern?",
-            "Are appointments booked in specific time blocks?"
+            "How often are appointments scheduled?",
+            "Are appointments booked in 15-minute intervals?",
+            "What are the start times for appointments?",
+            "Can I book an appointment at any time?",
+            "Are there specific times for booking appointments?",
+            "How are appointment times structured?",
+            "Can I choose my appointment time?"
           ],
           "answer_spoken": "Appointments start every 15 minutes (on the hour, at :15, :30 and :45) and are booked in 15-minute blocks.",
           "facts": {
@@ -1605,13 +1659,14 @@
           "id": "booking-book-weeks",
           "topic": "booking",
           "question_variants": [
-            "You can book up to 8 weeks ahead.",
-            "How far in advance can I book?",
-            "What is the maximum booking window?",
-            "How many weeks ahead can appointments be made?",
-            "What is the booking lead time?",
-            "Can I schedule appointments months in advance?",
-            "What is the earliest I can book an appointment?"
+            "How far in advance can I book an appointment?",
+            "Is there a limit to how early I can book?",
+            "Can I book up to 2 months ahead?",
+            "What's the maximum booking window for appointments?",
+            "Are there any restrictions on early bookings?",
+            "How do I book an appointment for next month?",
+            "Can I secure an appointment for a special event?",
+            "Are there any advantages to booking ahead?"
           ],
           "answer_spoken": "You can book up to 8 weeks ahead.",
           "provenance": {
@@ -1626,15 +1681,16 @@
         },
         {
           "id": "booking-every-appointment",
-          "topic": "booking",
+          "topic": "appointment",
           "question_variants": [
-            "Every appointment has to finish by closing time, so longer services need an earlier start.",
-            "What is the latest time for appointments?",
-            "How early must longer services start?",
-            "What is the duration of balayage service?",
-            "When should balayage appointments start on Saturdays?",
-            "Are there time restrictions for appointments?",
-            "How does schedule longer services?"
+            "What's the latest start time for longer services?",
+            "How do service durations affect appointment times?",
+            "Are there specific start times for certain services?",
+            "What's the policy for services that take over 3 hours?",
+            "How do I know the required start time for my service?",
+            "Are there any exceptions to the closing time rule?",
+            "What happens if my service runs past closing time?",
+            "How do I schedule a service that takes several hours?"
           ],
           "answer_spoken": "Every appointment has to finish by closing time, so longer services need an earlier start. For example, balayage past the shoulder blades takes 4 hours, so on a Saturday it has to start by 1:00 pm.",
           "applies_to": [
@@ -1651,39 +1707,17 @@
           }
         },
         {
-          "id": "booking-request-stylist",
-          "topic": "booking",
-          "question_variants": [
-            "You can request any stylist.",
-            "Can I choose a specific stylist for my appointment?",
-            "What happens if I don't specify a stylist preference?",
-            "How are stylists assigned for appointments?",
-            "Can I request a particular stylist?",
-            "What if I have no stylist preference?",
-            "How does the studio handle stylist requests?"
-          ],
-          "answer_spoken": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/policies.html",
-                "quote": "You can request any stylist. If you don't have a preference, we book the first available stylist who offers your service."
-              }
-            ]
-          }
-        },
-        {
           "id": "booking-confirm-every",
-          "topic": "booking",
+          "topic": "appointment",
           "question_variants": [
-            "We confirm every appointment by email within one business day of your request.",
-            "Do you confirm appointments via email?",
-            "How soon will I receive an appointment confirmation?",
-            "What is the confirmation process for appointments?",
-            "Will I get an email after booking an appointment?",
-            "How quickly are appointments confirmed?",
-            "Is there a confirmation step after booking?"
+            "Will I receive a confirmation for my appointment?",
+            "How soon will I get an appointment confirmation?",
+            "Is there a standard confirmation process for appointments?",
+            "What method is used for appointment confirmations?",
+            "Can I expect a call or email for confirmation?",
+            "Are confirmations sent automatically after booking?",
+            "What should I do if I don't receive a confirmation?",
+            "How do I know my appointment is confirmed?"
           ],
           "answer_spoken": "We confirm every appointment by email within one business day of your request.",
           "provenance": {
@@ -1692,6 +1726,10 @@
               {
                 "url": "https://quillfern.example/policies.html",
                 "quote": "We confirm every appointment by email within one business day of your request."
+              },
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "We confirm by email within one business day."
               }
             ]
           }
@@ -1701,13 +1739,13 @@
           "topic": "deposit",
           "question_variants": [
             "do i need to pay a deposit for color services?",
-            "Deposits for color",
             "Is there a deposit required for color services?",
-            "How much is the deposit for color treatments?",
-            "What is the cost of the color service deposit?",
-            "Do color services need a upfront payment?",
-            "Is a deposit necessary for hair coloring?",
-            "What is the deposit amount for color services?"
+            "What's the deposit amount for color services?",
+            "Are all color services subject to a deposit?",
+            "How do I pay the deposit for color services?",
+            "Are there any exceptions to the color service deposit?",
+            "What happens if I don't pay the color service deposit?",
+            "Can I book a color service without a deposit?"
           ],
           "answer_spoken": "Every color service (root touch-up, all-over color, partial or full highlights, balayage and color correction) needs a $50 deposit.",
           "facts": {
@@ -1732,15 +1770,16 @@
         },
         {
           "id": "deposits-for-color-color-consultations",
-          "topic": "deposit",
+          "topic": "free_services",
           "question_variants": [
-            "Color consultations and patch tests are free and don't need a deposit.",
             "Are color consultations free of charge?",
-            "Do patch tests require a deposit?",
-            "Is there a cost for color consultations?",
-            "Are patch tests included in the service?",
-            "Do I need to pay for a color consultation?",
-            "Are there any fees for patch tests?"
+            "Do I need to book a color consultation?",
+            "Are patch tests included in the service cost?",
+            "Can I get a free color consultation?",
+            "What's included in a free color consultation?",
+            "Are there any charges for patch tests?",
+            "Do I need a deposit for a color consultation?",
+            "How do I schedule a free color consultation?"
           ],
           "answer_spoken": "Color consultations and patch tests are free and don't need a deposit.",
           "applies_to": [
@@ -1761,13 +1800,14 @@
           "id": "deposits-for-color-whether-deposit",
           "topic": "deposit",
           "question_variants": [
-            "Whether a deposit is refunded depends on how much notice you give if you cancel.",
-            "Can color service deposits be refunded?",
-            "What affects the refund of a color deposit?",
-            "Is a color deposit refundable under certain conditions?",
-            "How is the refund of a color deposit determined?",
-            "What happens to the deposit if I cancel?",
-            "Are there circumstances where a color deposit is refunded?"
+            "What happens to my deposit if I cancel?",
+            "Is my deposit refundable upon cancellation?",
+            "How is the refund amount determined for deposits?",
+            "What's the policy for deposit refunds?",
+            "Can I get a full refund of my deposit?",
+            "Are there any conditions for deposit refunds?",
+            "How do I know if my deposit will be refunded?",
+            "What affects the refund of my deposit?"
           ],
           "answer_spoken": "Whether a deposit is refunded depends on how much notice you give if you cancel.",
           "provenance": {
@@ -1784,14 +1824,14 @@
           "id": "cancellations-and-no-shows",
           "topic": "cancellation",
           "question_variants": [
-            "Cancellations and no-shows",
+            "How much notice do I need to cancel an appointment?",
             "what is the cancellation policy?",
-            "Your appointment time is held just for you, so we ask for at least 24 hours' notice if you need to cancel or reschedule.",
-            "How much notice is needed to cancel an appointment?",
-            "What is the required notice for appointment changes?",
-            "How far in advance must I cancel to avoid charges?",
-            "What is the cancellation policy for appointments?",
-            "How soon should I inform if I need to reschedule?"
+            "What's the minimum notice for rescheduling?",
+            "Are there any charges for last-minute cancellations?",
+            "What happens if I cancel without notice?",
+            "Is there a grace period for cancellations?",
+            "How do I cancel or reschedule an appointment?",
+            "Are there any exceptions to the cancellation notice?"
           ],
           "answer_spoken": "Your appointment time is held just for you, so we ask for at least 24 hours' notice if you need to cancel or reschedule. Moving an appointment counts the same as cancelling it.",
           "facts": {
@@ -1811,13 +1851,14 @@
           "id": "cancellations-and-no-shows-hours-more",
           "topic": "cancellation",
           "question_variants": [
-            "24 hours or more before your appointment: No charge.",
-            "What happens if I cancel 24 hours or more before my appointment?",
-            "Is there a fee for canceling with 24 hours' notice?",
-            "What is the policy for cancellations made 24 hours in advance?",
-            "Can I get a full refund if I cancel early?",
-            "What are the terms for early cancellation of an appointment?",
-            "Are there any charges for canceling with adequate notice?"
+            "What if I cancel my appointment a day before?",
+            "Do I get a refund if I cancel early?",
+            "Can I get my color deposit back if I cancel?",
+            "Is there a fee if I cancel 24 hours ahead?",
+            "What happens to my color deposit if I cancel?",
+            "Can I move my color deposit to a new appointment?",
+            "Do I lose my color deposit if I cancel early?",
+            "Is there a charge for canceling an appointment early?"
           ],
           "answer_spoken": "24 hours or more before your appointment: No charge. A color deposit is refunded in full, or moved to your new appointment.",
           "provenance": {
@@ -1842,13 +1883,14 @@
           "id": "cancellations-and-no-shows-less-than",
           "topic": "cancellation",
           "question_variants": [
-            "Less than 24 hours before: We charge 50% of the booked service price.",
-            "What is the charge for canceling less than 24 hours before an appointment?",
-            "How much will I be charged for a last-minute cancellation?",
-            "What fee applies for late cancellations?",
-            "Is there a penalty for canceling close to the appointment time?",
-            "What is the cost of a cancellation made at the last minute?",
-            "How is the charge calculated for a late cancellation?"
+            "What if I cancel my appointment less than 24 hours before?",
+            "Do I get charged if I cancel at the last minute?",
+            "What happens to my color deposit if I cancel late?",
+            "Is there a penalty for canceling an appointment last minute?",
+            "Can I get a partial refund if I cancel late?",
+            "How much do I lose if I cancel my appointment late?",
+            "Does the color deposit count towards the late cancellation fee?",
+            "What's the charge for canceling an appointment less than 24 hours before?"
           ],
           "answer_spoken": "Less than 24 hours before: We charge 50% of the booked service price. A color deposit is kept and counts toward that charge.",
           "provenance": {
@@ -1871,15 +1913,16 @@
         },
         {
           "id": "cancellations-and-no-shows-show-charge",
-          "topic": "cancellation",
+          "topic": "no_show_charges",
           "question_variants": [
-            "No-show: We charge 100% of the booked service price.",
-            "What is the policy for no-shows?",
-            "How are no-shows handled by the studio?",
-            "What is the charge for not showing up to an appointment?",
-            "Is there a fee for missing an appointment without notice?",
-            "What happens if I don't show up for my appointment?",
-            "How does the studio deal with clients who don't arrive?"
+            "What if I don't show up for my appointment?",
+            "Is there a fee for being a no-show?",
+            "What's the charge if I miss my appointment?",
+            "Do I get charged the full price if I'm a no-show?",
+            "What happens if I forget my appointment?",
+            "Is there a penalty for not showing up without canceling?",
+            "What's the policy for no-shows?",
+            "Do I lose my deposit if I'm a no-show?"
           ],
           "answer_spoken": "No-show: We charge 100% of the booked service price.",
           "provenance": {
@@ -1900,13 +1943,14 @@
           "id": "cancellations-and-no-shows-cancel-reschedule",
           "topic": "cancellation",
           "question_variants": [
-            "To cancel or reschedule, call (512) 555-0147 or email quillfernhairstudio@example.com.",
-            "How can I cancel or reschedule an appointment?",
-            "What is the contact information for appointment changes?",
-            "Can I change my appointment by phone or email?",
-            "What are the methods for canceling an appointment?",
-            "How do I notify the studio of a schedule change?",
-            "What is the procedure for rescheduling an appointment?"
+            "How do I cancel or reschedule my appointment?",
+            "What's the number to call for cancellations?",
+            "Can I cancel my appointment by email?",
+            "What time counts as my notice for cancellations?",
+            "Do I need to call to cancel, or can I email?",
+            "What's the email for cancellations?",
+            "Is there a specific time I need to cancel by?",
+            "How far in advance do I need to cancel my appointment?"
           ],
           "answer_spoken": "To cancel or reschedule, call (512) 555-0147 or email quillfernhairstudio@example.com. The time on your voicemail or email counts as your notice.",
           "provenance": {
@@ -1921,15 +1965,16 @@
         },
         {
           "id": "running-late",
-          "topic": "late_arrival",
+          "topic": "late_policy",
           "question_variants": [
             "what happens if i am late for my appointment?",
-            "Running late",
-            "How does being late affect my service?",
-            "What should I do if I am running late?",
-            "Can my service be shortened if I am late?",
-            "How does the studio handle late arrivals?",
-            "What is the policy for clients arriving late?"
+            "What if I'm more than 15 minutes late?",
+            "Do I get charged for being late?",
+            "Can my service be shortened if I'm late?",
+            "What should I do if I'm running behind?",
+            "Will my appointment be moved if I'm late?",
+            "Is there a policy for late arrivals?",
+            "What happens if I'm late for my appointment?"
           ],
           "answer_spoken": "If you're more than 15 minutes late, we may need to shorten your service or move your appointment to another time so the next client isn't kept waiting. If you're running behind, call us and we'll tell you what we can do.",
           "facts": {
@@ -1950,15 +1995,15 @@
           "topic": "patch_test",
           "question_variants": [
             "do i need a patch test for color services?",
-            "Patch tests and allergies",
-            "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye.",
-            "Is a patch test required before coloring?",
-            "When should a patch test be done?",
-            "What are the requirements for a patch test?",
-            "Do I need a patch test for hair coloring?",
-            "How long before coloring must a patch test be done?"
+            "Do I need a patch test for hair color?",
+            "Is a patch test required for new clients?",
+            "What if I've had a reaction to hair dye before?",
+            "Do I need a patch test if I've colored my hair elsewhere?",
+            "Is a patch test necessary for everyone?",
+            "What's the policy on patch tests?",
+            "Do I have to do a patch test for hair color?"
           ],
-          "answer_spoken": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment.",
+          "answer_spoken": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye.",
           "applies_to": [
             "services/patch-test"
           ],
@@ -1967,7 +2012,34 @@
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+                "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye."
+              }
+            ]
+          }
+        },
+        {
+          "id": "patch-tests-and-allergies-done-least",
+          "topic": "patch_test",
+          "question_variants": [
+            "When do I need to do a patch test?",
+            "How far in advance should I do a patch test?",
+            "Is there a specific time frame for patch tests?",
+            "What's the deadline for doing a patch test?",
+            "Do I need to do a patch test 72 hours before?",
+            "When is the latest I can do a patch test?",
+            "Is there a minimum time required for patch tests?",
+            "What's the timing requirement for patch tests?"
+          ],
+          "answer_spoken": "Patch tests and allergies: It has to be done at least 72 hours before your color appointment.",
+          "applies_to": [
+            "services/patch-test"
+          ],
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/policies.html",
+                "quote": "It has to be done at least 72 hours before your color appointment."
               }
             ]
           }
@@ -1976,16 +2048,16 @@
           "id": "patch-tests-and-allergies-free-takes",
           "topic": "patch_test",
           "question_variants": [
-            "It's free and takes 15 minutes.",
-            "do i need a patch test for color services?",
-            "Patch tests and allergies",
             "How long does a patch test take?",
-            "What is the duration of a patch test?",
-            "How much time is needed for a patch test?",
-            "Is a patch test a quick process?",
-            "What is the time requirement for a patch test?"
+            "Is there a cost for a patch test?",
+            "What's involved in a patch test?",
+            "Do I need to pay for a patch test?",
+            "How much time should I set aside for a patch test?",
+            "Is a patch test free?",
+            "What's the duration of a patch test?",
+            "Do I need to schedule time for a patch test?"
           ],
-          "answer_spoken": "It's free and takes 15 minutes.",
+          "answer_spoken": "Patch tests and allergies: It's free and takes 15 minutes.",
           "applies_to": [
             "services/patch-test"
           ],
@@ -1994,22 +2066,23 @@
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+                "quote": "It's free and takes 15 minutes."
               }
             ]
           }
         },
         {
           "id": "patch-tests-and-allergies-standard-permanent",
-          "topic": "patch_test",
+          "topic": "color_options",
           "question_variants": [
-            "Our standard permanent hair color contains PPD (para-phenylenediamine).",
-            "What types of hair color does the studio offer?",
-            "Does the studio provide PPD-free hair color?",
-            "What are the options for hair coloring?",
-            "Are there PPD-free alternatives for all-over color?",
-            "What color options are available for root touch-ups?",
-            "Does the studio offer different types of permanent hair color?"
+            "What types of hair color do you offer?",
+            "Do you have PPD-free hair color options?",
+            "What's in your standard permanent hair color?",
+            "Can I get a root touch-up without PPD?",
+            "What are my options for all-over color?",
+            "Do you offer PPD-free color for root touch-ups?",
+            "What's the difference between your color lines?",
+            "Can I choose a PPD-free color for my appointment?"
           ],
           "answer_spoken": "Our standard permanent hair color contains PPD (para-phenylenediamine). For all-over color and root touch-ups, we also carry a PPD-free color line.",
           "applies_to": [
@@ -2029,15 +2102,16 @@
         },
         {
           "id": "patch-tests-and-allergies-highlights-balayage",
-          "topic": "patch_test",
+          "topic": "highlights_details",
           "question_variants": [
-            "Highlights and balayage use lightener, which contains persulfates.",
-            "Are there persulfate-free options for highlights?",
-            "What is used in highlights and balayage?",
-            "Does the studio offer persulfate-free lightener?",
-            "Are there alternatives to persulfates in hair treatments?",
-            "What ingredients are in the lightener used for highlights?",
-            "Does the studio provide persulfate-free hair services?"
+            "What's in your highlights and balayage?",
+            "Do you have a persulfate-free lightener?",
+            "What chemicals are in your lightener?",
+            "Can I get highlights without persulfates?",
+            "What's the ingredient in your lightener?",
+            "Do you offer persulfate-free highlights?",
+            "What's the composition of your lightener?",
+            "Are there any persulfate-free options for highlights?"
           ],
           "answer_spoken": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative.",
           "applies_to": [
@@ -2056,15 +2130,16 @@
         },
         {
           "id": "patch-tests-and-allergies-smoothing-treatment",
-          "topic": "patch_test",
+          "topic": "smoothing_treatment",
           "question_variants": [
-            "Our smoothing treatment is formaldehyde-free.",
-            "Is the smoothing treatment free of formaldehyde?",
-            "What is the studio's policy on formaldehyde in treatments?",
-            "Are there formaldehyde-free options for smoothing treatments?",
-            "Does the smoothing treatment contain formaldehyde?",
-            "What ingredients are avoided in the smoothing treatment?",
-            "Is the smoothing treatment safe for formaldehyde-sensitive clients?"
+            "Is your smoothing treatment safe?",
+            "What's in your smoothing treatment?",
+            "Do you use formaldehyde in your treatments?",
+            "Is your smoothing treatment chemical-free?",
+            "What makes your smoothing treatment different?",
+            "Are there any harmful chemicals in your smoothing treatment?",
+            "What's the main ingredient in your smoothing treatment?",
+            "Is your smoothing treatment formaldehyde-free?"
           ],
           "answer_spoken": "Our smoothing treatment is formaldehyde-free.",
           "applies_to": [
@@ -2083,15 +2158,16 @@
         },
         {
           "id": "patch-tests-and-allergies-finishing-contains",
-          "topic": "patch_test",
+          "topic": "finishing_oil",
           "question_variants": [
-            "Our finishing oil contains argan oil.",
-            "Does the finishing oil contain any allergens?",
-            "Can the finishing oil be modified for nut allergies?",
-            "What should I inform the studio about regarding allergies?",
-            "Are there any nut-based ingredients in the finishing oil?",
-            "How does the studio accommodate clients with nut allergies?",
-            "Can the finishing oil be adjusted for allergy concerns?"
+            "What's in your finishing oil?",
+            "Do you use argan oil in your products?",
+            "Can I get the finishing oil if I'm allergic to nuts?",
+            "What if I have a nut allergy?",
+            "Is there a nut-free option for finishing oil?",
+            "What oils do you use in your finishing products?",
+            "Can you omit argan oil if I'm allergic?",
+            "What's the ingredient list for your finishing oil?"
           ],
           "answer_spoken": "Our finishing oil contains argan oil. If you have a nut allergy, tell us and we'll leave it out.",
           "applies_to": [
@@ -2109,15 +2185,16 @@
         },
         {
           "id": "patch-tests-and-allergies-nitrile-latex",
-          "topic": "patch_test",
+          "topic": "gloves",
           "question_variants": [
-            "We use nitrile (latex-free) gloves for every service.",
-            "What type of gloves are used during services?",
-            "Are latex gloves used in the salon?",
-            "How does the studio ensure safety during services?",
-            "What kind of gloves are standard for all services?",
-            "Are there latex-free options available for services?",
-            "What safety measures are in place regarding gloves?"
+            "What type of gloves do you use?",
+            "Are your gloves latex-free?",
+            "Do you use nitrile gloves?",
+            "What if I'm allergic to latex?",
+            "Are there any latex gloves used in your services?",
+            "What's the material of the gloves you use?",
+            "Do you have latex-free options for gloves?",
+            "What kind of gloves are used for services?"
           ],
           "answer_spoken": "We use nitrile (latex-free) gloves for every service.",
           "applies_to": [
@@ -2135,15 +2212,16 @@
         },
         {
           "id": "patch-tests-and-allergies-fragrance-free",
-          "topic": "patch_test",
+          "topic": "fragrance_free_products",
           "question_variants": [
-            "Fragrance-free shampoo and conditioner are available on request.",
-            "Can I request fragrance-free products?",
-            "Are there fragrance-free options available at the studio?",
-            "How can I get fragrance-free shampoo and conditioner?",
-            "Does the studio offer fragrance-free hair care products?",
-            "Can I specify no-fragrance products for my service?",
-            "Are there any fragrance-free options for hair treatments?"
+            "Do you have fragrance-free products?",
+            "Can I request fragrance-free shampoo and conditioner?",
+            "Are there any fragrance-free options available?",
+            "What if I'm sensitive to fragrances?",
+            "Do you offer fragrance-free products on request?",
+            "Can I get fragrance-free shampoo and conditioner?",
+            "What's available if I need fragrance-free products?",
+            "Are there any fragrance-free options for shampoo and conditioner?"
           ],
           "answer_spoken": "Fragrance-free shampoo and conditioner are available on request.",
           "applies_to": [
@@ -2161,15 +2239,16 @@
         },
         {
           "id": "patch-tests-and-allergies-please-tell",
-          "topic": "patch_test",
+          "topic": "allergies",
           "question_variants": [
-            "Please tell us about any allergies or sensitivities when you book.",
-            "Should I inform the studio about any allergies?",
-            "What information should I provide regarding allergies?",
-            "How can I communicate my allergies to the studio?",
-            "Is it important to disclose allergies when booking?",
-            "What should I tell the studio about my sensitivities?",
-            "How does the studio handle clients with allergies?"
+            "What if I have allergies or sensitivities?",
+            "Do I need to inform you about my allergies?",
+            "What should I do if I have sensitivities?",
+            "Are there any allergy policies in place?",
+            "What if I'm allergic to certain products?",
+            "Do you need to know about my allergies when I book?",
+            "What's the policy for clients with allergies?",
+            "Should I mention any sensitivities when booking?"
           ],
           "answer_spoken": "Please tell us about any allergies or sensitivities when you book.",
           "applies_to": [
@@ -2187,16 +2266,16 @@
         },
         {
           "id": "kids-and-teens",
-          "topic": "kids_and_teens",
+          "topic": "kids_cut_price",
           "question_variants": [
-            "Kids and teens",
-            "The kids cut price ($30) is for ages 12 and under.",
-            "What is the price for a kids cut?",
-            "How much does a children's haircut cost?",
-            "What is the cost of a cut for ages 12 and under?",
-            "Is there a special rate for kids' haircuts?",
-            "What is the charge for a child's haircut?",
-            "How much should I expect to pay for a kids cut?"
+            "What's the price for a kids cut?",
+            "How much does a kids cut cost?",
+            "Is there a special price for kids cuts?",
+            "What's the cost for a child's haircut?",
+            "Do you offer discounts for kids cuts?",
+            "What's the rate for a kids haircut?",
+            "Is there a different price for kids cuts?",
+            "What's the fee for a kids haircut?"
           ],
           "answer_spoken": "The kids cut price ($30) is for ages 12 and under.",
           "applies_to": [
@@ -2214,16 +2293,16 @@
         },
         {
           "id": "kids-and-teens-clients-under",
-          "topic": "kids_and_teens",
+          "topic": "minor_policy",
           "question_variants": [
             "what are the policies for kids and teens?",
-            "Clients under 16 need a parent or guardian with them for any color service.",
-            "Do kids need a parent for color services?",
-            "Can teens get color services alone?",
-            "Is a guardian needed for under 16 clients?",
             "Can a minor get a color service alone?",
-            "Do you require parental presence for young clients?",
-            "Is a parent needed for teen color services?"
+            "What's the policy for minors getting color services?",
+            "Do minors need a parent for color services?",
+            "What if I'm under 16 and want a color service?",
+            "Is a parent required for minors getting color?",
+            "What's the age requirement for color services?",
+            "Do I need a guardian for a color service if I'm under 16?"
           ],
           "answer_spoken": "Clients under 16 need a parent or guardian with them for any color service.",
           "provenance": {
@@ -2238,16 +2317,16 @@
         },
         {
           "id": "payment-and-tips",
-          "topic": "payment",
+          "topic": "payment_methods",
           "question_variants": [
             "what payment methods are accepted?",
-            "Payment and tips",
-            "We accept credit and debit cards, tap-to-pay and cash.",
-            "Do you accept checks for payment?",
+            "What payment methods do you accept?",
             "Can I pay with a credit card?",
-            "Do you take debit cards?",
-            "Can I use tap-to-pay at your studio?",
-            "Do you accept cash payments?"
+            "Do you accept cash payments?",
+            "What if I want to pay with a debit card?",
+            "Are checks accepted as payment?",
+            "Can I use tap-to-pay for my appointment?",
+            "What's the policy on payment methods?"
           ],
           "answer_spoken": "We accept credit and debit cards, tap-to-pay and cash. We don't accept checks.",
           "provenance": {
@@ -2262,15 +2341,16 @@
         },
         {
           "id": "payment-and-tips-tips-added",
-          "topic": "payment",
+          "topic": "tipping",
           "question_variants": [
-            "Tips can be added to your card payment or left in cash.",
-            "Can I tip with my card payment?",
+            "Is tipping expected?",
+            "How can I tip for my service?",
+            "Can I add a tip to my card payment?",
+            "What's the customary tip amount?",
             "Do you accept cash tips?",
-            "Can tips be added electronically?",
-            "Is tipping mandatory at your studio?",
-            "How should I leave a tip?",
-            "Are digital tips accepted?"
+            "Is there a tip jar available?",
+            "What's the best way to tip?",
+            "Are tips included in the service price?"
           ],
           "answer_spoken": "Tips can be added to your card payment or left in cash.",
           "provenance": {
@@ -2285,64 +2365,64 @@
         },
         {
           "id": "gift-cards",
-          "topic": "gift_cards",
+          "topic": "gift",
           "question_variants": [
             "what are the policies for gift cards?",
-            "Gift cards",
-            "Gift cards come in any amount from $25 and can be bought in the studio or by phone.",
-            "Can I buy a gift card for $50?",
-            "Do you sell gift cards in-studio?",
-            "Can I purchase a gift card by phone?",
+            "Can I buy a gift card?",
             "What's the minimum amount for a gift card?",
-            "Do gift cards have an expiration date?"
+            "How can I purchase a gift card?",
+            "Are gift cards available in the studio?",
+            "Can I buy a gift card over the phone?",
+            "What's the range of gift card amounts?",
+            "Do you offer gift cards for any amount?"
           ],
-          "answer_spoken": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service.",
+          "answer_spoken": "Gift cards come in any amount from $25 and can be bought in the studio or by phone.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service. They can't be exchanged for cash."
+                "quote": "Gift cards come in any amount from $25 and can be bought in the studio or by phone."
               }
             ]
           }
         },
         {
-          "id": "gift-cards-they-exchanged",
-          "topic": "gift_cards",
+          "id": "gift-cards-they-never",
+          "topic": "gift",
           "question_variants": [
-            "They can't be exchanged for cash.",
-            "what are the policies for gift cards?",
-            "Gift cards",
+            "Do gift cards have an expiration date?",
+            "Can I use a gift card for any service?",
             "Can I get cash for a gift card?",
-            "Are gift cards refundable?",
-            "Can I exchange a gift card for cash?",
-            "Is there a cash-back option for gift cards?",
-            "Can unused gift card balances be refunded?"
+            "What can I buy with a gift card?",
+            "Are gift cards valid forever?",
+            "Can I use multiple gift cards in one visit?",
+            "Is there a minimum spend for gift cards?",
+            "Do gift cards cover all services?"
           ],
-          "answer_spoken": "They can't be exchanged for cash.",
+          "answer_spoken": "Gift cards: They never expire and can be used for any service. They can't be exchanged for cash.",
           "provenance": {
             "owner_confirmed": false,
             "evidence": [
               {
                 "url": "https://quillfern.example/policies.html",
-                "quote": "Gift cards come in any amount from $25 and can be bought in the studio or by phone. They never expire and can be used for any service. They can't be exchanged for cash."
+                "quote": "They never expire and can be used for any service. They can't be exchanged for cash."
               }
             ]
           }
         },
         {
           "id": "if-something-isnt-right",
-          "topic": "if_something_isnt_right",
+          "topic": "satisfaction_guarantee",
           "question_variants": [
-            "If something isn't right",
-            "Tell us within 7 days of your appointment and we'll adjust your cut or color at no charge.",
-            "Can I get a free adjustment for my cut?",
-            "What if I'm not happy with my color?",
-            "How long do I have to report a problem?",
+            "What if I'm not happy with my haircut?",
+            "Can I get a free adjustment for my hair color?",
+            "How long do I have to request a service adjustment?",
             "Can I switch stylists for a free adjustment?",
-            "What's the time frame for service adjustments?",
-            "Do I need to pay for a service adjustment?"
+            "Is there a charge for correcting my haircut?",
+            "What services are covered under the satisfaction guarantee?",
+            "Do I need an appointment for a free adjustment?",
+            "Can I get a refund instead of an adjustment?"
           ],
           "answer_spoken": "Tell us within 7 days of your appointment and we'll adjust your cut or color at no charge. You can come back to the same stylist or switch to another one.",
           "provenance": {
@@ -2360,13 +2440,13 @@
           "topic": "accessibility",
           "question_variants": [
             "what accessibility features are available?",
-            "Accessibility",
-            "Is your studio accessible for wheelchairs?",
+            "Is the salon wheelchair accessible?",
             "Do you have an accessible restroom?",
-            "Are service animals allowed in the studio?",
-            "Is your entrance step-free?",
-            "Do you have adjustable salon chairs?",
-            "Is there parking for disabled clients?"
+            "Can service animals come inside?",
+            "Are the salon chairs adjustable?",
+            "Is there a step-free entrance?",
+            "What accommodations are there for disabled customers?",
+            "Can I bring my mobility aid inside?"
           ],
           "answer_spoken": "Our entrance is step-free, from the parking lot behind the building; We have an accessible restroom, and every station has an adjustable hydraulic chair; Service animals are welcome.",
           "provenance": {
@@ -2389,15 +2469,15 @@
         },
         {
           "id": "hours",
-          "topic": "hours",
+          "topic": "holiday_closure",
           "question_variants": [
-            "Hours",
-            "Sundays are for cuts, styling and treatments only, with no color services.",
-            "Do you offer color services on Sundays?",
             "Are you open on Thanksgiving Day?",
-            "Are you closed on December 24?",
-            "Do you work on New Year's Day?",
-            "What are your holiday closing dates?"
+            "Are you closed on Christmas?",
+            "Do you offer color services on Sundays?",
+            "What's your schedule for New Year's Day?",
+            "Are you open on December 24?",
+            "Can I book a color service on a holiday?",
+            "What holidays are you closed for?"
           ],
           "answer_spoken": "Sundays are for cuts, styling and treatments only, with no color services. We're closed on Thanksgiving Day (November 26, 2026), December 24 and 25, and January 1.",
           "provenance": {
@@ -2414,15 +2494,40 @@
           "id": "how-to-book",
           "topic": "booking",
           "question_variants": [
-            "what is the deposit for color services",
-            "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind.",
-            "How do I choose a service and stylist?",
-            "What information do I need to book?",
-            "How many time options should I provide?",
-            "Do I need to list alternative dates?",
-            "Can I book without a preferred stylist?"
+            "Can I choose my stylist when booking?",
+            "How do I book an appointment?",
+            "What services can I book online?",
+            "How far in advance should I book?",
+            "Can I book multiple services at once?",
+            "Do I need to specify a time for my appointment?",
+            "Can I book for someone else?",
+            "What information do I need to provide when booking?"
           ],
           "answer_spoken": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you.",
+          "provenance": {
+            "owner_confirmed": false,
+            "evidence": [
+              {
+                "url": "https://quillfern.example/contact.html",
+                "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you."
+              }
+            ]
+          }
+        },
+        {
+          "id": "how-to-book-color-services",
+          "topic": "deposit",
+          "question_variants": [
+            "How much is the deposit for color services?",
+            "Is there a deposit required for color services?",
+            "Can I pay the deposit in cash?",
+            "When do I pay the deposit for color services?",
+            "Is the deposit refundable?",
+            "What payment methods are accepted for the deposit?",
+            "Can I use a gift card for the deposit?",
+            "Do I need to pay the full amount upfront?"
+          ],
+          "answer_spoken": "For color services, we take the $50 deposit by card at that point.",
           "facts": {
             "deposit_cents": 5000
           },
@@ -2431,31 +2536,7 @@
             "evidence": [
               {
                 "url": "https://quillfern.example/contact.html",
-                "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you. We confirm by email within one business day. For color services, we take the $50 deposit by card at that point."
-              }
-            ]
-          }
-        },
-        {
-          "id": "how-to-book-confirm-email",
-          "topic": "booking",
-          "question_variants": [
-            "We confirm by email within one business day.",
-            "what is the deposit for color services",
-            "How will I know my appointment is confirmed?",
-            "Do you send confirmations by email?",
-            "Is there a deposit for color services?",
-            "How much is the deposit for color services?",
-            "When is the deposit taken for color services?",
-            "Do you confirm bookings within a day?"
-          ],
-          "answer_spoken": "We confirm by email within one business day. For color services, we take the $50 deposit by card at that point.",
-          "provenance": {
-            "owner_confirmed": false,
-            "evidence": [
-              {
-                "url": "https://quillfern.example/contact.html",
-                "quote": "Tell us the service you'd like (see services & prices) and your stylist, if you have one in mind. Give us two or three days and times that work for you. We confirm by email within one business day. For color services, we take the $50 deposit by card at that point."
+                "quote": "For color services, we take the $50 deposit by card at that point."
               }
             ]
           }
@@ -2464,14 +2545,14 @@
           "id": "find-us",
           "topic": "parking",
           "question_variants": [
-            "is parking available",
-            "Find us",
-            "Is parking free at your studio?",
-            "How many parking spaces do you have?",
+            "Is there parking available at the salon?",
+            "How many parking spaces are there?",
+            "Is parking free at the salon?",
             "Where is the parking lot located?",
-            "Can I park behind the building?",
-            "Is there designated parking for clients?",
-            "Do I need to pay for parking?"
+            "Can I park on the street?",
+            "Is the parking lot secure?",
+            "Are there any parking restrictions?",
+            "What's the best way to access the parking lot?"
           ],
           "answer_spoken": "Parking. Free parking in our back lot (6 spaces), entered from the alley off Marigold Street.",
           "provenance": {
@@ -2488,14 +2569,14 @@
           "id": "find-us-street-parking",
           "topic": "parking",
           "question_variants": [
-            "Street parking is also available on Marigold Street.",
-            "is parking available",
-            "Find us",
-            "Can I park on the street near your studio?",
-            "Is street parking available on Marigold Street?",
+            "Can I park on the street near the salon?",
             "Are there parking meters on Marigold Street?",
             "Is street parking free or paid?",
-            "How close is street parking to your studio?"
+            "How close can I park to the salon entrance?",
+            "Are there any time limits for street parking?",
+            "Is street parking available at all times?",
+            "What's the nearest street for parking?",
+            "Are there any parking signs to be aware of?"
           ],
           "answer_spoken": "Street parking is also available on Marigold Street.",
           "provenance": {
@@ -2510,15 +2591,16 @@
         },
         {
           "id": "find-us-getting-entrance",
-          "topic": "parking",
+          "topic": "entrance",
           "question_variants": [
-            "is the entrance step-free",
-            "Is your studio's entrance accessible from the parking lot?",
-            "Do you have a step-free entrance?",
-            "Where is your studio's entrance located?",
-            "Is the entrance facing the back lot?",
-            "Do you have an accessible entrance?",
-            "Is there a ramp at your studio's entrance?"
+            "Where is the salon entrance located?",
+            "Is the entrance accessible for wheelchairs?",
+            "Are there any steps at the entrance?",
+            "What should I look for to find the entrance?",
+            "Is the entrance clearly marked?",
+            "Can I enter from the front or back?",
+            "What's the best way to approach the entrance?",
+            "Is there a specific time the entrance is open?"
           ],
           "answer_spoken": "Getting in. Our entrance faces the back lot and is step-free.",
           "provenance": {
@@ -2533,16 +2615,16 @@
         },
         {
           "id": "find-us-look-suite",
-          "topic": "parking",
+          "topic": "entrance",
           "question_variants": [
-            "Look for Suite B and the yellow light over the door.",
-            "is the entrance step-free",
-            "How can I identify your studio's entrance?",
-            "Is there a specific light over your door?",
-            "What color is the light over your door?",
-            "Should I look for Suite B?",
-            "Is there a yellow light at your entrance?",
-            "How is your studio marked for visitors?"
+            "What suite number is the salon located in?",
+            "Is there a specific color light over the door?",
+            "How can I identify the correct entrance?",
+            "What color is the light above the salon door?",
+            "Is Suite B the only entrance to the salon?",
+            "Are there any signs indicating Suite B?",
+            "What should I do if I can't find Suite B?",
+            "Is the yellow light over the door visible at night?"
           ],
           "answer_spoken": "Look for Suite B and the yellow light over the door.",
           "provenance": {
@@ -2790,7 +2872,7 @@
         ],
         "say_before_confirm": [
           "info/footnotes-cancellation-policy",
-          "info/how-to-book-confirm-email"
+          "info/booking-confirm-every"
         ]
       },
       "availability": {
@@ -3002,21 +3084,21 @@
       "kind": "web_page",
       "url": "https://quillfern.example/index.html",
       "title": "Quillfern Hair Studio | Hair salon in East Austin, Texas",
-      "retrieved_at": "2026-10-20T07:51:36Z",
+      "retrieved_at": "2026-10-20T08:47:49Z",
       "content_sha256": "dd5323b69bdcbaf2f2d76b6f023ee58c4c4237854c2d60f5b3fc85155a9f248d"
     },
     "web-services": {
       "kind": "web_page",
       "url": "https://quillfern.example/services.html",
       "title": "Services & prices | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-20T07:51:36Z",
+      "retrieved_at": "2026-10-20T08:47:49Z",
       "content_sha256": "075d5ff08168309b8d8f29712dcc615706338788f5c968e17e081b2dd1744064"
     },
     "web-team": {
       "kind": "web_page",
       "url": "https://quillfern.example/team.html",
       "title": "Our stylists | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-20T07:51:36Z",
+      "retrieved_at": "2026-10-20T08:47:49Z",
       "content_sha256": "25976432365d14a1669a2235fd63a4502e3a21a05cba901d3dfd6eb99f40bca3",
       "injection_canaries": [
         {
@@ -3033,14 +3115,14 @@
       "kind": "web_page",
       "url": "https://quillfern.example/policies.html",
       "title": "Studio policies | Quillfern Hair Studio",
-      "retrieved_at": "2026-10-20T07:51:36Z",
+      "retrieved_at": "2026-10-20T08:47:49Z",
       "content_sha256": "7ebd3b8414485a7c57d0ce9e53d6cf8d1ff37b1837e93497b630fb06553da61c"
     },
     "web-contact": {
       "kind": "web_page",
       "url": "https://quillfern.example/contact.html",
       "title": "Contact & hours | Quillfern Hair StudioMap showing Quillfern Hair Studio at 1906 East Marigold Street, Suite B, between",
-      "retrieved_at": "2026-10-20T07:51:36Z",
+      "retrieved_at": "2026-10-20T08:47:49Z",
       "content_sha256": "37f69adbb2ee5ccf3186e997447ce6f2448b198719d3c50e8e11f79dd188aebb"
     }
   },
@@ -3137,7 +3219,6 @@
       "targets": [
         "info/before-you-book-first-time#answer_spoken",
         "info/color-carry-free#answer_spoken",
-        "info/patch-tests-and-allergies-free-takes#answer_spoken",
         "info/patch-tests-and-allergies#answer_spoken",
         "info/patch-tests-and-allergies-standard-permanent#answer_spoken",
         "info/patch-tests-and-allergies-highlights-balayage#answer_spoken",
@@ -3167,19 +3248,11 @@
           }
         },
         {
-          "value": "info/patch-tests-and-allergies-free-takes",
-          "label": "As your Studio policies page says",
-          "evidence": {
-            "url": "https://quillfern.example/policies.html",
-            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
-          }
-        },
-        {
           "value": "info/patch-tests-and-allergies",
           "label": "As your Studio policies page says",
           "evidence": {
             "url": "https://quillfern.example/policies.html",
-            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye."
           }
         },
         {
@@ -3196,6 +3269,14 @@
           "evidence": {
             "url": "https://quillfern.example/policies.html",
             "quote": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-smoothing-treatment",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "Our smoothing treatment is formaldehyde-free."
           }
         }
       ],
@@ -3219,9 +3300,9 @@
           "version": "1.0"
         },
         "profile_revision": 1,
-        "profile_sha256": "5d50c4f04b8e725c8044f68e3795c93465cdc51225246efaffbded8c84155af4",
-        "started_at": "2026-10-20T07:51:44Z",
-        "finished_at": "2026-10-20T07:51:46Z",
+        "profile_sha256": "efa265fa8feea837af4b0a01ba60393c35e95f7a84f5975870ebe28b024b7a30",
+        "started_at": "2026-10-20T08:47:59Z",
+        "finished_at": "2026-10-20T08:48:02Z",
         "result": "passed",
         "cases_total": 95,
         "cases_passed": 95,

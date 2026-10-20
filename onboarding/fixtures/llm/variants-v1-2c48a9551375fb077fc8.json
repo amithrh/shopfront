@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-2c48a9551375fb077fc8",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:39+00:00",
+ "answer": "Open Tuesday through Sunday. Closed Mondays.",
+ "questions": [
+  "Are you open on Mondays?",
+  "What are your operating days?",
+  "Do you close on any specific day of the week?",
+  "Are you open every day of the week?",
+  "What days are you closed?",
+  "Do you have any days off?",
+  "Are you open on weekends?",
+  "What are your studio's working hours?"
+ ]
+}

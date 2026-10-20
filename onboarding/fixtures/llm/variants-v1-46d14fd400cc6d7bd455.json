@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-46d14fd400cc6d7bd455",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:59+00:00",
+ "answer": "Less than 24 hours before: We charge 50% of the booked service price. A color deposit is kept and counts toward that charge.",
+ "questions": [
+  "What if I cancel my appointment less than 24 hours before?",
+  "Do I get charged if I cancel at the last minute?",
+  "What happens to my color deposit if I cancel late?",
+  "Is there a penalty for canceling an appointment last minute?",
+  "Can I get a partial refund if I cancel late?",
+  "How much do I lose if I cancel my appointment late?",
+  "Does the color deposit count towards the late cancellation fee?",
+  "What's the charge for canceling an appointment less than 24 hours before?"
+ ]
+}
