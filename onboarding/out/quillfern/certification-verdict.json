@@ -2,15 +2,15 @@
   "verdict": "CONDITIONAL",
   "profile_id": "quillfern",
   "profile_revision": 1,
-  "profile_sha256": "5d50c4f04b8e725c8044f68e3795c93465cdc51225246efaffbded8c84155af4",
+  "profile_sha256": "efa265fa8feea837af4b0a01ba60393c35e95f7a84f5975870ebe28b024b7a30",
   "run_id": "run-1-1",
-  "started_at": "2026-10-20T07:51:44Z",
-  "finished_at": "2026-10-20T07:51:46Z",
+  "started_at": "2026-10-20T08:47:59Z",
+  "finished_at": "2026-10-20T08:48:02Z",
   "summary": {
-    "cases_total": 111,
+    "cases_total": 110,
     "passed": 96,
     "failed": 0,
-    "skipped": 15,
+    "skipped": 14,
     "open_blocking_questions": 3
   },
   "rules": [
@@ -29,9 +29,9 @@
       "title": "Answers are grounded",
       "requirement": "Every fact the assistant states comes from the profile with a source that supports it. Prices are spoken exactly as published.",
       "status": "passed",
-      "passed": 66,
+      "passed": 67,
       "failed": 0,
-      "skipped": 15,
+      "skipped": 14,
       "failures": []
     },
     {
@@ -39,7 +39,7 @@
       "title": "Disputed facts are withheld",
       "requirement": "While the owner is confirming a fact, the assistant does not state any version of it.",
       "status": "passed",
-      "passed": 17,
+      "passed": 16,
       "failed": 0,
       "skipped": 0,
       "failures": []
@@ -106,9 +106,9 @@
     }
   ],
   "latency": {
-    "calls": 113,
-    "p50_ms": 14.9,
-    "p95_ms": 16.5,
+    "calls": 112,
+    "p50_ms": 31.7,
+    "p95_ms": 34.9,
     "threshold_ms": 500.0,
     "status": "passed"
   },
@@ -309,7 +309,7 @@
     {
       "id": "grounded_fact.policy.about-us",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'studio' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us#answer_spoken"
@@ -317,7 +317,7 @@
     {
       "id": "grounded_fact.policy.about-us-open-tuesday",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'location' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us-open-tuesday#answer_spoken"
@@ -325,7 +325,7 @@
     {
       "id": "grounded_fact.policy.about-us-east-marigold",
       "check": "grounded_fact",
-      "title": "Policy answer 'about' is grounded",
+      "title": "Policy answer 'location' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/about-us-east-marigold#answer_spoken"
@@ -333,7 +333,7 @@
     {
       "id": "grounded_fact.policy.services-and-price",
       "check": "grounded_fact",
-      "title": "Policy answer 'services_and_price' is grounded",
+      "title": "Policy answer 'appointment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/services-and-price#answer_spoken"
@@ -341,15 +341,31 @@
     {
       "id": "grounded_fact.policy.the-team",
       "check": "grounded_fact",
-      "title": "Policy answer 'the_team' is grounded",
+      "title": "Policy answer 'stylists' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/the-team#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.the-team-anyone-name",
+      "check": "grounded_fact",
+      "title": "Policy answer 'stylist' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/the-team-anyone-name#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.booking",
+      "check": "grounded_fact",
+      "title": "Policy answer 'stylist' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/booking#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.studio-policy",
       "check": "grounded_fact",
-      "title": "Policy answer 'studio_policy' is grounded",
+      "title": "Policy answer 'contact_info' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/studio-policy#answer_spoken"
@@ -357,7 +373,7 @@
     {
       "id": "grounded_fact.policy.contact-and-hour",
       "check": "grounded_fact",
-      "title": "Policy answer 'contact_and_hour' is grounded",
+      "title": "Policy answer 'location' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/contact-and-hour#answer_spoken"
@@ -365,7 +381,7 @@
     {
       "id": "grounded_fact.policy.most-booked",
       "check": "grounded_fact",
-      "title": "Policy answer 'most_booked' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/most-booked#answer_spoken"
@@ -373,7 +389,7 @@
     {
       "id": "grounded_fact.policy.before-you-book",
       "check": "grounded_fact",
-      "title": "Policy answer 'appointments' is grounded",
+      "title": "Policy answer 'appointment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/before-you-book#answer_spoken"
@@ -389,7 +405,7 @@
     {
       "id": "grounded_fact.policy.before-you-book-first-time",
       "check": "grounded_fact",
-      "title": "Policy answer 'appointments' is grounded",
+      "title": "Policy answer 'patch_test' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/before-you-book-first-time#answer_spoken"
@@ -397,7 +413,7 @@
     {
       "id": "grounded_fact.policy.before-you-book-sundays-cuts",
       "check": "grounded_fact",
-      "title": "Policy answer 'appointments' is grounded",
+      "title": "Policy answer 'sunday_services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/before-you-book-sundays-cuts#answer_spoken"
@@ -405,7 +421,7 @@
     {
       "id": "grounded_fact.policy.ines-calderon",
       "check": "grounded_fact",
-      "title": "Policy answer 'ines_calderon' is grounded",
+      "title": "Policy answer 'owner' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/ines-calderon#answer_spoken"
@@ -413,7 +429,7 @@
     {
       "id": "grounded_fact.policy.ines-calderon-person-balayage",
       "check": "grounded_fact",
-      "title": "Policy answer 'ines_calderon' is grounded",
+      "title": "Policy answer 'owner' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/ines-calderon-person-balayage#answer_spoken"
@@ -421,7 +437,7 @@
     {
       "id": "grounded_fact.policy.wren-abernathy",
       "check": "grounded_fact",
-      "title": "Policy answer 'wren_abernathy' is grounded",
+      "title": "Policy answer 'senior_stylist_services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/wren-abernathy#answer_spoken"
@@ -429,7 +445,7 @@
     {
       "id": "grounded_fact.policy.june-okafor",
       "check": "grounded_fact",
-      "title": "Policy answer 'june_okafor' is grounded",
+      "title": "Policy answer 'stylist' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/june-okafor#answer_spoken"
@@ -445,7 +461,7 @@
     {
       "id": "grounded_fact.policy.get-in-touch",
       "check": "grounded_fact",
-      "title": "Policy answer 'get_in_touch' is grounded",
+      "title": "Policy answer 'contact_info' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/get-in-touch#answer_spoken"
@@ -453,7 +469,7 @@
     {
       "id": "grounded_fact.policy.cuts",
       "check": "grounded_fact",
-      "title": "Policy answer 'cuts' is grounded",
+      "title": "Policy answer 'cut_details' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/cuts#answer_spoken"
@@ -461,7 +477,7 @@
     {
       "id": "grounded_fact.policy.styling",
       "check": "grounded_fact",
-      "title": "Policy answer 'styling' is grounded",
+      "title": "Policy answer 'blowouts' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/styling#answer_spoken"
@@ -469,7 +485,7 @@
     {
       "id": "grounded_fact.policy.styling-wedding-parties",
       "check": "grounded_fact",
-      "title": "Policy answer 'styling' is grounded",
+      "title": "Policy answer 'wedding_parties' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/styling-wedding-parties#answer_spoken"
@@ -477,7 +493,7 @@
     {
       "id": "grounded_fact.policy.color",
       "check": "grounded_fact",
-      "title": "Policy answer 'color' is grounded",
+      "title": "Policy answer 'deposit' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/color#answer_spoken"
@@ -485,7 +501,7 @@
     {
       "id": "grounded_fact.policy.color-carry-free",
       "check": "grounded_fact",
-      "title": "Policy answer 'color' is grounded",
+      "title": "Policy answer 'color_options' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/color-carry-free#answer_spoken"
@@ -493,7 +509,7 @@
     {
       "id": "grounded_fact.policy.treatments",
       "check": "grounded_fact",
-      "title": "Policy answer 'treatments' is grounded",
+      "title": "Policy answer 'add_ons' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/treatments#answer_spoken"
@@ -509,7 +525,7 @@
     {
       "id": "grounded_fact.policy.footnotes-sundays-cuts",
       "check": "grounded_fact",
-      "title": "Policy answer 'footnotes' is grounded",
+      "title": "Policy answer 'sunday_services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/footnotes-sundays-cuts#answer_spoken"
@@ -517,7 +533,7 @@
     {
       "id": "grounded_fact.policy.wren-abernathy-senior-stylist",
       "check": "grounded_fact",
-      "title": "Policy answer 'wren_abernathy' is grounded",
+      "title": "Policy answer 'senior_stylist_services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/wren-abernathy-senior-stylist#answer_spoken"
@@ -525,7 +541,7 @@
     {
       "id": "grounded_fact.policy.wren-abernathy-wren-also",
       "check": "grounded_fact",
-      "title": "Policy answer 'wren_abernathy' is grounded",
+      "title": "Policy answer 'senior_stylist_services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/wren-abernathy-wren-also#answer_spoken"
@@ -533,18 +549,18 @@
     {
       "id": "grounded_fact.policy.whos-in-when",
       "check": "grounded_fact",
-      "title": "Policy answer 'whos_in_when' is grounded",
+      "title": "Policy answer 'studio' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/whos-in-when#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.booking",
+      "id": "grounded_fact.policy.booking-appointments-start",
       "check": "grounded_fact",
-      "title": "Policy answer 'booking' is grounded",
+      "title": "Policy answer 'appointment' is grounded",
       "status": "passed",
       "detail": "",
-      "fact_ref": "info/booking#answer_spoken"
+      "fact_ref": "info/booking-appointments-start#answer_spoken"
     },
     {
       "id": "grounded_fact.policy.booking-book-weeks",
@@ -557,23 +573,15 @@
     {
       "id": "grounded_fact.policy.booking-every-appointment",
       "check": "grounded_fact",
-      "title": "Policy answer 'booking' is grounded",
+      "title": "Policy answer 'appointment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/booking-every-appointment#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.booking-request-stylist",
-      "check": "grounded_fact",
-      "title": "Policy answer 'booking' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/booking-request-stylist#answer_spoken"
-    },
-    {
       "id": "grounded_fact.policy.booking-confirm-every",
       "check": "grounded_fact",
-      "title": "Policy answer 'booking' is grounded",
+      "title": "Policy answer 'appointment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/booking-confirm-every#answer_spoken"
@@ -589,7 +597,7 @@
     {
       "id": "grounded_fact.policy.deposits-for-color-color-consultations",
       "check": "grounded_fact",
-      "title": "Policy answer 'deposit' is grounded",
+      "title": "Policy answer 'free_services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/deposits-for-color-color-consultations#answer_spoken"
@@ -629,7 +637,7 @@
     {
       "id": "grounded_fact.policy.cancellations-and-no-shows-show-charge",
       "check": "grounded_fact",
-      "title": "Policy answer 'cancellation' is grounded",
+      "title": "Policy answer 'no_show_charges' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/cancellations-and-no-shows-show-charge#answer_spoken"
@@ -645,7 +653,7 @@
     {
       "id": "grounded_fact.policy.running-late",
       "check": "grounded_fact",
-      "title": "Policy answer 'late_arrival' is grounded",
+      "title": "Policy answer 'late_policy' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/running-late#answer_spoken"
@@ -659,17 +667,25 @@
       "fact_ref": "info/patch-tests-and-allergies#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.patch-tests-and-allergies-done-least",
+      "check": "grounded_fact",
+      "title": "Policy answer 'patch_test' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/patch-tests-and-allergies-done-least#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.patch-tests-and-allergies-free-takes",
       "check": "grounded_fact",
       "title": "Policy answer 'patch_test' is grounded",
-      "status": "skipped",
-      "detail": "answer withheld or handed off",
+      "status": "passed",
+      "detail": "",
       "fact_ref": "info/patch-tests-and-allergies-free-takes#answer_spoken"
     },
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-standard-permanent",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'color_options' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-standard-permanent#answer_spoken"
@@ -677,7 +693,7 @@
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-highlights-balayage",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'highlights_details' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-highlights-balayage#answer_spoken"
@@ -685,7 +701,7 @@
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-smoothing-treatment",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'smoothing_treatment' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-smoothing-treatment#answer_spoken"
@@ -693,7 +709,7 @@
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-finishing-contains",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'finishing_oil' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-finishing-contains#answer_spoken"
@@ -701,7 +717,7 @@
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-nitrile-latex",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'gloves' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-nitrile-latex#answer_spoken"
@@ -709,7 +725,7 @@
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-fragrance-free",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'fragrance_free_products' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-fragrance-free#answer_spoken"
@@ -717,7 +733,7 @@
     {
       "id": "grounded_fact.policy.patch-tests-and-allergies-please-tell",
       "check": "grounded_fact",
-      "title": "Policy answer 'patch_test' is grounded",
+      "title": "Policy answer 'allergies' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/patch-tests-and-allergies-please-tell#answer_spoken"
@@ -725,7 +741,7 @@
     {
       "id": "grounded_fact.policy.kids-and-teens",
       "check": "grounded_fact",
-      "title": "Policy answer 'kids_and_teens' is grounded",
+      "title": "Policy answer 'kids_cut_price' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/kids-and-teens#answer_spoken"
@@ -733,7 +749,7 @@
     {
       "id": "grounded_fact.policy.kids-and-teens-clients-under",
       "check": "grounded_fact",
-      "title": "Policy answer 'kids_and_teens' is grounded",
+      "title": "Policy answer 'minor_policy' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/kids-and-teens-clients-under#answer_spoken"
@@ -741,7 +757,7 @@
     {
       "id": "grounded_fact.policy.payment-and-tips",
       "check": "grounded_fact",
-      "title": "Policy answer 'payment' is grounded",
+      "title": "Policy answer 'payment_methods' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/payment-and-tips#answer_spoken"
@@ -749,7 +765,7 @@
     {
       "id": "grounded_fact.policy.payment-and-tips-tips-added",
       "check": "grounded_fact",
-      "title": "Policy answer 'payment' is grounded",
+      "title": "Policy answer 'tipping' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/payment-and-tips-tips-added#answer_spoken"
@@ -757,34 +773,18 @@
     {
       "id": "grounded_fact.policy.gift-cards",
       "check": "grounded_fact",
-      "title": "Policy answer 'gift_cards' is grounded",
+      "title": "Policy answer 'gift' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/gift-cards#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.gift-cards-they-exchanged",
+      "id": "grounded_fact.policy.gift-cards-they-never",
       "check": "grounded_fact",
-      "title": "Policy answer 'gift_cards' is grounded",
+      "title": "Policy answer 'gift' is grounded",
       "status": "passed",
       "detail": "",
-      "fact_ref": "info/gift-cards-they-exchanged#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.if-something-isnt-right",
-      "check": "grounded_fact",
-      "title": "Policy answer 'if_something_isnt_right' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/if-something-isnt-right#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.accessibility",
-      "check": "grounded_fact",
-      "title": "Policy answer 'accessibility' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/accessibility#answer_spoken"
+      "fact_ref": "info/gift-cards-they-never#answer_spoken"
     },
     {
       "id": "grounded_fact.business_info",
@@ -857,14 +857,6 @@
       "status": "passed",
       "detail": "",
       "fact_ref": "info/color-carry-free#answer_spoken"
-    },
-    {
-      "id": "disputed_fact_withheld.q-safety-policies.info-patch-tests-and-allergies-free-takes-answer_spoken",
-      "check": "disputed_fact_withheld",
-      "title": "'info/patch-tests-and-allergies-free-takes#answer_spoken' is withheld while q-safety-policies is open",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/patch-tests-and-allergies-free-takes#answer_spoken"
     },
     {
       "id": "disputed_fact_withheld.q-safety-policies.info-patch-tests-and-allergies-answer_spoken",
@@ -1005,7 +997,7 @@
     {
       "id": "injection_canary.all_outputs",
       "check": "injection_canary",
-      "title": "No injection text in any of 226 tool outputs",
+      "title": "No injection text in any of 224 tool outputs",
       "status": "passed",
       "detail": "",
       "fact_ref": null

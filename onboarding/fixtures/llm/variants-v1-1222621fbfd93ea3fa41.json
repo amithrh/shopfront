@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-1222621fbfd93ea3fa41",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:16+00:00",
+ "answer": "Orders under 25 servings don't need a deposit; you pay in full at pickup.",
+ "questions": [
+  "Do small cake orders require a deposit?",
+  "What's the payment process for orders under 25 servings?",
+  "Is there a different payment method for small orders?",
+  "How do I pay for a cake order of less than 25 servings?",
+  "Are there any special instructions for small cake orders?",
+  "What's the payment timeline for small cake orders?",
+  "Do I need to make a deposit for a small cake order?",
+  "How are small cake orders handled at pickup?"
+ ]
+}

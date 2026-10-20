@@ -24,7 +24,7 @@ class FakeModel:
         self.calls.append(kind)
         if kind.startswith("review"):
             return json.dumps(self.review)
-        if kind.startswith("variants"):
+        if kind.startswith(("variants", "topics")):
             return "{}"
         url = re.search(r"PAGE URL: (\S+)", user).group(1)
         return "```json\n" + json.dumps(self.pages.get(url, {})) + "\n```"

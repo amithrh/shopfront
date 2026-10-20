@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-dff3f458adb945b74270",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:29:41+00:00",
+ "answer": "Typical prices for the jobs we do most. Every job still gets a written quote before work starts, and that quote is the price you pay unless you approve a change.",
+ "questions": [
+  "How much does a typical repair cost?",
+  "Do you have a price list for common jobs?",
+  "Will the quote I receive be the final price?",
+  "What happens if I want changes after the quote?",
+  "Are there any hidden fees in the quote?",
+  "Can I get an estimate without an in-person visit?",
+  "Is the quote valid for a limited time?",
+  "Do prices vary depending on the job complexity?"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-30df7089ba9fd4aff9c5",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "We never go over the approved price without your OK.",
+ "questions": [
+  "Can the price change without me knowing?",
+  "Do I need to approve extra costs?",
+  "Will the price go up without my OK?",
+  "Are there hidden fees?",
+  "Can they charge more than quoted?",
+  "Is the final price guaranteed?",
+  "Do I get to say yes to extra costs?",
+  "Are there surprises on the bill?"
+ ]
+}

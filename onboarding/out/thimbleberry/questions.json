@@ -504,14 +504,16 @@
       "kind": "confirm",
       "targets": [
         "info/cakes-made-for-your-table-order-least#answer_spoken",
-        "info/about-allergens-items-marked#answer_spoken",
         "info/about-allergens#answer_spoken",
+        "info/about-allergens-each-item#answer_spoken",
+        "info/about-allergens-items-marked#answer_spoken",
         "info/flavors-fillings-and-frostings#answer_spoken",
+        "info/gluten-free-cakes#answer_spoken",
         "info/gluten-free-cakes-gluten-free#answer_spoken",
         "info/gluten-free-cakes-they-made#answer_spoken",
-        "info/gluten-free-cakes#answer_spoken",
-        "info/vegan-cakes-vegan-cakes#answer_spoken",
+        "info/gluten-free-cakes-recommend-them#answer_spoken",
         "info/vegan-cakes#answer_spoken",
+        "info/vegan-cakes-vegan-cakes#answer_spoken",
         "info/vegan-cakes-make-cake#answer_spoken",
         "info/nuts#answer_spoken",
         "info/refunds#answer_spoken",
@@ -530,19 +532,27 @@
           }
         },
         {
-          "value": "info/about-allergens-items-marked",
-          "label": "As your Menu page says",
-          "evidence": {
-            "url": "https://thimbleberry.example.com/menu.html",
-            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
-          }
-        },
-        {
           "value": "info/about-allergens",
           "label": "As your Menu page says",
           "evidence": {
             "url": "https://thimbleberry.example.com/menu.html",
-            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts. Each item below lists what it contains, but we can't guarantee anything is free of traces of the others. Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
+            "quote": "Everything is made in one kitchen that handles wheat, milk, eggs, soy, sesame, tree nuts (almonds, hazelnuts and walnuts) and peanuts."
+          }
+        },
+        {
+          "value": "info/about-allergens-each-item",
+          "label": "As your Menu page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/menu.html",
+            "quote": "Each item below lists what it contains, but we can't guarantee anything is free of traces of the others."
+          }
+        },
+        {
+          "value": "info/about-allergens-items-marked",
+          "label": "As your Menu page says",
+          "evidence": {
+            "url": "https://thimbleberry.example.com/menu.html",
+            "quote": "Items marked gluten-free are made with gluten-free ingredients, not in a gluten-free kitchen."
           }
         },
         {
@@ -554,19 +564,11 @@
           }
         },
         {
-          "value": "info/gluten-free-cakes-gluten-free",
+          "value": "info/gluten-free-cakes",
           "label": "As your Custom cakes page says",
           "evidence": {
             "url": "https://thimbleberry.example.com/custom-cakes.html",
-            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
-          }
-        },
-        {
-          "value": "info/gluten-free-cakes-they-made",
-          "label": "As your Custom cakes page says",
-          "evidence": {
-            "url": "https://thimbleberry.example.com/custom-cakes.html",
-            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting. Add $12.00 per cake, or $12.00 per tier on tiered cakes. Gluten-free cakes contain milk and eggs, and the dark chocolate one also contains soy. They're made with gluten-free ingredients on cleaned pans, but our kitchen uses wheat flour every day, so we can't guarantee they're free of gluten traces."
+            "quote": "Available in vanilla bean, dark chocolate and lemon-poppyseed, in every size, with any filling and frosting."
           }
         }
       ],

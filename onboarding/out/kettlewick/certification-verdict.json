@@ -2,10 +2,10 @@
   "verdict": "CONDITIONAL",
   "profile_id": "kettlewick",
   "profile_revision": 1,
-  "profile_sha256": "b125e432533c54fe9002ebdeb1b41c0a6fa5fe1c4bb4dc51785bbbccd3503b4d",
+  "profile_sha256": "47ff8586c23aed8179d667ec2d5603876b4771c31c557ed7433cd598fbdc1e09",
   "run_id": "run-1-1",
-  "started_at": "2026-10-20T07:51:39Z",
-  "finished_at": "2026-10-20T07:51:44Z",
+  "started_at": "2026-10-20T08:47:52Z",
+  "finished_at": "2026-10-20T08:47:59Z",
   "summary": {
     "cases_total": 111,
     "passed": 101,
@@ -107,8 +107,8 @@
   ],
   "latency": {
     "calls": 109,
-    "p50_ms": 61.2,
-    "p95_ms": 68.2,
+    "p50_ms": 77.9,
+    "p95_ms": 84.4,
     "threshold_ms": 500.0,
     "status": "passed"
   },
@@ -306,33 +306,25 @@
       "fact_ref": "services/something-else#price"
     },
     {
+      "id": "grounded_fact.policy.about-us",
+      "check": "grounded_fact",
+      "title": "Policy answer 'quote' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/about-us#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.services-and-price",
       "check": "grounded_fact",
-      "title": "Policy answer 'services_and_price' is grounded",
+      "title": "Policy answer 'pricing' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/services-and-price#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.service-area",
-      "check": "grounded_fact",
-      "title": "Policy answer 'service_area' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/service-area#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.service-area-only-travel",
-      "check": "grounded_fact",
-      "title": "Policy answer 'service_area' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/service-area-only-travel#answer_spoken"
-    },
-    {
       "id": "grounded_fact.policy.how-quotes-work",
       "check": "grounded_fact",
-      "title": "Policy answer 'how_quotes_work' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/how-quotes-work#answer_spoken"
@@ -340,7 +332,7 @@
     {
       "id": "grounded_fact.policy.a-denver-repair-company-that-prices-the-job-before-it-starts",
       "check": "grounded_fact",
-      "title": "Policy answer 'a_denver_repair_company_that_prices_the' is grounded",
+      "title": "Policy answer 'company' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/a-denver-repair-company-that-prices-the-job-before-it-starts#answer_spoken"
@@ -348,7 +340,7 @@
     {
       "id": "grounded_fact.policy.contact-us",
       "check": "grounded_fact",
-      "title": "Policy answer 'quote_requests' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/contact-us#answer_spoken"
@@ -356,23 +348,47 @@
     {
       "id": "grounded_fact.policy.diagnostic-visit",
       "check": "grounded_fact",
-      "title": "Policy answer 'diagnostic_visit' is grounded",
+      "title": "Policy answer 'payment' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/diagnostic-visit#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.what-it-costs",
+      "check": "grounded_fact",
+      "title": "Policy answer 'pricing' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/what-it-costs#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.what-we-fix",
+      "check": "grounded_fact",
+      "title": "Policy answer 'staff' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/what-we-fix#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.how-a-quote-works",
       "check": "grounded_fact",
-      "title": "Policy answer 'how_a_quote_works' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/how-a-quote-works#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.send-a-request",
+      "check": "grounded_fact",
+      "title": "Policy answer 'quote' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/send-a-request#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.approve-and-schedule",
       "check": "grounded_fact",
-      "title": "Policy answer 'approval' is grounded",
+      "title": "Policy answer 'scheduling' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/approve-and-schedule#answer_spoken"
@@ -380,7 +396,7 @@
     {
       "id": "grounded_fact.policy.where-we-work-extended-area",
       "check": "grounded_fact",
-      "title": "Policy answer 'where_we_work' is grounded",
+      "title": "Policy answer 'service' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/where-we-work-extended-area#answer_spoken"
@@ -388,7 +404,7 @@
     {
       "id": "grounded_fact.policy.plumbing",
       "check": "grounded_fact",
-      "title": "Policy answer 'plumbing' is grounded",
+      "title": "Policy answer 'pricing' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/plumbing#answer_spoken"
@@ -396,7 +412,7 @@
     {
       "id": "grounded_fact.policy.leak-repair",
       "check": "grounded_fact",
-      "title": "Policy answer 'leak_repair' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/leak-repair#answer_spoken"
@@ -404,7 +420,7 @@
     {
       "id": "grounded_fact.policy.leak-repair-leaks-inside",
       "check": "grounded_fact",
-      "title": "Policy answer 'leak_repair' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/leak-repair-leaks-inside#answer_spoken"
@@ -412,7 +428,7 @@
     {
       "id": "grounded_fact.policy.leak-repair-open-drywall",
       "check": "grounded_fact",
-      "title": "Policy answer 'leak_repair' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/leak-repair-open-drywall#answer_spoken"
@@ -420,7 +436,7 @@
     {
       "id": "grounded_fact.policy.water-heaters",
       "check": "grounded_fact",
-      "title": "Policy answer 'water_heaters' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/water-heaters#answer_spoken"
@@ -428,7 +444,7 @@
     {
       "id": "grounded_fact.policy.water-heaters-replacements-include",
       "check": "grounded_fact",
-      "title": "Policy answer 'water_heaters' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/water-heaters-replacements-include#answer_spoken"
@@ -436,7 +452,7 @@
     {
       "id": "grounded_fact.policy.water-heaters-year-labor",
       "check": "grounded_fact",
-      "title": "Policy answer 'water_heaters' is grounded",
+      "title": "Policy answer 'warranty' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/water-heaters-year-labor#answer_spoken"
@@ -444,7 +460,7 @@
     {
       "id": "grounded_fact.policy.approve-the-quote-and-pick-an-arrival-window",
       "check": "grounded_fact",
-      "title": "Policy answer 'approve_the_quote_and_pick_an_arrival_wi' is grounded",
+      "title": "Policy answer 'scheduling' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/approve-the-quote-and-pick-an-arrival-window#answer_spoken"
@@ -452,7 +468,7 @@
     {
       "id": "grounded_fact.policy.water-heaters-water-sure",
       "check": "grounded_fact",
-      "title": "Policy answer 'water_heaters' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/water-heaters-water-sure#answer_spoken"
@@ -460,7 +476,7 @@
     {
       "id": "grounded_fact.policy.drain-cleaning",
       "check": "grounded_fact",
-      "title": "Policy answer 'drain_cleaning' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/drain-cleaning#answer_spoken"
@@ -468,7 +484,7 @@
     {
       "id": "grounded_fact.policy.drain-cleaning-main-line",
       "check": "grounded_fact",
-      "title": "Policy answer 'drain_cleaning' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/drain-cleaning-main-line#answer_spoken"
@@ -476,7 +492,7 @@
     {
       "id": "grounded_fact.policy.drain-cleaning-excavate-replace",
       "check": "grounded_fact",
-      "title": "Policy answer 'drain_cleaning' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/drain-cleaning-excavate-replace#answer_spoken"
@@ -484,7 +500,7 @@
     {
       "id": "grounded_fact.policy.faucet-and-fixture-installs",
       "check": "grounded_fact",
-      "title": "Policy answer 'faucet_and_fixture_installs' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/faucet-and-fixture-installs#answer_spoken"
@@ -492,7 +508,7 @@
     {
       "id": "grounded_fact.policy.faucet-and-fixture-installs-fixtures-supply",
       "check": "grounded_fact",
-      "title": "Policy answer 'faucet_and_fixture_installs' is grounded",
+      "title": "Policy answer 'pricing' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/faucet-and-fixture-installs-fixtures-supply#answer_spoken"
@@ -500,7 +516,7 @@
     {
       "id": "grounded_fact.policy.faucet-and-fixture-installs-2",
       "check": "grounded_fact",
-      "title": "Policy answer 'faucet_and_fixture_installs' is grounded",
+      "title": "Policy answer 'warranty' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/faucet-and-fixture-installs-2#answer_spoken"
@@ -508,7 +524,7 @@
     {
       "id": "grounded_fact.policy.handyman",
       "check": "grounded_fact",
-      "title": "Policy answer 'handyman' is grounded",
+      "title": "Policy answer 'pricing' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/handyman#answer_spoken"
@@ -516,23 +532,23 @@
     {
       "id": "grounded_fact.policy.drywall-patching",
       "check": "grounded_fact",
-      "title": "Policy answer 'drywall_patching' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/drywall-patching#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.drywall-patching-medium-patches",
+      "id": "grounded_fact.policy.drywall-patching-prime-every",
       "check": "grounded_fact",
-      "title": "Policy answer 'drywall_patching' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
-      "fact_ref": "info/drywall-patching-medium-patches#answer_spoken"
+      "fact_ref": "info/drywall-patching-prime-every#answer_spoken"
     },
     {
       "id": "grounded_fact.policy.drywall-patching-homes-built",
       "check": "grounded_fact",
-      "title": "Policy answer 'drywall_patching' is grounded",
+      "title": "Policy answer 'lead_paint' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/drywall-patching-homes-built#answer_spoken"
@@ -540,7 +556,7 @@
     {
       "id": "grounded_fact.policy.drywall-patching-suspect-asbestos",
       "check": "grounded_fact",
-      "title": "Policy answer 'drywall_patching' is grounded",
+      "title": "Policy answer 'asbestos' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/drywall-patching-suspect-asbestos#answer_spoken"
@@ -548,7 +564,7 @@
     {
       "id": "grounded_fact.policy.furniture-assembly",
       "check": "grounded_fact",
-      "title": "Policy answer 'furniture_assembly' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/furniture-assembly#answer_spoken"
@@ -556,31 +572,15 @@
     {
       "id": "grounded_fact.policy.furniture-assembly-break-down",
       "check": "grounded_fact",
-      "title": "Policy answer 'furniture_assembly' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/furniture-assembly-break-down#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.furniture-assembly-recommend-wall",
-      "check": "grounded_fact",
-      "title": "Policy answer 'furniture_assembly' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/furniture-assembly-recommend-wall#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.tv-mounting",
-      "check": "grounded_fact",
-      "title": "Policy answer 'tv_mounting' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/tv-mounting#answer_spoken"
-    },
-    {
       "id": "grounded_fact.policy.tv-mounting-plaster-lath",
       "check": "grounded_fact",
-      "title": "Policy answer 'tv_mounting' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/tv-mounting-plaster-lath#answer_spoken"
@@ -588,7 +588,7 @@
     {
       "id": "grounded_fact.policy.tv-mounting-mount-ceilings",
       "check": "grounded_fact",
-      "title": "Policy answer 'tv_mounting' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/tv-mounting-mount-ceilings#answer_spoken"
@@ -596,7 +596,7 @@
     {
       "id": "grounded_fact.policy.tv-mounting-wall-uses",
       "check": "grounded_fact",
-      "title": "Policy answer 'tv_mounting' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/tv-mounting-wall-uses#answer_spoken"
@@ -604,7 +604,7 @@
     {
       "id": "grounded_fact.policy.rates-and-fees-after-hours",
       "check": "grounded_fact",
-      "title": "Policy answer 'after_hours_emergencies' is grounded",
+      "title": "Policy answer 'emergencies' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/rates-and-fees-after-hours#answer_spoken"
@@ -612,7 +612,7 @@
     {
       "id": "grounded_fact.policy.rates-and-fees-emergencies-active",
       "check": "grounded_fact",
-      "title": "Policy answer 'after_hours_emergencies' is grounded",
+      "title": "Policy answer 'emergencies' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/rates-and-fees-emergencies-active#answer_spoken"
@@ -620,7 +620,7 @@
     {
       "id": "grounded_fact.policy.what-we-dont-do",
       "check": "grounded_fact",
-      "title": "Policy answer 'what_we_dont_do' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/what-we-dont-do#answer_spoken"
@@ -628,7 +628,7 @@
     {
       "id": "grounded_fact.policy.what-we-dont-do-sewer-line",
       "check": "grounded_fact",
-      "title": "Policy answer 'what_we_dont_do' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/what-we-dont-do-sewer-line#answer_spoken"
@@ -636,7 +636,7 @@
     {
       "id": "grounded_fact.policy.what-we-dont-do-irrigation-systems",
       "check": "grounded_fact",
-      "title": "Policy answer 'what_we_dont_do' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/what-we-dont-do-irrigation-systems#answer_spoken"
@@ -644,7 +644,7 @@
     {
       "id": "grounded_fact.policy.outside-our-area-take-jobs",
       "check": "grounded_fact",
-      "title": "Policy answer 'outside_our_area' is grounded",
+      "title": "Policy answer 'service' is grounded",
       "status": "skipped",
       "detail": "answer withheld or handed off",
       "fact_ref": "info/outside-our-area-take-jobs#answer_spoken"
@@ -652,7 +652,7 @@
     {
       "id": "grounded_fact.policy.extended-area",
       "check": "grounded_fact",
-      "title": "Policy answer 'emergency_service' is grounded",
+      "title": "Policy answer 'service' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/extended-area#answer_spoken"
@@ -660,23 +660,15 @@
     {
       "id": "grounded_fact.policy.service-area-code-listed",
       "check": "grounded_fact",
-      "title": "Policy answer 'service_area' is grounded",
+      "title": "Policy answer 'service' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/service-area-code-listed#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.send-a-quote-request",
-      "check": "grounded_fact",
-      "title": "Policy answer 'send_a_quote_request' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/send-a-quote-request#answer_spoken"
-    },
-    {
       "id": "grounded_fact.policy.send-a-quote-request-brand-model",
       "check": "grounded_fact",
-      "title": "Policy answer 'send_a_quote_request' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/send-a-quote-request-brand-model#answer_spoken"
@@ -684,23 +676,39 @@
     {
       "id": "grounded_fact.policy.send-a-quote-request-arrival-first",
       "check": "grounded_fact",
-      "title": "Policy answer 'send_a_quote_request' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/send-a-quote-request-arrival-first#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.send-a-quote-request-also-text",
+      "check": "grounded_fact",
+      "title": "Policy answer 'quote' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/send-a-quote-request-also-text#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.quotes",
       "check": "grounded_fact",
-      "title": "Policy answer 'quotes' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/quotes#answer_spoken"
     },
     {
+      "id": "grounded_fact.policy.quotes-quote-covers",
+      "check": "grounded_fact",
+      "title": "Policy answer 'quote' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/quotes-quote-covers#answer_spoken"
+    },
+    {
       "id": "grounded_fact.policy.quotes-anything-extra",
       "check": "grounded_fact",
-      "title": "Policy answer 'quotes' is grounded",
+      "title": "Policy answer 'quote' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/quotes-anything-extra#answer_spoken"
@@ -708,7 +716,7 @@
     {
       "id": "grounded_fact.policy.rescheduling-and-cancelling",
       "check": "grounded_fact",
-      "title": "Policy answer 'rescheduling_and_cancelling' is grounded",
+      "title": "Policy answer 'cancellation_fee' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/rescheduling-and-cancelling#answer_spoken"
@@ -722,17 +730,9 @@
       "fact_ref": "info/payment#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.payment-take-cash",
-      "check": "grounded_fact",
-      "title": "Policy answer 'payment' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/payment-take-cash#answer_spoken"
-    },
-    {
       "id": "grounded_fact.policy.deposits",
       "check": "grounded_fact",
-      "title": "Policy answer 'deposits' is grounded",
+      "title": "Policy answer 'deposit' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/deposits#answer_spoken"
@@ -746,17 +746,25 @@
       "fact_ref": "info/warranty#answer_spoken"
     },
     {
-      "id": "grounded_fact.policy.warranty-parts-supply",
+      "id": "grounded_fact.policy.do-i-need-to-buy-the-parts",
       "check": "grounded_fact",
-      "title": "Policy answer 'warranty' is grounded",
+      "title": "Policy answer 'services' is grounded",
       "status": "passed",
       "detail": "",
-      "fact_ref": "info/warranty-parts-supply#answer_spoken"
+      "fact_ref": "info/do-i-need-to-buy-the-parts#answer_spoken"
+    },
+    {
+      "id": "grounded_fact.policy.do-i-need-to-buy-the-parts-parts-supply",
+      "check": "grounded_fact",
+      "title": "Policy answer 'services' is grounded",
+      "status": "passed",
+      "detail": "",
+      "fact_ref": "info/do-i-need-to-buy-the-parts-parts-supply#answer_spoken"
     },
     {
       "id": "grounded_fact.policy.someone-at-home",
       "check": "grounded_fact",
-      "title": "Policy answer 'someone_at_home' is grounded",
+      "title": "Policy answer 'requirements' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/someone-at-home#answer_spoken"
@@ -764,7 +772,7 @@
     {
       "id": "grounded_fact.policy.rentals",
       "check": "grounded_fact",
-      "title": "Policy answer 'rentals' is grounded",
+      "title": "Policy answer 'rental_homes' is grounded",
       "status": "passed",
       "detail": "",
       "fact_ref": "info/rentals#answer_spoken"
@@ -776,14 +784,6 @@
       "status": "passed",
       "detail": "",
       "fact_ref": "info/discounts#answer_spoken"
-    },
-    {
-      "id": "grounded_fact.policy.send-a-quote-request-quote-form",
-      "check": "grounded_fact",
-      "title": "Policy answer 'send_a_quote_request' is grounded",
-      "status": "passed",
-      "detail": "",
-      "fact_ref": "info/send-a-quote-request-quote-form#answer_spoken"
     },
     {
       "id": "grounded_fact.business_info",

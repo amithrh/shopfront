@@ -54,3 +54,5 @@ def test_numbers_and_yes_no_facts_are_read_in_any_unit():
     assert bool_claim("accepts_checks", "We accept cards and cash. We don't accept checks.") is False
     assert bool_claim("after_hours_emergency", "No travel fee, and we take after-hours emergencies there.") is True
     assert bool_claim("nut_free_kitchen", "No. We use tree nuts every day.", questions=["Is your kitchen nut-free?"]) is False
+    assert bool_claim("reschedule_counts_as_cancel", "No-show: We charge 100% of the booked service price.",
+                      questions=["What if I cancel or reschedule instead of showing up?"]) is None

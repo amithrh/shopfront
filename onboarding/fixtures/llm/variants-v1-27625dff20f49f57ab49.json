@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-27625dff20f49f57ab49",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:20+00:00",
+ "answer": "The office answers the phone and email during office hours. The emergency line is answered 24 hours a day, 7 days a week, for plumbing emergencies in our core service area.",
+ "questions": [
+  "Are you available outside of office hours?",
+  "How can I reach you in an emergency?",
+  "Do you offer 24/7 service?",
+  "What are your regular office hours?",
+  "Is there someone to call after hours?",
+  "How quickly do you respond to emergencies?",
+  "Can I email you outside of office hours?",
+  "What's the best time to call your office?"
+ ]
+}

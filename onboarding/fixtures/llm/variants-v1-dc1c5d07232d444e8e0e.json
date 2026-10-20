@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-dc1c5d07232d444e8e0e",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:06+00:00",
+ "answer": "You pay when you pick it up.",
+ "questions": [
+  "When do I pay for my order?",
+  "Is payment required upfront?",
+  "Do I pay when I arrive?",
+  "Is there an online payment option?",
+  "Can I pay with a card?",
+  "Is cash payment accepted?",
+  "Do I need to bring exact change?",
+  "Is payment required at pickup?"
+ ]
+}

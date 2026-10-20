@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-840a8ca9f74c079c1bc5",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "We work on rental homes when the property owner or manager approves the quote in writing. We bill the owner or manager directly.",
+ "questions": [
+  "Do you work on rental properties?",
+  "What if I'm a tenant needing repairs?",
+  "Can the property owner approve the quote in writing?",
+  "Will you bill the property owner directly?",
+  "What if I'm the property manager?",
+  "Can I get repairs done without the owner's approval?",
+  "What if the owner is unavailable for approval?",
+  "How do you handle payments for rental properties?"
+ ]
+}

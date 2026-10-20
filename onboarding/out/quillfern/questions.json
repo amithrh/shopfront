@@ -100,7 +100,6 @@
       "targets": [
         "info/before-you-book-first-time#answer_spoken",
         "info/color-carry-free#answer_spoken",
-        "info/patch-tests-and-allergies-free-takes#answer_spoken",
         "info/patch-tests-and-allergies#answer_spoken",
         "info/patch-tests-and-allergies-standard-permanent#answer_spoken",
         "info/patch-tests-and-allergies-highlights-balayage#answer_spoken",
@@ -130,19 +129,11 @@
           }
         },
         {
-          "value": "info/patch-tests-and-allergies-free-takes",
-          "label": "As your Studio policies page says",
-          "evidence": {
-            "url": "https://quillfern.example/policies.html",
-            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
-          }
-        },
-        {
           "value": "info/patch-tests-and-allergies",
           "label": "As your Studio policies page says",
           "evidence": {
             "url": "https://quillfern.example/policies.html",
-            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye. It has to be done at least 72 hours before your color appointment. It's free and takes 15 minutes."
+            "quote": "A patch test is required if you're new to color with us, or if you've ever reacted to hair dye."
           }
         },
         {
@@ -159,6 +150,14 @@
           "evidence": {
             "url": "https://quillfern.example/policies.html",
             "quote": "Highlights and balayage use lightener, which contains persulfates. We don't have a persulfate-free alternative."
+          }
+        },
+        {
+          "value": "info/patch-tests-and-allergies-smoothing-treatment",
+          "label": "As your Studio policies page says",
+          "evidence": {
+            "url": "https://quillfern.example/policies.html",
+            "quote": "Our smoothing treatment is formaldehyde-free."
           }
         }
       ],

@@ -273,24 +273,19 @@
       "quote": "Colorado Master Plumber License MP.0048213, Denver Plumbing Contractor License PC-27715 Lead-safe certified firm (RRP) for work in homes built before 1978"
     },
     {
-      "page": "https://kettlewick.example.com/index.html",
+      "page": "https://kettlewick.example.com/service-area.html",
       "what": "policy entry (over the entry limit)",
-      "quote": "Tell us what needs fixing, add your ZIP code and a photo or two. Jo reviews every request and replies with a written quote, and nothing is scheduled until you approve it."
+      "quote": "We work across central Denver and a ring of nearby neighborhoods and suburbs."
     },
     {
-      "page": "https://kettlewick.example.com/index.html",
+      "page": "https://kettlewick.example.com/service-area.html",
       "what": "policy entry (over the entry limit)",
-      "quote": "Real numbers, so you have a rough idea before you ask. Your written quote is the price you pay."
+      "quote": "Our prices are the same everywhere we go."
     },
     {
-      "page": "https://kettlewick.example.com/index.html",
+      "page": "https://kettlewick.example.com/service-area.html",
       "what": "policy entry (over the entry limit)",
-      "quote": "Licensed plumbers for the water side of the house, and two handymen for the jobs that have been on your list since spring."
-    },
-    {
-      "page": "https://kettlewick.example.com/index.html",
-      "what": "policy entry (over the entry limit)",
-      "quote": "Describe the job, give us your ZIP code and the time of day that suits you. Photos are optional, but they help us price the job without a visit."
+      "quote": "Only the travel fee changes."
     },
     {
       "page": "https://kettlewick.example.com/index.html",
@@ -310,7 +305,17 @@
     {
       "page": "https://kettlewick.example.com/services.html",
       "what": "policy entry (over the entry limit)",
-      "quote": "We prime every patch. Paint touch-up is included if you have leftover paint."
+      "quote": "Medium patches take two visits: one to patch, and one to texture after it dries."
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "We recommend wall anchoring for dressers and bookcases in any home with kids."
+    },
+    {
+      "page": "https://kettlewick.example.com/services.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Wall-mounted TVs, level and centered, with cables tidied or hidden inside the wall."
     },
     {
       "page": "https://kettlewick.example.com/services.html",
@@ -335,7 +340,27 @@
     {
       "page": "https://kettlewick.example.com/how-it-works.html",
       "what": "policy entry (over the entry limit)",
+      "quote": "What needs doing: A few sentences about the problem or the job."
+    },
+    {
+      "page": "https://kettlewick.example.com/how-it-works.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Payment is due when the job is done."
+    },
+    {
+      "page": "https://kettlewick.example.com/how-it-works.html",
+      "what": "policy entry (over the entry limit)",
       "quote": "Quotes are valid for 30 days."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "So Kettlewick was built around one rule."
+    },
+    {
+      "page": "https://kettlewick.example.com/about.html",
+      "what": "policy entry (over the entry limit)",
+      "quote": "Every job still works that way."
     },
     {
       "page": "https://kettlewick.example.com/about.html",
@@ -368,9 +393,9 @@
       "quote": "Office and scheduling Answers the office line and sets up arrival windows."
     },
     {
-      "page": "https://kettlewick.example.com/about.html",
+      "page": "https://kettlewick.example.com/contact.html",
       "what": "policy entry (over the entry limit)",
-      "quote": "you can request a quote online or by phone"
+      "quote": "We come to you."
     },
     {
       "page": "https://kettlewick.example.com/services.html",
@@ -424,7 +449,7 @@
   ],
   "model": {
     "calls": 0,
-    "cache_hits": 14,
+    "cache_hits": 16,
     "cost_usd": 0.0
   }
 }

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-053579a2da8edd55e7d5",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "No. Every job starts with a quote request.",
+ "questions": [
+  "Can I just show up for service?",
+  "Do I need a quote first?",
+  "Is a quote request mandatory?",
+  "Can I skip the quote process?",
+  "Do I need to ask for a quote?",
+  "Is there work without a quote?",
+  "Can I get service without a quote?",
+  "Is a quote always needed before work?"
+ ]
+}

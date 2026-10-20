@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-12ce5c623e4360846571",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "Appointments start every 15 minutes (on the hour, at :15, :30 and :45) and are booked in 15-minute blocks.",
+ "questions": [
+  "How often are appointments scheduled?",
+  "Are appointments booked in 15-minute intervals?",
+  "What are the start times for appointments?",
+  "Can I book an appointment at any time?",
+  "Are there specific times for booking appointments?",
+  "How are appointment times structured?",
+  "Can I choose my appointment time?",
+  "Are appointments booked in blocks of time?"
+ ]
+}

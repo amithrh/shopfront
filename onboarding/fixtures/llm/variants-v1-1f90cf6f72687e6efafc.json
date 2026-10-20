@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-1f90cf6f72687e6efafc",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:26+00:00",
+ "answer": "We're closed on Thanksgiving Day, December 25 and January 1.",
+ "questions": [
+  "Are you open on Thanksgiving?",
+  "Do you close on December 25?",
+  "Is the bakery open on January 1?",
+  "What holidays are you closed on?",
+  "Will the bakery be open during the holidays?",
+  "Are there any days the bakery is closed?",
+  "Do you have special hours around holidays?",
+  "Is the bakery operational on all holidays?"
+ ]
+}

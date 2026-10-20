@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-f51739c0fc932e07eb6a",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:27:56+00:00",
+ "answer": "Everything here is baked in our kitchen each morning and sold until it runs out. Oregon has no sales tax, so the price you see is the price you pay.",
+ "questions": [
+  "Is there sales tax on your products?",
+  "Do I need to add tax to the price?",
+  "Are your prices final or do they include tax?",
+  "What if I want to know the total cost?",
+  "Is the price I see the price I pay?",
+  "Do you charge extra for sales tax?",
+  "Are your prices tax-inclusive?",
+  "What's the final price I'll pay for a product?"
+ ]
+}

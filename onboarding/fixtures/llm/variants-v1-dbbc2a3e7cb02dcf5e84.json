@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-dbbc2a3e7cb02dcf5e84",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:16+00:00",
+ "answer": "Our decorating bench is small, so we only take a limited number of custom cakes each day. Weekends in May, June and December fill up first, so get in touch as soon as you know your date.",
+ "questions": [
+  "How many custom cakes do you make daily?",
+  "Are custom cakes available on weekends?",
+  "When should I contact you for a custom cake?",
+  "Do you take custom cake orders in May?",
+  "Is there a limit on custom cake orders?",
+  "Can I get a custom cake in June?",
+  "Are custom cakes available in December?",
+  "What's the best time to order a custom cake?"
+ ]
+}

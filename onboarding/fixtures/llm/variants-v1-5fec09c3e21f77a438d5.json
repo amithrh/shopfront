@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-5fec09c3e21f77a438d5",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "They're scheduled during regular hours.",
+ "questions": [
+  "When are services done?",
+  "Are there specific service hours?",
+  "Is there an off-hour service?",
+  "When can I expect service?",
+  "Are services scheduled during normal hours?",
+  "Is there an after-hours service?",
+  "What are the regular service hours?",
+  "Can I get service outside regular hours?"
+ ]
+}

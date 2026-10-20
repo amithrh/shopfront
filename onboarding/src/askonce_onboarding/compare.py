@@ -173,7 +173,7 @@ def bool_claim(key: str, text: str, subject: set[str] | None = None, questions: 
     all_words = list(tokens(key.replace("_", " ")))
     words = [w for w in all_words if w not in GENERIC_KEY_WORDS] or all_words
     low = ascii_lower(text).replace("’", "'")
-    opener = re.match(r"\s*(yes|no)\b", low)
+    opener = re.match(r"\s*(yes|no)\b(?!-)", low)  # "No-show: ..." is not a "No"
     if opener and any(any(_key_hit(w, tokens(q)) for w in words) for q in questions):
         claim = opener.group(1) == "yes"
         return (claim, len(words) + 1) if with_hits else claim

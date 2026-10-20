@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-5dd5567e5a653be7ba95",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:29:52+00:00",
+ "answer": "Fixtures you supply are covered by our labor warranty, but we can't warranty the part itself.",
+ "questions": [
+  "Is my supplied fixture covered by warranty?",
+  "Do you warranty parts I provide?",
+  "What's covered under your labor warranty?",
+  "Can you warranty the fixture I supply?",
+  "Does your warranty include supplied parts?",
+  "What parts are excluded from your warranty?",
+  "Is the part itself covered by your warranty?",
+  "Do you offer any warranty on supplied fixtures?"
+ ]
+}

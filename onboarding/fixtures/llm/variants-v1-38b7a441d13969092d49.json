@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-38b7a441d13969092d49",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "Free, written and valid for 30 days.",
+ "questions": [
+  "How long is a quote valid for?",
+  "Is the quote written and free?",
+  "What's the duration of a valid quote?",
+  "Do I need to pay for a quote?",
+  "Can I use the quote within 30 days?",
+  "Is there an expiration date on quotes?",
+  "What if I need the quote after 30 days?",
+  "Are quotes provided in writing?"
+ ]
+}

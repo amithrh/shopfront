@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-fa7d36d9ccb5fa8f2053",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:06+00:00",
+ "answer": "At least 72 hours before pickup.",
+ "questions": [
+  "How far in advance should I order?",
+  "What's the minimum notice for ordering?",
+  "Can I order the day before pickup?",
+  "Is there a lead time for orders?",
+  "How many hours ahead should I place an order?",
+  "Can I order with less than 72 hours notice?",
+  "What happens if I order less than 72 hours ahead?",
+  "Is there a deadline for placing orders?"
+ ]
+}

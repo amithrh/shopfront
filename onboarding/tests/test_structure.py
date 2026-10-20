@@ -89,3 +89,11 @@ def test_holiday_closures_resolve_to_their_next_date():
         ("2026-11-26", "2026-11-26"), ("2026-12-24", "2026-12-25"), ("2027-01-01", "2027-01-01")]
     memorial = closure_dates("The office is closed on Memorial Day.", country="US", ref=ref)
     assert memorial[0][0] == dt.date(2027, 5, 31)
+
+
+def test_subjects_that_start_alike_share_one_topic():
+    from askonce_onboarding.assemble import share_topics
+
+    entries = [{"topic": t} for t in ("cancellation_notice", "cancellation_charges", "no_show_charges", "parking")]
+    share_topics(entries)
+    assert [e["topic"] for e in entries] == ["cancellation", "cancellation", "no_show_charges", "parking"]

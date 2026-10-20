@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-ff06e9f8dc5ed0571418",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "Services marked with an asterisk need a $50 deposit when you book. We don't do color on Sundays.",
+ "questions": [
+  "Is there a deposit required for certain services?",
+  "What services need a $50 deposit?",
+  "Do all services require a deposit?",
+  "Can I book color services on Sundays?",
+  "What's the deposit amount for marked services?",
+  "Are there any exceptions to the deposit rule?",
+  "Why is there no color service on Sundays?",
+  "How do I know if a service requires a deposit?"
+ ]
+}

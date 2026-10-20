@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-cc7cc344cd29f0e77869",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:13+00:00",
+ "answer": "Not at the moment. Wheat Ridge (80033) and Arvada are outside our service area.",
+ "questions": [
+  "Do you service Wheat Ridge?",
+  "Are you available in Arvada?",
+  "Is my area outside your service zone?",
+  "Can I get service in 80033?",
+  "Do you cover all areas?",
+  "Is my location within your service area?",
+  "Are there places you don't service?",
+  "Can I get service in my zip code?"
+ ]
+}

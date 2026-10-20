@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-ba6de8459d43905adb6b",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:26+00:00",
+ "answer": "Butter is cultured, chocolate is dark, and nothing comes out of a mix.",
+ "questions": [
+  "Is the butter cultured?",
+  "Do you use dark chocolate?",
+  "Are your products made from scratch?",
+  "Is there any pre-made mix used?",
+  "What type of butter do you use?",
+  "Is the chocolate in your products dark?",
+  "Do you avoid using baking mixes?",
+  "What kind of chocolate is used in the recipes?"
+ ]
+}

@@ -22,6 +22,7 @@ from askonce_onboarding.extract import PageFacts, extract_page, review_contradic
 from askonce_onboarding.injection import find_canaries, model_text
 from askonce_onboarding.llm import Model, ModelUnavailable
 from askonce_onboarding.site import Fetcher, crawl
+from askonce_onboarding.topics import generate as subjects
 from askonce_onboarding.variants import generate as question_variants
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -78,7 +79,8 @@ def onboard(
 
     assembler = Assembler(pages, page_facts, canaries, updated_at=clock())
     result = assembler.build(review=lambda facts: review_contradictions(model, facts),
-                             variants=lambda business, entries: question_variants(model, business, entries))
+                             variants=lambda business, entries: question_variants(model, business, entries),
+                             topics=lambda business, statements: subjects(model, business, statements))
     profile = result.profile
     profile_id = profile["profile_id"]
     out_dir = out_root / profile_id

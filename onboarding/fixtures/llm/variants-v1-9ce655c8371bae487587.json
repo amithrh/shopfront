@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-9ce655c8371bae487587",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:59+00:00",
+ "answer": "To cancel or reschedule, call (512) 555-0147 or email quillfernhairstudio@example.com. The time on your voicemail or email counts as your notice.",
+ "questions": [
+  "How do I cancel or reschedule my appointment?",
+  "What's the number to call for cancellations?",
+  "Can I cancel my appointment by email?",
+  "What time counts as my notice for cancellations?",
+  "Do I need to call to cancel, or can I email?",
+  "What's the email for cancellations?",
+  "Is there a specific time I need to cancel by?",
+  "How far in advance do I need to cancel my appointment?"
+ ]
+}

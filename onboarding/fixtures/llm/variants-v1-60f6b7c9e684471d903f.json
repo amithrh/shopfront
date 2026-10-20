@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-60f6b7c9e684471d903f",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:03+00:00",
+ "answer": "Brand and model numbers help for water heaters and fixtures; Your ZIP code: So we can confirm you're in our service area; Preferred time window: Weekday morning (arrival 8 am–12 pm), weekday afternoon (arrival 12–4 pm), Saturday morning",
+ "questions": [
+  "Do you need brand and model numbers for quotes?",
+  "Why do you ask for my ZIP code?",
+  "What time windows are available for service?",
+  "Can I choose a specific time for the technician to arrive?",
+  "Do you offer morning or afternoon appointments?",
+  "Can I schedule a Saturday morning appointment?",
+  "What if I need service outside regular hours?",
+  "How do I let you know my preferred time?"
+ ]
+}

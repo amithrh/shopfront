@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-7df010f782085f1da193",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:30:49+00:00",
+ "answer": "Cancellation policy: please give us at least 48 hours' notice to cancel or reschedule. Cancellations with less than 48 hours' notice are charged 50% of the service price.",
+ "questions": [
+  "What's the notice required to cancel an appointment?",
+  "Is there a fee for last-minute cancellations?",
+  "How much notice do I need to reschedule?",
+  "What happens if I cancel with less than 48 hours?",
+  "Are there any exceptions to the cancellation policy?",
+  "Do I get a full refund for cancellations?",
+  "What's the charge for canceling within 48 hours?",
+  "Can I cancel an appointment without any charge?"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "key": "variants-v1-40e30c8ff8160f2a6da0",
+ "kind": "variants-v1",
+ "recorded_at": "2026-10-20T08:28:26+00:00",
+ "answer": "Our flour is milled in the Willamette Valley, our eggs come from a family farm in Yamhill County, and the hazelnuts in our shortbread and praline grow in orchards south of Salem.",
+ "questions": [
+  "Where does the flour come from?",
+  "Are the eggs locally sourced?",
+  "Do you use hazelnuts in your recipes?",
+  "What's the origin of your baking ingredients?",
+  "Are the ingredients locally grown or produced?",
+  "Where are the hazelnuts in your products from?",
+  "Do you use Willamette Valley flour?",
+  "Are the eggs from a family farm?"
+ ]
+}
