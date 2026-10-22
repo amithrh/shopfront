@@ -197,6 +197,8 @@ uv run askonce-answer out/thimbleberry/profile.json fixtures/owner-answers/thimb
 uv run askonce-onboard https://example.com/ --live    # any site, on Bedrock (spend-capped)
 ```
 
+**As an Agent Skill:** [`skills/askonce-onboard-business/SKILL.md`](skills/askonce-onboard-business/SKILL.md) lets an agent run the whole owner flow: it reads the site, relays each question with its reason (never answering for the owner), re-certifies, and publishes only a CERTIFIED profile, and only after the owner says yes.
+
 More detail: [`docs/local-testing.md`](docs/local-testing.md).
 
 ## Deploy to AWS
@@ -231,6 +233,7 @@ recorded in fixtures).
 | [`packages/mcp-tasks/`](packages/mcp-tasks/) | **Open Source entry:** the SEP-2663 Tasks extension for the MCP Python SDK 2.2, reusable, no AskOnce code |
 | [`packages/askonce-bedrock/`](packages/askonce-bedrock/) | Bedrock model router and spend ledger |
 | [`host/`](host/) | Reference voice host (Alexa+ stand-in) |
+| [`skills/askonce-onboard-business/`](skills/askonce-onboard-business/SKILL.md) | **Agent Skill:** onboard → ask the owner → certify → go live, for any agent that runs skills |
 | [`schema/`](schema/), [`profiles/`](profiles/), [`sites/`](sites/) | Business Profile schema, demo profiles and verdicts, fictional demo websites |
 | [`infra/`](infra/) | AWS CDK stack and deploy script |
 | [`docs/friction-log.md`](docs/friction-log.md) | Friction log kept throughout the build |
