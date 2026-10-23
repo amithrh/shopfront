@@ -12,7 +12,7 @@ with its source.
 > **Track:** Alexa+ (self-hosted MCP server, protocol 2026-07-28 over Streamable HTTP, with a 2025-11-25
 > fallback). **Mini challenges:** AWS Builder; Open Source (`packages/mcp-tasks`).
 >
-> - Demo video: **TODO (YouTube link)**
+> - Demo video: https://youtu.be/CmaW0W8vizY
 > - Live endpoint: deployed to AWS (ECS Express Mode, ap-southeast-2) for the demo recording and shown in the video;
 >   not kept running afterwards, to stay at $0. Deploy your own with one command: [`infra/`](infra/).
 

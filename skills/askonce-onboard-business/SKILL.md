@@ -84,7 +84,7 @@ in code (no model). It writes `out/<id>/certification-verdict.json`:
 | `NOT_CERTIFIED` | A check failed. | Show the failing `rules[].failures` in plain words. Fix the cause (usually the website or an answer), then onboard or answer again. Never edit the verdict or the profile's facts by hand. |
 
 Report to the owner: the verdict, how many cases passed, and anything withheld or failed. Example:
-"Certified: 67 of 67 checks passed. Customers will hear your Saturday hours as 6:00 pm."
+"Certified: 96 of 96 checks passed. Customers will hear your Saturday hours as 6:00 pm."
 
 ## 5. Go live (only with the owner's yes)
 
