@@ -179,6 +179,21 @@ class AskOnceCoreStack(Stack):
         CfnOutput(self, "RepositoryUri", value=self.repository.repository_uri)
         CfnOutput(self, "AdminTokenSecretArn", value=self.secrets["ASKONCE_ADMIN_TOKEN"].secret_arn)
 
+        # Part of the core layer, not the service: on a fresh account ECS Express Mode rejects a role
+        # created in the same deployment as the service ("infrastructure role ... doesn't have enough
+        # permission") because IAM hasn't propagated it yet. Deploying it first avoids that race.
+        self.infrastructure_role = iam.Role(
+            self,
+            "ExpressInfrastructureRole",
+            assumed_by=iam.ServicePrincipal("ecs.amazonaws.com"),
+            description="Lets ECS Express Mode manage the load balancer, certificate and scaling for AskOnce",
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    "service-role/AmazonECSInfrastructureRoleforExpressGatewayServices"
+                )
+            ],
+        )
+
         if image_tag:
             self._service(image_tag, normalize_host(public_host) if public_host else None, min_tasks, max_tasks)
 
@@ -256,17 +271,7 @@ class AskOnceCoreStack(Stack):
             cluster_settings=[ecs.CfnCluster.ClusterSettingsProperty(name="containerInsights", value="disabled")],
         )
 
-        infrastructure_role = iam.Role(
-            self,
-            "ExpressInfrastructureRole",
-            assumed_by=iam.ServicePrincipal("ecs.amazonaws.com"),
-            description="Lets ECS Express Mode manage the load balancer, certificate and scaling for AskOnce",
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name(
-                    "service-role/AmazonECSInfrastructureRoleforExpressGatewayServices"
-                )
-            ],
-        )
+        infrastructure_role = self.infrastructure_role
 
         service = ecs.CfnExpressGatewayService(
             self,

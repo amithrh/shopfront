@@ -80,7 +80,7 @@ in a profile. Generate one with `python -c "import secrets; print(secrets.token_
 ## Try it with MCP Inspector (modern era)
 
 ```bash
-npx -y @modelcontextprotocol/inspector@2.10.1
+npx -y @modelcontextprotocol/inspector@2.8.0
 ```
 
 Open http://localhost:6274, choose **Streamable HTTP**, enter `http://localhost:8000/mcp`, then set
@@ -92,9 +92,9 @@ the web UI. If the browser reports a CORS error, add the Inspector's origin:
 CLI smoke test (the CLI cannot drive `tasks/*`):
 
 ```bash
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:8000/mcp --transport http \
+npx -y @modelcontextprotocol/inspector@2.8.0 --cli http://localhost:8000/mcp --transport http \
   --protocol-era modern --method tools/list --strict --format json
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:8000/mcp --transport http \
+npx -y @modelcontextprotocol/inspector@2.8.0 --cli http://localhost:8000/mcp --transport http \
   --protocol-era modern --method tools/call --tool-name find_business \
   --tool-args-json '{"need":"gluten-free birthday cake"}' --format json
 ```
