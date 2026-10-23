@@ -52,7 +52,7 @@ flowchart LR
   subgraph AWS["AWS (ap-southeast-2)"]
     MCP[AskOnce MCP server /mcp<br/>ECS Express Mode · Fargate arm64]
     DDB[(DynamoDB<br/>profiles · orders · tasks)]
-    BR[Amazon Bedrock<br/>Nova · Claude-ready router]
+    BR[Amazon Bedrock<br/>Nova + Claude-ready router]
   end
   Host[Alexa+ / voice host /<br/>MCP Inspector]
 
