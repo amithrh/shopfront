@@ -109,7 +109,7 @@ def test_service_runs_arm64_main_container_on_8000_with_health(full: Template) -
     assert main["PortMappings"] == [{"ContainerPort": 8000, "Name": "http", "Protocol": "tcp"}]
     full.has_resource_properties(
         "AWS::ECS::ExpressGatewayService",
-        {"HealthCheckPath": "/health", "ServiceName": "askonce-mcp", "TaskDefinitionArn": Match.any_value()},
+        {"HealthCheckPath": "/health", "ServiceName": "askonce-live", "TaskDefinitionArn": Match.any_value()},
     )
 
 
